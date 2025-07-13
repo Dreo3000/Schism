@@ -1,0 +1,43 @@
+// Headshot targets for golem (mud blood)
+
+actor HeadshotTarget2g: HeadshotTarget2
+{
+BloodType "Mud_Blood", "MudSawBlood", "MudSawBlood"
+BloodColor "99 50 00"
+}
+
+actor HeadshotTarget4g: HeadshotTarget4
+{
+BloodType "Mud_Blood", "MudSawBlood", "MudSawBlood"
+BloodColor "99 50 00"
+}
+
+actor HeadshotTarget8g: HeadshotTarget8
+{
+BloodType "Mud_Blood", "MudSawBlood", "MudSawBlood"
+BloodColor "99 50 00"
+}
+
+actor HeadshotTarget6g: HeadshotTarget6
+{
+BloodType "Mud_Blood", "MudSawBlood", "MudSawBlood"
+BloodColor "99 50 00"
+}
+
+actor HeadshotTarget10g: HeadshotTarget10
+{
+BloodType "Mud_Blood", "MudSawBlood", "MudSawBlood"
+BloodColor "99 50 00"
+}
+
+actor HeadshotTarget30g: HeadshotTarget30
+{
+BloodType "Mud_Blood", "MudSawBlood", "MudSawBlood"
+BloodColor "99 50 00"
+}
+
+actor HeadshotTarget200g: HeadshotTarget200
+{
+BloodType "Mud_Blood", "MudSawBlood", "MudSawBlood"
+BloodColor "99 50 00"
+}

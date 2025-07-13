@@ -1,0 +1,23 @@
+//---------------------//
+//----Ice Guy Blood----//
+//---------------------//
+
+actor Ice_Blood : Brutal_Blood
+{
+ states
+ {
+  Spawn:
+        TNT1 A 0
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Splash")
+		TNT1 A 0 A_CustomMissile ("BlueFlareSpawn", 7, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_Jump(128, 2)
+		TNT1 A 0 A_CustomMissile ("XIceChunk1", 7, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_Jump(128, 2)
+		TNT1 A 0 A_CustomMissile ("XIceChunk2", 7, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_Jump(128, 2)
+		TNT1 A 0 A_CustomMissile ("XIceChunk3", 7, 0, random (0, 360), 2, random (0, 360))
+		//TNT1 A 0 A_SpawnItem ("BloodHit")
+        BLOD BCD 0
+        stop
+ }
+}

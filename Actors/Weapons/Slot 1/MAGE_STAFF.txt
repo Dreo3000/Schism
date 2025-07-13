@@ -1,0 +1,740 @@
+ACTOR PowerHDLevel2 : CustomInventory
+{
+inventory.maxamount 1
+}
+
+ACTOR MageMeleeStaff : Schism_Weapon
+{
+  Weapon.SelectionOrder 3000
+  Weapon.YAdjust 5
+  Weapon.SlotPriority 1
+  Tag "$TAG_STAFF"
+  Weapon.SlotNumber 1
+  Weapon.SisterWeapon "MageMeleeStaffPowered"
+  //+NOALERT
+  +THRUGHOST
+  +WIMPY_WEAPON
+  +MELEEWEAPON
+  +NOEXTREMEDEATH
+  +DONTSPLASH
+  	Obituary "%o was staffed by %k"
+	+WEAPON.MELEEWEAPON
+    +WEAPON.NOALERT
+    +WEAPON.NOAUTOAIM
+	+WEAPON.CHEATNOTWEAPON
+	VisibleToPlayerClass Schism_Corvus
+	Inventory.RestrictedTo Schism_Corvus
+	Inventory.ForbiddenTo Schism_Ranger, Schism_Warrior, Schism_Sorcerer
+  States
+  {
+  Spawn:
+    GWAN A -1
+    Stop
+	Ready:
+		// This is placed here for now, should be moved if there is a replaying
+		// idle animation for weapons
+	ReadyLoop:
+        //MDAR A 0 A_JumpIfInventory("Taunting",1,"powertome?")
+		TNT1 A 0 A_JumpIfInventory("Reloading", 1, "PoleJump")
+		TNT1 A 0 A_JumpIfInventory("Salute1", 1, "Salute")
+		TNT1 A 0 A_JumpIfInventory("Salute2", 1, "Salute")
+		TNT1 A 0 A_JumpIfInventory("Kicking",1,"DoKick")
+		TNT1 A 0 A_JumpIfInventory("TossGrenade",1,"TossGrenade")
+		STFF A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+		Loop
+  PoweredReady:
+    STFF DEF 2 A_WeaponReady (WRF_ALLOWRELOAD)
+    Goto Ready
+
+  Deselect:
+	TNT1 A 0 A_Lower
+    Loop
+
+  Select:
+    STAF A 0 A_Raise
+    STAF A 1 A_Raise
+    Loop
+
+  PoweredDeselect:
+    STFF E 0 A_Lower
+    STFF E 1 A_Lower
+    Goto Deselect
+
+  PoweredSelect:
+    STFF F 0 A_Raise
+    STFF F 1 A_Raise
+    Goto Select
+
+////////////////////////////////////////////////////
+//
+//		ADVANCED CORVUS STAFF MOVESET DESCRIPTION
+//
+//		1. Straight thrust						STFF ABCD
+//		2. Left to right smash (left hand)		STFL ABCDEF
+//		3. Right to straight thrust (left hand) STFL GHIJK-LMN-STFR
+//		4. Right to left smash (right hand)		STFR ABCDEF
+//		5. Left to straight thrust (right hand)	STFR GHIJK-LMN-STFR
+//		6. Left bonk attack (left hand) 		STFL STUVWXY
+//		7. Right bonk attack (right hand)		STFR STUVWXY
+//
+//		Each attack is meant to be provided with
+//		hip movement (making step during attack)
+//		so proper order of making that sequence
+//		is the one above, CONSIDERING starting stance
+//		is with right hand and right leg in front.
+//		Of course it doesn't affect 6th and 7th attacks
+//		which are "altfire" and also "finishers".
+//
+// 		- Lord Lothar
+//
+////////////////////////////////////////////////////
+
+  Fire:
+    TNT1 A 0 A_JumpIfInventory("PowerHDLevel2",1,"PoweredFire")
+/*	STFL RQPO 2
+	Hold:
+		STFL O 2
+		TNT1 A 0 A_Refire
+	goto FlightThrust
+
+	FlightThrust:
+			STFF AB 1
+			STFF C 1 A_ChangeVelocity(45*Cos(pitch),0,-45*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			TNT1 A 0 A_PlaySound("weapons/gswing")
+			"####" A 0 A_PlaySound("Paladin/SpellCast", 2)
+			//TNT1 A 0 A_Giveinventory("Punching",1)
+
+			STFF C 1 BRIGHT
+			TNT1 A 0 A_FireCustomMissile("MeleeSmashStrikePaladin", 0, 0, 0, -9)
+			TNT1 A 0 A_ChangeVelocity(38*Cos(pitch),0,-38*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			STFF C 1
+			TNT1 A 0 A_ChangeVelocity(32*Cos(pitch),0,-32*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			STFF D 1
+			TNT1 A 0 A_FireCustomMissile("MeleeSmashStrikePaladin", 0, 0, 0, -9)
+			TNT1 A 0 A_ChangeVelocity(27*Cos(pitch),0,-27*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			STFF D 1
+			TNT1 A 0 A_FireCustomMissile("MeleeSmashStrikePaladin", 0, 0, 0, -9)
+			TNT1 A 0 A_ChangeVelocity(22*Cos(pitch),0,-22*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			STFF D 1
+			TNT1 A 0 A_FireCustomMissile("MeleeSmashStrikePaladin", 0, 0, 0, -9)
+			STFF D 1
+			TNT1 A 0 A_ChangeVelocity(15*Cos(pitch),0,-15*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			STFF C 1
+			TNT1 A 0 A_ChangeVelocity(12*Cos(pitch),0,-12*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			STFF B 1
+			TNT1 A 0 A_ChangeVelocity(11*Cos(pitch),0,-11*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			STFF A 1
+
+			FlightThrustEnd:
+			TNT1 A 0
+			STFF A 1 Offset(0,62)
+			//TNT1 A 0 A_ChangeVelocity(-sin(pitch)-3,0,-sin(pitch)+0.4, CVF_RELATIVE)
+			TNT1 A 0 A_TakeInventory("Hit")
+			TNT1 A 0 A_JumpIfInventory("GoFatality", 1, "GoingToReady")
+			//TNT1 A 0 A_TakeInventory("HeavyStrikeUpward", 1)
+			TNT1 A 0 SetPlayerProperty(0,0,0)
+			STFL LMN 2 //Offset(0,62)
+			TNT1 A 3
+			STFL OPQR 2 A_JumpIfInventory("Kicking",1,"KickRight")
+			TNT1 A 2 A_WeaponReady(1)
+			TNT1 A 0 A_REfire
+			Goto Ready		*/
+
+  StraightThrust:	//STFF ABCD
+	STFF A 1 Offset(0,62)
+    STFF A 1 A_PlayWeaponSound("WHOPF")
+	"####" A 0 A_Recoil(-5)
+	STFF B 1 //A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -9)
+	STFF C 1 A_FireCustomMissile("MeleeStrikePaladin2", 0, 0, 0, -9)
+	STFF D 1 //A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -9)
+    STFF D 1 A_Recoil(2)
+	STFF CBA 1
+	STFF A 1 Offset(0,62)
+	"####" A 2 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")
+    "####" A 0 A_ReFire("LeftSmash")
+    Goto Ready
+
+		//A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -9)
+		//A_FireCustomMissile("KickAttack", 0, 0, 0, -2)
+
+  LeftSmash:	//STFL ABCDEF
+    STFL A 2 A_PlayWeaponSound("WHOPD")
+	"####" A 0 A_Recoil(-5)
+	"####" A 0 A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -9) //A_CustomPunch(random(20,30)+(CallACS("StrengthCalculator")/3),TRUE,0,"BrutalStaffPuff",128)
+	STFL B 0 A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -9)
+	STFL C 1 A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -9)
+    STFL D 1
+	"####" A 0 A_Recoil(1)
+	STFL E 1 A_JumpIfInventory("Kicking",1,"KickRight") //After that attack Corvus makes step, and his left leg is in front
+	TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"LeftBonk")
+	STFL F 1 A_JumpIfInventory("Kicking",1,"KickRight")//so kick should be provided from rear one, RIGHT leg.
+	TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"LeftBonk")
+	TNT1 A 3 A_JumpIfInventory("Kicking",1,"KickRight")
+	TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"LeftBonk") //YOU CAN EXPERIMENT PUTTING HERE AND ABOVE RIGHT BONK
+    TNT1 A 0 A_ReFire("RightThrust")
+    Goto Ready
+
+  RightThrust:		//STFL GHIJK-LMN-OPQR
+    STFL G 2 A_PlayWeaponSound("WHOPH")
+	TNT1 A 0 A_Recoil(-1)
+	STFL H 1
+	STFL I 1 A_FireCustomMissile("MeleeSmashStrikePaladin", 0, 0, 0, -9) //A_CustomPunch(random(35,55)+(CallACS("StrengthCalculator")/3),TRUE,0,"BrutalStaffPuff",128)
+	STFL J 1 //A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -9)
+    STFL K 4
+	TNT1 A 0 A_Recoil(1)
+	STFL LL 1 A_JumpIfInventory("Kicking",1,"KickRight")
+	TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"LeftBonk")
+	STFL MN 1 A_JumpIfInventory("Kicking",1,"KickRight")//After that attack Corvus DOES NOT make another step
+	TNT1 AAA 1 A_JumpIfInventory("FiredSecondary",1,"LeftBonk")
+
+		RightToReady:
+		STFL OPQQRR 1 A_JumpIfInventory("Kicking",1,"KickRight") //so kick should be provided same RIGHT leg.
+		TNT1 A 0 A_ReFire("RightSmash")
+    Goto Ready
+
+  RightSmash: //STFR ABCDEF
+    STFR A 2 A_PlayWeaponSound("WHOPD")
+	"####" A 0 A_Recoil(-5)
+	"####" A 0 A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -9) //A_CustomPunch(random(20,30)+(CallACS("StrengthCalculator")/3),TRUE,0,"BrutalStaffPuff",128)
+	STFR B 0 A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -9)
+	STFR C 1 A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -9)
+    STFR D 1
+	"####" A 0 A_Recoil(1)
+	STFR E 1 A_JumpIfInventory("Kicking",1,"LeftFinishingKick") //After that attack Corvus makes step, and his right leg is in front
+	TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"RightBonk")
+	STFR F 1 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")//so kick should be provided from rear one, LEFT leg.
+	TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"RightBonk")
+	TNT1 A 3 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")
+	TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"RightBonk")  //YOU CAN EXPERIMENT PUTTING HERE AND ABOVE LEFT BONK
+    TNT1 A 0 A_ReFire("LeftThrust")
+    Goto Ready
+
+  LeftThrust:		//STFR GHIJK-LMN-OPQR
+    STFR G 2 A_PlayWeaponSound("WHOPH")
+	TNT1 A 0 A_Recoil(-1)
+	STFR H 1
+	STFR I 1 A_FireCustomMissile("MeleeSmashStrikePaladin2", 0, 0, 0, -9) //A_CustomPunch(random(35,55)+(CallACS("StrengthCalculator")/3),TRUE,0,"BrutalStaffPuff",128)
+	STFR J 1 //A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -9)
+    STFR K 4
+	TNT1 A 0 A_Recoil(1)
+	STFR LL 1 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")
+	TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"RightBonk")
+	STFR MN 1 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")//After that attack Corvus DOES NOT make another step
+	TNT1 AAA 1 A_JumpIfInventory("FiredSecondary",1,"RightBonk")
+
+
+		LeftToReady:
+		STFR OPQQRR 1 A_JumpIfInventory("Kicking",1,"LeftFinishingKick") //so kick should be provided same LEFT leg.
+		TNT1 A 0 A_ReFire("StraightThrust") //Full combo completed
+    Goto Ready
+
+
+
+  AltFire:
+	TNT1 A 0
+
+	LeftBonk: //STFL STUVWXY
+	STFR RQPO 1
+	TNT1 A 0 A_PlayWeaponSound("WHOPH")
+	STFL STU 1 A_FireCustomMissile("MeleeStrikePaladin1", 0, 0, 0, -9)
+	STFL V 1 A_FireCustomMissile("MeleeSmashStrikePaladin4", 0, 0, 0, -9)
+	STFL WXY 1 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")
+	TNT1 A 3 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")
+	STFR RQPO 1 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")
+	TNT1 A 0 A_Refire("RightSmash")
+	Goto Ready
+
+	RightBonk: //STFR STUVWXY
+	STFL RQPO 1
+	TNT1 A 0 A_PlayWeaponSound("WHOPH")
+	STFR STU 1 A_FireCustomMissile("MeleeStrikePaladin1", 0, 0, 0, -9)
+	STFR V 1 A_FireCustomMissile("MeleeSmashStrikePaladin4", 0, 0, 0, -9)
+	STFR WXY 1 A_JumpIfInventory("Kicking",1,"KickRight")
+	TNTR A 3 A_JumpIfInventory("Kicking",1,"KickRight")
+	STFL RQPO 1 A_JumpIfInventory("Kicking",1,"KickRight")
+	TNT1 A 0 A_Refire("LeftSmash")
+	Goto Ready
+
+  SuperAttack:
+    TNT1 A 0 A_PlayWeaponSound("WHOP")
+	TNT1 A 0 A_SetReflective
+	TNT1 A 0 A_SetGravity(0.7)
+	SSPN A 2 //A_FireCustomMissile("KickAttack", 0, 0, 0, -2) //A_CustomPunch(random(10,20),TRUE,CPF_NOTURN|CPF_STEALARMOR,"BrutalStaffPuff",64,0.5)
+	SSPN B 1 A_SetReflectiveInvulnerable
+	SSPN C 2
+	TNT1 A 0 A_UnSetReflectiveInvulnerable
+	TNT1 A 0 A_FireCustomMissile("MeleeStrikeNormal", 5, 0, 0, -2)
+	TNT1 A 0 A_FireCustomMissile("MeleeStrikeNormal", -5, 0, 0, -2)
+	SSPN F 2 A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -2) //A_CustomPunch(random(10,20),TRUE,CPF_NOTURN|CPF_STEALARMOR,"BrutalStaffPuff",64,0.5)
+	TNT1 A 0 A_UnSetReflective
+	TNT1 A 0 A_SetGravity(1)
+	TNT1 A 0 A_Refire("Superattack")
+	Goto Ready
+  PoweredHold:
+    TNT1 A 0 A_PlayWeaponSound("WHOP")
+	TNT1 A 0 A_SetReflective
+	TNT1 A 0 A_SetGravity(0.7)
+	TNT1 A 0 A_RadiusThrust(-650,640,RTF_NOIMPACTDAMAGE)
+	TNT1 A 0 A_RadiusThrust(-50,640,RTF_NOIMPACTDAMAGE)
+	SSPN A 1 A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -2) //A_CustomPunch(random(10,20)+(CallACS("StrengthCalculator")/3),TRUE,CPF_NOTURN|CPF_STEALARMOR,"BrutalStaffPuff",64,1)
+	TNT1 A 0 A_RadiusThrust(-650,640,RTF_NOIMPACTDAMAGE)
+	TNT1 A 0 A_RadiusThrust(-5,640,RTF_NOIMPACTDAMAGE)
+	SSPN B 1 A_SetReflectiveInvulnerable
+	TNT1 A 0 A_RadiusThrust(-650,640,RTF_NOIMPACTDAMAGE)
+	TNT1 A 0 A_RadiusThrust(-5,640,RTF_NOIMPACTDAMAGE)
+	SSPN C 1
+	TNT1 A 0 A_UnSetReflectiveInvulnerable
+	TNT1 A 0 A_RadiusThrust(-650,640,RTF_NOIMPACTDAMAGE)
+	TNT1 A 0 A_RadiusThrust(-5,640,RTF_NOIMPACTDAMAGE)
+	SSPN F 1 A_FireCustomMissile("MeleeStrikeNormal", 0, 0, 0, -2) //A_CustomPunch(random(10,20)+(CallACS("StrengthCalculator")/3),TRUE,CPF_NOTURN|CPF_STEALARMOR,"BrutalStaffPuff",64,1)
+	TNT1 A 0 A_UnSetReflective
+	TNT1 A 0 A_SetGravity(1)
+	Goto Ready
+
+  PoweredFire:
+  PoweredFire1:
+	STFF F 1 Offset(0,62)
+    STFF F 1 A_PlayWeaponSound("STAFSWNG")
+	TNT1 A 0 A_Recoil(-3)
+	STFF G 1 A_CustomPunch(random(25,40)+(CallACS("StrengthCalculator")),TRUE,0,"BrutalPoweredStaffPuff",104)
+	STFF H 1 A_CustomPunch(random(15,25) + (CallACS("StrengthCalculator")),TRUE,0,"BrutalPoweredStaffPuff",104)
+	STFF HH 1 A_CustomPunch(random(25,40)+(CallACS("StrengthCalculator")),TRUE,0,"BrutalPoweredStaffPuff",104)
+    STFF G 1
+	TNT1 A 0 A_Recoil(2)
+	STFF F 1
+	STFF F 1 Offset(0,62)
+	TNT1 A 2
+    TNT1 A 0 A_ReFire("PoweredFire2")
+    Goto Ready
+
+  PoweredFire2:
+	goto Ready
+	STFR A 1 Offset(0,62)
+    STFR A 1 A_PlayWeaponSound("STAFSWNG")
+	TNT1 A 0 A_Recoil(-3)
+	STFR B 1
+	STFR C 1 A_CustomPunch(random(25,40)+(CallACS("StrengthCalculator")),TRUE,0,"BrutalPoweredStaffPuff",104)
+	STFR C 2 A_CustomPunch(random(25,40)+(CallACS("StrengthCalculator")),TRUE,0,"BrutalPoweredStaffPuff",104)
+    STFR B 1
+	TNT1 A 0 A_Recoil(2)
+	STFR A 1
+	STFR A 1 Offset(0,62)
+	TNT1 A 2
+    TNT1 A 0 A_ReFire("PoweredFire3")
+    Goto Ready
+
+  PoweredFire3:
+	TNT1 A 0 A_JumpIfInventory("PowerHDLevel2",1,2)
+	goto Ready
+	STFL A 1 Offset(0,62)
+    STFL A 1 A_PlayWeaponSound("STAFSWNG")
+	TNT1 A 0 A_Recoil(-3)
+	STFL B 1
+	STFL C 1 A_CustomPunch(random(35,55)+(CallACS("StrengthCalculator")),TRUE,0,"BrutalPoweredStaffPuff",104)
+	STFL C 2 A_CustomPunch(random(25,40)+(CallACS("StrengthCalculator")),TRUE,0,"BrutalPoweredStaffPuff",104)
+    STFL B 1
+	TNT1 A 0 A_Recoil(2)
+	STFL A 1
+	STFL A 1 Offset(0,62)
+	TNT1 A 2
+    TNT1 A 0 A_ReFire("PoweredFire4")
+    Goto Ready
+
+  PoweredFire4:
+	TNT1 A 0 A_JumpIfInventory("PowerHDLevel2",1,2)
+	goto Ready
+  	STAF I 1 Offset(0,62)
+    STAF I 1 A_PlayWeaponSound("STAFSWNG")
+	TNT1 A 0 A_Recoil(-3)
+	STAF J 2
+	STFC A 1 A_CustomPunch(random(45,70)+(CallACS("StrengthCalculator")*2),TRUE,0,"BrutalPoweredStaffPuff",104)
+	STFC A 2 A_CustomPunch(random(25,40)+(CallACS("StrengthCalculator")),TRUE,0,"BrutalPoweredStaffPuff",104)
+    STAF J 2
+	TNT1 A 0 A_Recoil(2)
+	STAF I 1
+	STAF I 1 Offset(0,62)
+	TNT1 A 2
+	TNT1 A 0 A_ReFire("PoweredFire2")
+    Goto Ready
+
+	PoleJump:
+	TNT1 A 0 A_TakeInventory("Reloading",1)
+	TNT1 A 0 A_JumpIf (momZ > 0, "PoleFumble")
+	TNT1 A 0 A_JumpIf (momZ < 0, "PoleFumble")
+	SSPN A 2 A_recoil(-8)
+	STAF I 2 A_recoil(-12)
+	STAF J 2 ThrustThingZ (0,8,0,1)
+	STAF LL 1 A_ChangeVelocity(25*Cos(pitch),0,-25*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+	STOM ABC 1
+	TNT1 A 0 A_jumpifinventory("PowerStrength",1,"MightyBoots")
+	TNT1 A 0 A_FireCustomMissile("KickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("KickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("KickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("KickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("KickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("KickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("KickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("KickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("KickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("KickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("KickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("KickAttack",0,0, 5,0)
+	STOM EEBA 2
+	Goto Ready
+
+	MightyBoots:
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	STOM EEBA 2
+	Goto Ready
+
+	PoleFumble:
+	SSPN FCB 2
+	STKK KK 1
+	STOM ABC 1
+	TNT1 A 0 A_FireCustomMissile("KickAttack",0,0,-5,0)
+	STOM D 6 A_FireCustomMissile("KickAttack",0,0, 5,0)
+	STOM EEBA 2
+	Goto Ready
+}}
+
+ACTOR MageMeleeStaffPowered : MageMeleeStaff
+{
++WEAPON.POWERED_UP
+Weapon.AmmoGive 0
+Weapon.SisterWeapon "MageMeleeStaff"
+States
+{
+	Ready:
+//	STFF DDEEFF 1
+//	{
+//	A_WeaponReady;
+//	if(CountInv("Kicking")>0){return State("DoKick");}
+//	if(CountInv("Reloading")>0){return State("PowerPoleJump");}
+//	if(CountInv("Salute1")>0){return State("Salute");}
+//	if(CountInv("Salute2")>0){return State("Salute");}
+//	if(CountInv("Taunting")>0){return State("Taunt");}
+//	if(CountInv("TossGrenade")>0){return State("TossGrenade");}
+//	return state("");
+//	} - nice GZDoom code, shame it won't work in Zandronum, so let me bring some SPAGHETTI AGAIN...
+	STFF D 1 BRIGHT A_WeaponReady(WRF_ALLOWRELOAD)
+	TNT1 A 0 A_JumpIfInventory("Reloading", 1, "PoleJump")
+	TNT1 A 0 A_JumpIfInventory("Salute1", 1, "Salute")
+	TNT1 A 0 A_JumpIfInventory("Salute2", 1, "Salute")
+	TNT1 A 0 A_JumpIfInventory("Kicking",1,"DoKick")
+	TNT1 A 0 A_JumpIfInventory("TossGrenade",1,"TossGrenade")
+
+	STFF D 1 BRIGHT A_WeaponReady(WRF_ALLOWRELOAD)
+	TNT1 A 0 A_JumpIfInventory("Reloading", 1, "PoleJump")
+	TNT1 A 0 A_JumpIfInventory("Salute1", 1, "Salute")
+	TNT1 A 0 A_JumpIfInventory("Salute2", 1, "Salute")
+	TNT1 A 0 A_JumpIfInventory("Kicking",1,"DoKick")
+	TNT1 A 0 A_JumpIfInventory("TossGrenade",1,"TossGrenade")
+
+	STFF E 1 BRIGHT A_WeaponReady(WRF_ALLOWRELOAD)
+	TNT1 A 0 A_JumpIfInventory("Reloading", 1, "PoleJump")
+	TNT1 A 0 A_JumpIfInventory("Salute1", 1, "Salute")
+	TNT1 A 0 A_JumpIfInventory("Salute2", 1, "Salute")
+	TNT1 A 0 A_JumpIfInventory("Kicking",1,"DoKick")
+	TNT1 A 0 A_JumpIfInventory("TossGrenade",1,"TossGrenade")
+
+	STFF E 1 BRIGHT A_WeaponReady(WRF_ALLOWRELOAD)
+	TNT1 A 0 A_JumpIfInventory("Reloading", 1, "PoleJump")
+	TNT1 A 0 A_JumpIfInventory("Salute1", 1, "Salute")
+	TNT1 A 0 A_JumpIfInventory("Salute2", 1, "Salute")
+	TNT1 A 0 A_JumpIfInventory("Kicking",1,"DoKick")
+	TNT1 A 0 A_JumpIfInventory("TossGrenade",1,"TossGrenade")
+
+	STFF F 1 BRIGHT A_WeaponReady(WRF_ALLOWRELOAD)
+	TNT1 A 0 A_JumpIfInventory("Reloading", 1, "PoleJump")
+	TNT1 A 0 A_JumpIfInventory("Salute1", 1, "Salute")
+	TNT1 A 0 A_JumpIfInventory("Salute2", 1, "Salute")
+	TNT1 A 0 A_JumpIfInventory("Kicking",1,"DoKick")
+	TNT1 A 0 A_JumpIfInventory("TossGrenade",1,"TossGrenade")
+
+	STFF F 1 BRIGHT A_WeaponReady(WRF_ALLOWRELOAD)
+	Loop
+
+	Deselect:
+    STFF E 0 A_Lower
+    STFF E 1 A_Lower
+    Goto Deselect
+
+	Select:
+    STFF F 0 A_Raise
+    STFF F 1 A_Raise
+    Goto Select
+
+  Fire:
+  Fire1:
+	STFF F 1 Offset(0,62)
+    STFF F 1 A_PlayWeaponSound("STAFSWNG")
+	TNT1 A 0 A_Recoil(-3)
+	STFF G 1 A_FireCustomMissile("PoweredStaffStrike", 0, 0, 0, -9)
+	STFF H 1 A_FireCustomMissile("PoweredStaffStrike", 0, 0, 0, -9)
+	STFF HH 1 A_FireCustomMissile("PoweredStaffStrike", 0, 0, 0, -9)
+    STFF G 1
+	TNT1 A 0 A_Recoil(2)
+	STFF F 1
+	STFF F 1 Offset(0,62)
+	TNT1 A 2
+    TNT1 A 0 A_ReFire("Fire2")
+    Goto Ready
+
+  Fire2:
+	STFR A 1 Offset(0,62)
+    STFR A 1 A_PlayWeaponSound("STAFSWNG")
+	TNT1 A 0 A_Recoil(-3)
+	STFR B 1
+	STFR C 1 A_FireCustomMissile("PoweredStaffStrike", 0, 0, 0, -9)
+	STFR C 2 A_FireCustomMissile("PoweredStaffStrike", 0, 0, 0, -9)
+    STFR B 1
+	TNT1 A 0 A_Recoil(2)
+	STFR A 1
+	STFR A 1 Offset(0,62)
+	TNT1 A 2
+    TNT1 A 0 A_ReFire("Fire3")
+    Goto Ready
+
+  Fire3:
+	STFL A 1 Offset(0,62)
+    STFL A 1 A_PlayWeaponSound("STAFSWNG")
+	TNT1 A 0 A_Recoil(-3)
+	STFL B 1
+	STFL C 1 A_FireCustomMissile("PoweredStaffStrike", 0, 0, 0, -9)
+	STFL C 2 A_FireCustomMissile("PoweredStaffStrike", 0, 0, 0, -9)
+    STFL B 1
+	TNT1 A 0 A_Recoil(2)
+	STFL A 1
+	STFL A 1 Offset(0,62)
+	TNT1 A 2
+    TNT1 A 0 A_ReFire("Fire4")
+    Goto Ready
+
+  Fire4:
+  	STAF I 1 Offset(0,62)
+    STAF I 1 A_PlayWeaponSound("STAFSWNG")
+	TNT1 A 0 A_Recoil(-3)
+	STAF J 2
+	STFC A 1 A_FireCustomMissile("PoweredStaffStrike", 0, 0, 0, -9)
+	STFC A 2 A_FireCustomMissile("PoweredStaffStrike", 0, 0, 0, -9)
+    STAF J 2
+	TNT1 A 0 A_Recoil(2)
+	STAF I 1
+	STAF I 1 Offset(0,62)
+	TNT1 A 2
+	TNT1 A 0 A_ReFire("Fire2")
+    Goto Ready
+
+  AltFire:
+    TNT1 A 0 A_PlayWeaponSound("WHOP")
+	TNT1 A 0 A_SetReflective
+	TNT1 A 0 A_SetGravity(0.7)
+	TNT1 A 0 A_RadiusThrust(-650,640,RTF_NOIMPACTDAMAGE)
+	TNT1 A 0 A_RadiusThrust(-50,640,RTF_NOIMPACTDAMAGE)
+	TNT1 A 0
+	SSPN A 1 A_FireCustomMissile("PoweredStaffStrike", 0, 0, 0, -2) //A_CustomPunch(random(10,20)+(CallACS("StrengthCalculator")/3),TRUE,CPF_NOTURN|CPF_STEALARMOR,"BrutalStaffPuff",64,1)
+	TNT1 A 0 A_RadiusThrust(-650,640,RTF_NOIMPACTDAMAGE)
+	TNT1 A 0 A_RadiusThrust(-5,640,RTF_NOIMPACTDAMAGE)
+	SSPN B 1 A_SetReflectiveInvulnerable
+	TNT1 A 0 A_RadiusThrust(-650,640,RTF_NOIMPACTDAMAGE)
+	TNT1 A 0 A_RadiusThrust(-5,640,RTF_NOIMPACTDAMAGE)
+	SSPN C 1
+	TNT1 A 0 A_UnSetReflectiveInvulnerable
+	TNT1 A 0 A_RadiusThrust(-650,640,RTF_NOIMPACTDAMAGE)
+	TNT1 A 0 A_RadiusThrust(-5,640,RTF_NOIMPACTDAMAGE)
+	TNT1 A 0
+	SSPN F 1 A_FireCustomMissile("PoweredStaffStrike", 0, 0, 0, -2) //A_CustomPunch(random(10,20)+(CallACS("StrengthCalculator")/3),TRUE,CPF_NOTURN|CPF_STEALARMOR,"BrutalStaffPuff",64,1)
+	TNT1 A 0 A_UnSetReflective
+	TNT1 A 0 A_SetGravity(1)
+	Goto Ready
+
+	PowerPoleJump:
+	TNT1 A 0 A_TakeInventory("Reloading",1)
+	TNT1 A 0 A_JumpIf (momZ > 0, "PoleFumble")
+	TNT1 A 0 A_JumpIf (momZ < 0, "PoleFumble")
+	SSPN F 2 A_recoil(-8)
+	SSPN C 2 A_recoil(-12)
+	SSPN B 2 ThrustThingZ (0,8,0,1)
+	STKK KK 1 A_ChangeVelocity(40*Cos(pitch),0,-40*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+	STOM ABC 1
+	TNT1 A 0 A_jumpifinventory("PowerStrength",1,"MightiestBoots")
+	TNT1 A 0 A_FireCustomMissile("PoweredStaffStrike",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("PoweredStaffStrike",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("PoweredStaffStrike",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("PoweredStaffStrike",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("PoweredStaffStrike",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("PoweredStaffStrike",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("PoweredStaffStrike",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("PoweredStaffStrike",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("PoweredStaffStrike",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("PoweredStaffStrike",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("PoweredStaffStrike",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("PoweredStaffStrike",0,0, 5,0)
+	STOM EEBA 2
+	Goto Ready
+
+	MightiestBoots:
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	TNT1 A 0 A_FireCustomMissile("SuperKickAttack",0,0,-5,0)
+	STOM D 1 A_FireCustomMissile("SuperKickAttack",0,0, 5,0)
+	STOM EEBA 2
+	Goto Ready
+
+	PoleFumble:
+	SSPN FCB 2
+	STKK KK 1
+	STOM ABC 1
+	TNT1 A 0 A_FireCustomMissile("KickAttack",0,0,-5,0)
+	STOM D 6 A_FireCustomMissile("KickAttack",0,0, 5,0)
+	STOM EEBA 2
+	Goto Ready
+}}
+
+
+Actor BrutalStaffPuff : BulletPuff
+{
+	VSpeed 0
+	Alpha 0.9
+	Renderstyle Add
+	+FORCEXYBILLBOARD
+	-ALLOWPARTICLES
+	+NOEXTREMEDEATH
+	+PUFFONACTORS
+	+ALWAYSPUFF
+	+MTHRUSPECIES
+	Scale 0.13
+	+NOEXTREMEDEATH
+	-ALWAYSPUFF
+	+THRUGHOST
+	DamageType "Staff"
+	States
+	{
+	Melee:
+	Spawn:
+		TNT1 A 0
+		TNT1 AA 0 //ACS_NamedExecuteAlways("GetFloorTypeXTerrain",0)
+		TNT1 AAAAA 0 A_SpawnItemEx("BrutalStaffPuffSpark",0,0,4,frandom(-3.2,3.2),frandom(-3.2,3.2),frandom(-3.2,3.2))
+		KTPF A 1 Bright Light("STAFPUFF01") A_PlaySound("STAFHIT1")
+	Death:
+		KTPF A 0 A_SetScale(scalex*0.7,scaley*0.7)
+		KTPF A 1 Bright Light("STAFPUFF02")A_FadeOut(0.1)
+		KTPF A 0 A_SetScale(scalex*0.7,scaley*0.7)
+		KTPF A 1 Bright Light("STAFPUFF03")A_FadeOut(0.1)
+		KTPF A 0 A_SetScale(scalex*0.7,scaley*0.7)
+		KTPF A 1 Bright Light("STAFPUFF04")A_FadeOut(0.1)
+		KTPF A 0 A_SetScale(scalex*0.7,scaley*0.7)
+		KTPF A 1 Bright Light("STAFPUFF05")A_FadeOut(0.1)
+	Fade:
+		KTPF A 0 A_SetScale(scalex*0.7,scaley*0.7)
+		KTPF A 1 Bright A_FadeOut(0.1)
+		Loop
+	XDeath:
+	    TNT1 A 1 A_PlaySound("STAFHIT2")
+		Stop
+	}
+}
+Actor BrutalStaffPuffSpark
+{
+  Radius 2
+  Height 2
+  RenderStyle Add
+  Alpha 0.9
+  Scale 0.045
+  +NOINTERACTION
+  +CLIENTSIDEONLY
+  +FORCEXYBILLBOARD
+  +NOGRAVITY
+  +DONTSPLASH
+  States
+  {
+  Spawn:
+    KTPF A 1 Bright A_FadeOut(0.05)
+	KTPF A 0 Bright A_SetScale(scalex*0.79,scaley*0.79)
+	KTPF A 0 A_ChangeVelocity(frandom(-1,1),frandom(-1,1),frandom(-1,1),CVF_RELATIVE)
+    loop
+  }
+}
+
+ACTOR BrutalPoweredStaffPuff
+{
+  +NOBLOCKMAP
+  +NOGRAVITY
+  +PUFFONACTORS
+  +FORCEXYBILLBOARD
+  -THRUGHOST
+  RenderStyle Add
+  Alpha 0.9
+  VSpeed 0.0
+  Scale 0.34
+  Decal "WallCrack"
+  DamageType "PowerStaff"
+  States
+  {
+  Spawn:
+    TNT1 A 0 NoDelay A_PlaySound("STAFWALL")
+	Goto Puff
+  XDeath:
+	TNT1 A 0 A_PlaySound("STAFHIT2")
+  Puff:
+    PUF4 AABBCCDDEEFF 1 Bright A_SpawnItemEx("BlueFlare",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+    Stop
+  }
+}
+
+ACTOR PoweredStaffStrike: FastProjectile
+{
+	Radius 6
+	Height 6
+	DamageType "Lightning"
+	Projectile
+	+FORCEXYBILLBOARD +NOEXTREMEDEATH
+	RenderStyle Add
+	Alpha 0.5
+	Damage (Random(15,20))
+	Speed 50
+	SeeSound "none"
+	DeathSound "none"
+	Decal "WallCrack"
+	States
+	{
+	Spawn:
+		MRS2 AB 1 BRIGHT
+		Stop
+	Death:
+		TNT1 A 0 A_AlertMonsters(200)
+		TNT1 A 0 A_CheckFloor("DeathOnGround")
+		PUFF A 0 A_PlaySound("player/cyborg/fist", 3)
+		TNT1 A 0 A_SpawnItemEx ("PLOFT2",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		EXPL A 0 A_CustomMissile ("BluePlasmaParticleSpawner", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 Radius_Quake (2, 6, 0, 5, 0)//(intensity, duration, damrad, tremrad, tid)
+		PUF4 AABBCCDDEEFF 1 Bright A_SpawnItemEx("BlueFlareSmall",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+		Stop
+	DeathOnGround:
+		TNT1 A 0
+		PUFF A 0 A_PlaySound("player/cyborg/fist", 3)
+		TNT1 A 0 A_SpawnItemEx ("PLOFT2",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		EXPL A 0 A_CustomMissile ("BluePlasmaParticleSpawner", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 Radius_Quake (2, 6, 0, 5, 0)//(intensity, duration, damrad, tremrad, tid)
+		PUF4 AABBCCDDEEFF 1 Bright A_SpawnItemEx("BlueFlareSmall",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+		Stop
+}}

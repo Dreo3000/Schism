@@ -1,0 +1,2178 @@
+//=============================================================================================
+//
+// Iron Lich (Some code from Bitter Heretic and Some from Cyberdemon/etc. from Schism)
+// modified by LordADHD
+//=============================================================================================
+
+ACTOR BrutalLich replaces IronLich //: Cyberdemon //Replaces Cyberdemon // see MonsterSpawner.txt for details
+{
+    Game Heretic
+	damagefactor "HKFT", 0.05
+	damagefactor "HKFT", 0.05
+	damagefactor "Decaptate", 5.0
+	damagefactor "Avoid", 0.0
+	damagefactor "GibRemoving", 0.0
+	damagefactor "TeleportRemover", 0.0
+	DamageFactor "CauseSplash", 0.0 DamageFactor "CauseObjectsToSplashSlime", 0.0 DamageFactor "CauseObjectsToSplashNukage", 0.0
+	DamageFactor "CauseObjectsToSplashBlood", 0.0 DamageFactor "CauseObjectsToSplashLava", 0.0
+    //damagefactors taken from Tank, but modified (gl marine X) )
+	damagefactor "stomp", 0.0 damagefactor "Shotgun", 0.1 damagefactor "SSG", 0.1 damagefactor "kick", 0.05 damagefactor "extremepunches", 0.05
+	damagefactor "melee", 0.2 damagefactor "minigun", 0.3 damagefactor "minor", 0.1 damagefactor "saw", 0.2 damagefactor "cut", 0.3
+	damagefactor "Explosive", 0.46 damagefactor "bullet", 0.1 damagefactor "monsterbullet", 0.25 damagefactor "monstershotgun", 0.2 damagefactor "monsterminigun", 0.2
+	damagefactor "ExplosiveImpact", 0.25 damagefactor "blast", 0.5
+	damagefactor "Fire", 0.5 damagefactor "Lightning", 0.5 damagefactor "Freeze", 0.5
+	///////////////////////////////
+	Health 1000
+    damagefactor "Crush", 20.0
+    Scale 1.2
+	Radius 40
+	Height 72
+	SpawnID 20
+	Monster
+	+DONTMORPH
+	+DONTSQUASH
+	+BOSSDEATH
+	+NOGRAVITY
+	+FLOAT
+    +DONTRIP
+	+DONTHURTSPECIES
+	+DONTHARMSPECIES
+	meleethreshold 150
+	
+	SeeSound "ironlich/sight"
+	AttackSound "ironlich/attack"
+	PainSound "ironlich/pain"
+	DeathSound "ironlich/death"
+	ActiveSound "ironlich/active"
+	
+	Obituary "$OB_IRONLICH"
+	HitObituary "$OB_IRONLICHHIT"
+	
+	Speed 7
+	FastSpeed 10 //placeholder
+	painchance "kick", 255
+	painchance "Fire", 60
+	painchance 32
+	mass 5000
+	//PainChance "Head", 40 //He is a big head XD
+	PainChance "KillMe", 64
+	PainChance "Taunt", 255
+	PainChance "Freeze", 255
+	PainChance "Cut", 5
+	DropItem "DemonStrengthRune" 25
+	//Painchance "Fatality", 90
+    BloodType "TankBlood", "TankBlood", "TankBlood"
+	damagefactor "Blood", 0.0 damagefactor "BlueBlood", 0.0 damagefactor "GreenBlood", 0.0
+	Tag "Iron Lich"
+	Species "Liches"
+	States
+	{
+
+		
+	Pain:
+		TNT1 A 0 A_SetReflective
+		//TNT1 A 0 A_JumpIfHealthLower(500,"Pain2")
+		LICH H 1
+		LICH H 4 A_Pain
+		LICH H 4
+		TNC1 A 0 A_UnSetReflective
+		Goto See
+	
+	Pain2:
+		LIPW A 1 A_Blast
+		LIPW A 4 A_Pain
+		LIPW A 4
+		TNT1 A 0 A_UnSetReflective
+		Goto See
+	
+	Pain.Freeze:
+		TNT1 A 0
+		TNT1 A 0 A_JumpIfInventory("IsSlowed", 1, "Pain")
+		TNT1 A 0 ACS_NamedExecute("SlowingFreeze",0)
+		TNT1 A 0 A_GiveInventory("IsSlowed", 1)
+		Goto Pain
+	
+    Spawn:
+		LICH A 0
+		
+	Stand:	
+        
+        LICH A 10 A_Look
+        Loop
+	
+	See:
+		//TNT1 A 0 A_JumpIfHealthLower(500,2)
+		LICH A 0
+		Goto See2
+		LICw A 0
+	
+	See2:
+		"####" A 0 BRIGHT A_SpawnItemEx ("SmallFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("ImBallGettingReady", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("SmallFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("ImBallGettingReady", 20, -15, 60)
+		"####" A 2 A_Chase
+		"####" A 0 BRIGHT A_SpawnItemEx ("SmallFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("ImBallGettingReady", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("SmallFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("ImBallGettingReady", 20, -15, 60)
+		"####" A 2 A_Chase
+		"####" A 0 A_JumpIfCloser(120, "Blast")
+		Goto See
+
+	Missile:
+	    "####" A 0 A_JumpIfCloser(180, "Blast")
+		//"####" A 0 A_JumpIfInventory("Enraged", 1, "SpecialAttack")
+		"####" A 5 A_FaceTarget
+		"####" A 0 A_Jump(255, "FireBallSet", "LightningShot", "IceBall")
+		Goto IceBall
+	
+/*
+	SpecialAttack:
+		"####" A 5 A_FaceTarget
+		"####" J 15 A_FaceTarget
+		//"####" B 10 A_FaceTarget
+		"####" A 0 A_Jump(255, "FireBallX", "LightningShotX", "IceBallX")
+		Goto IceBallX
+*/
+	
+	Blast:
+	Melee:
+		//"####" A 0 A_JumpIfInventory("Enraged", 1, "SpecialMelee")
+		"####" A 5 A_FaceTarget
+		"####" A 0 A_Jump(255, "Flamethrower", "Shockthrower", "FreezeThrower")
+		Goto FreezeThrower
+	
+/*
+	SpecialMelee:
+		"####" A 5 A_FaceTarget
+		"####" J 15 A_FaceTarget
+		//"####" B 10 A_FaceTarget
+		"####" A 0 A_Jump(255, "FlamethrowerX", "ShockthrowerX", "FreezeThrowerX")
+		Goto FreezeThrowerX
+*/
+	
+///////////////////////////
+//Attacks are placed here//
+///////////////////////////
+	
+	FireBallSet:
+		"####" A 0 A_JumpIf(z-floorz > 50.0, "DeadlyFireball")
+		Goto Purgatory
+
+	Purgatory:
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 A_CustomMissile ("LichSuperHammer", 32, 0, 0)
+		Goto See
+		
+	DeadlyFireball:
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 A_CustomMissile ("LichDeadlyFireball", 32, 0, 0)
+		Goto See
+
+	LightningShot:
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 A_CustomMissile ("LichLightningMissile1", 32, 0, 0)
+		Goto See
+	
+	IceBall:
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" D 2 A_FaceTarget
+		"####" A 0 A_CustomMissile ("LichIceOrb", 32, 0, 0)
+		Goto See
+	
+/*
+	FireBallX:
+		"####" B 10 A_CustomMissile ("LichBigFireball", 32, 0, 0)
+		"####" B 10 A_CustomMissile ("LichBigFireball", 32, 0, 45)
+		"####" B 10 A_CustomMissile ("LichBigFireball", 32, 0, 315)
+		Goto See
+	
+	LightningShotX:
+		"####" B 10 A_CustomMissile ("LichLightningMissile", 32, 0, 0)
+		"####" B 10 A_CustomMissile ("LichLightningMissile", 32, 0, 45)
+		"####" B 10 A_CustomMissile ("LichLightningMissile", 32, 0, 315)
+		Goto See
+	
+	IceBallX:
+		"####" B 10 A_CustomMissile ("LichIceOrb", 32, 0, 0)
+		"####" B 10 A_CustomMissile ("LichIceOrb", 32, 0, 45)
+		"####" B 10 A_CustomMissile ("LichIceOrb", 32, 0, 315)
+		Goto See
+*/	
+
+	FlameThrower:
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichFireFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyFire", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		Goto See
+		
+	ShockThrower:
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichStormFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyStorm", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		Goto See
+		
+	FreezeThrower:
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" B 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" C 2 A_FaceTarget
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, 15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, 15, 60)
+		"####" A 0 BRIGHT A_SpawnItemEx ("LichIceFlameTrails", 20, -15, 60)
+		"####" A 0 A_SpawnItemEx ("LichBallGettingReadyIce", 20, -15, 60)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" D 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		Goto See
+		
+/*
+	FlameThrowerX:
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFlameMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFlameMissile", 32, 0, random(-45,45))
+		Goto See
+	
+	ShockThrowerX:
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichShockMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichShockMissile", 32, 0, random(-45,45))
+		Goto See
+	
+	FreezeThrowerX:
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		"####" B 1 A_CustomMissile ("LichFreezeMissile", 32, 0, 0)
+		"####" A 0 A_CustomMissile ("LichFreezeMissile", 32, 0, random(-45,45))
+		Goto See
+*/
+
+
+////////////
+	
+	Death:
+		LICH H 5 BRIGHT
+		LICH H 5 BRIGHT A_Scream
+		TNT1 A 0 A_BossDeath
+		//TNT1 A 0 A_Explode (50,220)
+		TNT1 AAAAAA 0 A_CustomMissile ("FireworkSFXType1", 0, 0, random (0, 360), 2, random (10, 80))
+		
+		TNT1 A 0 A_CustomMissile ("XDeathLichNew1", 32, 0, random (0, 360), 2, random (30, 90))
+        TNT1 A 0 A_CustomMissile ("XDeathLichNew2", 32, 0, random (0, 360), 2, random (30, 90))
+		TNT1 A 0 A_CustomMissile ("XDeathLichNew3", 32, 0, random (0, 360), 2, random (30, 90))
+        TNT1 A 0 A_CustomMissile ("XDeathLichNew4", 32, 0, random (0, 360), 2, random (30, 90))
+		TNT1 A 0 A_CustomMissile ("XDeathLichNew5", 32, 0, random (0, 360), 2, random (30, 90))
+		TNT1 AAAAAAAAAAAA 0 A_CustomMissile ("XDeathLichNew6", 32, 0, random (0, 360), 2, random (30, 90))
+		
+		TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 30, 0, random (0, 360), 2, random (40, 90))
+		TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 30, 0, random (0, 360), 2, random (40, 90))
+		TNT1 AA 0 A_CustomMissile ("BDExplosionparticles3", 10, 0, random (0, 360), 2, random (40, 90))
+		TNT1 AA 0 A_SpawnItemEx("TinyBurningPiece3", random (-5, 5), random (-5, 5))
+		TNT1 AA 0 A_SpawnItemEx("TinyBurningPiece", random (-5, 5), random (-5, 5))
+		TNT1 AA 0 A_SpawnItemEx("TinyBurningPiece2", random (-5, 5), random (-5, 5))
+		TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		EXPL A 0 A_SpawnItemEx("ExplosionParticleSpawner", 0, 0, 0, 0, 0, 0, 0, 128)
+		EXPL AAAAAAAAAAAAAAAAA 0 A_CustomMissile ("FireBallExplosion", 6, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0
+		TNT1 A -1
+		Stop
+	
+	Death.Ice:
+	Death.Freeze:
+	Death.Frost:
+		TNT1 A 0
+		TNT1 A 0 A_BossDeath
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+		TNT1 A 0 A_ChangeFlag("SOLID", 0)
+		TNT1 A 0 A_SpawnItemEx("FrozenLich", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS, 0, tid)
+		Stop
+	
+    Crush:
+		TNT1 A 0
+		TNT1 AAAA 0 A_SpawnItemEx ("BodyRemovalThing",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 1 A_XScream
+		Stop
+	
+	Pain.Taunt:
+		TNT1 A 0
+		TNT1 A 0 HealThing(1)
+		TNT1 A 0 A_JumpIfInventory("Enraged", 1, "Missile")
+		TNT1 A 0 A_JumpIfHealthLower(500, "DamagedTaunt")
+		SPOS B 0 A_Pain
+		TNT1 A 0 A_ChangeFlag("FASTER", 1)
+		TNT1 A 0 A_ChangeFlag("MISSILEMORE", 1)
+		TNT1 A 0 A_ChangeFlag("MISSILEEVENMORE", 1)
+		TNT1 A 0 A_ChangeFlag("NOPAIN", 1)
+		LICH A 1 A_FaceTarget
+		LICH AJBJAJBJA 4 A_FaceTarget
+		TNT1 A 0 A_GiveInventory("Enraged", 1)
+		Goto See
+	
+	DamagedTaunt:
+		SPOS B 0 A_Pain
+		TNT1 A 0 A_ChangeFlag("FASTER", 1)
+		TNT1 A 0 A_ChangeFlag("MISSILEMORE", 1)
+		TNT1 A 0 A_ChangeFlag("MISSILEEVENMORE", 1)
+		TNT1 A 0 A_ChangeFlag("NOPAIN", 1)
+		LICW A 1 A_FaceTarget
+		LICW AJBJAJBJA 4 A_FaceTarget
+		TNT1 A 0 A_GiveInventory("Enraged", 1)
+		Goto See
+	
+	Pain.Killme:
+		TNT1 A 0
+		TNT1 A 0 HealThing(1)
+		Goto Missile
+	
+	}
+}
+
+/////////////////////
+//Iron Lich Attacks//
+/////////////////////
+
+//Frostmancy//
+
+ACTOR LichIceFlameTrails: FlameTrails
+{
+	States
+	{
+    Spawn:
+	    TNT1 A 1
+        LICI CDEFGH 1 BRIGHT
+        Stop
+	}
+}
+
+ACTOR LichBallGettingReadyIce: ImBallGettingReady
+{
+Speed 0
+-FORCEXYBILLBOARD
+Alpha 1.0
+Renderstyle Add
+    Scale 1.6
+	States
+	{
+    Spawn:
+        LICI JK 3 BRIGHT
+        Stop
+	}
+}
+
+Actor LichIceOrb
+{
+Radius 13
+Height 8
+Speed 8
+Fastspeed 8
+Damage 15
+Projectile
+RenderStyle Add
+Alpha 0.7
++FORCEXYBILLBOARD
++NODAMAGETHRUST
++RIPPER
++NOBOSSRIP
++Friendly
+-THRUGHOST
++DONTHURTSPECIES
+Damagetype Freeze
+Scale 0.5
+DeathSound "iceimpa"
+Decal "IceScorch"
+
+species "Liches"
+
+States
+{
+Spawn:
+	TNT1 A 0
+	TNT1 A 0 A_SpawnItem("CryoSmoke2")
+	TNT1 A 0 A_playsound("coldcst")
+Fly:
+	ICOR AA 1 Bright 
+	TNT1 A 0 A_Explode(20,90,0)
+	//TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	TNT1 A 0 A_SpawnItemEx("FreezerTrailSparksSmall", random(5,-5), random(5,-5), 4, 0, 0, 0, 0, 128, 0) 
+	TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	
+	ICOR BB 1 Bright 
+	TNT1 A 0 A_Explode(20,90,0)
+	//TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,40,SXF_TRANSFERPOINTERS,128)
+	TNT1 A 0 A_SpawnItemEx("FreezerTrailSparksSmall", random(5,-5), random(5,-5), 4, 0, 0, 0, 0, 128, 0) 
+	TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	//TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	
+	ICOR CC 1 Bright 
+	TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,100,SXF_TRANSFERPOINTERS,128)
+	TNT1 A 0 A_Explode(20,90,0)
+	TNT1 A 0 A_SpawnItemEx("FreezerTrailSparksSmall", random(5,-5), random(5,-5), 4, 0, 0, 0, 0, 128, 0) 
+    //TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	
+	ICOR DD 1 Bright 
+	//TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	TNT1 A 0 A_Explode(20,90,0)
+	TNT1 A 0 A_SpawnItemEx("FreezerTrailSparksSmall", random(5,-5), random(5,-5), 4, 0, 0, 0, 0, 128, 0) 
+	TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	//TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	
+	ICOR EE 1 Bright 
+	TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	TNT1 A 0 A_Explode(20,90,0)
+	TNT1 A 0 A_SpawnItemEx("FreezerTrailSparksSmall", random(5,-5), random(5,-5), 4, 0, 0, 0, 0, 128, 0) 
+    //TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	TNT1 A 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+	loop
+	
+Death:
+	ICOR FF 1 Bright
+	TNT1 A 0 A_SpawnItem("FreezenadeExplosion",0,0,0)
+	TNT1 A 0 A_SetScale(1.5)
+		TNT1 AAAA 0 A_SpawnItemEx("LichIceSpike",0,0,0,random(30,50),0,0,random(-180,180),SXF_TRANSFERPOINTERS,128)
+		BXPL AAAAA 0 Bright A_SpawnItemEx("BigCryoSmoke", 0, 0, 0, random(10, 30)*0.04, 0, random(0, 10)*0.04, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION,64)
+		BXPL AABBCCDD 1 Bright A_Explode(25,250,0) 
+		TNT1 A 0 A_SetScale(2.0,1.5)
+		TNT1 A 0 A_SpawnItemEx ("FreezeCloudSpawner",0,0,5,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		BXPL EFGH 2 Bright A_FadeOut(0.1)
+		BXPL AAAAA 0 Bright A_SpawnItemEx("BigCryoSmoke", 0, 0, 0, random(10, 30)*0.04, 0, random(0, 10)*0.04, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION,64)
+		TNT1 A 0 A_SpawnItemEx ("FreezeCloudSpawner",0,0,5,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		BXPL IJKLLM 2 Bright A_FadeOut(0.1)
+		BXPL AAAAA 0 Bright A_SpawnItemEx("BigCryoSmoke", 0, 0, 0, random(10, 30)*0.04, 0, random(0, 10)*0.04, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION,64)
+		TNT1 A 0 A_SpawnItemEx ("FreezeCloudSpawner",0,0,5,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 12
+		BXPL AAA 0 Bright A_SpawnItemEx("BigCryoSmoke", 0, 0, 0, random(10, 30)*0.04, 0, random(0, 10)*0.04, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION,64)
+
+		TNT1 A 0 A_SpawnItemEx ("FreezeCloudSpawner",0,0,5,0,0,0,0,SXF_NOCHECKPOSITION,0)
+
+
+	
+	Stop
+}
+}
+
+ACTOR LichIceSpike : FastProjectile
+{
+	Radius 6
+	Height 8
+	Speed 45
+	Damage (random(5,10))
+	Projectile
+	DamageType "Freeze"
+	RenderStyle Add
+	//Translation "0:255=%[0,0,0]:[0,1,1]"
+	Alpha 0.95
+	DeathSound "iceimpa"
+	//MissileHeight 8
+	Decal "IceSmall"
+	
+	species "Liches"
+	
+	+DONTHURTSPECIES
+	+THRUSPECIES
+	+MTHRUSPECIES
+	States
+	{
+	Spawn:
+		ICPK A 3 Bright
+		TNT1 A 0 A_PlaySound("icespik", CHAN_7)
+		TNT1 A 0 A_CustomMissile("BlueFlareSpawn",0,0,0,0)
+		//TNT1 A 0 A_CustomMissile ("Icetracer", 0, 0, random (0, 360), 2, random (0, 360))
+		Loop
+	Death:
+		//TNT1 A 0 A_Jump(192,"Death2")
+		TNT1 A 0 A_SpawnItemEx ("DetectFloorIce",0,0,1,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("DetectCeilIce",0,0,1,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	Death2:
+		BXPL A 0 Bright A_ChangeFlag("ICEDAMAGE", 1)
+		BXPL A 0 Bright A_ChangeFlag("NODAMAGETHRUST", 0)
+		BXPL AAAAAAA 0 Bright A_SpawnItemEx("FreezerTrailSparksSmall", random(5,-5), random(5,-5), random(5,-5), random(10, 30)*0.04, 0, random(0, 10)*0.04, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION,64)
+		BXPL AAAAAAA 0 Bright A_SpawnItemEx("CryoSmoke2", 0, 0, 0, random(10, 30)*0.04, 0, random(0, 10)*0.04, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION,64)
+		TNT1 A 0 A_SpawnItemEx ("FreezeCloudSpawner",0,0,5,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		BXPL IJK 1 BRIGHT A_FadeOut(0.1)
+		TNT1 A 0 A_SpawnItemEx ("FreezeCloudSpawner",0,0,5,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		BXPL LLM 1 Bright A_FadeOut(0.1)
+		TNT1 A 0 A_SpawnItemEx ("FreezeCloudSpawner",0,0,5,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		Stop
+	}
+}
+
+ACTOR LichFreezeMissile
+{
++BLOODLESSIMPACT
+//+FORCERADIUSDMG
++DONTBLAST
++NODAMAGETHRUST
++DOOMBOUNCE 
++PAINLESS
+-MISSILE
++DONTHURTSPECIES
++THRUSPECIES
++MTHRUSPECIES
++RIPPER
++DONTSPLASH
+//+FRIENDLY
+BounceType Grenade
+damagetype "Freeze" 
+damage 2
+gravity 0.005
+Translation "0:255=%[0.0,0.0,0.0]:[0.5,0.8,1.0]"
+Alpha 0.40
+Height 16
+Projectile
+Radius 1
+RenderStyle Shaded
+StencilColor "A0 FF FF"
+Scale 0.5
+Speed 30
+
+species "Liches"
+
+SeeSound "none"
+DeathSound "none"
+AttackSound "none"
+
+	States
+	{
+	Spawn:
+	WPXS A 0 
+	WPXS A 0 A_Jump(230,3,7,11,15,19,23,27)
+	WPXS AB 2 A_FadeOut(0.03)
+	//TNT1 A 0 A_Explode(1,32,0,0,16)
+	WPXS CD 2 A_FadeOut(0.03)
+	TNT1 A 0 A_Explode(4,64,0,0,16)
+	WPXS EF 2 A_FadeOut(0.03)
+	//TNT1 A 0 A_Explode(1,32,0,0,16)
+	WPXS GH 2 A_FadeOut(0.03)
+	TNT1 A 0 A_Explode(4,64,0,0,16)
+	WPXS IJ 2 A_FadeOut(0.03)
+	//TNT1 A 0 A_Explode(1,32,0,0,16)
+	WPXS KL 2 A_FadeOut(0.03)
+	TNT1 A 0 A_Explode(4,64,0,0,16)
+	WPXS MN 2 A_FadeOut(0.03)
+	//TNT1 A 0 A_Explode(1,32,0,0,16)
+	WPXS OP 2 A_FadeOut(0.03)
+	TNT1 A 0 A_Explode(4,64,0,0,16)
+	WPXS QR 2 A_FadeOut(0.03) 
+	TNT1 A 0 A_SetScale (0.8)
+	WPXS ST 2 A_FadeOut(0.03)
+	WPXS UV 2 A_FadeOut(0.03)
+	TNT1 A 0 A_Explode(4,64,0,0,16)
+	WPXS WX 2 A_FadeOut(0.03)
+	WPXS YZ 2 A_FadeOut(0.03)
+	TNT1 A 0 A_Explode(4,64,0,0,16)
+	WPXZ ABC 3 A_FadeOut(0.03)
+	TNT1 A 0 
+	Stop
+	}
+
+}
+
+//Stormcast//
+
+ACTOR LichStormFlameTrails: FlameTrails
+{
+	States
+	{
+    Spawn:
+	    TNT1 A 1
+        LICL CDEFGH 1 BRIGHT
+        Stop
+	}
+}
+
+ACTOR LichBallGettingReadyStorm: ImBallGettingReady
+{
+Speed 0
+-FORCEXYBILLBOARD
+Alpha 1.0
+Renderstyle Add
+    Scale 1.6
+	States
+	{
+    Spawn:
+        LICL JK 3 BRIGHT
+        Stop
+	}
+}
+
+ACTOR LichLightningMissile1
+{
+    Radius 2
+    Height 4
+    Speed 100
+    Damage (50)
+    DamageType Lightning
+    PROJECTILE
+    +BLOODLESSIMPACT
+    -EXTREMEDEATH
+    +NODAMAGETHRUST
+	+DOOMBOUNCE
+	+RIPPER
+	+FORCEPAIN
+    DeathSound "weapons/lightningend"
+	SeeSound "PZAPBOMB"
+	+THRUSPECIES
+	+MTHRUSPECIES
+	+DONTHURTSPECIES
+	
+	species "Liches"
+	
+	renderstyle ADD
+	alpha 0.90
+	scale 1.6
+    
+	States
+    {
+    Spawn:
+	TNT1 A 0
+	TNT1 A 0 A_Weave(10, 10, random( -10, 10), random( -10, 10))
+	ZAP6 A 1 BRIGHT //A_SeekerMissile(40,50, SMF_LOOK|SMF_PRECISE)
+	TNT1 A 0 A_CustomMissile("LichLightningMissile2",0,0,frandom(-15,15),6,(momz+frandom(-15,15)))
+	TNT1 A 0 A_CustomMissile("LichLightningMissile2",0,0,frandom(-15,15),6,(momz+frandom(-15,15)))
+	TNT1 A 0 A_CustomMissile("LichLightningMissile2",0,0,frandom(-15,15),6,(momz+frandom(-15,15)))
+	ZAP6 B 1 BRIGHT //A_SeekerMissile(40,50, SMF_LOOK|SMF_PRECISE)
+	TNT1 A 0 A_CustomMissile("LichLightningMissile3",0,0,frandom(-15,15),6,(momz+frandom(-15,15)))
+	TNT1 A 0 A_CustomMissile("LichLightningMissile3",0,0,frandom(-15,15),6,(momz+frandom(-15,15)))
+	TNT1 A 0 A_CustomMissile("LichLightningMissile3",0,0,frandom(-15,15),6,(momz+frandom(-15,15)))
+	ZAP6 B 1 BRIGHT //A_SeekerMissile(40,50, SMF_LOOK|SMF_PRECISE)
+	TNT1 A 0 A_CustomMissile("LichLightningMissile4",0,0,frandom(-15,15),6,(momz+frandom(-15,15)))
+	TNT1 A 0 A_CustomMissile("LichLightningMissile4",0,0,frandom(-15,15),6,(momz+frandom(-15,15)))
+	TNT1 A 0 A_CustomMissile("LichLightningMissile4",0,0,frandom(-15,15),6,(momz+frandom(-15,15)))
+
+	Stop
+	Crash:
+	XDeath:
+    Death:
+	//TNT1 AAAA 0 A_CustomMissile ("ShoqueAzul", 3, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAAAA 0 A_SpawnItemEx("DLightningFX",0,0,0,frandom(3,-3),frandom(3,-3),frandom(3,-3),0,0)
+	TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+        SH1K ABCDEFG 2 BRIGHT A_SpawnItem("BlueFlare",0,0)
+	TNT1 A 0 A_SpawnItemEx("LightningTrailLarge",0,0,0,0,0,0,0,32)
+	//TNT1 A 0 A_Explode(15,10,0)
+	TNT1 A 1 A_Scream
+	
+	Stop
+    }
+}
+
+ACTOR LichLightningMissile2 : LichLightningMissile1
+{
+    Radius 2
+    Height 2
+    Damage (30)
+	Damagetype Lightning
+	+RIPPER
+	+DOOMBOUNCE
+	+FORCEPAIN
+	SeeSound "PZAPFIRE"
+	scale 1.3
+	
+	States
+    {
+    Spawn:
+	TNT1 A 0 A_Weave(12, 12, random( -8, 8), random( -8, 8))
+	TNT1 A 0 A_SpawnItemEx("LightningTrailLarge",0,0,0,0,0,0,0,32)
+	ZAP6 A 1 BRIGHT //A_SeekerMissile(50,55, SMF_LOOK|SMF_PRECISE)
+	TNT1 A 0 A_CustomMissile("LichLightningMissile3",0,0,frandom(-15,15),6,(momz+frandom(-15,15)))
+	ZAP6 B 1 BRIGHT //A_SeekerMissile(50,55, SMF_LOOK|SMF_PRECISE)
+	ZAP6 C 1 //A_SeekerMissile(50,55, SMF_LOOK|SMF_PRECISE)
+	TNT1 A 0 A_CustomMissile("LichLightningMissile3",0,0,frandom(-15,15),6,(momz+frandom(-15,15)))
+	ZAP6 A 1 //A_SeekerMissile(50,55, SMF_LOOK|SMF_PRECISE)
+	TNT1 A 0 A_CustomMissile("LichLightningMissile4",0,0,frandom(-40,40),6,(momz+frandom(-30,30)))
+	ZAP6 B 1 //A_SeekerMissile(50,55, SMF_LOOK|SMF_PRECISE)
+	TNT1 A 0 A_CustomMissile("LichLightningMissile4",0,0,frandom(-40,40),6,(momz+frandom(-30,30)))
+	TNT1 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	TNT1 A 0 A_SeekerMissile(50,55, SMF_LOOK|SMF_PRECISE)
+	TNT1 A 0 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+
+	Stop
+	Crash:
+	XDeath:
+    Death:
+    //TNT1 AAAA 0 A_CustomMissile ("ShoqueAzul", 3, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAAAA 0 A_SpawnItemEx("DLightningFX",0,0,0,frandom(3,-3),frandom(3,-3),frandom(3,-3),0,0)
+	TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+        SH1K ABCDEFG 2 BRIGHT A_SpawnItem("BlueFlare",0,0)
+	TNT1 A 0 A_SpawnItemEx("LightningTrailLarge",0,0,0,0,0,0,0,32)
+	//TNT1 A 0 A_Explode(15,10,0)
+	TNT1 A 1 A_Scream
+	Stop
+    }
+}
+
+ACTOR LichLightningMissile3 : LichLightningMissile2
+{
+	Radius 2
+    Height 2
+	+RIPPER
+	+FORCEPAIN
+	Damage (20)
+	DamageType Lightning
+	SeeSound "LIGHTN"
+	scale 1.0
+		
+    States
+    {
+    Spawn:
+	TNT1 A 0 A_Weave(12, 12, random( -8, 8), random( -8, 8))
+	ZAP6 C 1 //A_SeekerMissile(60,70, SMF_LOOK|SMF_PRECISE)
+	TNT1 A 0 A_SpawnItemEx("LightningTrail",0,0,0,0,0,0,0,32)
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 B 1
+	ZAP6 C 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+
+//	TNT1 A 0 A_CustomMissile("LightningMissile4",0,0,frandom(-30,30),6,(momz+frandom(-15,15)))
+
+//	TNT1 A 0 A_CustomMissile("LightningMissile4",0,0,frandom(-30,30),6,(momz+frandom(-15,15)))
+
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 C 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 B 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	TNT1 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 C 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 B 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	TNT1 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	Stop
+	Crash:
+	XDeath:
+	    //TNT1 AAAA 0 A_CustomMissile ("ShoqueAzul", 3, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAAAA 0 A_SpawnItemEx("DLightningFX",0,0,0,frandom(3,-3),frandom(3,-3),frandom(3,-3),0,0)
+	TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+        SH1K ABCDEFG 2 BRIGHT A_SpawnItem("BlueFlare",0,0)
+	TNT1 A 0 A_SpawnItemEx("LightningTrailLarge",0,0,0,0,0,0,0,32)
+	//TNT1 A 0 A_Explode(15,10,0)
+	TNT1 A 1 A_Scream
+	TNT1 A 2 
+	//TNT1 A 0 A_CustomMissile("LightningMissileTargetSeeker",0,0,frandom(-45,45),6,(momz+frandom(-15,15)))
+
+	TNT1 A 0 A_SpawnItemEx("LichLightningMissile5",32,0,0,0,0,0,0,32)
+
+    Death:
+ 	TNT1 A 0 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	Stop
+    }
+}
+
+ACTOR LichLightningMissile4 : LichLightningMissile3
+{
+	Radius 2
+    Height 2
+	Damage (12)
+	Damagetype Lightning
+	SeeSound "TPortalZap"
+	-RIPPER
+    //+DOOMBOUNCE
+	+FORCEPAIN
+	scale 0.8
+
+    States
+    {
+    Spawn:
+	TNT1 A 0 A_Weave(10, 10, random( -8, 8), random( -8, 8))
+	TNT1 A 0 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	//TNT1 A 0 A_JumpIfCloser(15,"Death")
+	ZAP6 C 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 B 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 C 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	
+	ZAP6 C 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 B 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 C 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	stop
+	Crash:
+	XDeath:
+	    //TNT1 AAAA 0 A_CustomMissile ("ShoqueAzul", 3, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAAAA 0 A_SpawnItemEx("DLightningFX",0,0,0,frandom(3,-3),frandom(3,-3),frandom(3,-3),0,0)
+	TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+        SH1K ABCDEFG 2 BRIGHT A_SpawnItem("BlueFlare",0,0)
+	//TNT1 A 0 A_Explode(15,10,0)
+	TNT1 A 1 A_Scream
+	Death:
+ 	TNT1 A 0 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	Stop
+    }
+}
+
+ACTOR LichLightningMissile5 : LichLightningMissile3
+{
+	Radius 2
+    Height 2
+	Damage (7)
+	Damagetype Lightning
+	SeeSound "ZAP"
+    -DOOMBOUNCE
+	+FORCEPAIN
+	scale 0.6
+	
+	
+    States
+    {
+    Spawn:
+	TNT1 A 0 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	//TNT1 A 0 A_JumpIfCloser(15,"Death")
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	ZAP6 A 1 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	stop
+	Crash:
+	XDeath:
+	    //TNT1 AAAA 0 A_CustomMissile ("ShoqueAzul", 3, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAAAA 0 A_SpawnItemEx("DLightningFX",0,0,0,frandom(3,-3),frandom(3,-3),frandom(3,-3),0,0)
+	TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+        SH1K ABCDEFG 2 BRIGHT A_SpawnItem("BlueFlare",0,0)
+	//TNT1 A 0 A_Explode(15,10,0)
+	TNT1 A 1 A_Scream
+	Death:
+ 	TNT1 A 0 A_SpawnItemEx("LightningTrailSmall",0,0,0,0,0,0,0,32)
+	Stop
+    }
+}
+
+ACTOR LichLightningMissile
+{
+    Radius 2
+    Height 4
+    Speed 30
+    Damage (25)
+    DamageType Lightning
+    PROJECTILE
+    +BLOODLESSIMPACT
+    -EXTREMEDEATH
+    +NODAMAGETHRUST
+	+RIPPER
+    DeathSound "weapons/lightningend"
+	SeeSound "PZAPBOMB"
+	+THRUSPECIES
+	+MTHRUSPECIES
+	
+	renderstyle ADD
+	alpha 0.90
+	scale 1.6
+    
+	States
+    {
+    Spawn:
+	ZAP6 AB 1 BRIGHT
+	TNT1 A 0 BRIGHT A_CustomMissile("LichLMLess",0,0,90,6)
+	TNT1 A 0 BRIGHT A_CustomMissile("LichLMLess",0,0,270,6)
+	loop
+	
+	Crash:
+	XDeath:
+    Death:
+	//TNT1 AAAA 0 A_CustomMissile ("ShoqueAzul", 3, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAAAA 0 A_SpawnItemEx("DLightningFX",0,0,0,frandom(3,-3),frandom(3,-3),frandom(3,-3),0,0)
+	TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+        SH1K ABCDEFG 2 BRIGHT A_SpawnItem("BlueFlare",0,0)
+	TNT1 A 0 A_SpawnItemEx("LightningTrailLarge",0,0,0,0,0,0,0,32)
+	//TNT1 A 0 A_Explode(15,10,0)
+	TNT1 A 1 A_Scream
+	
+	Stop
+    }
+}
+
+ACTOR LichLMLess
+{
+    Radius 2
+    Height 4
+    Speed 30
+    Damage (10)
+    DamageType Lightning
+    PROJECTILE
+    +BLOODLESSIMPACT
+    -EXTREMEDEATH
+    +NODAMAGETHRUST
+	+RIPPER
+    DeathSound "weapons/lightningend"
+	SeeSound "PZAPBOMB"
+	+THRUSPECIES
+	+MTHRUSPECIES
+	
+	renderstyle ADD
+	alpha 0.90
+	scale 1.0
+    
+	States
+    {
+    Spawn:
+	ZAP6 AB 1 BRIGHT
+	loop
+	
+	Crash:
+	XDeath:
+    Death:
+	//TNT1 AAAA 0 A_CustomMissile ("ShoqueAzul", 3, 0, random (0, 360), 2, random (0, 360))
+	//TNT1 AAAAAAA 0 A_SpawnItemEx("DLightningFX",0,0,0,frandom(3,-3),frandom(3,-3),frandom(3,-3),0,0)
+	//TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+        SH1K ABCDEFG 2 BRIGHT A_SpawnItem("BlueFlare",0,0)
+	//TNT1 A 0 A_SpawnItemEx("LightningTrailLarge",0,0,0,0,0,0,0,32)
+	//TNT1 A 0 A_Explode(15,10,0)
+	TNT1 A 1 A_Scream
+	
+	Stop
+    }
+}
+
+ACTOR LichShockMissile
+{
+   Radius 2
+   Height 2
+   Speed 32
+   Damage 5
+   PROJECTILE
+   RENDERSTYLE ADD
+   DamageType Lightning
+   ALPHA 1.0
+   Scale 0.8
+
+	+THRUSPECIES
+	+MTHRUSPECIES
+
+   SeeSound "none"
+   DeathSound "none"
+   States
+   {
+   
+   Spawn:
+      NULL A 1 Bright
+	  TNT1 A 0 A_JumpIf(waterlevel > 1, "Underwater")
+      ZAPT A 1 Bright A_Weave(5, 5, random( -5, 5), random( -5, 5))
+	  SH1K AB 1 Bright
+	  TNT1 A 0 A_Weave(5, 5, random( -3, 3), random( -3, 3))
+	  FAXE T 1 BRIGHT A_FadeOut(0.25)
+	  FAXE U 1 BRIGHT A_FadeOut(0.25)
+	  TNT1 A 0 A_JumpIf(waterlevel > 1, "Underwater")
+	  ZAPT A 1 Bright A_Weave(5, 5, random( -5, 5), random( -5, 5))
+	  SH1K AB 1 Bright
+	  TNT1 A 0 A_Weave(5, 5, random( -3, 3), random( -3, 3))
+	  FAXE T 1 BRIGHT A_FadeOut(0.25)
+	  FAXE U 1 BRIGHT A_FadeOut(0.25)
+	  TNT1 A 0 A_JumpIf(waterlevel > 1, "Underwater")
+      ZAPT A 1 Bright A_Weave(5, 5, random( -5, 5), random( -5, 5))
+	  SH1K AB 1 Bright
+	  TNT1 A 0 A_Weave(5, 5, random( -3, 3), random( -3, 3))
+	  FAXE T 1 BRIGHT A_FadeOut(0.25)
+	  FAXE U 1 BRIGHT A_FadeOut(0.25)
+		  
+	  Stop
+   Death:
+      TNT1 A 0
+      stop
+	XDeath:
+	TNT1 A 0 A_Explode(5, 40, 0)
+	Stop
+	
+	 Underwater:
+	 TNT1 A 0
+	 Stop
+   }
+}
+
+//Pyromancy//
+
+ACTOR LichFireFlameTrails: FlameTrails
+{
+	States
+	{
+    Spawn:
+	    TNT1 A 1
+        LICF CDEFGH 1 BRIGHT
+        Stop
+	}
+}
+
+ACTOR LichBallGettingReadyFire: ImBallGettingReady
+{
+Speed 0
+-FORCEXYBILLBOARD
+Alpha 1.0
+Renderstyle Add
+    Scale 1.6
+	States
+	{
+    Spawn:
+        LICF JK 3 BRIGHT
+        Stop
+	}
+}
+
+ACTOR LichSuperHammer
+{
+	Radius 10
+	Height 10
+	Speed 25
+	Damage 5
+    DamageType Fire
+	Decal "Scorch"
+	Projectile
+	BounceType Grenade
+	BounceFactor 0.4
+	+MISSILE
+	+DOOMBOUNCE
+	+RANDOMIZE
+	+MOVEWITHSECTOR
+	+FLOORHUGGER
+	+RIPPER
+	//+EXTREMEDEATH
+renderstyle ADD
+alpha 0.90
+Scale 1.0
+	+THRUSPECIES
+	+MTHRUSPECIES
+	+DONTHURTSPECIES
+	DeathSound "weapons/plasmax"
+    SeeSound "None"
+	Obituary "$OB_MPPLASMARIFLE"
+	
+	species "Liches"
+	
+	States
+	{
+	Spawn:
+	    TNT1 A 4
+        TNT1 A 6 A_SpawnItem("LichHammerGroundExplosion2")  //A_SpawnItem("InverseGroundExplosion")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 6 A_SpawnItem("LichHammerGroundExplosion")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 6 A_SpawnItem("LichHammerGroundExplosion2")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 6 A_SpawnItem("LichHammerGroundExplosion")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 6 A_SpawnItem("LichHammerGroundExplosion2")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 4 A_SpawnItem("LichHammerGroundExplosion")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 4 A_SpawnItem("LichHammerGroundExplosion2")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 4 A_SpawnItem("LichHammerGroundExplosion")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 3 A_SpawnItem("LichHammerGroundExplosion2")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 3 A_SpawnItem("LichHammerGroundExplosion")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 3 A_SpawnItem("LichHammerGroundExplosion2")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 3 A_SpawnItem("LichHammerGroundExplosion")
+		//TNT1 A 0 A_Explode(200,300)
+		 Stop
+	Death:	 
+	TNT1 A 0 A_SpawnItem("LichHammerGroundExplosion")
+	Stop
+	}
+}
+
+ACTOR LichHammerGroundExplosion : GroundExplosion
+{
+    Scale 1.5
+	Species "Liches"
+	States
+	{
+    Spawn:
+	TNT1 A 0
+	TNT1 A 0 A_Explode(60, 120, 0)
+	TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_PlaySound("DSBAREXP", 1)
+	TNT1 A 1 Radius_Quake (4, 15, 0, 12, 0)
+	TNT1 AAAA 0 A_CustomMissile ("PlasmaSmoke", 3, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("BDExplosionparticles", 3, 0, random (0, 360), 2, random (0, 360))	
+    exR1 ABCDEFGHIJKLMN 1 BRIGHT A_SpawnItemEx ("RedFlareLarge1x",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT2 AAAAAAAAAAAAAAA 6 A_CustomMissile ("PlasmaSmoke", 1, 0, random (0, 360), 2, random (0, 160))
+      Stop
+	}
+}
+
+ACTOR LichHammerGroundExplosion2 : LichHammerGroundExplosion
+{
+    Scale 1.4
+}
+
+ACTOR LichDeadlyFireBall
+{
+	Radius 10
+	Height 8
+	Projectile
+	Speed 55
+    Damage 20
+	DamageType Fire
+    //Gravity 0.2
+    Decal "Scorch"
+	Renderstyle Add
+    //-NOGRAVITY
+	+EXTREMEDEATH
+	+THRUGHOST
+	+DONTHURTSPECIES
+	//+SEEKERMISSILE
+	Scale 1.7
+    SeeSound "FLAMECS"
+    //SeeSound "RLANSHOT"
+	DeathSound "Explosion"
+	Obituary "$OB_MPROCKET"
+	
+	species "Liches"
+	
+	States
+	{
+	Spawn:
+	    TNT1 A 0
+		//TNT1 A 0 ACS_ExecuteAlways(798, 0, 0, 0, 0)//Check Effects
+		//TNT1 A 0 ACS_ExecuteAlways(503, 0, 0, 0, 0)
+		
+	//Spawn1:	
+		//TNT1 A 0 A_SeekerMissile(0,6,SMF_PRECISE)
+		TNT1 A 0 A_JumpIf(waterlevel > 1, "SpawnUnderwater")
+	    WYVB A 1 Bright A_SpawnItem("RedFlareSmall22",0,0) 
+		//TNT1 A 0 A_Weave(4, 4, random( -5, 5), random( -5, 5))
+		TNT1 A 0 A_SpawnItem ("CoolAndNewFlameTrailsLong2", 0, random( -2, 2))
+		TNT1 A 0 A_JumpIfInventory("lowgraphicsmode", 1, "SpawnCheap")
+		Loop
+		
+	SpawnCheap:
+	    TNT1 A 0
+		TNT1 A 0 A_SeekerMissile(0,6,SMF_PRECISE)
+	    WYVB A 1 Bright A_SpawnItem("RedFlareSmall22",0,0)
+		//TNT1 A 0 A_SpawnItem("CoolAndNewFlameTrails")
+		Loop	
+	
+	
+	SpawnUnderwater:
+	    WYVB A 1 Bright A_SpawnItem("YellowFlareSmall",0,0) 
+        TNT1 A 0 A_CustomMissile ("BUBULZ", 0, 0, random (0, 360), 2, random (0, 180))
+		Goto Spawn
+	
+	Crush:
+	XDeath:	
+	Death:
+	TNT1 A 0 A_Explode(100, 250)
+	TNT1 A 0 A_ChangeFlag("NOGRAVITY", 0)
+	TNT1 AAAA 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	EXPL A 0 A_SpawnItem("ExplosionParticleSpawner")
+	//EXPL AAAAAAA 0 A_CustomMissile ("FireballExplosionFlamesBig", 6, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAA 0 A_CustomMissile ("PyromancyLargeSparksFlames", 0, 0, random (0, 360), 2, random (0, 180))
+	TNT1 AA 0 A_CustomMissile ("PyromancyLargeExplosionFlames", 0, 0, random (0, 360), 2, random (0, 180))
+	
+	TNT1 AAA 0 A_CustomMissile ("FlyingMagicLava", 54, 0, random (0, 360), 2, random (20, 80))
+	TNT1 AAA 0 A_CustomMissile ("FlyingMagicLava", 44, 0, random (0, 360), 2, random (20, 80))
+	TNT1 AAAAAAAA 0 A_CustomMissile ("FlyingMagicLava", 54, 0, random (0, 360), 2, random (30, 80))
+	TNT1 AAAAAAAAA 0 A_CustomMissile ("FlyingMagicLava", 44, 0, random (0, 360), 2, random (30, 80))
+	TNT1 A 0 A_SpawnItemEx("TinyBurningPiece", random (-15, 15), random (-15, 15))
+	TNT1 A 0 A_SpawnItemEx("TinyBurningPiece2", random (-35, 35), random (-35, 35))
+	TNT1 A 0 A_SpawnItemEx("TinyBurningPiece3", random (-45, 45), random (-45, 35))
+
+	TNT1 A 0 A_Explode(15, 200)
+	TNT1 A 2 A_CustomMissile ("PyromancyInfernoExplosionFlames", 0, 0, random (0, 360), 2, random (0, 180))
+	TNT1 A 0 A_Explode(15, 200)
+	TNT1 A 2 A_CustomMissile ("PyromancyLargeExplosionFlames", 0, 0, random (0, 360), 2, random (0, 180))
+	TNT1 A 0 A_Explode(15, 200)
+	TNT1 A 2 A_CustomMissile ("PyromancyLargeExplosionFlames2", 0, 0, random (0, 360), 2, random (0, 180))
+	TNT1 A 0 A_Explode(15, 200)
+	
+	EXPL AAA 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 12, 0, random (0, 360), 2, random (40, 160))
+	TNT1 AA 2 A_CustomMissile ("PyromancyLargeExplosionFlames", 0, 0, random (0, 360), 2, random (0, 180))
+	TNT1 A 0 A_Explode(15, 200)
+	TNT1 AA 2 A_CustomMissile ("PyromancyInfernoExplosionFlames", 0, 0, random (0, 360), 2, random (0, 180))
+	TNT1 A 0 A_Explode(15, 200)
+	EXPL AAA 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 12, 0, random (0, 360), 2, random (40, 160))
+	TNT1 AAAA 2 A_CustomMissile ("PyromancyLargeExplosionFlames2", 0, 0, random (0, 360), 2, random (0, 180))
+	TNT1 A 0 A_Explode(15, 200)
+	
+	//TNT1 AA 1 A_CustomMissile ("PyromancyInfernoFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	//EXPL AAAAAAA 0 A_CustomMissile ("FlamethrowerMissleSlow", 6, 0, random (0, 360), 2, random (0, 25))
+	EXPL AAAAA 0 A_CustomMissile ("BigNeoSmoke", 0, 0, random (0, 360), 2, random (0, 360))
+	FRFX ZZZ 0 BRIGHT A_CustomMissile ("BigNeoSmoke", 2, 0, random (0, 360), 2, random (0, 360))
+	EXPL AAA 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 12, 0, random (0, 360), 2, random (40, 160))
+	
+	//EXPL AAAAAA 0 A_CustomMissile ("FlamethrowerMissleSlow", 6, 0, random (0, 360), 2, random (0, 40))
+	//TNT1 AAAAAA 20 A_CustomMissile ("BigBlackSmoke", 0, 0, random (0, 360), 2, random (40, 160))
+    TNT1 A 0 A_Playsound("Pyromancy/FireballHit")
+	TNT1 AAAAAAAAA 2 A_Explode(5, 150)
+	Stop
+	//ExplosionEffect:
+		TNT1 A 0
+		TNT1 AAAA 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		EXPL A 0 A_SpawnItem("ExplosionParticleSpawner")
+		
+		TNT1 A 0 A_SpawnItemEx("TinyBurningPiece", random (-15, 15), random (-15, 15))
+		TNT1 A 0 A_SpawnItemEx("TinyBurningPiece2", random (-35, 35), random (-35, 35))
+		TNT1 A 0 A_SpawnItemEx("TinyBurningPiece3", random (-45, 45), random (-45, 35))
+		TNT1 AAAAAA 20 A_CustomMissile ("BigBlackSmoke", 0, 0, random (0, 360), 2, random (40, 160))
+		Stop
+	
+	DeathCheap:
+		TNT1 A 0 ACS_ExecuteAlways(501,0,800,0,0)
+		TNT1 A 0 A_GiveInventory("FireballIsDead", 1)
+		TNT1 A 0 A_Explode(60, 150, 0, 1, 80)
+		
+        EXPL A 0 Radius_Quake (2, 8, 0, 15, 0)//(intensity, duration, damrad, tremrad, tid)
+        TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	    TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	    TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+        TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("BarrelKaboom",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+        TNT1 AAA 0 A_CustomMissile ("ExplosionParticleHeavy", 0, 0, random (0, 360), 2, random (0, 180))
+        TNT1 AAA 0 A_CustomMissile ("ExplosionParticleHeavy", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAA 0 A_CustomMissile ("ExplosionParticleVeryFast", 0, 0, random (0, 360), 2, random (0, 360))
+        TNT1 AAAAA 0 A_CustomMissile ("MediumExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 1
+		TNT1 A 0 A_PlaySound("FAREXPL", 3)
+		TNT1 A 15
+		Stop	
+	}
+}
+
+ACTOR LichBFCounter : Inventory
+{
+Inventory.MaxAmount 2
+}
+
+ACTOR LichBigFireBall
+{
+	Game Doom
+	Radius 6
+	Height 8
+	Speed 20
+    Fastspeed 25
+	Damage (random(60,60))
+	Projectile 
+    Scale 0.9
+	+FORCEXYBILLBOARD
+	+THRUGHOST
+	+GHOST
+	RenderStyle Add
+    DamageType Fire
+	ExplosionRadius 170
+	ExplosionDamage 10
+	Alpha 1
+	Decal "Scorch"
+	SeeSound "BREATHOF"
+	DeathSound "fatso/shotx"
+	States
+	{
+	Spawn:
+	    TNT1 A 0
+		TNT1 A 0 ACS_NamedExecuteAlways("BDCheckJanitor", 0, 0, 0, 0)//Check Effects
+	
+	Spawn1:
+		TNT1 A 0 A_JumpIfInventory("LichBFCounter", 2, "Spit")
+		TNT1 A 0 A_JumpIfInventory("lowgraphicsmode", 1, "SpawnCheap")
+		TNT1 A 0 
+		BLHD AB 1 BRIGHT A_SpawnItem ("FireballExplosionFlamesSmall")
+		TNT1 A 0 A_CustomMissile ("RocketSmokeTrail52", 2, 0, random (70, 110), 2, random (0, 360))
+		TNT1 A 0 A_GiveInventory("LichBFCounter", 1)
+		Loop
+		
+	SpawnCheap:
+		TNT1 A 0 A_JumpIfInventory("LichBFCounter", 2, "Spit")
+		TNT1 A 0 A_SpawnItem ("FireballExplosionFlamesSmall")
+		BLHD AB 1 BRIGHT A_SpawnItem("RedFlare22")
+		TNT1 A 0 A_GiveInventory("LichBFCounter", 1)
+		Loop	
+	
+	Spit:
+		TNT1 A 0 A_CustomMissile("LichFireBall", 0, 0, random(0, 360))
+		TNT1 A 0 A_TakeInventory("LichBFCounter", 2)
+		Goto Spawn1
+	
+	Death:
+	
+	TNT1 A 0 A_ChangeFlag("NOGRAVITY", 0)
+	TNT1 A 0 A_Explode(15, 60, 0)
+	Goto ExplosionEffect
+	
+	ExplosionEffect:
+	TNT1 A 0
+	TNT1 A 0 A_JumpIfInventory("lowgraphicsmode", 1, "DeathCheap")
+	TNT1 AA 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (40, 90))
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (40, 90))
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles3", 10, 0, random (0, 360), 2, random (40, 90))
+	EXPL A 0 A_CustomMissile ("FlamethrowerFireParticles", 6, 0, random (0, 360), 2, random (0, 90))
+	//FRFX ZZZ 0 BRIGHT A_CustomMissile ("BigBlackSmoke", 2, 0, random (0, 360), 2, random (0, 30))
+	//TNT1 A 2 A_SpawnItem("BurningGroundLowDamage")
+	TNT1 A 0 A_SpawnItemEx("TinyBurningPiece", random (-15, 15), random (-15, 15))
+	TNT1 A 0 A_SpawnItemEx("TinyBurningPiece2", random (-35, 35), random (-35, 35))
+	TNT1 A 0 A_SpawnItemEx("TinyBurningPiece3", random (-45, 45), random (-45, 35))
+	TNT1 AA 20 A_CustomMissile ("BigBlackSmoke", 0, 0, random (0, 360), 2, random (40, 160))
+	Stop
+		
+	DeathCheap:
+	XDeath:
+	TNT1 A 0
+	TNT1 A 0 A_JumpIfCloser(200, "StopInAir")
+	TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (40, 90))
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (40, 90))
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles3", 10, 0, random (0, 360), 2, random (40, 90))
+	EXPL A 0 A_CustomMissile ("FlamethrowerFireParticles", 6, 0, random (0, 360), 2, random (0, 90))
+	Stop
+	
+		
+	StopInAIr:	
+	EXPL AAA 0 A_CustomMissile ("FlamethrowerFireParticles", 6, 0, random (0, 360), 2, random (0, 90))
+	Stop
+	}
+}
+
+ACTOR LichFireBall
+{
+	Game Doom
+	Radius 6
+	Height 8
+	Speed 20
+    Fastspeed 25
+	Damage (random(40,40))
+	Projectile 
+    Scale 0.6
+	+FORCEXYBILLBOARD
+	+THRUGHOST
+	+GHOST
+	-NOGRAVITY
+	RenderStyle Add
+    DamageType Fire
+	ExplosionRadius 150
+	ExplosionDamage 8
+	Alpha 1
+	Gravity 0.2
+	Decal "Scorch"
+	SeeSound "BREATHOF"
+	DeathSound "fatso/shotx"
+	States
+	{
+	Spawn:
+	    TNT1 A 0
+		TNT1 A 0 ACS_NamedExecuteAlways("BDCheckJanitor", 0, 0, 0, 0)//Check Effects
+	
+	Spawn1:
+		TNT1 A 0 A_JumpIfInventory("lowgraphicsmode", 1, "SpawnCheap")
+		TNT1 A 0 
+		BLHD AB 1 BRIGHT A_SpawnItem ("FireballExplosionFlamesSmall")
+		TNT1 A 0 A_CustomMissile ("RocketSmokeTrail52", 2, 0, random (70, 110), 2, random (0, 360))
+		Loop
+		
+	SpawnCheap:
+		TNT1 A 0 A_SpawnItem ("FireballExplosionFlamesSmall")
+		BLHD AB 1 BRIGHT A_SpawnItem("RedFlare22")
+		Loop	
+		
+	Death:
+	
+	TNT1 A 0 A_ChangeFlag("NOGRAVITY", 0)
+	TNT1 A 0 A_Explode(10, 50, 0)
+	Goto ExplosionEffect
+	
+	ExplosionEffect:
+	TNT1 A 0
+	TNT1 A 0 A_JumpIfInventory("lowgraphicsmode", 1, "DeathCheap")
+	TNT1 AA 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (40, 90))
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (40, 90))
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles3", 10, 0, random (0, 360), 2, random (40, 90))
+	EXPL A 0 A_CustomMissile ("FlamethrowerFireParticles", 6, 0, random (0, 360), 2, random (0, 90))
+	//FRFX ZZZ 0 BRIGHT A_CustomMissile ("BigBlackSmoke", 2, 0, random (0, 360), 2, random (0, 30))
+	//TNT1 A 2 A_SpawnItem("BurningGroundLowDamage")
+	TNT1 A 0 A_SpawnItemEx("TinyBurningPiece", random (-15, 15), random (-15, 15))
+	TNT1 A 0 A_SpawnItemEx("TinyBurningPiece2", random (-35, 35), random (-35, 35))
+	TNT1 A 0 A_SpawnItemEx("TinyBurningPiece3", random (-45, 45), random (-45, 35))
+	TNT1 AA 20 A_CustomMissile ("BigBlackSmoke", 0, 0, random (0, 360), 2, random (40, 160))
+	Stop
+		
+	DeathCheap:
+	XDeath:
+	TNT1 A 0
+	TNT1 A 0 A_JumpIfCloser(200, "StopInAir")
+	TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (40, 90))
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (40, 90))
+	TNT1 A 0 A_CustomMissile ("BDExplosionparticles3", 10, 0, random (0, 360), 2, random (40, 90))
+	EXPL A 0 A_CustomMissile ("FlamethrowerFireParticles", 6, 0, random (0, 360), 2, random (0, 90))
+	Stop
+	
+		
+	StopInAIr:	
+	EXPL AAA 0 A_CustomMissile ("FlamethrowerFireParticles", 6, 0, random (0, 360), 2, random (0, 90))
+	Stop
+	}
+}
+
+ACTOR LichFlameMissile
+{
+   Radius 2
+   Height 2
+   Speed 32
+   Damage 6
+   PROJECTILE
+   RENDERSTYLE ADD
+   DamageType Fire
+   ALPHA 1.0
+   Scale 0.8
+
+	+THRUSPECIES
+	+MTHRUSPECIES
+
+   SeeSound "weapons/flamer"
+   DeathSound "weapons/scorch"
+   States
+   {
+   Spawn:
+      NULL A 1 Bright
+	  TNT1 A 0 A_JumpIf(waterlevel > 1, "Underwater")
+      FRFX ABCD 1 Bright A_SpawnItem("RedFlareMedium")
+	  TNT1 A 0 A_JumpIf(waterlevel > 1, "Underwater")
+      FRFX EFG 1 Bright A_SpawnItem("RedFlareMedium")
+      FRFX HIJ 1 Bright A_SpawnItem("RedFlareMedium")
+	  TNT1 A 0 A_JumpIf(waterlevel > 1, "Underwater")
+      FRFX KLM 1 Bright A_SpawnItem("RedFlareMedium")
+		  
+	  Stop
+   Death:
+      FRFX HIJ 2 Bright A_Explode(5,70 -XF_HURTSOURCE)
+      FRFX J 0 A_SpawnItem ("MageFlame")
+	  EXPL A 0 A_CustomMissile ("FlameTrails", 6, 0, random (0, 360), 2, random (45, 135))
+      FRFX KLM 2 Bright //A_Explode(5,70,-XF_HURTSOURCE)
+	  EXPL A 0 A_CustomMissile ("FlameTrails", 6, 0, random (0, 360), 2, random (60, 120))
+      FRFX NO 2 Bright
+	  EXPL A 0 A_CustomMissile ("FlameTrails", 6, 0, random (0, 360), 2, random (45, 135))
+      stop
+	XDeath:
+	//TNT1 A 0 A_Explode(5, 40, 0)
+	TNT1 A 0 A_SpawnItemEx("TinyBurningPiece2", random (-25, 25), random (-15, 15))
+	TNT1 A 0 A_SpawnItemEx("TinyBurningPiece", random (-15, 15), random (-15, 15))
+	EXPL AA 0 A_CustomMissile ("FlamethrowerFireParticles", 6, 0, random (0, 360), 2, random (10, 90))
+	Stop
+	
+	 Underwater:
+	 TNT1 A 0
+	 Stop
+   }
+}
+
+////////////////////
+//Iron Lich "Gibs"//
+////////////////////
+
+ACTOR XDeathLichNew1: XDeath1
+{
+    Speed 12
+	Gravity 0.4
+	SeeSound "misc/xdeath5"
+    DeathSound "misc/xdeath5"
+    Scale 1.1
+    States
+    {
+    Spawn:
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Splash")
+        LICB ABCD 2
+        Loop
+    Death:
+		TNT1 A 0
+		TNT1 A 0 A_QueueCorpse
+	    TNT1 A 0 A_CheckFloor("SpawnFloor")
+        LICB D 9009
+		TNT1 A 2
+        Stop
+	SpawnFloor:
+	    LICB D 9009
+		TNT1 A 2
+		Stop
+    }
+}
+
+ACTOR XDeathLichNew2: XDeathLichNew1
+{
+    Speed 12
+	Gravity 0.6
+    Scale 1.1
+    States
+    {
+    Spawn:
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Splash")
+        LICB EFGH 2
+        Loop
+    Death:
+	    
+		TNT1 A 0
+		TNT1 A 0 A_QueueCorpse
+	    TNT1 A 0 A_CheckFloor("SpawnFloor")
+        LICB F 9009
+		TNT1 A 2
+        Stop
+	SpawnFloor:
+	    LICB F 9009
+		TNT1 A 2
+		Stop
+    }
+}
+
+ACTOR XDeathLichNew3: XDeathLichNew1
+{
+    Speed 12
+	Gravity 0.6
+    Scale 1.1
+    States
+    {
+    Spawn:
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Splash")
+        LICB IJKL 2
+        Loop
+    Death:
+	    
+		TNT1 A 0
+		TNT1 A 0 A_QueueCorpse
+	    TNT1 A 0 A_CheckFloor("SpawnFloor")
+        LICB L 9009
+		TNT1 A 2
+        Stop
+	SpawnFloor:
+	    LICB L 9009
+		TNT1 A 2
+		Stop
+    }
+}
+
+ACTOR XDeathLichNew4: XDeathLichNew1
+{
+    Speed 12
+	Gravity 0.6
+    Scale 1.1
+    States
+    {
+    Spawn:
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Splash")
+        LICB MNOP 2
+        Loop
+    Death:
+	    
+		TNT1 A 0
+		TNT1 A 0 A_QueueCorpse
+	    TNT1 A 0 A_CheckFloor("SpawnFloor")
+        LICB N 9009
+		TNT1 A 2
+        Stop
+	SpawnFloor:
+	    LICB N 9009
+		TNT1 A 2
+		Stop
+    }
+}
+
+ACTOR XDeathLichNew5: XDeathLichNew1
+{
+    Speed 12
+	Gravity 0.6
+    Scale 1.1
+    States
+    {
+    Spawn:
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Splash")
+        LICB QRST 2
+        Loop
+    Death:
+	    
+		TNT1 A 0
+		TNT1 A 0 A_QueueCorpse
+	    TNT1 A 0 A_CheckFloor("SpawnFloor")
+        LICB Q 9009
+		TNT1 A 2
+        Stop
+	SpawnFloor:
+	    LICB Q 9009
+		TNT1 A 2
+		Stop
+    }
+}
+
+ACTOR XDeathLichNew6: XDeathLichNew1
+{
+    Speed 12
+	Gravity 0.6
+    Scale 1.1
+    States
+    {
+    Spawn:
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Splash")
+        LICB UVWX 2
+        Loop
+    Death:
+	    
+		TNT1 A 0
+		TNT1 A 0 A_QueueCorpse
+	    TNT1 A 0 A_CheckFloor("SpawnFloor")
+        LICB V 9009
+		TNT1 A 2
+        Stop
+	SpawnFloor:
+	    LICB V 9009
+		TNT1 A 2
+		Stop
+    }
+}
+
+/////////////////////
+//Frozen Lich Stuff//
+/////////////////////
+
+ACTOR FrozenLich : FrozenZombieman 
+{
+	States
+	{
+	Spawn:
+        TNT1 A 0 NoDelay A_PlaySound("Cryomancy/EnemyFreeze", 1)
+		FRDL A 400
+		FRDL A 2
+		TNT1 A 0 A_PlaySound("ICEBRK1")
+		FRDL A 50
+		FRDL B 2
+		FRDL A 50
+		FRDL C 2
+		FRDL A 50
+		FRDL B 2
+		FRDL A 25
+		FRDL C 2
+		FRDL A 25
+		FRDL B 2
+		FRDL A 10
+		FRDL C 2
+		FRDL A 10
+		FRDL B 2
+		FRDL A 10
+		FRDL CABACA 2
+		Goto Death.Burn
+		Death.Fire:
+		Death.Flames:
+		Death.Burn:
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+	    TNT1 A 0 A_ChangeFlag("SOLID", 0)
+	    TNT1 A 0 A_ChangeFlag("COUNTKILL", 0)
+		TNT1 A 0 A_PlaySound("Cryomancy/EnemyUnfreeze", 1)
+		TNT1 AAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk1", 48, 0, random (0, 360), 2, random (0, 160))
+	    TNT1 AAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk2", 48, 0, random (0, 360), 2, random (0, 160))
+	    TNT1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk3", 48, 0, random (0, 360), 2, random (40, 120))
+	    TNT1 A 0 A_NoBlocking
+	    TNT1 A 0 A_spawnItem("LichDamaged")
+	    Stop
+	Death:	
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_PlaySound("Cryomancy/EnemyShatter", 1)
+		TNT1 AAAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk1", 48, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk2", 48, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk3", 48, 0, random (0, 360), 2, random (40, 120))
+		Stop
+	Death.Freeze:
+	Death.Ice:
+	Death.Frost:
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+		TNT1 A 0 A_ChangeFlag("SOLID", 0)
+		TNT1 A 0 A_ChangeFlag("COUNTKILL", 0)
+		TNT1 A 0 A_SpawnItem("FrozenLich")
+		Stop
+	}
+}
+
+ACTOR LichDamaged : BrutalLich
+{
+	Health 100
+	Speed 4
+}

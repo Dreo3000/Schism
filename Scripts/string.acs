@@ -1,0 +1,95 @@
+// This is not exactly smart way to write stringfind but among other variants that exist
+// This one fits my puposes best
+// -Dreo
+
+// I am going completely insane with those string find functions
+// 	Loops are not the best way to find things, loops are not the best way to
+// 	find things, loops are not the best way to find things, loops are not the
+// 	best way to find things...
+Function int stringFindHelper(str inString, str toFind, int startIndex) {
+	For(int i = startIndex; i <= strlen(inString) - strlen(toFind); i++) {
+		If(StrMid(inString, i, strlen(toFind)) == toFind) 
+			Return i;
+	}
+	Return -1;
+}
+
+// if occurrence is 0 then its just helper
+
+Function int stringFind(str inString, str toFind, int occurrence) {
+	int counter = 0, s = 0, l = strlen(inString), i = 0;
+
+	For(i = 0; i <= l; i++) {
+		s = stringFindHelper(inString, toFind, i);
+		If(s > -1) {
+			If(counter == occurrence) {Return s;}
+			counter++;
+			i = s; //This needs further investigation
+		}	
+	}
+		
+	If((l > 0) & (occurrence >= counter))
+			Return l;
+
+	Return -1;
+}
+
+Function str stringReplace(str inString, str whatReplace, str toReplace, int occurrence, bool replaceAll) {
+	str outString = inString;
+	int subIndex = stringFind(outString, whatReplace, occurrence);
+
+	If(!replaceAll){outString = StrParam(s: StrLeft(outString, subIndex), s:toReplace, s:StrMid(outString, subIndex+strlen(whatReplace), strlen(outString) - (subIndex+strlen(whatReplace))));}
+	Else {
+		For(int o = 0; o <= stringFind(inString, whatReplace, 0) - 1; o++) {
+			subIndex = stringFind(outString, whatReplace, occurrence);
+			outString = StrParam(s: StrLeft(outString, subIndex), s:toReplace, s:StrMid(outString, subIndex+strlen(whatReplace), strlen(outString) - (subIndex+strlen(whatReplace))));
+		}
+	}
+
+
+	Return outString;
+}
+
+Function int stringCount(str inString, str whatToCount, int startIndex, int endIndex) {
+	int counter;
+	
+	
+	return counter;
+}
+
+Function str stringRearrange(str inString, int index, str toInsert) {
+	str outString = inString;
+
+	outString = StrParam(s:StrLeft(outString, index), s:toInsert, s:StrMid(outString, index+1, strlen(inString) - (index+1)));
+
+	Return outString;
+}
+
+Function str stringZFill(str toFill, int len) {
+	str outString = "";
+
+	If(toFill == ""){toFill = "0";}
+
+	For(int el = 0; el < len; el++) {
+		outString = StrParam(s:outString, s:toFill);
+	}
+	return outString;
+}
+
+Function int stringToInt(str inString) {
+	int outData = 0;
+	For(int i = 0; i < strlen(inString); i++) {
+		If(GetChar(inString, i) == '0'){outData += 0;}
+		Else If(GetChar(inString, i) == '1'){outData += 1;}
+		Else If(GetChar(inString, i) == '2'){outData += 2;}
+		Else If(GetChar(inString, i) == '3'){outData += 3;}
+		Else If(GetChar(inString, i) == '4'){outData += 4;}
+		Else If(GetChar(inString, i) == '5'){outData += 5;}
+		Else If(GetChar(inString, i) == '6'){outData += 6;}
+		Else If(GetChar(inString, i) == '7'){outData += 7;}
+		Else If(GetChar(inString, i) == '8'){outData += 8;}
+		Else If(GetChar(inString, i) == '9'){outData += 9;}
+		outData *= 10;
+	}
+	return outData / 10;
+}

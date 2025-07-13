@@ -1,0 +1,49 @@
+// Made with some inspiration from the base code provided by Xaser and Zhs2 from
+// the original ACS implementation in Pillowblasters mod, The Guncaster.
+//
+// Now that the credits are out of the way...
+//
+// *Cracks knuckles*
+// Lets do this...
+// -Dino
+
+//Little modifications by LordADHD x)
+
+#library "ScalyScum"
+#include "zcommon.acs"
+
+// This script is executed the moment you equip the shield+axe, it stays active until you unequip the weapon.
+Script "DinosComboBreaker" (void)
+{
+	// This is only going to do anything IF and only if you have the shield+axe selected. It ends when you unequip it.
+	while(StrIcmp(GetWeapon(), "BattleAxe") == 0)
+	{
+		// If you are pressing or pressing and holding the alt fire button, it gets ready to deliver the punch.
+		if((GetPlayerInput(-1, INPUT_BUTTONS) & BT_ALTATTACK) && !(GetUserVariable(0, "user_amuletopen")) && !(CheckInventory("PowerBashCooldown")))
+		{
+			// C-C-C-COMBO BREAKER!!!
+			// Press primary fire while holding alt fire to deliver the bitch-slap of justice.
+			if((getplayerinput(-1, INPUT_BUTTONS) & BT_ATTACK) && !(GetUserVariable(0, "user_amuletopen")))
+			{
+				giveinventory("SpecialAttackPunch",1);
+				delay(1);
+				takeinventory("SpecialAttackPunch",1);
+			}
+			// we wanna make sure we have these single tick delays to ensure we
+			// don't get an infinite loop crash.
+			delay(1);
+		}
+		delay(1);
+		takeinventory("SpecialAttackPunch",1);
+	}
+}
+
+Script "DangerousDeathmatch" (void)
+{
+	// If we are playing a deathmatch game
+	if(GameType () == GAME_NET_DEATHMATCH)
+	{
+		// Make sure we get the crossbow that can kill our friends.
+		SetActorState(0,"DangerousCrossbow");
+	}
+}

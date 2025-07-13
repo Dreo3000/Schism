@@ -1,0 +1,3053 @@
+Actor Schism_Warrior : Schism_BasePlayerClass {
+	Mass 250
+	MaxStepHeight 32
+    Player.ViewHeight 50
+	Player.AttackZOffset 20
+	Player.DisplayName "Paladin"
+    Player.SoundClass "Paladin"
+	Player.Portrait "PPALA0"
+	Player.Face "PAL"
+	Player.CrouchSprite ""
+	Player.WeaponSlot 1, Schism_WarriorMeleeAttacks
+	Player.WeaponSlot 2, BattleAxe, DualBattleAxe, Schism_Smg, Schism_Deagle
+	Player.WeaponSlot 3, Schism_Shotgun, Schism_SSG, Schism_AssaultShotgun
+	Player.WeaponSlot 4, TheQuietus, BrutalDragonClaw, Schism_Rifle, Schism_HeavyRifle, Schism_Minigun, Schism_Machinegun
+	Player.WeaponSlot 5, Schism_Arrancadora, Schism_Crossbow, Schism_RocketLauncher, Schism_AdvancedMissileLauncher
+	Player.StartItem "Schism_WarriorMeleeAttacks"
+	Player.StartItem "TheQuietus", 1
+	Player.StartItem "BattleAxe", 1
+	Player.StartItem "Schism_Arrancadora", 1
+	Player.StartItem "IsPlayer", 1
+	Player.StartItem "IsPaladin", 1
+	Player.StartItem "NeverSelectedShotgun", 1
+	Player.StartItem "Schism_PalGrenades"
+	//Slot2
+
+	//Slot3
+
+	//Slot4
+
+	//Slot5
+
+
+
+	Player.StartItem "PlayHelmetAnimation", 1
+
+
+
+	Player.ColorRange 0, 0
+	DamageFactor "KillMeBot", 0.0
+	DamageFactor "ShieldDefense", 0.0
+	DamageFactor "ShieldBash", 0.0
+	DamageFactor "Fatality", 0.3
+	DamageFactor "rip", 0.5 //imp attacks
+	DamageFactor "MonsterBullet", 0.22 //zombieman bullets
+	DamageFactor "MonsterShotgunBullet", 0.22 //sergeants shrapnel
+	DamageFactor "MonsterCutless", 0.22
+	DamageFactor "burn", 0.6 //imp fireballs
+	DamageFactor "cut", 0.6 //kinda grenade damages n' sword
+	DamageFactor "saw", 0.6 //hateful chainsaw
+	DamageFactor "fire", 0.6 //fire of mancubus n' foe mages
+	DamageFactor "lightning", 0.8 //less then monsters had, but more then normal marine
+	Species "Players"
+	States {
+		Spawn:
+			PALN A 0
+			PALN A 0 A_TakeInventory("PlayerIsDead", 1)
+			PALN A 0 A_TakeInventory("IsInvisible", 1)
+			NULL A 0 SetPlayerProperty(0,1,0)
+			TNT1 A 0 A_Changeflag("NOPAIN", 1)
+			PALN A 0 A_TakeInventory("ChaingunguyContinue", 1)
+			PALN A 0 A_TakeInventory("HasInfrared", 1)
+			PALN A 0 A_TakeInventory("PlayerIsDead", 1)
+			TNT1 A 0 A_CustomMissile("Headkicking", 0, 0, 0, 2)
+			//TNT1 A 0 A_SpawnItemEx ("Headkicking", 0, 0, 0, velx, vely, velz, angle, SXF_SETMASTER | SXF_ABSOLUTEANGLE)
+			PALN A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)//Disable Camera.
+			PALN A 0 ACS_NamedExecuteAlways("CheckIfDM", 0, 0, 0, 0)//Check if Coop
+			PALN A 2
+			PALN A 0 A_JumpIfInventory("DMgame", 1, "DM")
+
+		DM:
+			PALN A 1
+			NULL A 0 SetPlayerProperty(0,0,0)
+			TNT1 A 0 A_ChangeFlag("THRUSPECIES", 0)
+			TNT1 A 0 A_ChangeFlag("MTHRUSPECIES", 0)
+			Goto StandStill
+
+		StandStill:
+			"PALN" "A" 1
+			"####" "#" 0 A_Changeflag("NOPAIN", 0)
+			"####" "#" 0 A_JumpIfInventory("GoFatality", 1, "FatalityChecker")
+
+			"####" "AA" 2
+			"####" "AA" 2
+			"####" "#" 0 A_JumpIfInventory("GoFatality", 1, "FatalityChecker")
+
+			"####" "AA" 2
+			"####" "AA" 2
+			"####" "#" 0 A_JumpIfInventory("GoFatality", 1, "FatalityChecker")
+
+			"####" "#" 0 A_Changeflag("THRUSPECIES", 0)
+			Loop
+
+		See:
+			"####" "#" 0 A_TakeInventory("IsStandingStill", 1)
+			"####" "#" 0 A_TakeInventory("ChaingunguyContinue", 1)
+
+			"####" "AAA" 1
+			"####" "#" 0 A_JumpIfInventory("GoFatality", 1, "FatalityChecker")
+
+			"####" "BBB" 1
+			"####" "#" 0 A_JumpIfInventory("GoFatality", 1, "FatalityChecker")
+			"####" "#" 0 A_SpawnItemEx("FootStep6", 0, 0, 8, 0, 0, 0, 0, SXF_SETMASTER)
+			"####" "CCC" 1
+			"####" "#" 0 A_JumpIfInventory("GoFatality", 1, "FatalityChecker")
+
+			"####" "DDD" 1
+			"####" "#" 0 A_JumpIfInventory("GoFatality", 1, "FatalityChecker")
+
+			"####" "#" 0 A_Changeflag("THRUSPECIES", 0)
+			"####" "#" 0 A_JumpIfInventory("BootsSmearedWithRedBlood", 1, "SeeSmearedWithRedBlood")
+			"####" "#" 0 A_JumpIfInventory("BootsSmearedWithBlueBlood", 1, "SeeSmearedWithBlueBlood")
+			"####" "#" 0 A_JumpIfInventory("BootsSmearedWithGreenBlood", 1, "SeeSmearedWithGreenBlood")
+			"####" "#" 0 A_GiveInventory("IsStandingStill", 1)
+			Goto StandStill
+			
+		BattleAxeSee:
+			"PAL1" "A" 0
+			Goto StandStill+1
+			
+		TheQuietusSee:
+			"PAL2" "A" 0
+			Goto StandStill+1
+			
+		ArrancadoraSee:
+			"PAL3" "A" 0
+			Goto StandStill+1
+			
+		CrossbowSee:
+			"PAL4" "A" 0
+			Goto StandStill+1
+			
+		VorpalBladeSee:
+			"PAL5" "A" 0
+			Goto StandStill+1
+			
+		SmgSee:
+		SSgSee:
+		RifleSee:
+		MinigunSee:
+		RocketLauncherSee:
+		GrenadeLauncherSee:
+		ShotgunSee:
+			"PAL6" "A" 0
+			Goto StandStill+1
+
+		SeeSmearedWithRedBlood:
+			"####" "#" 0
+			"####" "#" 0 A_JumpIfInventory("FootPrintAlternate", 1, "SeeSmearedWithRedBlood2")
+			"####" "#" 0 A_SpawnItemEx("RedBloodFootPrintLeft", 0, 7)
+			"####" "#" 0 A_GiveInventory("FootPrintAlternate", 1)
+			"####" "#" 0 A_TakeInventory("BootsSmearedWithRedBlood", 1)
+			Goto StandStill
+
+		SeeSmearedWithRedBlood2:
+			"####" "#" 0
+			"####" "#" 0 A_SpawnItemEx("RedBloodFootPrintRight", 0, -7)
+			"####" "#" 0 A_TakeInventory("FootPrintAlternate", 1)
+			"####" "#" 0 A_TakeInventory("BootsSmearedWithRedBlood", 1)
+			Goto StandStill
+
+		SeeSmearedWithBlueBlood:
+			"####" "#" 0
+			"####" "#" 0 A_JumpIfInventory("FootPrintAlternate", 1, "SeeSmearedWithBlueBlood2")
+			"####" "#" 0 A_SpawnItemEx("BlueBloodFootPrintLeft", 0, 7)
+			"####" "#" 0 A_GiveInventory("FootPrintAlternate", 1)
+			"####" "#" 0 A_TakeInventory("BootsSmearedWithBlueBlood", 1)
+			Goto StandStill
+
+		SeeSmearedWithBlueBlood2:
+			"####" "#" 0
+			"####" "#" 0 A_SpawnItemEx("BlueBloodFootPrintRight", 0, -7)
+			"####" "#" 0 A_TakeInventory("FootPrintAlternate", 1)
+			"####" "#" 0 A_TakeInventory("BootsSmearedWithBlueBlood", 1)
+			Goto StandStill
+
+		SeeSmearedWithGreenBlood:
+			"####" "#" 0
+			"####" "#" 0 A_JumpIfInventory("FootPrintAlternate", 1, "SeeSmearedWithGreenBlood2")
+			"####" "#" 0 A_SpawnItemEx("GreenBloodFootPrintLeft", 0, 7)
+			"####" "#" 0 A_GiveInventory("FootPrintAlternate", 1)
+			"####" "#" 0 A_TakeInventory("BootsSmearedWithGreenBlood", 1)
+			Goto StandStill
+
+		SeeSmearedWithGreenBlood2:
+			"####" "#" 0
+			"####" "#" 0 A_SpawnItemEx("GreenBloodFootPrintRight", 0, -7)
+			"####" "#" 0 A_TakeInventory("FootPrintAlternate", 1)
+			"####" "#" 0 A_TakeInventory("BootsSmearedWithGreenBlood", 1)
+			Goto StandStill
+
+		Pain:
+			NULL A 0 A_Pain
+// 			NULL A 0 A_PlaySound("plpain", 2)
+			//NULL A 0 ACS_Execute(577, 0, 0, 0, 0)
+			//NULL A 0 ACS_Execute(530, 0, 0, 0, 0)
+			TNT1 A 0 A_GiveInventory("ImpactMovesSling", 1)
+			TNT1 AA 0
+			PALN G 4
+			Goto StandStill
+
+		//Pain.Melee:
+			TNT1 A 0
+			TNT1 A 0 Radius_quake(4, 2, 0, 2, 0)
+			TNT1 A 0 A_SetAngle(angle+random(-4, 4))
+			TNT1 A 0 A_SetPitch(pitch+random(-4, 4))
+			PALN GGGG 1 A_SetPitch(pitch-4)
+			PALN GGGG 1 A_SetPitch(pitch+4)
+			Goto Pain
+
+		Pain.Kick:
+		Pain.Extremepunches:
+			NULL A 0 A_Pain
+			TNT1 A 0 A_FaceTarget
+			TNT1 A 0 A_Recoil(5)
+			NULL A 0 A_PlaySound("plpain", 2)
+			NULL A 0 ThrustThingZ(0, 30, 0, 1)
+			TNT1 A 0 SetPlayerProperty(0,1,0)
+			TNT1 A 0 A_ChangeFlag("THRUSPECIES", 1)
+			TNT1 A 0 A_ChangeFlag("SOLID", 0)
+			PALN G 7
+			TNT1 A 0 A_ChangeFlag("THRUSPECIES", 0)
+			TNT1 A 0 A_ChangeFlag("SOLID", 1)
+			TNT1 A 0 SetPlayerProperty(0,0,0)
+			Goto See
+
+		Pain.Fire:
+			NULL A 0 A_Pain
+			//NULL A 0 ACS_Execute(577, 0, 0, 0, 0)
+			//NULL A 0 ACS_Execute(530, 0, 0, 0, 0)
+			TNT1 A 0 A_GiveInventory("ImpactMovesSling", 1)
+			NULL A 0 A_PlaySound("plpain", 2)
+			TNT1 AA 0
+			PALN G 4
+			Goto StandStill
+
+		Pain.Falling:
+			NULL A 0 A_CustomMissile ("CameraShake", 50, 0, random (0, 360), 2, random (0, 160))
+			NULL A 0 A_Playsound("misc/xdeath4a", 6, 2.0)
+			NULL A 0 A_Pain
+			TNT1 A 0 A_GiveInventory("ImpactMovesSling", 1)
+			NULL A 0 A_PlaySound("plpain", 2)
+			PALN G 4
+			Goto StandStill
+
+		Pain.ImpFatalityMarine:
+		Pain.Rip:
+			NULL A 0 ACS_Execute(577, 0, 0, 0, 0)
+			NULL A 0 ACS_Execute(530, 0, 0, 0, 0)
+			NULL A 0 ACS_Execute(617, 0, 0, 0, 0)
+			NULL A 0 A_PlaySound("plpain", 2)
+			Goto Pain
+
+		Death:
+			TNT1 A 0
+			NULL A 0 A_Takeinventory("Kicking",1)
+			TIMO A 0 A_GiveInventory("PlayerIsDead", 1)
+			TNT1 A 0 A_JumpIfInTargetInventory("EnemyIsArchvile", 1, "Death.ArchvileExplode")
+			NULL A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)//Start Camera
+			NULL A 0 A_CustomMissile ("MuchBlood", 50, 0, random (0, 360), 2, random (0, 160))
+			TIMO H 10
+			TIMO I 10 A_PlayerScream
+			TIMO J 10 A_NoBlocking
+			TIMO KLM 10
+			NULL A 0 A_SpawnItem ("GrowingBloodPool")
+			TIMO M -1
+			Stop
+
+		Death.Falling:
+			TNT1 A 0
+			TNT1 A 0 A_Stop
+			TNT1 A 0 A_Takeinventory("Kicking",1)
+			TNT1 A 0 A_GiveInventory("PlayerIsDead", 1)
+			TNT1 A 0 A_CustomMissile ("MuchBlood2", 0, 0, random (0, 360), 2, random (0, 160))
+			TNT1 A 0 A_SpawnItem ("SplatteredLarge")
+			TIMO H 1
+			TIMO I 1 A_XScream
+			TIMO J 1 A_NoBlocking
+			TIMO KLM 1
+			TIMO M 35
+			NULL A 0 A_SpawnItem ("GrowingBloodPool")
+			TIMO M -1
+			Stop
+
+/*
+		Death.Falls:
+			NULL A 1 A_NoBlocking
+			TNT1 A 0 A_PlaySound("PLFALDE", 4)
+			NULL A -1
+			Stop
+*/
+
+		XDeath:
+		Death.Explosive:
+		Death.Explosives:
+			NULL A 0 A_Takeinventory("Kicking",1)
+			PALN A 0 A_GiveInventory("PlayerIsDead", 1)
+			TNT1 A 0 A_JumpIfInTargetInventory("EnemyIsArchvile", 1, "Death.ArchvileExplode")
+			NULL A 0 ThrustThingZ(0,60,0,1)
+			PPOD A 0 A_SpawnItemEx("BasicMarineGib1", 0, 0, 0, 0, 0, 0, 0, SXF_TRANSFERTRANSLATION)
+			PPOD A 0 A_SpawnItemEx("BasicMarineGib2", 0, 0, 0, 0, 0, 0, 0, SXF_TRANSFERTRANSLATION)
+			PPOD A 0 A_SpawnItemEx("BasicMarineGib3", 0, 0, 0, 0, 0, 0, 0, SXF_TRANSFERTRANSLATION)
+			PPOD A 0 A_SpawnItemEx("BasicMarineGib4", 0, 0, 0, 0, 0, 0, 0, SXF_TRANSFERTRANSLATION)
+			NULL A 0 A_CustomMissile ("MuchMeatDeath", 0, 0, random (0, 360), 2, random (0, 160))
+			NULL A 0 ACS_Execute(580, 0, 0, 0, 0) //ACS 580 to 585 is the blood driping on screen
+			NULL A 0 ACS_Execute(581, 0, 0, 0, 0)
+			MHEA A 0 A_XScream
+			MHEA B 0 A_NoBlocking
+			MHEA CD 0
+			//MHEA E -1
+			NULL A 0 A_CustomMissile ("XDeathArm1", 32, 0, random (0, 360), 2, random (0, 90))
+			NULL A 0 A_SpawnItem ("BigBloodSpot")
+			NULL AAAAA 0 A_CustomMissile ("Guts", 32, 0, random (0, 360), 2, random (0, 160))
+			XDMG E 1
+			NULL AAAAAAAAAAAAAAA 0 A_CustomMissile ("SuperWallRedBlood", 40, 0, random (0, 360), 2, random (-5, 5))
+			NULL AAAAAA 0 bright A_CustomMissile ("SuperGoreSpawner", 5, 0, random (0, 360), 2, random (30, 180))
+			XDMG E -1
+			Stop
+
+		Death.ArchvileExplode:
+			TNT1 A 0
+			PPOD A 0 A_SpawnItemEx("BasicMarineGib1", 0, 0, 0, 0, 0, 0, 0, SXF_TRANSFERTRANSLATION)
+			PPOD A 0 A_SpawnItemEx("BasicMarineGib2", 0, 0, 0, 0, 0, 0, 0, SXF_TRANSFERTRANSLATION)
+			PPOD A 0 A_SpawnItemEx("BasicMarineGib3", 0, 0, 0, 0, 0, 0, 0, SXF_TRANSFERTRANSLATION)
+			NULL A 0 A_CustomMissile ("XDeathBurnedMeat", 32, 0, random (0, 360), 2, random (0, 160))
+			NULL A 0 A_CustomMissile ("XDeathBurnedMeat2", 32, 0, random (0, 360), 2, random (0, 160))
+			NULL A 0 A_CustomMissile ("XDeathBurnedMeat3", 32, 0, random (0, 360), 2, random (0, 160))
+			TNT1 AA 0 A_CustomMissile ("FlyingBurningFuel", 4, 0, random (0, 360), 2, random (30, 80))
+			TNT1 A 0 A_CustomMissile ("FlyingBurningFuel2", 4, 0, random (0, 360), 2, random (30, 80))
+			TNT1 A 0 A_CustomMissile ("FlyingBurningFuel3", 4, 0, random (0, 360), 2, random (30, 80))
+			TNT1 A 0 A_SpawnItemEx ("ExplosionSplashSpawner", 0, 0, 0)
+			TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_SpawnItemEx ("BarrelKaboom",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 AAA 0 A_CustomMissile ("ExplosionFlames", 30, 0, random (0, 360), 2, random (0, 360))
+			TNT1 AAAAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("ExplosionParticleHeavy", 0, 0, random (0, 360), 2, random (0, 180))
+			TNT1 AAAAAA 0 A_CustomMissile ("ExplosionParticleHeavy", 0, 0, random (0, 360), 2, random (0, 180))
+			NULL A 0 A_CustomMissile ("MuchMeatDeath", 0, 0, random (0, 360), 2, random (0, 160))
+			NULL A 0 ACS_Execute(580, 0, 0, 0, 0) //ACS 580 to 585 is the blood driping on screen
+			NULL A 0 ACS_Execute(581, 0, 0, 0, 0)
+			TNT1 AAAA 0 A_CustomMissile ("FireworkSFXType2", 64, 0, random (0, 360), 2, random (30, 60))
+			MHEA A 0 A_XScream
+			MHEA B 0 A_NoBlocking
+			MHEA CD 0
+			//MHEA E -1
+			NULL A 0 A_CustomMissile ("XDeathArm1", 32, 0, random (0, 360), 2, random (0, 90))
+			NULL A 0 A_SpawnItem ("BigBloodSpot")
+			NULL AAAAA 0 A_CustomMissile ("Guts", 32, 0, random (0, 360), 2, random (0, 160))
+			XDMG E 1
+			NULL AAAAAAAAAAAAAAA 0 A_CustomMissile ("SuperWallRedBlood", 40, 0, random (0, 360), 2, random (-5, 5))
+			NULL AAAAAA 0 bright A_CustomMissile ("SuperGoreSpawner", 5, 0, random (0, 360), 2, random (30, 180))
+			XDMG E -1
+			Stop
+
+		Death.Plasma:
+		Death.Plasma2:
+			NULL A 0
+			PALN A 0 A_GiveInventory("PlayerIsDead", 1)
+			NULL A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)//Start Camera
+			PBR1 A 6 A_Scream
+			NULL AAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("Ashes1", 32, 0, random (0, 360), 2, random (0, 180))
+			NULL AAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("Ashes2", 32, 0, random (0, 360), 2, random (0, 180))
+			NULL AAAA 0 A_CustomMissile ("BluePlasmaFireNonStatic", 32, 0, random (0, 360), 2, random (0, 180))
+			PBR1 B 6 A_NoBlocking
+			PBR1 CDEFGH 6 A_CustomMissile ("Blood", 10, 0, random (0, 360), 2, random (0, 160))
+			PBR1 HHHHHHHHHHHHHHHHHHHHHH 8 A_CustomMissile ("PlasmaSmoke", 10, 0, random (0, 360), 2, random (0, 160))
+			PBR1 H -1
+			Stop
+
+		Death.superplasma:
+			NULL A 0
+			NULL A 0 A_XScream
+			PALN A 0 A_GiveInventory("PlayerIsDead", 1)
+			NULL A 0 A_NoBlocking
+			NULL A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)//Start Camera
+			NULL AAA 0 A_CustomMissile ("Brutal_FlyingBlood", 50, 0, random (0, 360), 2, random (0, 160))
+			NULL A 0 A_CustomMissile ("XDeathBurnedArm", 32, 0, random (0, 360), 2, random (0, 160))
+			NULL A 0 A_CustomMissile ("XDeathBurnedLeg", 32, 0, random (0, 360), 2, random (0, 160))
+			NULL A 0 A_CustomMissile ("XDeathBurnedSkull", 32, 0, random (0, 360), 2, random (0, 160))
+			NULL A 0 A_CustomMissile ("XDeathBurnedMeat", 32, 0, random (0, 360), 2, random (0, 160))
+			NULL A 0 A_CustomMissile ("XDeathBurnedMeat2", 32, 0, random (0, 360), 2, random (0, 160))
+			NULL A 0 A_CustomMissile ("XDeathBurnedMeat3", 32, 0, random (0, 360), 2, random (0, 160))
+			EXPL AAAAAA 0 A_CustomMissile ("ExplosionSmoke", 32, 0, random (0, 360), 2, random (0, 360))
+			NULL A 1
+			NULL A -1
+			Stop
+
+		Death.Fire:
+		Death.flames:
+			NULL A 0
+			TNT1 A 0 A_JumpIfInTargetInventory("EnemyIsArchvile", 1, "Death.ArchvileExplode")
+			PALN A 0 A_GiveInventory("PlayerIsDead", 1)
+			NULL A 0 A_Takeinventory("Kicking",1)
+			NULL A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)//Start Camera
+			NULL A 0 A_Scream
+			NULL A 0 A_NoBlocking
+			TNT1 A 0 A_PLaySound("BIGSCRE", 2)
+			NULL A 0 A_SpawnItem("GenericBurningGuy")
+			NULL A 1
+			NULL A -1
+			Stop
+
+		Death.Desintegrate:
+			PALN A 0 A_GiveInventory("PlayerIsDead", 1)
+			NULL A 0 A_Takeinventory("Kicking",1)
+			NULL A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)//Start Camera
+			NULL A 0 A_Scream
+			NULL A 0 A_NoBlocking
+			NULL A 0 A_SpawnItem("DesintegratedHuman")
+			NULL A 1
+			NULL A -1
+			Stop
+
+		Death.Stomp:
+			PALN A 0 A_GiveInventory("PlayerIsDead", 1)
+			NULL AAAAAA 0 bright A_CustomMissile ("SuperGoreSpawner", 5, 0, random (0, 360), 2, random (30, 180))
+			NULL AAAAAA 0 bright A_CustomMissile ("XDeath1", 5, 0, random (0, 360), 2, random (30, 180))
+			NULL AA 0 bright A_CustomMissile ("XDeath2", 55, 0, random (0, 360), 2, random (30, 180))
+			NULL AA 0 bright A_CustomMissile ("XDeath3", 55, 0, random (0, 360), 2, random (30, 180))
+			NULL A 0 A_SpawnItem ("CrushedRemains")
+			NULL A 1
+			NULL A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)//Start Camera
+			NULL A 1 A_XScream
+			NULL A 1 A_NoBlocking
+			NULL A -1
+			Stop
+
+		Crush:
+			NULL A 0 A_PlaySound("misc/xdeath4")
+			CRS1 A 5
+			CRS1 A -1
+			Stop
+
+		FatalityChecker:
+			PALN A 0 A_Stop
+			NULL A 0 A_GiveInventory("No_Overlay", 1)
+			//DOOM FATALITIES//
+			//Zombieman Fatalities
+			PALN A 0 A_JumpIfInventory("ZombieManFatality", 1, "PZF")
+			PALN A 0 A_JumpIfInventory("ZombieManFatality2", 1, "PZF2")
+			PALN A 0 A_JumpIfInventory("ZombieManFatality3", 1, "PZF3")
+			PALN A 0 A_JumpIfInventory("ZombieManFatality4", 1, "PZF4")
+			PALN A 0 A_JumpIfInventory("ZombieManFatality5", 1, "PZF5")
+			//Lab Guy Fatalities
+			PALN A 0 A_JumpIfInventory("LabGuyToken1", 1, "PLF")
+			PALN A 0 A_JumpIfInventory("LabGuyToken2", 1, "PLF2")
+			PALN A 0 A_JumpIfInventory("LabGuyToken3", 1, "PLF3")
+			//Sergeant Fatalities
+			PALN A 0 A_JumpIfInventory("SergeantFatality", 1, "PSF")
+			PALN A 0 A_JumpIfInventory("SergeantFatality2", 1, "PSF2")
+			PALN A 0 A_JumpIfInventory("SergeantFatality3", 1, "PSF3")
+			PALN A 0 A_JumpIfInventory("SergeantFatality4", 1, "PSF4")
+			PALN A 0 A_JumpIfInventory("SergeantFatality5", 1, "PSF5")
+			//Commando Fatalities
+			PALN A 0 A_JumpIfInventory("ComandoFatality", 1, "POF")
+			PALN A 0 A_JumpIfInventory("ComandoFatality2", 1, "POF2")
+			//Imp Fatalities
+			PALN A 0 A_JumpIfInventory("ImpFatality", 1, "PIF")
+			PALN A 0 A_JumpIfInventory("ImpFatality2", 1, "PIF2")
+			PALN A 0 A_JumpIfInventory("ImpFatality3", 1, "PIF3")
+			PALN A 0 A_JumpIfInventory("ImpFatality4", 1, "PIF4")
+			//Pinky Fatalities
+			PALN A 0 A_JumpIfInventory("DemonFatality", 1, "PPF")
+			PALN A 0 A_JumpIfInventory("DemonFatality2", 1, "PPF2")
+			PALN A 0 A_JumpIfInventory("DemonFatality3", 1, "PPF2")
+			//Skeleton Pinky Fatalities
+			PALN A 0 A_JumpIfInventory("DemonSkeletonFatality", 1, "PPF4")
+			PALN A 0 A_JumpIfInventory("DemonSkeletonFatality2", 1, "PPF5")
+			//Mech Pinky Fatalities
+			PALN A 0 A_JumpIfInventory("DemonMechFatality", 1, "PPF6")
+			//Cacodemon Fatalities
+			PALN A 0 A_JumpIfInventory("CacoDemonFatality", 1, "PAF")
+			PALN A 0 A_JumpIfInventory("CacoDemonFatality2", 1, "PAF2")
+			//HellKnight Fatalities
+			PALN A 0 A_JumpIfInventory("HKFatality", 1, "PHF")
+			PALN A 0 A_JumpIfInventory("HKFatality2", 1, "PHF2")
+			PALN A 0 A_JumpIfInventory("HKFatality3", 1, "PHF3")
+			//Afrit Fatalities
+			PALN A 0 A_JumpIfInventory("AfritFatality", 1, "PHF4")
+			//Revenant Fatalities
+			PALN A 0 A_JumpIfInventory("RevenantFatality", 1, "PRF")
+			PALN A 0 A_JumpIfInventory("RevenantFatality2", 1, "PRF2")
+			//Fatso Fatality
+			PALN A 0 A_JumpIfInventory("FatsoFatality", 1, "PMF")
+			//Volcabus Fatalities
+			PALN A 0 A_JumpIfInventory("VolcabusFatality", 1, "PUF")
+			PALN A 0 A_JumpIfInventory("VolcabusFatality2", 1, "PUF2")
+			//Baron of Hell Fatality
+			PALN A 0 A_JumpIfInventory("BaronFatality", 1, "PBF")
+			//CyberBaron Fatalities
+			PALN A 0 A_JumpIfInventory("CyberBaronFatality1", 1, "PYF")
+			PALN A 0 A_JumpIfInventory("CyberBaronFatality2", 1, "PYF2")
+			//Pain Elemental Fatality
+			PALN A 0 A_JumpIfInventory("PEFatality", 1, "PQF")
+			//Arachnotron Curbstomp
+			PALN A 0 A_JumpIfInventory("IsCurbstompingSpider", 1, "PAS")
+			//Arachnotron Fatalities
+			PALN A 0 A_JumpIfInventory("ArachnotronFatality", 1, "PTF")
+			PALN A 0 A_JumpIfInventory("ArachnotronFatality2", 1, "PTF2")
+			//Ancient Arachnotron Curbstomp
+			PALN A 0 A_JumpIfInventory("IsCurbstompingSpiderB", 1, "PNS")
+			//Ancient Arachnotron Fatalities
+			PALN A 0 A_JumpIfInventory("Arachnotron2FatalityA", 1, "PGF")
+			PALN A 0 A_JumpIfInventory("Arachnotron2FatalityB", 1, "PGF2")
+			//ArchVile Fatalities
+			PALN A 0 A_JumpIfInventory("ArchVileFatality", 1, "PVF")
+			PALN A 0 A_JumpIfInventory("ArchVileFatality2", 1, "PVF2")
+			//Belphegor Fatality
+			PALN A 0 A_JumpIfInventory("BelphegorFatality", 1, "PJF")
+			//Arachnorb Fatality
+			PALN A 0 A_JumpIfInventory("AracnorbFatality", 1, "PKF")
+			//Superdemon Fatality
+			PALN A 0 A_JumpIfInventory("SuperDemonFatality", 1, "PWF")
+			//Avatar Fatality
+			PALN A 0 A_JumpIfInventory("AvatarFatality", 1, "PXF")
+			//Mastermind Fatalities
+			PALN A 0 A_JumpIfInventory("MastermindFatality", 1, "PDF")
+			PALN A 0 A_JumpIfInventory("MastermindFatality2", 1, "PDF2")
+			//Cyberdemon Fatality
+			PALN A 0 A_JumpIfInventory("CyberdemonFatality", 1, "PNF")
+			//HEXEN FATALITIES//
+			//Ettin Fatalities
+			PALN A 0 A_JumpIfInventory("EttinFatality", 1, "PEF")
+			PALN A 0 A_JumpIfInventory("EttinFatality2", 1, "PEF2")
+			PALN A 0 A_JumpIfInventory("EttinFatality3", 1, "PEF2")
+			//FireDemon Fatalities
+			PALN A 0 A_JumpIfInventory("FireDemonFatality", 1, "PFF")
+			PALN A 0 A_JumpIfInventory("FireDemonFatality2", 1, "PFF")
+			PALN A 0 A_JumpIfInventory("FireDemonFatality3", 1, "PFF")
+			//Chaos Serpent Fatalities
+			PALN A 0 A_JumpIfInventory("SerpentFatality", 1, "PCF")
+			PALN A 0 A_JumpIfInventory("SerpentFatality2", 1, "PCF")
+			PALN A 0 A_JumpIfInventory("SerpentFatality3", 1, "PCF")
+			PALN A 0 A_TakeInventory("GoFatality", 1)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+
+		//DOOM FATALITY STATES
+
+		//Zombie Fatalities
+		//Overhead throwdown!
+		PZF:
+			PFZ1 A 0 SetPlayerProperty(0, 1, 0)
+			PFZ1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFZ1 A 0 ACS_Execute(312, 0)
+			PFZ1 A 3
+			PFZ1 A 0 A_PlaySound("grunt/pain")
+			PFZ1 A 0 SetPlayerProperty(0, 1, 0)
+			PFZ1 BCDE 3 SetPlayerProperty(0, 1, 0)
+			PFZ1 FGHI 2 SetPlayerProperty(0, 1, 0)
+			PFZ1 A 0 A_PlaySound("CLAP", 1)
+			PFZ1 A 0 A_CustomMissile("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFZ1 JKKKK 2
+			PFZ1 LLMMNNOOPP 2
+			PFZ1 A 0 A_PlaySound("misc/xdeath1")
+			PFZ1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFZ1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFZ1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFZ1 A 0 A_SpawnItemEx("ZombiemanHeadExplode", 0, -30)
+			PFZ1 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 20)
+			PFZ1 Q 20
+			PFZ1 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFZ1 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFZ1 A 0 A_SpawnItemEx("POSLL0")
+			PFZ1 A 0 A_TakeInventory("GoFatality", 1)
+			PFZ1 A 0 A_TakeInventory("ZombieManFatality",1)
+			PFZ1 A 0 A_GiveInventory("HealthBonus", 15)
+			PFZ1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFZ1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Punch in face and send him off for a home run!!!
+		PZF2:
+			PFZ2 A 0 SetPlayerProperty(0, 1, 0)
+			PFZ2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFZ2 A 0 ACS_NamedExecuteAlways("BDActivateCameraBig", 0, 0, 0, 0)
+			PFZ2 A 0 ACS_Execute(312, 0)
+			PFZ2 AABC 2
+			PFZ2 D 2 A_PlaySound("grunt/pain")
+			PFZ2 A 0 A_PlaySound("PUNCHHIT", 7)
+			PFZ2 A 0 A_SpawnItemEX("MuchBlood", 0, 10, 32)
+			PFZ2 EFGH 2 SetPlayerProperty(0, 1, 0)
+			PFZ2 I 2 SetPlayerProperty(0, 1, 0)
+			PFZ2 JKLMNNOOPPQR 2 SetPlayerProperty(0, 1, 0)
+			PFZ2 A 0 A_PlaySound("CLAP", 1)
+			PFZ2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFZ2 A 0 A_CustomMissile ("XDeath1", 32, 40, random (0, 360), 2, random (0, 160))
+			PFZ2 A 0 A_CustomMissile ("XDeath2", 32, 40, random (0, 360), 2, random (0, 160))
+			PFZ2 A 0 A_CustomMissile ("Brains2", 50, 40, random (0, 360), 2, random (0, 160))
+			PFZ2 A 0 A_CustomMissile ("Brains3", 50, 40, random (0, 360), 2, random (0, 160))
+			PFZ2 A 0 A_CustomMissile ("Brains4GreenHair", 50, 40, random (0, 360), 2, random (0, 160))
+			PFZ2 A 0 A_CustomMissile ("Brains5", 50, 40, random (0, 360), 2, random (0, 160))
+			PFZ2 AAAA 0 A_CustomMissile ("SmallBrainPieceFast", random (45, 55), random (45, -45), random (170, 190), 2, random (-10, 10))
+			PFZ2 AAAA 0 A_CustomMissile ("SmallBrainPiece", 50, 40, random (0, 360), 2, random (0, 160))
+			PFZ2 A 0 A_CustomMissile ("XDeathArm1", 35, 40, random (0, 360), 2, random (0, 160))
+			PFZ2 A 0 A_CustomMissile ("XDeathZombieLeg", 32, 40, random (0, 360), 2, random (0, 160))
+			PFZ2 A 0 A_CustomMissile ("FlyingDeadZombie", 15, 40, random (-40, 40), 2, 0)
+			PFZ2 STTTTTTTT 2
+			PFZ2 A 0 A_TakeInventory("GoFatality", 1)
+			PFZ2 A 0 A_TakeInventory("ZombieManFatality2",1)
+			PFZ2 A 0 A_GiveInventory("HealthBonus", 15)
+			PFS3 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFZ2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFZ2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Do a PileDriver, blowing up the Zombie's head!!!
+		PZF3:
+			PFZ3 A 0 SetPlayerProperty(0, 1, 0)
+			PFZ3 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFZ3 A 0 ACS_Execute(312, 0)
+			PFZ3 A 2
+			PFZ3 B 2 A_PlaySound("grunt/pain")
+			PFZ3 CDEFGHHHHHH 2 SetPlayerProperty(0, 1, 0)
+			PFZ3 I 2 A_PlaySound("Paladin/MediumExert", 3)
+			PFZ3 JKLMN 2 SetPlayerProperty(0, 1, 0)
+			PFZ3 A 0 A_PlaySound("CLAP", 1)
+			PFZ3 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFZ3 A 0 A_SpawnItem("ZombiemanHeadExplode", 0, 5)
+			PFZ3 OPPPPPP 2
+			PFZ3 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 20)
+			PFZ3 A 0 A_SpawnItemEx("POSLL0")
+			PFZ3 A 0 A_TakeInventory("GoFatality", 1)
+			PFZ3 A 0 A_TakeInventory("ZombieManFatality3",1)
+			PFZ3 A 0 A_GiveInventory("HealthBonus", 15)
+			PFZ3 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFZ3 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Do a Johnny Cage Finisher (Zombie's been Caged)!!! (Uppercut to the head, heh)
+		PZF4:
+			PFZ4 A 0 SetPlayerProperty(0, 1, 0)
+			PFZ4 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFZ4 A 0 ACS_Execute(312, 0)
+			PFZ4 A 9 SetPlayerProperty(0, 1, 0)
+			PFZ4 B 3 A_PlaySound("Paladin/MediumExert", 3)
+			PFZ4 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFZ4 A 0 A_SpawnItem("ZombiemanHeadExplode", 30, 40)
+			PFZ4 CCDDEEFFGGHHIIJJ 3 A_CustomMissile ("Brutal_LiquidBlood2", 40, 30, 120, 2, random (0, 60))
+			PFZ4 KKLLMMNN 3 A_CustomMissile ("Brutal_LiquidBlood2", 40, 30, 120, 2, random (0, 60))
+			PFZ4 N 6 A_CustomMissile ("ArterialBloodSPray", 10, 40, 45, 2, random (0, 60))
+			PFZ4 N 9
+			PFZ4 A 0 A_SpawnItem ("GrowingBloodPool")
+			PFZ4 A 0 A_SpawnItem ("DeadZombieman_NoHeadFront")
+			PFZ4 A 0 A_TakeInventory("GoFatality", 1)
+			PFZ4 A 0 A_TakeInventory("ZombieManFatality4",1)
+			PFZ4 A 0 A_GiveInventory("HealthBonus", 15)
+			PFZ4 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFZ4 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Do a gut rip and the kick the upper half of the zombie's body *evil laugh*!!!
+		PZF5:
+			PFZ5 A 0 SetPlayerProperty(0, 1, 0)
+			PFZ5 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFZ5 A 0 ACS_Execute(312, 0)
+			PFZ5 AAABCDEF 3 SetPlayerProperty(0, 1, 0)
+			PFZ5 A 0 A_PlaySound("weapons/rifle")
+			PFZ5 A 0 A_CustomMissile("DistantFireSoundRifle", 32, 8, 0, 1, 0)
+			PFZ5 G 3 A_PlaySound("Paladin/MediumExert", 3)
+			PFZ5 H 3 SetPlayerProperty(0, 1, 0)
+			PFZ5 A 0 A_CustomMissile ("MuchBlood2", 24, -30, random (0, 360), 2, random (0, 160))
+			PFZ5 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFZ5 A 0 A_PlaySound("grunt/pain")
+			PFZ5 HI 5
+			PFZ5 A 0 A_SpawnItemEX("Blood", -1, -30, 24)
+			PFZ5 JK 5
+			PFZ5 A 0 A_SpawnItemEX("Blood", -1, -30, 24)
+			PFZ5 LM 5
+			PFZ5 A 0 A_SpawnItemEX("Blood", -1, -30, 24)
+			PFZ5 N 5
+			PFZ5 A 0 A_CustomMissile ("RipZombieman2", 0, -30, random (-100, -80), 2, random (0, 160))
+			PFZ5 A 0 A_CustomMissile ("MuchBlood2", 24, -30, random (0, 360), 2, random (0, 160))
+			PFZ5 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFZ5 OPQRRR 5
+			PFZ5 A 0 A_SpawnItem ("GrowingBloodPool")
+			PFZ5 A 0 A_SpawnItem("DeadZombieman_TearedInHalf")
+			PFZ5 A 0 A_TakeInventory("GoFatality", 1)
+			PFZ5 A 0 A_TakeInventory("ZombieManFatality5",1)
+			PFZ5 A 0 A_GiveInventory("HealthBonus", 15)
+			PFZ5 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFZ5 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Lab Guy Fatalities
+		//Overhead throwdown! (much like the Zombieman)
+		PLF:
+			PFL1 A 0 SetPlayerProperty(0, 1, 0)
+			PFL1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFL1 A 0 ACS_Execute(312, 0)
+			PFL1 A 3
+			PFL1 A 0 A_PlaySound("grunt/pain")
+			PFL1 A 0 SetPlayerProperty(0, 1, 0)
+			PFL1 BCDE 3 SetPlayerProperty(0, 1, 0)
+			PFL1 FGHIJ 2 SetPlayerProperty(0, 1, 0)
+			PFL1 A 0 A_PlaySound("CLAP", 1)
+			PFL1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFL1 A 0 A_Custommissile("BloodyAxe", 8, -20, random (0, 360), 2, random (50, 130))
+			PFL1 KLLLL 2
+			PFL1 MMNNOOPPQQ 2
+			PFL1 A 0 A_PlaySound("misc/xdeath1")
+			PFL1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFL1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFL1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFL1 A 0 A_CustomMissile ("MuchBlood2", 0, -30, random (0, 360), 2, random (0, 160))
+			PFL1 AAAA 0 A_CustomMissile ("Brains1", 0, -30, random (0, 360), 2, random (0, 160))
+			PFL1 A 0 A_CustomMissile ("Brains2", 0, -30, random (0, 360), 2, random (0, 160))
+			PFL1 A 0 A_CustomMissile ("Brains3", 0, -30, random (0, 360), 2, random (0, 160))
+			PFL1 A 0 A_CustomMissile ("Brains4", 0, -30, random (0, 360), 2, random (0, 160))
+			PFL1 A 0 A_CustomMissile ("Brains5", 0, -30, random (0, 360), 2, random (0, 160))
+			PFL1 AAAA 0 A_CustomMissile ("SmallBrainPiece", 0, random(-25,-35), random (170, 190), 2, random (0, 40))
+			PFL1 AAAA 0 A_CustomMissile ("SmallBrainPiece", 0, -30, random (0, 360), 2, random (0, 160))
+			PFL1 AA 0 A_CustomMissile ("SuperWallRedBlood", 0, -30, random (170, 190), 2, random (0, 40))
+			PFL1 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 20)
+			PFL1 R 20
+//			PFL1 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFL1 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFL1 A 0 A_SpawnItemEx("DeadLabguyFSADE")
+			PFL1 A 0 A_TakeInventory("GoFatality", 1)
+			PFL1 A 0 A_TakeInventory("LabGuyToken1", 1)
+			PFL1 A 0 A_GiveInventory("HealthBonus",15)
+			PFL1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFL1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto Standstill
+		//Rip Leg off, then throw down violently!!!
+		PLF2:
+			PFL2 A 0 SetPlayerProperty(0, 1, 0)
+			PFL2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFL2 A 0 ACS_Execute(312, 0)
+			PFL2 A 5
+			PFL2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFL2 A 0 SetPlayerProperty(0, 1, 0)
+			PFL2 BCDEGG 4 SetPlayerProperty(0, 1, 0) //I skipped F frame cuz I didn't like that frame anyway X)
+			PFL2 HIGIHGHIGIHG 3 SetPlayerProperty(0, 1, 0)
+			PFL2 A 0 A_PlaySound("grunt/death")
+			PFL2 A 0 A_CustomMissile ("MuchBlood2", 20, 20, random (0, 360), 2, random (0, 160))
+			PFL2 A 0 A_CustomMissile ("XDeath1", 20, 20, random (0, 360), 2, random (0, 160))
+			PFL2 A 0 A_Custommissile("BloodyAxe", 20, 20, random (0, 360), 2, random (50, 130))
+			PFL2 JKLMN 2 SetPlayerProperty(0, 1, 0)
+			PFL2 OPQRS 2 SetPlayerProperty(0, 1, 0)
+			PFL2 A 0 A_PlaySound("CLAP", 1)
+			PFL2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFL2 TU 2
+			PFL2 A 0 A_CustomMissile ("ThrownLabguy", 0, -50, random (0, 360), 2, random (0, 160))
+			PFL2 V 10
+			PFL2 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFL2 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFL2 A 0 A_CustomMissile ("XDeathSargeLeg1", 24, 20, random (0, 360), 2, random (0, 160))
+			PFL2 W 20
+//			PFL2 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFL2 A 0 A_TakeInventory("GoFatality", 1)
+			PFL2 A 0 A_TakeInventory("LabGuyToken2", 1)
+			PFL2 A 0 A_GiveInventory("HealthBonus",15)
+			PFL2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFL2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto Standstill
+		//Punch in face and chop with the Quietus, "Atlantean Sword Kata" style, heh
+		PLF3:
+			PFL3 A 0 SetPlayerProperty(0, 1, 0)
+			PFL3 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFL3 A 0 ACS_Execute(312, 0)
+			PFL3 AABC 2
+			PFL3 D 2 A_PlaySound("grunt/pain")
+			PFL3 A 0 A_PlaySound("PUNCHHIT", 7)
+			PFL3 A 0 A_SpawnItemEX("MuchBlood", 0, 10, 32)
+			PFL3 EFGH 2 SetPlayerProperty(0, 1, 0)
+			PFL3 I 2 SetPlayerProperty(0, 1, 0) //(Maybe crack sound?)
+			PFL3 JKLMNOPQRS 2 SetPlayerProperty(0, 1, 0)
+			PFL3 T 2 A_PlaySound("weapons/gswing")
+			PFL3 UVW 2 SetPlayerProperty(0, 1, 0)
+			PFL3 X 2 A_PlaySound("weapons/gswing")
+			PFL3 YZ 2 SetPlayerProperty(0, 1, 0)
+			PFL4 A 2 SetPlayerProperty(0, 1, 0)
+			PFL4 B 2 A_PlaySound("weapons/gswing")
+			PFL4 CDEF 2 SetPlayerProperty(0, 1, 0)
+			TNT1 AA 0 A_CustomMissile ("MuchBlood2", 35, 35, random (0, 360), 2, random (0, 160))
+			TNT1 A 0 A_CustomMissile ("RipLabguy", 0, 35, random (0, 360), 2, random (0, 160))
+			PFL4 GHIJJJJJJJ 2
+			PFL4 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFL4 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFL4 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 0)
+			PFL4 A 0 A_SpawnItemEx("DeadLabguyFSD1H")
+			PFL4 A 0 A_TakeInventory("GoFatality", 1)
+			PFL4 A 0 A_TakeInventory("LabGuyToken3", 1)
+			PFL4 A 0 A_GiveInventory("HealthBonus", 15)
+			PFL4 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFL4 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Sergeant Fatalities
+		//Overhead throwdown (same as zombieman)
+		PSF:
+			PFS1 A 0 SetPlayerProperty(0, 1, 0)
+			PFS1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFS1 A 0 ACS_Execute(312, 0)
+			PFS1 A 3
+			PFS1 A 0 A_PlaySound("grunt/pain")
+			PFS1 A 0 SetPlayerProperty(0, 1, 0)
+			PFS1 BCDE 3 SetPlayerProperty(0, 1, 0)
+			PFS1 FGHI 2 SetPlayerProperty(0, 1, 0)
+			PFS1 A 0 A_PlaySound("CLAP", 1)
+			PFS1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFS1 JKKKK 2
+			PFS1 LL 2
+			PFS1 MMNNOOPP 2
+			PFS1 A 0 A_PlaySound("misc/xdeath1")
+			PFS1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFS1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFS1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFS1 A 0 A_SpawnItemEx("ShotgunguyHeadExplode", 0, -30)
+			PFS1 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 20)
+			PFS1 Q 20
+			PFS1 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFS1 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFS1 A 0 A_SpawnItemEx("SPDHE0")
+			PFS1 A 0 A_TakeInventory("GoFatality", 1)
+			PFS1 A 0 A_TakeInventory("SergeantFatality",1)
+			PFS1 A 0 A_GiveInventory("HealthBonus",15)
+			PFS1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFS1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Parry gun and grab it, throw up shotgun guy, do a winchester spin, and say "Hasta la vista... baby!" to the sergeant (shoot him in the air after impale)!
+		PSF2:
+			PFS2 A 0 SetPlayerProperty(0, 1, 0)
+			PFS2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFS2 A 0 ACS_NamedExecuteAlways("BDActivateCameraBig", 0, 0, 0, 0)
+			PFS2 A 0 ACS_Execute(312, 0)
+			PFS2 A 5
+			PFS2 A 0 SetPlayerProperty(0, 1, 0)
+			PFS2 A 0 A_PlaySound("weapons/sg")
+			PFS2 A 0 A_CustomMissile("ShotCaseSpawn", 32, 0, random (0,360), 2, random (40,80))
+			PFS2 B 5 BRIGHT SetPlayerProperty(0, 1, 0)
+			PFS2 C 5 SetPlayerProperty(0, 1, 0)
+			PFS2 DEFGH 2 SetPlayerProperty(0, 1, 0)
+			PFS2 A 0 A_PlaySound("grunt/death")
+			PFS2 IIJJKKLLMMNNO 1 SetPlayerProperty(0, 1, 0)
+			PFS2 A 0 A_CustomMissile("ShotCaseSpawn", 32, -20, random (0,360), 2, random (40,80))
+			PFS2 P 1 A_PlaySound("weapons/sgpump", 3)
+			PFS2 QRSTUVWXYY 1 SetPlayerProperty(0, 1, 0)
+			PFS2 Z 2 SetPlayerProperty(0, 1, 0)
+			PFS3 ABCDEF 2 SetPlayerProperty(0, 1, 0)
+			PFS3 A 0 A_PlaySound("misc/xdeath1")
+			PFS3 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFS3 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFS3 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFS3 AAAA 0 A_CustomMissile ("XDeath1", 50, 0, random (0, 360), 2, random (0, 160))
+			PFS3 AAA 0 A_CustomMissile ("BloodMistSmall", 60, 0, random (0, 360), 2, random (20, 90))
+			PF33 A 0 A_SpawnItemEX("MuchBlood", 0, 0, 50)
+			PFS3 GHHHHHH 3 SetPlayerProperty(0, 1, 0)
+
+			PFS3 A 0 A_PlaySound("weapons/sg")
+			PFS3 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFS3 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFS3 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFS3 AAAAA 0 A_CustomMissile ("XDeath1", 100, 0, random (0, 360), 2, random (0, 160))
+			PFS3 AA 0 A_CustomMissile ("XDeath2", 100, 0, random (0, 360), 2, random (0, 160))
+			PFS3 AA 0 A_CustomMissile ("XDeath3", 100, 0, random (0, 360), 2, random (0, 160))
+			PFS3 AAAAAAAAAAA 0 A_CustomMissile ("BloodMist", 110, 0, random (0, 360), 2, random (20, 90))
+			PFS3 A 0 A_CustomMissile ("FlyingImpaledSergeant", 80, 0, random (0, 360), 2, random (70, 110))
+
+			PFS3 K 3 BRIGHT
+			PFS3 J 3
+			PFS3 I 10
+			PFS3 A 0 A_TakeInventory("GoFatality", 1)
+			PFS3 A 0 A_TakeInventory("SergeantFatality2",1)
+			PFS3 A 0 A_GiveInventory("HealthBonus",15)
+			PFS3 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFS3 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFS3 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Punch in the face, then do a big ass kick to him!
+		PSF3:
+			PFS4 A 0 SetPlayerProperty(0, 1, 0)
+			PFS4 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFS4 A 0 ACS_Execute(312, 0)
+			PFS4 ABC 3
+			PFS4 A 0 A_PlaySound("grunt/pain")
+			PFS4 A 0 SetPlayerProperty(0, 1, 0)
+			PFS4 DE 2 SetPlayerProperty(0, 1, 0)
+			PFS4 FGH 2 SetPlayerProperty(0, 1, 0)
+			PFS4 A 0 A_PlaySound("misc/xdeath1")
+			PFS4 A 0 A_SpawnItemEx("ShotgunguyHeadExplode", 0, 54, 10)
+			PFS4 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFS4 IJK 4
+			PFS4 A 0 A_SpawnItemEX("Blood", -1, 40, 40)
+			PFS4 KLL 4
+			PFS4 A 0 A_SpawnItemEX("Blood", -1, 40, 40)
+			PFS4 LLM 4
+			PFS4 A 0 A_SpawnItemEX("Blood", -1, 40, 40)
+			PFS4 NOP 4
+			PFS4 A 0 A_PlaySound("CLAP", 1)
+			PFS4 A 0 A_CustomMissile ("Muchblood2", 24, 40, random (0, 360), 2, random (0, 160))
+			PFS4 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFS4 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFS4 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFS4 QR 2 SetPlayerProperty(0, 1, 0)
+			PFS4 A 0 A_PlaySound("grunt/death")
+			PFS4 S 2 SetPlayerProperty(0, 1, 0)
+			PFS4 T 20
+			PFS4 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 0)
+			PFS4 A 0 A_SpawnItemEx("PFS4U0")
+			PFS4 A 0 A_TakeInventory("GoFatality", 1)
+			PFS4 A 0 A_TakeInventory("SergeantFatality3",1)
+			PFS4 A 0 A_GiveInventory("HealthBonus",15)
+			PFS4 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFS4 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Do a Johnny Cage Finisher (Sergeant's been Caged)!!! (Uppercut to the head, heh)
+		PSF4:
+			PFS5 A 0 SetPlayerProperty(0, 1, 0)
+			PFS5 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFS5 A 0 ACS_Execute(312, 0)
+			PFS5 A 10 SetPlayerProperty(0, 1, 0)
+			PFS5 B 3 A_PlaySound("Paladin/MediumExert", 3)
+			PFS5 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFS5 A 0 A_SpawnItem("ShotgunguyHeadExplode", 30, 40)
+			PFS5 CCCCCCCDDEEFFGGGGGGHHHHHIIII 2 A_CustomMissile ("Brutal_LiquidBlood2", 40, 30, 120, 2, random (0, 60))
+			PFS5 J 6 A_CustomMissile ("ArterialBloodSPray", 10, 40, 45, 2, random (0, 60))
+			PFS5 J 9
+			PFS5 A 0 A_SpawnItem ("GrowingBloodPool")
+			PFS5 A 0 A_SpawnItem ("DeadShotgunguySPDHE")
+			PFS5 A 0 A_TakeInventory("GoFatality", 1)
+			PFS5 A 0 A_TakeInventory("SergeantFatality4",1)
+			PFS5 A 0 A_GiveInventory("HealthBonus", 15)
+			PFS5 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFS5 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Punch the face and do a full fist slam on him, pulverising him entirely (hahahaha!!!!)
+		PSF5:
+			PFS6 A 0 SetPlayerProperty(0, 1, 0)
+			PFS6 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFS6 A 0 ACS_Execute(312, 0)
+			PFS6 A 5 SetPlayerProperty(0, 1, 0)
+			PFS6 B 3 A_PlaySound("Paladin/MediumExert", 3)
+			PFS6 C 3 SetPlayerProperty(0, 1, 0)
+			PFS6 A 0 A_PlaySound("grunt/pain")
+			PFS6 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFS6 A 0 A_SpawnItem("ShotgunguyHeadExplode", -30, 40)
+			PFS6 DEFGHIJKLMM 3
+			PFS6 M 3 A_PlaySound("Paladin/MediumExert", 3)
+			PFS6 NO 3
+			PFS6 A 0 A_PlaySound("CLAP", 1)
+			PFS6 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFS6 AAA 0 A_CustomMissile ("XDeath1", 6, -30, random (0, 190), 2, random (10, 60))
+			PFS6 AAA 0 A_CustomMissile ("XDeath3", 6, -30, random (0, 190), 2, random (10, 60))
+			PFS6 A 0 A_CustomMissile ("XDeath2", 6, -30, random (0, 190), 2, random (10, 60))
+			PFS6 A 0 A_CustomMissile ("XDeath4", 6, -30, random (0, 190), 2, random (10, 60))
+			PFS6 A 0 A_CustomMissile ("SargeXDeath", 0, -30, random (0, 360), 2, random (0, 160))
+			PFS6 PPQQRRRR 3
+			PFS6 A 0 A_TakeInventory("GoFatality", 1)
+			PFS6 A 0 A_TakeInventory("SergeantFatality5",1)
+			PFS6 A 0 A_GiveInventory("HealthBonus", 15)
+			PFS6 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFS6 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Commando Fatalities
+		//Overhead throwdown (pretty much like the zombie one)
+		POF:
+			PFO1 A 0 SetPlayerProperty(0, 1, 0)
+			PFO1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFO1 A 0 ACS_Execute(312, 0)
+			PFO1 A 3
+			PFO1 A 0 A_PlaySound("grunt/pain")
+			PFO1 A 0 SetPlayerProperty(0, 1, 0)
+			PFO1 BCDE 3 SetPlayerProperty(0, 1, 0)
+			PFO1 FGHI 2 SetPlayerProperty(0, 1, 0)
+			PFO1 A 0 A_PlaySound("CLAP", 1)
+			PFO1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFO1 JKKKK 2
+			PFO1 LL 2
+			PFO1 MMNNOOPP 2
+			PFO1 A 0 A_PlaySound("misc/xdeath1")
+			PFO1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFO1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFO1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFO1 AA 0 A_CustomMissile ("XDeathChainArm", 5, -20, random (0, 360), 2, random (0, 160))
+			PFO1 A 0 A_SpawnItemEx("ChaingunguyHeadExplode", 0, -30)
+			PFO1 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 20)
+			PFO1 Q 20
+			PFO1 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFO1 A 0 A_SpawnItemEx("PFO1R0")
+			PFO1 A 0 A_TakeInventory("GoFatality", 1)
+			PFO1 A 0 A_TakeInventory("ComandoFatality",1)
+			PFO1 A 0 A_GiveInventory("HealthBonus",20)
+			PFO1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFO1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Clobber the face, throw over to the other side, and then mega stomp the rest!!!
+		POF2:
+			PFO2 A 0 SetPlayerProperty(0, 1, 0)
+			PFO2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFO2 A 0 ACS_Execute(312, 0)
+			PFO2 A 3
+			PFO2 A 0 SetPlayerProperty(0, 1, 0)
+			PFO2 BC 3 SetPlayerProperty(0, 1, 0)
+			PFO2 A 0 A_PlaySound("CLAP", 1)
+			PFO2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFO2 A 0 A_CustomMissile ("MuchBlood", 32, 45, random (0, 360), 2, random (0, 160))
+			PFO2 A 0 A_SpawnItemEx("ChaingunguyHeadExplode", 32, 45)
+			PFO2 DEFGHIJKK 3
+			PFO2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFO2 LMNOPQRSTU 3
+			PFO2 A 0 A_PlaySound("misc/xdeath1")
+			PFO2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFO2 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFO2 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFO2 AA 0 A_CustomMissile ("XDeath1", 8, -40, random (0, 360), 2, random (10, 90))
+			PFO2 AA 0 A_CustomMissile ("XDeath2", 8, -40, random (0, 360), 2, random (10, 90))
+			PFO2 AAAA 0 A_CustomMissile ("XDeath2b", 5, -40, random (0, 360), 2, random (10, 90))
+			PFO2 AAAA 0 A_CustomMissile ("XDeath3b", 5, -40, random (0, 360), 2, random (10, 90))
+			PFO2 AA 0 A_CustomMissile ("XDeathSkinPiece2", 5, -40, random (0, 360), 2, random (10, 90))
+			PFO2 AA 0 A_CustomMissile ("XDeathSkinPiece1", 5, -40, random (0, 360), 2, random (10, 90))
+			PFO2 AAA 0 A_CustomMissile ("SuperGoreSpawner", 10, -40, random (0, 360), 2, random (30, 60))
+			PFO2 A 0 A_CustomMissile ("MuchBlood2", 5, 0, random (0, 360), 2, random (0, 160))
+			PFO2 AA 0 A_CustomMissile ("XDeathChainArm", 5, -40, random (0, 360), 2, random (0, 160))
+			PFO2 AA 0 A_CustomMissile ("XDeathChainLeg", 5, -40, random (0, 360), 2, random (0, 160))
+			PFO2 UVVVV 5
+			PFO2 A 0 A_SpawnItem("BigBloodSpot")
+			PFO2 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFO2 A 0 A_TakeInventory("GoFatality", 1)
+			PFO2 A 0 A_TakeInventory("ComandoFatality2",1)
+			PFO2 A 0 A_GiveInventory("HealthBonus",20)
+			PFO2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFO2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Imp Fatalities
+		//Overhead throwdown (pretty much like the zombie one)
+		PIF:
+			PFI1 A 0 SetPlayerProperty(0, 1, 0)
+			PFI1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFI1 A 0 ACS_Execute(312, 0)
+			PFI1 A 2
+			PFI1 A 0 A_PlaySound("imp/pain")
+			PFI1 A 0 SetPlayerProperty(0, 1, 0)
+			PFI1 BCDE 3 SetPlayerProperty(0, 1, 0)
+			PFI1 FGH 2 SetPlayerProperty(0, 1, 0)
+			PFI1 A 0 A_PlaySound("CLAP", 1)
+			PFI1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFI1 IJJJJ 2
+			PFI1 KKLLMMNNOO 2
+			PFI1 A 0 A_PlaySound("misc/xdeath1")
+			PFI1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFI1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFI1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			TNT1 A 0 A_SpawnItemEx("ImpHeadExplode", 0, -30)
+			TNT1 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 20)
+			PFI1 P 20
+			PFI1 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			TNT1 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFI1 A 0 A_SpawnItemEx("T6SWG0")
+			PFI1 A 0 A_TakeInventory("GoFatality", 1)
+			PFI1 A 0 A_TakeInventory("ImpFatality",1)
+			PFI1 A 0 A_GiveInventory("HealthBonus",15)
+			PFI1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFI1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Punch in the gut, smack head, then do a drop down head explosion thigy!!!
+		PIF2:
+			PFI2 A 0 SetPlayerProperty(0, 1, 0)
+			PFI2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFI2 A 0 ACS_Execute(312, 0)
+			PFI2 A 10
+			PFI2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFI2 A 0 SetPlayerProperty(0, 1, 0)
+			PFI2 BC 3 SetPlayerProperty(0, 1, 0)
+			PFI2 A 0 A_PlaySound("PUNCHHIT", 7)
+			PFI2 A 0 A_SpawnItemEX("MuchBlood", 0, 10, 32)
+			PFI2 DE 3 SetPlayerProperty(0, 1, 0)
+			PFI2 A 0 A_PlaySound("imp/pain")
+			PFI2 FGHIJKL 4 SetPlayerProperty(0, 1, 0)
+			PFI2 A 0 A_PlaySound("imp/pain")
+			PFI2 MMMNNNOOOOPPPQQQQPPP 1 SetPlayerProperty(0, 1, 0)
+			PFI2 A 0 A_PlaySound("CLAP", 1)
+			PFI2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFI2 RS 4 SetPlayerProperty(0, 1, 0)
+			//PFI2 A 0 A_PlaySound("imp/pain")
+			PFI2 TUV 4 SetPlayerProperty(0, 1, 0)
+			PFI2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFI2 WXY 3 SetPlayerProperty(0, 1, 0)
+			PFI2 A 0 A_PlaySound("misc/xdeath1")
+			PFI2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFI2 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFI2 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFI2 A 0 A_SpawnItemEx("ImpHeadExplode", 0, 10)
+			PFI2 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 0)
+			PFI2 Z 20
+			PFI2 A 0 A_SpawnItemEx("T6SWG0")
+			PFI2 A 0 A_TakeInventory("GoFatality", 1)
+			PFI2 A 0 A_TakeInventory("ImpFatality2",1)
+			PFI2 A 0 A_GiveInventory("HealthBonus",15)
+			PFI2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFI2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Rip arm off, then take the head off, then power stomp the poor bastard!!!
+		PIF3:
+			PFI3 A 0 SetPlayerProperty(0, 1, 0)
+			PFI3 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFI3 A 0 ACS_Execute(312, 0)
+			PFI3 A 4
+			PFI3 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFI3 BCDEF 4 SetPlayerProperty(0, 1, 0)
+			PFI3 A 0 A_PlaySound("misc/xdeath1")
+			PFI3 A 0 A_SpawnItemEX("MuchBlood", 0, 0, 32)
+			PFI3 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFI3 GH 4 SetPlayerProperty(0, 1, 0)
+			PFI3 A 0 A_PlaySound("imp/pain")
+			PFI3 IJKLMNOPQR 4 SetPlayerProperty(0, 1, 0)
+			PFI3 A 0 A_PlaySound("misc/xdeath1")
+			PFI3 A 0 A_SpawnItemEX("MuchBlood", 0, 0, 32)
+			PFI3 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFI3 STUVWX 4 SetPlayerProperty(0, 1, 0)
+			PFI3 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFI3 YZ 4 SetPlayerProperty(0, 1, 0)
+			PFI4 A 4 SetPlayerProperty(0, 1, 0)
+			PFI4 A 0 A_SpawnItemEX("MuchBlood", 0, 0, 12)
+			PFI4 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFI4 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFI4 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFI4 BCDEF 4 SetPlayerProperty(0, 1, 0)
+			PFI4 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 0)
+			PFI4 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFI4 A 0 A_SpawnItemEx("T6SWH0")
+			PFI4 A 0 A_TakeInventory("GoFatality", 1)
+			PFI4 A 0 A_TakeInventory("ImpFatality3",1)
+			PFI4 A 0 A_GiveInventory("HealthBonus",15)
+			PFI4 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFI4 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Bust the head up, thrown to the other side, then jump stomp on the muther focker!!!
+		PIF4:
+			PFI5 A 0 SetPlayerProperty(0, 1, 0)
+			PFI5 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFI5 A 0 ACS_Execute(312, 0)
+			PFI5 A 10
+			PFI5 A 0 A_PlaySound("weapons/gswing")
+			PFI5 BC 3 SetPlayerProperty(0, 1, 0)
+			//PFI5 A 0 A_PlaySound("PUNCHHIT", 7)
+			PFI5 AA 0 A_CustomMissile ("BloodMist", 32, 40, random (0, 360), 2, random (60, 90))
+			PFI5 AAAA 0 A_CustomMissile ("BloodmistSpraySmall", 32, 40, random (0, 360), 2, random (30, 90))
+			PFI5 AAAAA 0 A_CustomMissile ("Brutal_FlyingBlood", 32, 40, random (0, 360), 2, random (30, 90))
+			PFI5 A 0 A_CustomMissile ("Brains3", 32, 40, random (0, 360), 2, random (10, 90))
+			PFI5 A 0 A_CustomMissile ("Brains6", 32, 40, random (0, 360), 2, random (10, 90))
+			PFI5 A 0 A_CustomMissile ("Brains7", 32, 40, random (0, 360), 2, random (10, 90))
+			PFI5 A 0 A_CustomMissile ("BrainsImpHeadPiece", 32, 40, random (0, 360), 2, random (10, 90))
+			PFI5 AAA 0 A_CustomMissile ("SmallBrainPieceFast", 32, 40, random (0, 360), 2, random (10, 20))
+			PFI5 AAAAA 0 A_CustomMissile ("SmallBrainPiece", 32, 40, random (0, 360), 2, random (10, 90))
+			PFI5 AAA 0 A_CustomMissile ("Teeth", 32, 40, random (0, 360), 2, random (10, 90))
+			PFI5 AAA 0 A_CustomMissile ("XDeath1", 32, 40, random (0, 360), 2, random (10, 90))
+			PFI5 A 0 A_CustomMissile ("XDeath3b", 42, 40, random (0, 360), 2, random (50, 90))
+			PFI5 A 0 A_SpawnItemEX("MuchBlood", 0, 40, 32)
+			PFI5 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFI5 D 3 SetPlayerProperty(0, 1, 0)
+			PFI5 A 0 A_PlaySound("imp/death")
+			PFI5 EFFFFFGH 3 SetPlayerProperty(0, 1, 0)
+			PFI5 A 0 A_PlaySound("weapons/gswing")
+			PFI5 IJ 3 SetPlayerProperty(0, 1, 0)
+			PFI5 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFI5 KKKKK 3 SetPlayerProperty(0, 1, 0)
+			//PFI5 A 0 A_SpawnItemEX("Blood", 0, -20, 4)
+			PFI5 L 3 SetPlayerProperty(0, 1, 0)
+			PFI5 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFI5 MNO 3 SetPlayerProperty(0, 1, 0)
+			PFI5 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFI5 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFI5 A 0 A_PlaySound("misc/xdeath1")
+			PFI5 A 0 A_SpawnItemEX("MuchBlood", 0, -40, 6)
+			PFI5 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFI5 P 20
+			PFI5 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 0)
+			PFI5 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFI5 A 0 A_SpawnItemEx("T6SWI0")
+			PFI5 A 0 A_TakeInventory("GoFatality", 1)
+			PFI5 A 0 A_TakeInventory("ImpFatality4",1)
+			PFI5 A 0 A_GiveInventory("HealthBonus",15)
+			PFI5 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFI5 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Pinky Fatalities
+		//Rip arm off and beat em down with it!!
+		PPF:
+			PFP1 A 0 SetPlayerProperty(0, 1, 0)
+			PFP1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFP1 A 0 ACS_Execute(312, 0)
+			PFP1 ABCD 2
+			PFP1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFP1 E 6
+			PFP1 FEFEF 2
+			PFP1 G 2 A_PlaySound("player/cyborg/fist", 3)
+			PFP1 H 2 A_PlaySound("demon/pain")
+			PFP1 A 0 A_CustomMissile ("Muchblood2", 30, 0, random (0, 360), 2, random (0, 160))
+			PFP1 A 0 SetPlayerProperty(0, 1, 0)
+			PFP1 IJK 2 SetPlayerProperty(0, 1, 0)
+			PFP1 L 30 SetPlayerProperty(0, 1, 0)
+			PFP1 A 0 A_PlaySound("demon/pain")
+			PFP1 L 10 SetPlayerProperty(0, 1, 0)
+			PFP1 MNOP 2 SetPlayerProperty(0, 1, 0)
+			PFP1 Q 2 A_PlaySound("player/cyborg/fist", 3)
+			PFP1 R 2 A_PlaySound("demon/pain")
+			PFP1 S 2
+			PFP1 T 10
+			PFP1 UV 2
+			PFP1 W 1 A_PlaySound("player/cyborg/fist", 3)
+			PFP1 W 2 A_PlaySound("misc/xdeath1")
+			PFP1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFP1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFP1 A 0 A_CustomMissile ("Muchblood2", 30, 0, random (0, 360), 2, random (0, 160))
+			PFP1 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 20)
+			PFP1 X 10
+			PFP1 Y 5
+			PFP1 Z 20
+			PFP1 A 0 A_SpawnItemEx("PFP2Z0")
+			PFP1 A 0 A_TakeInventory("GoFatality", 1)
+			PFP1 A 0 A_TakeInventory("DemonFatality",1)
+			PFP1 A 0 A_GiveInventory("HealthBonus",20)
+			PFP1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFP1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Rip jaw off and do a massive gibby punch!!
+		PPF2:
+			PFP2 A 0 SetPlayerProperty(0, 1, 0)
+			PFP2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFP2 A 0 ACS_Execute(312, 0)
+			PFP2 ABC 2
+			PFP2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFP2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFP2 A 0 A_CustomMissile ("Muchblood2", 30, 0, random (0, 360), 2, random (0, 160))
+			PFP2 DEF 2
+			PFP2 G 2 A_PlaySound("demon/pain")
+			PFP2 HIJKL 5 A_SpawnItemEX("Blood", 0, 30, 4)
+			PFP2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFP2 A 0 A_CustomMissile ("Muchblood2", 30, 0, random (0, 360), 2, random (0, 160))
+			PFP2 M 2 A_PlaySound("player/cyborg/fist", 3)
+			PFP2 N 2 A_PlaySound("misc/xdeath1")
+			PFP2 OPQRS 2 SetPlayerProperty(0, 1, 0)
+			PFP2 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 0)
+			PFP2 T 20
+			PFP2 A 0 A_SpawnItemEx("PFP2U0")
+			PFP2 A 0 A_TakeInventory("GoFatality", 1)
+			PFP2 A 0 A_TakeInventory("DemonFatality2",1)
+			PFP2 A 0 A_TakeInventory("DemonFatality3",1)
+			PFP2 A 0 A_GiveInventory("HealthBonus",20)
+			PFP2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFP2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Skeleton Pinky Fatalities
+		//Punch in da face and do a final "blow up" punch!!
+		PPF4:
+			PFP4 A 0 SetPlayerProperty(0, 1, 0)
+			PFP4 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFP4 A 0 ACS_Execute(312, 0)
+			PFP4 A 8
+			PFP4 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFP4 BC 2
+			PFP4 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFP4 D 2 A_PlaySound("demon/pain")
+			PFP4 EFGGGGGGGGHI 2
+			PFP4 A 0 A_PlaySound("CLAP", 1)
+			PFP4 A 0 A_CustomMissile ("SargeBoneXDeath", 32, 30, random (0, 360), 2, random (0, 160))
+			PFP4 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFP4 J 20
+			PFP4 A 0 A_TakeInventory("GoFatality", 1)
+			PFP4 A 0 A_TakeInventory("DemonSkeletonFatality",1)
+			PFP4 A 0 A_GiveInventory("HealthBonus",20)
+			PFP4 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFP4 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Pick up and throw down like a ragdoll, then elbow slam what still remains!
+		PPF5:
+			PFP5 A 0 SetPlayerProperty(0, 1, 0)
+			PFP5 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFP5 A 0 ACS_Execute(312, 0)
+			PFP5 A 8
+			PFP5 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFP5 BBBCCC 1
+			PFP5 DDDEEEEEFFFFGGHHII 1
+			PFP5 A 0 A_PlaySound("CLAP", 1)
+			PFP5 AA 0 A_CustomMissile ("XDeathDemonSkeletonLeg", 8, 15, random (0, 360), 2, random (10, 90))
+			PFP5 AAAA 0 A_CustomMissile ("XDeathDemonSkeletonBone", 8, 15, random (0, 360), 2, random (10, 90))
+			PFP5 A 0 A_CustomMissile ("XDeathSkinPiece2", 4, 15, random (0, 360), 2, random (10, 90))
+			PFP5 A 0 A_CustomMissile ("XDeathSkinPiece1", 4, 15, random (0, 360), 2, random (10, 90))
+			PFP5 JKLMNNNN 2
+			PFP5 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFP5 OOOOPQR 3
+			PFP5 A 0 A_PlaySound("CLAP", 1)
+			PFP5 A 0 A_CustomMissile ("CameraShake", 1, 15, random (0, 360), 2, random (0, 160))
+			PFP5 AAAAAA 0 A_CustomMissile ("WaterBloodCHecker", 4, 15, random (0, 360), 2, random (30, 60))
+			PFP5 AAAAA 0 A_CustomMissile ("SuperWallRedBlood", 12, 15, random (0, 360), 2, random (-15, 15))
+			PFP5 AAAAAAAAA 0 A_CustomMissile ("CeilBloodLauncherLong", 0, 15, random (0, 360), 2, random (50, 130))
+			PFP5 AA 0 A_CustomMissile ("XDeath1", 8, 15, random (0, 360), 2, random (10, 90))
+			PFP5 AA 0 A_CustomMissile ("SuperGoreSpawner", 8, 15, random (0, 360), 2, random (30, 60))
+			PFP5 AAAA 0 A_CustomMissile ("XDeath2b", 4, 15, random (0, 360), 2, random (10, 90))
+			PFP5 A 0 A_CustomMissile ("XDeathSkinPiece2", 4, 15, random (0, 360), 2, random (10, 90))
+			PFP5 A 0 A_CustomMissile ("XDeathSkinPiece1", 4, 15, random (0, 360), 2, random (10, 90))
+			PFP5 A 0 A_CustomMissile ("XDeathOrgan1", 6, 15, random (0, 360), 2, random (10, 90))
+			PFP5 A 0 A_CustomMissile ("XDeathOrgan2", 6, 15, random (0, 360), 2, random (10, 90))
+			PFP5 AAAAAA 0 A_CustomMissile ("Guts", 8, 15, random (0, 360), 2, random (60, 90))
+			PFP5 AA 0 A_CustomMissile ("XDeathDemonSkeletonArm", 8, 15, random (0, 360), 2, random (10, 90))
+			PFP5 AA 0 A_CustomMissile ("XDeathDemonSkeletonMouth", 8, 15, random (0, 360), 2, random (10, 90))
+			PFP5 AA 0 A_CustomMissile ("XDeathDemonSkeletonHead", 8, 15, random (0, 360), 2, random (10, 90))
+			PFP5 AAAAAAAAA 0 A_CustomMissile ("XDeathDemonSkeletonBone", 8, 15, random (0, 360), 2, random (10, 90))
+			PFP5 A 0 A_SpawnItem ("BigBloodSpot")
+			PFP5 S 20
+			PFP5 A 0 A_TakeInventory("GoFatality", 1)
+			PFP5 A 0 A_TakeInventory("DemonSkeletonFatality2",1)
+			PFP5 A 0 A_GiveInventory("HealthBonus",20)
+			PFP5 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFP5 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Mech Pinky Fatalities
+		//Cruely rip in half!!
+		PPF6:
+			PFP6 A 0 SetPlayerProperty(0, 1, 0)
+			PFP6 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFP6 A 0 ACS_Execute(312, 0)
+			PFP6 ABC 5
+			PFP6 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFP6 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFP6 DEDED 2
+			PFP6 A 0 A_PlaySound("demon/pain")
+			PFP6 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFP6 GFGFGF 2
+			PFP6 A 0 A_PlaySound("demon/pain")
+			PFP6 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFP6 A 0 A_SpawnItemEX("Blood", -4, -12, 32)
+			PFP6 IH 2
+			PFP6 A 0 A_SpawnItemEX("Blood", -4, -12, 32)
+			PFP6 IH 2
+			PFP6 A 0 A_SpawnItemEX("Blood", -4, -12, 32)
+			PFP6 IH 2
+			PFP6 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFP6 A 0 A_CustomMissile ("Muchblood2", 32, -12, random (0, 360), 2, random (0, 160))
+			PFP6 J 2 A_PlaySound("misc/xdeath1")
+			PFP6 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFP6 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFP6 KKLLMMNNNN 5
+			PFP6 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 0)
+			PFP6 A 0 A_SpawnItemEx("SRG4F0")
+			PFP6 A 0 A_TakeInventory("GoFatality", 1)
+			PFP6 A 0 A_TakeInventory("DemonMechFatality",1)
+			PFP6 A 0 A_GiveInventory("HealthBonus",20)
+			PFP6 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFP6 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Cacodemon Fatalities
+		//Do a Grand Slam to the eyeball, blowing the back away!!
+		PAF:
+			PFA1 A 0 SetPlayerProperty(0, 1, 0)
+			PFA1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFA1 A 0 ACS_Execute(312, 0)
+			PFA1 A 5 SetPlayerProperty(0, 1, 0)
+			PFA1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFA1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFA1 ABC 2 SetPlayerProperty(0, 1, 0)
+			PFA1 D 3 A_PlaySound("misc/xdeath4", 4)
+			PFA1 E 3 SetPlayerProperty(0, 1, 0)
+			PFA1 F 3 A_PlaySound("CLAP", 1)
+			PFA1 G 6 A_PlaySound("caco/death", 1)
+			PFA1 A 0 A_CustomMissile ("CacoXDeath1", 45, 45, random (0, 360), 2, random (0, 160))
+			PFA1 A 0 A_CustomMissile ("CacoXDeath6", 45, 45, random (0, 360), 2, random (0, 160))
+			PFA1 A 0 A_CustomMissile ("Muchblood2Blue", 45, 45, random (0, 360), 2, random (0, 160))
+			PFA1 HIJ 5 SetPlayerProperty(0, 1, 0)
+			PFA1 K 5 SetPlayerProperty(0, 1, 0)
+			PFA1 A 0 A_SpawnItemEx("BlueGrowingBloodPool", 0, 40)
+			PFA1 K 20 SetPlayerProperty(0, 1, 0)
+			PFA1 LM 10 SetPlayerProperty(0, 1, 0)
+			PFA1 A 0 A_SpawnItemEx("PFA1N0")
+			PFA1 A 0 A_TakeInventory("GoFatality", 1)
+			PFA1 A 0 A_TakeInventory("CacoDemonFatality",1)
+			PFA1 A 0 A_GiveInventory("HealthBonus",50)
+			PFA1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFA1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Bitch slap the eye/front off, and do a massive "jump and crush" on him!!
+		PAF2:
+			PFA2 A 0 SetPlayerProperty(0, 1, 0)
+			PFA2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFA2 A 0 ACS_Execute(312, 0)
+			PFA2 ABC 3 SetPlayerProperty(0, 1, 0)
+			PFA2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFA2 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFA2 D 3 SetPlayerProperty(0, 1, 0)
+			PFA2 A 0 A_CustomMissile ("CacoXDeath1", 45, 45, random (0, 360), 2, random (0, 160))
+			PFA2 A 0 A_CustomMissile ("CacoXDeath6", 45, 45, random (0, 360), 2, random (0, 160))
+			PFA2 A 0 A_CustomMissile ("Muchblood2Blue", 45, 45, random (0, 360), 2, random (0, 160))
+			PFA2 E 3 A_PlaySound("misc/xdeath4", 4)
+			PFA2 F 3 A_PlaySound("CLAP", 1)
+			PFA2 G 3 A_PlaySound("caco/death", 1)
+			PFA2 H 3 SetPlayerProperty(0, 1, 0)
+			PFA2 I 6 A_PlaySound("Paladin/MediumExert", 3)
+			PFA2 JKLM 3 SetPlayerProperty(0, 1, 0)
+			PFA2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFA2 AAAAAA 0 A_CustomMissile ("BlueBloodMistBig", 30, 30, random (0, 360), 2, random (0, 50))
+			PFA2 AAAAAA 0 A_CustomMissile ("BlueBloodMistBig", 30, 30, random (160, 200), 2, random (20, 40))
+			PFA2 AA 0 A_CustomMissile ("XDeath2Blue", 25, 30, random (140, 230), 2, random (30, 60))
+			PFA2 AA 0 A_CustomMissile ("XDeath3Blue", 25, 30, random (140, 230), 2, random (30, 60))
+			PFA2 AA 0 A_CustomMissile ("XDeath4Blue", 25, 30, random (140, 230), 2, random (30, 60))
+			PFA2 A 0 A_CustomMissile ("CacoXDeath2", 30, 30, random (160, 200), 2, random (20, 40))
+			PFA2 A 0 A_CustomMissile ("CacoXDeath1", 30, 30, random (160, 200), 2, random (20, 40))
+			PFA2 A 0 A_CustomMissile ("CacoXDeath3", 30, 30, random (160, 200), 2, random (20, 40))
+			PFA2 A 0 A_CustomMissile ("CacoXDeath4", 30, 30, random (160, 200), 2, random (20, 40))
+			PFA2 AA 0 A_CustomMissile ("CacoXDeath5", 30, 30, random (160, 200), 2, random (20, 40))
+			PFA2 AAAA 0 A_CustomMissile ("CacoXDeath6", 30, 30, random (160, 200), 2, random (20, 40))
+			PFA2 AAAAAA 0 A_CustomMissile ("CacoXDeath7", 30, 30, random (160, 200), 2, random (20, 40))
+			PFA2 N 20 SetPlayerProperty(0, 1, 0)
+			PFA2 A 0 A_SpawnItemEx("BlueGrowingBloodPool", 0, 0)
+			PFA2 A 0 A_SpawnItemEx("DeadHalfCacoDemon")
+			PFA2 A 0 A_TakeInventory("GoFatality", 1)
+			PFA2 A 0 A_TakeInventory("CacoDemonFatality2",1)
+			PFA2 A 0 A_GiveInventory("HealthBonus",50)
+			PFA2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFA2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//HellKnight Fatalities
+		//Rip arm off, let 'em suffer, and then smash head with it!!
+		PHF:
+			PFH1 A 0 SetPlayerProperty(0, 1, 0)
+			PFH1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFH1 A 0 ACS_Execute(312, 0)
+			PFH1 ABCD 2
+			PFH1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFH1 E 6
+			PFH1 FEFEF 2
+			PFH1 G 2 A_PlaySound("player/cyborg/fist", 3)
+			PFH1 H 2 A_PlaySound ("PSXDPN")
+			PFH1 A 0 A_CustomMissile ("muchblood2Green", 55, -35, random (0, 360), 2, random (0, 160))
+			PFH1 A 0 SetPlayerProperty(0, 1, 0)
+			PFH1 IJKKKKK 3 SetPlayerProperty(0, 1, 0)
+			//PFH1 A 0 A_SpawnItemEx("GreenBloodDying", 0, -30, 25)
+			//PFH1 A 0 A_PlaySound ("PSXDPN")
+			//PFH1 LMNM 6 SetPlayerProperty(0,1,0)
+			PFH1 A 0 A_SpawnItemEx("GreenBloodDying", 0, -30, 25)
+			PFH1 A 0 A_PlaySound ("PSXDPN")
+			PFH1 LMNM 6 SetPlayerProperty(0, 1, 0)
+			PFH1 A 0 A_SpawnItemEx("GreenBloodDying", 0, -30, 25)
+			PFH1 A 0 A_PlaySound ("PSXDPN")
+			PFH1 LMNM 6 SetPlayerProperty(0, 1, 0)
+			PFH1 A 0 A_SpawnItemEx("GreenBloodDying", 0, -30, 25)
+			PFH1 A 0 A_PlaySound ("PSXDPN")
+			PFH1 LLOPQ 3 SetPlayerProperty(0, 1, 0)
+			PFH1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFH1 A 0 A_PlaySound("misc/xdeath1")
+			PFH1 A 0 A_CustomMissile ("muchblood2Green", 60, -20, random (0, 360), 2, random (0, 160))
+			PFH1 A 0 A_SpawnItemEx("HellKnightHeadExplode", 0, -20, 62)
+			PFH1 RSTUVWWXXXXXX 3 SetPlayerProperty(0, 1, 0)
+			PFH1 A 0 A_SpawnItemEx("GreenGrowingBloodPool")
+			PFH1 A 0 A_SpawnItemEx("DeadHellKnightNoArmNoHead")
+			PFH1 A 0 A_TakeInventory("GoFatality", 1)
+			PFH1 A 0 A_TakeInventory("HKFatality",1)
+			PFH1 AA 0 A_GiveInventory("Medikit2",1)
+			PFH1 A 0 A_GiveInventory("GiveHealth",50)
+			PFH1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFH1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Throw Quietus in the Gut, and then Quiet him up for good by knocking his head off!!
+		PHF2:
+			PFH2 A 0 SetPlayerProperty(0, 1, 0)
+			PFH2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFH2 A 0 ACS_Execute(312, 0)
+			PFH2 ABCD 3 SetPlayerProperty(0, 1, 0)
+			PFH2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFH2 EFGH 3
+			PFH2 A 0 A_PlaySound("SLMETA", 1)
+			PFH2 A 0 A_SpawnItemEx("GreenBloodDying", -1, 40, 20)
+			PFH2 IJ 3
+			PFH2 A 0 A_PlaySound ("PSXDPN")
+			PFH2 A 0 A_SpawnItemEx("GreenBloodDying", -1, 40, 20)
+			PFH2 KL 3
+			PFH2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFH2 A 0 A_SpawnItemEx("GreenBloodDying", -1, 40, 20)
+			PFH2 M 3
+			PFH2 A 0 A_PlaySound("misc/xdeath1")
+			PFH2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFH2 A 0 A_CustomMissile ("muchblood2Green", 30, 25, random (0, 360), 2, random (0, 160))
+			PFH2 A 0 A_SpawnItemEx("HellKnightHeadExplode", 0, 30, 30)
+			PFH2 NOPQR 3 SetPlayerProperty(0, 1, 0)
+			PFH2 A 0 A_PlaySound("SLMETA", 1)
+			PFH2 STUVWXYYYYY 3
+			PFH2 A 0 A_SpawnItemEx("GreenGrowingBloodPool")
+			PFH2 A 0 A_SpawnItemEx("DeadKnightBTN5F")
+			PFH2 A 0 A_TakeInventory("GoFatality", 1)
+			PFH2 A 0 A_TakeInventory("HKFatality2",1)
+			PFH2 AA 0 A_GiveInventory("Medikit2",1)
+			PFH2 A 0 A_GiveInventory("GiveHealth",50)
+			PFH2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFH2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Bust head off, throw over to the other side, and do a massive step on the body!!
+		PHF3:
+			PFH3 A 0 SetPlayerProperty(0, 1, 0)
+			PFH3 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFH3 A 0 ACS_Execute(312, 0)
+			PFH3 ABCD 3 SetPlayerProperty(0, 1, 0)
+			PFH3 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFH3 EFG 3
+			PFH3 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFH3 A 0 A_CustomMissile ("muchblood2Green", 60, -30, random (0, 360), 2, random (0, 160))
+			PFH3 A 0 A_SpawnItemEx("HellKnightHeadExplode", 0, -30, 60)
+			PFH3 A 0 A_SpawnItemEx("GreenBloodDying", -1, -30, 60)
+			PFH3 HH 3
+			PFH3 A 0 A_SpawnItemEx("GreenBloodDying", -1, -30, 60)
+			PFH3 HI 3
+			PFH3 A 0 A_SpawnItemEx("GreenBloodDying", -1, -30, 60)
+			PFH3 JK 3
+			PFH3 A 0 A_SpawnItemEx("GreenBloodDying", -1, -30, 60)
+			PFH3 KK 3
+			PFH3 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFH3 A 0 A_SpawnItemEx("GreenBloodDying", -1, -30, 60)
+			PFH3 LM 3
+			PFH3 A 0 A_PlaySound("weapons/gswing")
+			PFH3 A 0 A_SpawnItemEx("GreenBloodDying", -1, 0, 70)
+			PFH3 NO 3
+			PFH3 A 0 A_PlaySound("CLAP", 1)
+			PFH3 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFH3 A 0 A_CustomMissile ("muchblood2Green", 10, 25, random (0, 360), 2, random (0, 160))
+			PFH3 A 0 A_SpawnItemEx("GreenBloodDying", -1, 30, 5)
+			PFH3 OO 3
+			PFH3 A 0 A_SpawnItemEx("GreenBloodDying", -1, 30, 5)
+			PFH3 PQ 3
+			PFH3 A 0 A_SpawnItemEx("GreenBloodDying", -1, 30, 5)
+			PFH3 RS 3
+			PFH3 A 0 A_SpawnItemEx("GreenBloodDying", -1, 30, 5)
+			PFH3 SS 3
+			PFH3 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFH3 AAAA 0 A_CustomMissile ("XDeath1Green", 5, 25, random (0, 360), 2, random (0, 160))
+			PFH3 AAA 0 A_CustomMissile ("muchbloodGreen", 5, 25, random (0, 360), 2, random (0, 160))
+			PFH3 A 0 A_CustomMissile ("XDeath1Green", 5, 25, random (0, 360), 2, random (0, 160))
+			PFH3 A 0 A_CustomMissile ("XDeath2bGreen", 5, 25, random (0, 360), 2, random (0, 160))
+			PFH3 A 0 A_CustomMissile ("XDeath3bGreen", 5, 25, random (0, 360), 2, random (0, 160))
+			PFH3 AA 0 A_CustomMissile ("GreenBloodMistBig", 1, 40, random (0, 360), 2, random (30, 90))
+			PFH3 AA 0 A_CustomMissile ("GreenBloodMistBig", 1, 0, random (0, 360), 2, random (30, 90))
+			PFH3 AAA 0 A_CustomMissile ("GreenGuts", 1, 25, random (0, 360), 2, random (30, 90))
+			PFH3 AA 0 A_CustomMissile ("XDeathHellKnightArm", 62, 0, random (0, 360), 2, random (0, 160))
+			PFH3 A 0 A_CustomMissile ("XDeathHellKnightTorso", 5, 25, random (0, 360), 2, random (0, 160))
+			PFH3 AA 0 A_CustomMissile ("XDeathHellKnightLEg", 5, 25, random (0, 360), 2, random (0, 160))
+			PFH3 TUVVVVV 3
+			PFH3 A 0 A_SpawnItemEx("GreenGrowingBloodPool")
+			PFH3 A 0 A_TakeInventory("GoFatality", 1)
+			PFH3 A 0 A_TakeInventory("HKFatality3",1)
+			PFH3 AA 0 A_GiveInventory("Medikit2",1)
+			PFH3 A 0 A_GiveInventory("GiveHealth",50)
+			PFH3 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFH3 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Afrit Fatalites
+		//Grab and do a MASSIVE bear hug, crushing him to ashes!!!
+		PHF4:
+			PFH4 A 0 SetPlayerProperty(0, 1, 0)
+			PFH4 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFH4 A 0 ACS_Execute(312, 0)
+			PFH4 A 4
+			PFH4 A 0 A_CustomMissile("BurnParticles", 15 ,0, random (0, 360), 2, random (50, 130))
+			PFH4 A 4 A_PlaySound("Paladin/MediumExert", 3)
+			PFH4 A 0 A_CustomMissile("BurnParticles", 15 ,0, random (0, 360), 2, random (50, 130))
+			PFH4 BC 2
+			PFH4 A 0 A_PlaySound("Baron/Pain", 3)
+			PFH4 A 0 A_CustomMissile("BurnParticles", 15 ,0, random (0, 360), 2, random (50, 130))
+			PFH4 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFH4 DE 2
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 F 4
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 F 4
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 F 4
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFH4 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFH4 EF 2
+			PFH4 A 0 A_PlaySound("Baron/Pain", 3)
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 EF 2
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 EF 2
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 F 4
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 F 4
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 F 4
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFH4 EF 2
+			PFH4 A 0 A_PlaySound("Baron/Pain", 3)
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 EF 2
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 EF 2
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 EF 2
+			PFH4 A 0 A_PlaySound("Baron/Pain", 3)
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 EF 2
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 EF 2
+			PFH4 A 0 A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 A 0 A_PlaySound("CLAP", 1)
+			PFH4 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFH4 GH 4 BRIGHT A_CustomMissile("BurnParticles", 5 ,30, random (0, 360), 2, random (50, 130))
+			PFH4 A 0 A_PlaySound("Baron/Death", 3)
+			PFH4 AAAA 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,30,5,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			EXPL A 0 A_SpawnItemEX("ExplosionParticleSpawner", 0, 30, 5)
+			EXPL AAAAAAA 0 A_CustomMissile ("FireballExplosionFlamesBig", 6, 30, random (0, 360), 2, random (0, 360))
+			PFH4 IJKLMNOP 4 BRIGHT
+			PFH4 Q 8
+			PFH4 A 0 A_TakeInventory("GoFatality", 1)
+			PFH4 A 0 A_TakeInventory("AfritFatality",1)
+			PFH4 AAA 0 A_GiveInventory("Medikit2",1) //made this a set of 3 rather than 2 like the HellKnight
+			PFH4 A 0 A_GiveInventory("GiveHealth",50)
+			PFH4 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFH4 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Revenant Fatalities
+		//Drag all over ground and do a mega stomp!
+		PRF:
+			PFR1 A 0 SetPlayerProperty(0, 1, 0)
+			PFR1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFR1 A 0 ACS_Execute(312, 0)
+			PFR1 AB 4
+			PFR1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFR1 A 0 SetPlayerProperty(0, 1, 0)
+			PFR1 C 8 SetPlayerProperty(0, 1, 0)
+			PFR1 A 0 A_PlaySOund("REVOUCH", 1)
+			PFR1 DEFG 3 SetPlayerProperty(0, 1, 0)
+			PFR1 A 0 A_PlaySound("CLAP", 1)
+			PFR1 A 0 A_SpawnItemEx ("Sparks", 0, -20)
+			PFR1 AAAAAA 0 A_CustomMissile ("SparkX", 2, -20, random (0, 360), 2, random (30, 170))
+			PFR1 A 0 A_PlaySound("weapons/chainsaw/hitwall")
+			PFR1 H 3 SetPlayerProperty(0, 1, 0)
+			PFR1 A 0 A_SpawnItemEx ("Sparks", 0, -10)
+			PFR1 AAAAAA 0 A_CustomMissile ("SparkX", 2, -10, random (0, 360), 2, random (30, 170))
+			PFR1 I 3 SetPlayerProperty(0, 1, 0)
+			PFR1 A 0 A_SpawnItemEx ("Sparks", 0, 0)
+			PFR1 AAAAAA 0 A_CustomMissile ("SparkX", 2, 0, random (0, 360), 2, random (30, 170))
+			PFR1 J 3 SetPlayerProperty(0, 1, 0)
+			PFR1 A 0 A_SpawnItemEx ("Sparks", 0, 10)
+			PFR1 AAAAAA 0 A_CustomMissile ("SparkX", 2, 10, random (0, 360), 2, random (30, 170))
+			PFR1 K 3 SetPlayerProperty(0, 1, 0)
+			PFR1 A 0 A_SpawnItemEx ("Sparks", 0, 20)
+			PFR1 AAAAAA 0 A_CustomMissile ("SparkX", 2, 20, random (0, 360), 2, random (30, 170))
+			PFR1 L 3 SetPlayerProperty(0, 1, 0)
+			PFR1 A 0 A_SpawnItemEx ("Sparks", 0, 25)
+			PFR1 AAAAAA 0 A_CustomMissile ("SparkX", 2, 25, random (0, 360), 2, random (30, 170))
+			PFR1 A 0 A_PlaySound("misc/xdeath1")
+
+			PFR1 AAAA 0 A_CustomMissile ("RevenantBones", 5, 25, random (0, 360), 2, random (30, 150))
+			PFR1 AAAAAAA 0 A_CustomMissile ("RevenantPiece", 5, 25, random (0, 360), 2, random (30, 150))
+			PFR1 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 45)
+
+			PFR1 M 20 SetPlayerProperty(0, 1, 0)
+			PFR1 NOPPPPPP 4 SetPlayerProperty(0, 1, 0)
+			PFR1 A 0 A_PlaySound("skeleton/sight")
+			PFR1 QRS 6
+			PFR1 A 0 A_PlaySound("CLAP", 1)
+			PFR1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFR1 AAA 0 A_CustomMissile ("RevenantDust", 5, 45, random (0, 360), 2, random (0, 360))
+			PFR1 AAAA 0 A_CustomMissile ("RevenantDust2", 5, 45, random (0, 360), 2, random (0, 360))
+			PFR1 A 0 A_CustomMissile ("XDeathRevenantHead", 5, 45, random (0, 360), 2, random (0, 160))
+			PFR1 AA 0 A_CustomMissile ("XDeath1", 5, 45, random (0, 360), 2, random (30, 150))
+			PFR1 AA 0 A_CustomMissile ("RevenantBones", 5, 45, random (0, 360), 2, random (30, 150))
+			PFR1 AA 0 A_CustomMissile ("RevenantArm", 5, 45, random (0, 360), 2, random (30, 150))
+			PFR1 AA 0 A_CustomMissile ("MetalShard1", 5, 45, random (0, 360), 2, random (30, 160))
+			PFR1 AA 0 A_CustomMissile ("MetalShard2", 5, 45, random (0, 360), 2, random (30, 160))
+			PFR1 AA 0 A_CustomMissile ("MetalShard3", 5, 45, random (0, 360), 2, random (30, 160))
+			PFR1 AAA 0 A_CustomMissile ("RevenantBones", 5, 45, random (0, 360), 2, random (30, 150))
+			PFR1 AAA 0 A_CustomMissile ("RevenantPiece", 5, 45, random (0, 360), 2, random (30, 150))
+			PFR1 T 20
+			PFR1 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFR1 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFR1 A 0 A_TakeInventory("GoFatality", 1)
+			PFR1 A 0 A_TakeInventory("RevenantFatality",1)
+			PFR1 A 0 A_GiveInventory("HealthBonus",50)
+			PFR1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFR1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//slide kick the leg off and do another mega stomp!
+		PRF2:
+			PFR2 A 0 SetPlayerProperty(0, 1, 0)
+			PFR2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFR2 A 0 ACS_Execute(312, 0)
+			PFR2 AB 3 SetPlayerProperty(0, 1, 0)
+			PFR2 A 0 A_PlaySound("SlideKickStart", 5)
+			PFR2 CDE 3 SetPlayerProperty(0, 1, 0)
+			PFR2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFR2 A 0 A_CustomMissile ("RevenantDust", 5, 15, random (0, 360), 2, random (0, 360))
+			PFR2 AA 0 A_CustomMissile ("RevenantDust2", 5, 15, random (0, 360), 2, random (0, 360))
+			PFR2 FG 3 SetPlayerProperty(0, 1, 0)
+			PFR2 A 0 A_PlaySound("SlideKickStop", 5)
+			PFR2 HI 3 SetPlayerProperty(0, 1, 0)
+			PFR2 A 0 A_PlaySOund("REVOUCH", 1)
+			PFR2 JKLM 3 SetPlayerProperty(0, 1, 0)
+			PFR2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFR2 NOP 3 SetPlayerProperty(0, 1, 0)
+			PFR2 A 0 A_PlaySound("CLAP", 1)
+			PFR2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFR2 AAA 0 A_CustomMissile ("RevenantDust", 5, 5, random (0, 360), 2, random (0, 360))
+			PFR2 AAAA 0 A_CustomMissile ("RevenantDust2", 5, 5, random (0, 360), 2, random (0, 360))
+			PFR2 A 0 A_CustomMissile ("XDeathRevenantHead", 5, 5, random (0, 360), 2, random (0, 160))
+			PFR2 AA 0 A_CustomMissile ("XDeath1", 5, 5, random (0, 360), 2, random (30, 150))
+			PFR2 AA 0 A_CustomMissile ("RevenantBones", 5, 5, random (0, 360), 2, random (30, 150))
+			PFR2 AA 0 A_CustomMissile ("RevenantArm", 5, 5, random (0, 360), 2, random (30, 150))
+			PFR2 AA 0 A_CustomMissile ("MetalShard1", 5, 5, random (0, 360), 2, random (30, 160))
+			PFR2 AA 0 A_CustomMissile ("MetalShard2", 5, 5, random (0, 360), 2, random (30, 160))
+			PFR2 AA 0 A_CustomMissile ("MetalShard3", 5, 5, random (0, 360), 2, random (30, 160))
+			PFR2 AAA 0 A_CustomMissile ("RevenantBones", 5, 5, random (0, 360), 2, random (30, 150))
+			PFR2 AAA 0 A_CustomMissile ("RevenantPiece", 5, 5, random (0, 360), 2, random (30, 150))
+			PFR2 A 0 A_SpawnItem ("BigBloodSpot")
+			PFR2 QQRRR 5
+			PFR2 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFR2 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFR2 A 0 A_TakeInventory("GoFatality", 1)
+			PFR2 A 0 A_TakeInventory("RevenantFatality2",1)
+			PFR2 A 0 A_GiveInventory("HealthBonus",50)
+			PFR2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFR2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Mancubus Fatality
+		//Punch in the face, then shred the Fatso apart!!!
+		PMF:
+			PFM1 A 0 SetPlayerProperty(0, 1, 0)
+			PFM1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFM1 A 0 ACS_Execute(312, 0)
+			PFM1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFM1 AB 6
+			PFM1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFM1 C 18 A_PlaySound("PUNCHHIT", 7)
+			PFM1 DE 4 SetPlayerProperty(0, 1, 0)
+			PFM1 F 4 A_PlaySound("fatso/pain")
+			PFM1 GH 4 SetPlayerProperty(0, 1, 0)
+			PFM1 I 10 SetPlayerProperty(0, 1, 0)
+			PFM1 JKLMNOPQ 3 SetPlayerProperty(0, 1, 0)
+			PFM1 R 6 A_PlaySound("Paladin/MediumExert", 3)
+			PFM1 STRTSRSTRTSR 3 SetPlayerProperty(0, 1, 0)
+			PFM1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFM1 A 0 A_CustomMissile ("MeatDeath", 0, 30, random (0, 360), 2, random (0, 160))
+			PFM1 AAAAAA 0 A_CustomMissile ("BloodMistExtraBig", 30, 30, random (0, 360), 2, random (60, 90))
+			PFM1 AAA 0 A_CustomMissile ("SuperGoreSpawner", 25, 30, random (0, 360), 2, random (40, 70))
+			PFM1 AA 0 A_CustomMissile ("XDeathMancubusArm", 15, 30, random (0, 360), 2, random (50, 130))
+			PFM1 A 0 A_CustomMissile ("XDeathMancubusHead", 15, 30, random (0, 360), 2, random (0, 160))
+			PFM1 AA 0 A_CustomMissile ("XDeath2", 15, 30, random (0, 360), 2, random (10, 90))
+			PFM1 AA 0 A_CustomMissile ("XDeath3", 15, 30, random (0, 360), 2, random (10, 90))
+			PFM1 AA 0 A_CustomMissile ("Guts2", 27, 30, random (0, 360), 2, random (10, 90))
+			PFM1 A 0 A_CustomMissile ("XDeathOrgan1", 19, 30, random (0, 360), 2, random (10, 90))
+			PFM1 A 0 A_CustomMissile ("XDeathOrgan2", 19, 30, random (0, 360), 2, random (10, 90))
+			PFM1 U 15 A_PlaySound("misc/xdeath1")
+			PFM1 V 20 SetPlayerProperty(0, 1, 0)
+			PFM1 W 20
+			PFM1 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 30)
+//			PFM1 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFM1 A 0 A_SpawnItemEx("PFM1X0")
+			PFM1 A 0 A_TakeInventory("GoFatality", 1)
+			PFM1 A 0 A_TakeInventory("FatsoFatality",1)
+			PFM1 AA 0 A_GiveInventory("Medikit2",1)
+			PFM1 A 0 A_GiveInventory("HealthBonus",75)
+			PFM1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFM1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Volcabus Fatalities
+		//Punch the gut straight out, leave 'em hanging a bit, then throw 'em like he's nothin'!
+		PUF:
+			PFU1 A 0 SetPlayerProperty(0, 1, 0)
+			PFU1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFU1 A 0 ACS_Execute(312, 0)
+			PFU1 A 5 SetPlayerProperty(0, 1, 0)
+			PFU1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			//PFU1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFU1 ABC 4 SetPlayerProperty(0, 1, 0)
+			PFU1 D 6 A_PlaySound("misc/xdeath4", 4)
+			PFU1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFU1 E 3 A_PlaySound("CLAP", 1)
+			PFU1 E 3 A_PlaySound("Volcabus/death", 1)
+			PFU1 AA 0 A_CustomMissile ("XDeath1", 20, 10, random (0, 360), 2, random (0, 160))
+			PFU1 AAA 0 A_CustomMissile ("xdeath2", 20, 10, random (0, 360), 2, random (0, 160))
+			PFU1 AAA 0 A_CustomMissile ("RipGuts", 45, 10, random (0, 360), 2, random (0, 160))
+			PFU1 AAAA 0 A_CustomMissile ("Brutal_FlyingBlood", 52, 10, random (170, 190), 2, random (0, 40))
+			PFU1 AAAA 0 A_CustomMissile ("Brutal_FlyingBloodFaster", 52, 10, random (170, 190), 2, random (0, 40))
+			PFU1 AAAA 0 A_CustomMissile ("Brutal_FlyingBloodMuchFaster", 52, 10, random (170, 190), 2, random (0, 40))
+			PFU1 AAAA 0 A_CustomMissile ("SuperWallRedBlood", 52, 10, random (170, 190), 2, random (0, 40))
+			PFU1 AAAA 0 A_CustomMissile ("SuperWallRedBlood", 66, 10, random (170, 190), 2, random (0, 40))
+			PFU1 FFFFFFFF 2 A_CustomMissile ("Brutal_LiquidBlood2", 60, 10, random (0, 360), 2, random (30, 60))
+			PFU1 GGGG 2 A_CustomMissile ("Brutal_LiquidBlood2", 50, 6, random (0, 360), 2, random (30, 60))
+			PFU1 HHHHHHHH 2 A_CustomMissile ("Brutal_LiquidBlood2", 40, 0, random (0, 360), 2, random (30, 60))
+			PFU1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFU1 II 2 A_CustomMissile ("Brutal_LiquidBlood2", 50, 6, random (0, 360), 2, random (30, 60))
+			PFU1 J 2 A_CustomMissile ("Brutal_LiquidBlood2", 60, 10, random (0, 360), 2, random (30, 60))
+			PFU1 K 2 A_CustomMissile ("Brutal_LiquidBlood2", 65, 15, random (0, 360), 2, random (30, 60))
+			PFU1 L 2 A_CustomMissile ("Brutal_LiquidBlood2", 50, 20, random (0, 360), 2, random (30, 60))
+			PFU1 M 2 A_CustomMissile ("Brutal_LiquidBlood2", 40, 25, random (0, 360), 2, random (30, 60))
+			PFU1 N 20
+			PFU1 A 0 A_SpawnItemEx("GrowingBloodPool")
+			PFU1 A 0 A_SpawnItemEx("F8T2E0")
+			PFU1 A 0 A_TakeInventory("GoFatality", 1)
+			PFU1 A 0 A_GiveInventory("GiveHealth",200)
+			PFU1 A 0 A_TakeInventory("VolcabusFatality",1)
+			PFU1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFU1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Punch the face right off, blow em up a lot, and stomp on him into a pile of unrecognizable nothingness!!
+		PUF2:
+			PFU2 A 0 SetPlayerProperty(0, 1, 0)
+			PFU2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFU2 A 0 ACS_Execute(312, 0)
+			PFU2 ABCD 3 SetPlayerProperty(0, 1, 0)
+			PFU2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFU2 EF 3 SetPlayerProperty(0, 1, 0)
+			PFU2 G 3 A_PlaySound("player/cyborg/fist", 3)
+			PFU2 AA 0 A_CustomMissile ("MuchBlood", 40, 20, random (0, 360), 2, random (0, 160))
+			PFU2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFU2 HIJ 3 SetPlayerProperty(0, 1, 0)
+			PFU2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFU2 KL 3 SetPlayerProperty(0, 1, 0)
+			PFU2 M 3 A_PlaySound("player/cyborg/fist", 3)
+			PFU2 A 0 A_CustomMissile ("MuchBlood", 40, 20, random (0, 360), 2, random (0, 160))
+			PFU2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFU2 NO 3 SetPlayerProperty(0, 1, 0)
+			PFU2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFU2 PQ 3 SetPlayerProperty(0, 1, 0)
+			PFU2 R 3 A_PlaySound("CLAP", 1)
+			PFU2 AAAA 0 A_CustomMissile ("MuchBlood2", 40, 20, random (0, 360), 2, random (0, 160))
+			PFU2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFU2 STUVW 3 SetPlayerProperty(0, 1, 0)
+			PFU2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFU2 XYZ 3 SetPlayerProperty(0, 1, 0)
+			PFU3 ABCD 3 SetPlayerProperty(0, 1, 0)
+			PFU3 A 0 A_PlaySound("misc/gibbed")
+			PFU3 A 0 A_CustomMissile ("CameraShake", 1, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AAAA 0 A_CustomMissile ("brutal_FlyingBlood", 15, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AA 0 A_CustomMissile ("XDeath1", 0, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AAA 0 A_CustomMissile ("XDeath2", 0, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AA 0 A_CustomMissile ("XDeath1", 0, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AAAAA 0 A_CustomMissile ("XDeath2b", 5, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AAAAA 0 A_CustomMissile ("XDeath3b", 5, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AAA 0 A_CustomMissile ("MuchBlood2", 5, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AAAA 0 A_CustomMissile ("brutal_FlyingBlood", 15, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AA 0 A_CustomMissile ("XDeathVolcabusArm", 5, 30, random (0, 360), 2, random (50, 130))
+			PFU3 AA 0 A_CustomMissile ("brutal_FlyingBlood", 10, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AA 0 A_CustomMissile ("XDeath1", 0, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AA 0 A_CustomMissile ("XDeath2", 0, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AA 0 A_CustomMissile ("XDeath2", 0, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AAAA 0 A_CustomMissile ("brutal_FlyingBlood", 10, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AAAA 0 A_CustomMissile ("RipGuts", 0, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AAAA 0 A_CustomMissile ("XDeath2", 0, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AA 0 A_CustomMissile ("brutal_FlyingBlood", 5, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AA 0 A_CustomMissile ("XDeath3", 0, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AAAAA 0 A_CustomMissile ("Guts", 4, 30, random (0, 360), 2, random (0, 160))
+			PFU3 AAAAAAAA 0 A_CustomMissile ("MuchBlood", 6, 30, random (0, 360), 2, random (0, 160))
+			PFU3 A 0 A_SpawnItem("BigBloodSpot")
+			PFU3 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFU3 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFU3 EFGH 5
+			PFU3 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFU3 A 0 A_TakeInventory("GoFatality", 1)
+			PFU3 A 0 A_GiveInventory("GiveHealth",200)
+			PFU3 A 0 A_TakeInventory("VolcabusFatality2",1)
+			PFU3 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFU3 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Baron of Hell Fatality
+		//Rip the torso off, then thrown down and stomp on baron's face!
+		PBF:
+			PFB1 A 0 SetPlayerProperty(0, 1, 0)
+			PFB1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFB1 A 0 ACS_Execute(312, 0)
+			PFB1 A 10
+			PFB1 B 8 A_PlaySound("Paladin/MediumExert", 3)
+			PFB1 CDBDCBCDBDCB 3 SetPlayerProperty(0, 1, 0)
+			PFB1 AA 0 A_CustomMissile ("MuchBlood2Green", 40, 30, random (0, 360), 2, random (0, 160))
+			PFB1 AAAAA 0 A_CustomMissile ("GreenGuts", 32, 30, random (0, 360), 2, random (0, 160))
+			PFB1 EFGHIJK 4 SetPlayerProperty(0, 1, 0)
+			PFB1 AA 0 A_CustomMissile ("MuchBlood2Green", 5, -30, random (0, 360), 2, random (0, 160))
+			PFB1 A 0 A_PlaySound("CLAP", 1)
+			PFB1 L 10 SetPlayerProperty(0, 1, 0)
+			PFB1 MNNOPQRR 4 SetPlayerProperty(0, 1, 0)
+			PFB1 A 0 A_CustomMissile ("CameraShake", 1, -30, random (0, 360), 2, random (0, 160))
+			PFB1 A 0 A_PlaySound("misc/xdeath1")
+			PFB1 A 0 A_CustomMissile ("XDeath1Green", 5, -30, random (0, 360), 2, random (0, 160))
+			PFB1 A 0 A_CustomMissile ("XDeath2bGreen", 25, -30, random (0, 360), 2, random (0, 160))
+			PFB1 A 0 A_CustomMissile ("XDeath3bGreen", 25, -30, random (0, 360), 2, random (0, 160))
+			PFB1 A 0 A_SpawnItemEX("MuchBlood2Green", -30, 0, 25)
+			PFB1 A 0 A_SpawnItemEX("MuchBlood3Green", -30, 0, 25)
+			PFB1 A 0 A_CustomMissile ("XDeathBaronHead5", 5, -30, random (0, 360), 2, random (0, 160))
+			PFB1 AAA 0 A_CustomMissile ("Xdeath1Green", 40, -30, random (0, 360), 2, random (0, 160))
+			PFB1 S 20
+			PFB1 A 0 A_SpawnItemEx("GreenGrowingBloodPool", 0, 30)
+			PFB1 A 0 A_SpawnItemEx("GreenGrowingBloodPool", 0, -30)
+//			PFB1 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFB1 A 0 A_GiveInventory("BootsSmearedWithGreenBlood", 6)
+			PFB1 A 0 A_SpawnItemEx("PFB1T0", 0, 30)
+			PFB1 A 0 A_SpawnItemEx("PFB1U0", 0, -30)
+			PFB1 A 0 A_TakeInventory("GoFatality", 1)
+			PFB1 A 0 A_TakeInventory("BaronFatality",1)
+			PFB1 AAA 0 A_GiveInventory("Medikit2",1)
+			PFB1 A 0 A_GiveInventory("GiveHealth",100)
+			PFB1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFB1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Cyber Baron Fatalities
+		//Beat the crap out of then blow the chest cavity away!!
+		PYF:
+			PFY1 A 0 SetPlayerProperty(0, 1, 0)
+			PFY1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFY1 A 0 ACS_Execute(312, 0)
+			PFY1 A 5
+			PFY1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			//PFY1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFY1 BC 3 SetPlayerProperty(0, 1, 0)
+			PFY1 D 3 A_PlaySound("cbaron/pain", 4)
+			PFY1 E 2 SetPlayerProperty(0, 1, 0)
+			PFY1 F 3 SetPlayerProperty(0, 1, 0)
+			PFY1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			//PFY1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFY1 GGGH 3 SetPlayerProperty(0, 1, 0)
+			PFY1 I 3 A_PlaySound("cbaron/pain", 4)
+			PFY1 J 2 SetPlayerProperty(0, 1, 0)
+			PFY1 K 3 SetPlayerProperty(0, 1, 0)
+			//PFY1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			//PFY1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFY1 LLLM 3 SetPlayerProperty(0, 1, 0)
+			PFY1 N 3 A_PlaySound("CLAP", 1)
+			PFY1 AAAA 0 A_CustomMissile ("XDeath1Green", 62, 60, random (0, 360), 2, random (0, 160))
+			PFY1 AAA 0 A_CustomMissile ("XDeath2Green", 62, 60, random (0, 360), 2, random (0, 160))
+			PFY1 AAAAA 0 A_CustomMissile ("Green_FlyingBlood", 62, 60, random (170, 190), 2, random (0, 40))
+			PFY1 AAAA 0 A_CustomMissile ("SuperWallGreenBlood", 62, 60, random (170, 190), 2, random (0, 40))
+			PFY1 AAAA 0 A_CustomMissile ("GreenBloodMistBig", 59, 60, random (0, 360), 2, random (0, 160))
+			PFY1 O 4 A_PlaySound("cbaron/death", 4)
+			PFY1 PPQQ 2 A_CustomMissile ("Green_LiquidBlood", 52, 60, random (0, 360), 2, random (0, 160))
+			PFY1 RRR 2 A_CustomMissile ("Green_LiquidBlood", 52, 60, random (0, 360), 2, random (0, 160))
+			PFY1 SSSSS 2 A_CustomMissile ("Green_LiquidBlood", 52, 60, random (0, 360), 2, random (0, 160))
+			PFY1 TTTTTTTTTT 2 A_CustomMissile ("Green_LiquidBlood", 52, 60, random (0, 360), 2, random (0, 160))
+			PFY1 A 0 A_TakeInventory("GoFatality", 1)
+			PFY1 A 0 A_TakeInventory("CyberBaronFatality1",1)
+			PFY1 A 0 A_SpawnItemEx("DyingCyberBaron3", 0, 1, 1, 1, 1)
+			//PFY1 AAAAA 0 A_GiveInventory("HealthBonus",5) //I think it should be the two below
+			PFY1 AAA 0 A_GiveInventory("Medikit2",1)
+			PFY1 A 0 A_GiveInventory("GiveHealth",100)
+			PFY1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFY1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Just throw down violently, blowing him to pieces!
+		PYF2:
+			PFY2 A 0 SetPlayerProperty(0, 1, 0)
+			PFY2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFY2 A 0 ACS_Execute(312, 0)
+			PFY2 A 5
+			PFY2 BCDE 4 SetPlayerProperty(0, 1, 0)
+			PFY2 FGHI 3 SetPlayerProperty(0, 1, 0)
+			PFY2 A 0 A_PlaySound("CLAP", 1)
+			PFY2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFY2 JKL 3
+			PFY2 AAAAAAAAAAAAAA 0 A_CustomMissile ("GreenBloodMistBig", 24, -50, random (0, 360), 2, random (0, 160))
+			PFY2 AAAAAAA 0 A_CustomMissile ("SuperWallGreenBlood", 16, -50, random (0, 360), 2, random (0, 40))
+			PFY2 A 0 A_CustomMissile ("XDeathBaronOfHellTorso", 5, -50, random (0, 360), 2, random (0, 160))
+			PFY2 A 0 A_CustomMissile ("XDeathBaronHead5", 31, -50, random (0, 360), 2, random (50, 130))
+			PFY2 A 0 A_CustomMissile ("XDeathOrgan1Green", 12, -50, random (0, 360), 2, random (0, 160))
+			PFY2 A 0 A_CustomMissile ("XDeathOrgan2Green", 12, -50, random (0, 360), 2, random (0, 160))
+			PFY2 AA 0 A_CustomMissile ("XDeath1Green", 16, -50, random (0, 360), 2, random (0, 160))
+			PFY2 A 0 A_CustomMissile ("XDeath2Green", 16, -50, random (0, 360), 2, random (0, 160))
+			PFY2 A 0 A_CustomMissile ("XDeath3Green", 16, -50, random (0, 360), 2, random (0, 160))
+			PFY2 A 0 A_CustomMissile ("XDeath4Green", 16, -50, random (0, 360), 2, random (0, 160))
+			PFY2 AAAA 0 A_CustomMissile ("XDeath2bGreen", 5, -50, random (0, 360), 2, random (0, 160))
+			PFY2 AAAA 0 A_CustomMissile ("XDeath3bGreen", 5, -50, random (0, 360), 2, random (0, 160))
+			PFY2 M 10
+			//PFY2 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			//PFY2 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFY2 N 20
+//			PFY2 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFY2 A 0 A_TakeInventory("GoFatality", 1)
+			PFY2 A 0 A_TakeInventory("CyberBaronFatality2",1)
+			PFY2 AAAAA 0 A_GiveInventory("HealthBonus",5)
+			PFY2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFY2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Pain Elemental Fatality
+		//Pull out horn and imaple Pain boi in the eye, painfully XD!
+		PQF:
+			PFQ1 A 0 SetPlayerProperty(0, 1, 0)
+			PFQ1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFQ1 A 0 ACS_Execute(312, 0)
+			PFQ1 ABCDE 2
+			PFQ1 F 2 A_PlaySound("Paladin/MediumExert", 3)
+			PFQ1 GHIJ 2 SetPlayerProperty(0, 1, 0)
+			PFQ1 AAA 0 A_CustomMissile ("XDeath1", 60, -20, random (0, 360), 2, random (0, 160))
+			//PFQ1 A 0 A_CustomMissile ("Muchblood2", 60, 0, random (0, 360), 2, random (0, 160))
+			PFQ1 K 2 A_PlaySound("Pain/pain")
+			PFQ1 LMNOPQ 2 SetPlayerProperty(0, 1, 0)
+			PFQ1 R 2 A_PlaySound("Paladin/MediumExert", 3)
+			PFQ1 S 2 SetPlayerProperty(0, 1, 0)
+			PFQ1 AAA 0 A_CustomMissile ("XDeath1", 60, -20, random (0, 360), 2, random (0, 160))
+			PFQ1 A 0 A_CustomMissile ("Muchblood2", 60, -20, random (0, 360), 2, random (0, 160))
+			PFQ1 TTUUVVWWXXY 1
+			PFQ1 A 0 A_PlaySound("Pain/Death")
+			PFQ1 AAAAAA 0 A_CustomMissile ("FireworkSFXType1", 0, -40, random (0, 360), 2, random (10, 80))
+			PFQ1 AAAAAA 0 bright A_CustomMissile ("SuperGoreSpawner", 5, -40, random (0, 360), 2, random (30, 180))
+			PFQ1 AAAAAAAAA 0 A_CustomMissile ("CeilBloodLauncherLong", 0, -40, random (0, 360), 2, random (50, 130))
+
+			PFQ1 AAA 0 A_CustomMissile ("XDeathPainElementalNew1", 32, -40, random (0, 360), 2, random (30, 90))
+			PFQ1 AAA 0 A_CustomMissile ("XDeathPainElementalNew2", 32, -40, random (0, 360), 2, random (30, 90))
+
+			PFQ1 AAAAAAAAAAAA 0 A_CustomMissile ("BloodMistExtraBig", 30, -40, random (0, 360), 2, random (30, 90))
+			PFQ1 AA 0 A_CustomMissile ("XDeath2", 30, -40, random (0, 360), 2, random (40, 90))
+			PFQ1 AA 0 A_CustomMissile ("XDeath3", 30, -40, random (0, 360), 2, random (40, 90))
+			PFQ1 AA 0 A_CustomMissile ("XDeath1", 30, -40, random (0, 360), 2, random (40, 90))
+			PFQ1 AAA 0 A_CustomMissile ("BDExplosionparticles", 30, -40, random (0, 360), 2, random (40, 90))
+			PFQ1 AA 0 A_CustomMissile ("BDExplosionparticles2", 30, -40, random (0, 360), 2, random (40, 90))
+			PFQ1 AA 0 A_CustomMissile ("BDExplosionparticles3", 10, -40, random (0, 360), 2, random (40, 90))
+			PFQ1 AA 0 A_SpawnItemEx("TinyBurningPiece3", random (-5, 5), random (-5, 5))
+			PFQ1 AA 0 A_SpawnItemEx("TinyBurningPiece", random (-5, 5), random (-5, 5))
+			PFQ1 AA 0 A_SpawnItemEx("TinyBurningPiece2", random (-5, 5), random (-5, 5))
+			PFQ1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			EXPL A 0 A_SpawnItemEx("ExplosionParticleSpawner", 0, 0, 0, 0, 0, 0, 0, 128)
+			PFQ1 A 0 A_SpawnItem("BigBloodSpot")
+			EXPL AAAAAAAAAAAAAAAAA 0 A_CustomMissile ("FireBallExplosion", 6, -40, random (0, 360), 2, random (0, 360))
+			PFQ1 Z 15
+			PFQ1 A 0 A_SpawnItemEx("PAINN0")
+			PFQ1 A 0 A_TakeInventory("GoFatality", 1)
+			PFQ1 A 0 A_TakeInventory("PEFatality",1)
+			PFQ1 A 0 A_GiveInventory("GiveHealth",50)
+			PFQ1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFQ1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Arachnotron Fatalities
+		//Curbstomp head!!
+		PAS:
+			PSA1 A 0 SetPlayerProperty(0, 1, 0)
+			PSA1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+
+			PSA1 A 0 ACS_Execute(acsFatality, 0)
+
+			PSA1 A 3
+			PSA1 A 0 SetPlayerProperty(0, 1, 0)
+			PSA1 A 0 A_PlaySound("grunt/pain")
+			PSA1 BCCCC 3 SetPlayerProperty(0, 1, 0)
+			PSA1 A 0 A_PlaySound("misc/xdeath1")
+			PSA1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PSA1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PSA1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+
+
+			PSA1 AAAAAAAAAAAA 0 A_CustomMissile ("SmallBrainPiece", 10, 20, random (0, 360), 2, random (0, 160))
+			PSA1 AAAA 0 A_CustomMissile ("XDeath1", 10, 20, random (0, 360), 2, random (0, 160))
+			PSA1 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 20)
+			PSA1 DE 3
+			PSA1 F 20
+
+			PSA1 A 0 A_TakeInventory("IsCurbstompingSpider",1)
+			PSA1 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PSA1 A 0 A_SpawnItemEx("NAHCN0")
+			PSA1 A 0 A_TakeInventory("GoFatality", 1)
+			PSA1 A 0 A_TakeInventory("GoSpecial", 1)
+			PSA1 A 0 A_GiveInventory("HealthBonus",10)
+			PSA1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PSA1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Swing the poor bastard overhead and then do an elbow dropdown thing on him!!!
+		PTF:
+			PFT1 A 0 SetPlayerProperty(0, 1, 0)
+			PFT1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFT1 A 0 ACS_NamedExecuteAlways("BDActivateCameraBig", 0, 0, 0, 0)
+			PFT1 A 0 ACS_Execute(312, 0)
+			PFT1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFT1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFT1 A 8
+			PFT1 A 0 A_SpawnItemEx("Spark_UpOnce",0,20,30)
+			PFT1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFT1 BDC 3 SetPlayerProperty(0, 1, 0)
+			PFT1 A 0 A_PlaySound("SPIPAIN2")
+			PFT1 EFG 3 SetPlayerProperty(0, 1, 0)
+			PFT1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFT1 A 0 A_CustomMissile ("MuchBlood2", 20, -130, random (0, 360), 2, random (0, 160))
+			PFT1 A 0 A_CustomMissile ("SpiderLeg", 30, -30, random (0, 360), 2, random (50, 130))
+			PFT1 IJKLMNOOOOPP 3 SetPlayerProperty(0, 1, 0)
+			PFT1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFT1 QRS 3 SetPlayerProperty(0, 1, 0)
+			PFT1 A 0 A_PlaySound("CLAP", 1)
+			PFT1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFT1 AAA 0 A_CustomMissile ("Guts2", 14, -130, random (0, 360), 2, random (0, 160))
+			PFT1 AAAA 0 A_CustomMissile ("CeilBloodLauncher", 40, -130, random (0, 360), 2, random (50, 130))
+			PFT1 AAA 0 A_CustomMissile ("XDeath1", 10, -130, random (0, 360), 2, random (0, 160))
+			PFT1 AAA 0 A_CustomMissile ("XDeath2", 10, -130, random (0, 360), 2, random (0, 160))
+			PFT1 AAA 0 A_CustomMissile ("XDeath3", 10, -130, random (0, 360), 2, random (0, 160))
+			PFT1 A 0 A_CustomMissile ("MuchBlood2", 50, -130, random (0, 360), 2, random (0, 160))
+			PFT1 T 3 SetPlayerProperty(0, 1, 0)
+			PFT1 A 0 A_PlaySound("baby/death")
+			PFT1 U 20
+			PFT1 A 0 A_TakeInventory("GoFatality", 1)
+			PFT1 A 0 A_TakeInventory("ArachnotronFatality",1)
+			PFT1 A 0 A_SpawnItemEx("RapedArachnotron", 0, 1, 1, 1, 1)
+			PFT1 A 0 A_GiveInventory("HealthBonus",50)
+			PFT1 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFT1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFT1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Do a boxing match with the Arachnotron (where the Arachnotron loses pitifully!)
+		PTF2:
+			PFT2 A 0 SetPlayerProperty(0, 1, 0)
+			PFT2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFT2 A 0 ACS_Execute(312, 0)
+			PFT2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFT2 A 8
+			PFT2 B 3 SetPlayerProperty(0, 1, 0)
+			PFT2 A 0 A_PlaySound("PUNCHHIT", 7)
+			PFT2 A 0 A_SpawnItemEX("Blood", 0, 10, 32)
+			PFT2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFT2 CDEFG 3 SetPlayerProperty(0, 1, 0)
+			PFT2 A 0 A_PlaySound("PUNCHHIT", 7)
+			PFT2 A 0 A_SpawnItemEX("Blood", 0, 10, 32)
+			PFT2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFT2 HIJK 3 SetPlayerProperty(0, 1, 0)
+			PFT2 A 0 A_PlaySound("PUNCHHIT", 7)
+			PFT2 A 0 A_SpawnItemEX("Blood", 0, 10, 32)
+			PFT2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFT2 LMNOP 3 SetPlayerProperty(0, 1, 0)
+			PFT2 A 0 A_PlaySound("misc/xdeath1")
+			PFT2 A 0 A_SpawnItemEX("MuchBlood", 0, 10, 32)
+			PFT2 AAA 0 A_CustomMissile ("SmallBrainPiece", 32, 10, random (0, 360), 2, random (0, 160))
+			PFT2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFT2 QRSTU 3 SetPlayerProperty(0, 1, 0)
+			PFT2 A 0 A_PlaySound("misc/xdeath1")
+			PFT2 A 0 A_SpawnItemEX("MuchBlood", 0, 10, 32)
+			PFT2 AAAA 0 A_CustomMissile ("SmallBrainPiece", 32, 10, random (0, 360), 2, random (0, 160))
+			PFT2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFT2 VWXY 3 SetPlayerProperty(0, 1, 0)
+			PFT2 A 0 A_PlaySound("misc/xdeath1")
+			PFT2 A 0 A_SpawnItemEX("MuchBlood", 0, 10, 32)
+			PFT2 AAA 0 A_CustomMissile ("SmallBrainPiece", 32, 10, random (0, 360), 2, random (0, 160))
+			PFT2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFT2 Z 3 SetPlayerProperty(0, 1, 0)
+			PFT3 AAB 4 SetPlayerProperty(0, 1, 0)
+			PFT3 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFT3 CD 4 SetPlayerProperty(0, 1, 0)
+			PFT3 A 0 A_PlaySound("misc/xdeath1")
+			PFT3 A 0 A_SpawnItemEX("MuchBlood", 0, 10, 32)
+			PFT3 AAAA 0 A_CustomMissile ("SmallBrainPiece", 32, 10, random (0, 360), 2, random (0, 160))
+			PFT3 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFT3 EF 4 SetPlayerProperty(0, 1, 0)
+			PFT3 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 0)
+			PFT3 G 10
+			PFT3 A 0 A_TakeInventory("GoFatality", 1)
+			PFT3 A 0 A_TakeInventory("ArachnotronFatality2",1)
+			PFT3 A 0 A_SpawnItemEx("NoLegsSpider", 0, 1, 1, 1, 1)
+			PFT3 A 0 A_GiveInventory("HealthBonus",50)
+			PFT3 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFT3 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Ancient Arachnotron Fatalities
+		//Curbstomp head (like the other Arachnotron)!!
+		PNS:
+			PSN1 A 0 SetPlayerProperty(0, 1, 0)
+			PSN1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+
+			PSN1 A 0 ACS_Execute(acsFatality, 0)
+
+			PSN1 A 3
+			PSN1 A 0 SetPlayerProperty(0, 1, 0)
+			PSN1 A 0 A_PlaySound("grunt/pain")
+			PSN1 BCCCC 3 SetPlayerProperty(0, 1, 0)
+			PSN1 A 0 A_PlaySound("misc/xdeath1")
+			PSN1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PSN1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PSN1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+
+
+			PSN1 AAAAAAAAAAAA 0 A_CustomMissile ("SmallBrainPiece", 10, 20, random (0, 360), 2, random (0, 160))
+			PSN1 AAAA 0 A_CustomMissile ("XDeath1", 10, 20, random (0, 360), 2, random (0, 160))
+			PSN1 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 20)
+			PSN1 DE 3
+			PSN1 F 20
+
+			PSN1 A 0 A_TakeInventory("IsCurbstompingSpiderB",1)
+			PSN1 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PSN1 A 0 A_SpawnItemEx("NAHDN0")
+			PSN1 A 0 A_TakeInventory("GoFatality", 1)
+			PSN1 A 0 A_TakeInventory("GoSpecial", 1)
+			PSN1 A 0 A_GiveInventory("HealthBonus",10)
+			PSN1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PSN1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Rip the head off, take the leg, and spike the crap out of the head (2 variations :D)
+		PGF: //Jump version
+			PFG3 A 0 SetPlayerProperty(0, 1, 0)
+			PFG3 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFG3 A 0 ACS_NamedExecuteAlways("BDActivateCameraBig", 0, 0, 0, 0)
+			PFG3 A 0 ACS_Execute(312, 0)
+			PFG3 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFG3 A 10 SetPlayerProperty(0, 1, 0)
+			PFG3 BCD 3 SetPlayerProperty(0, 1, 0)
+			PFG3 A 0 A_PlaySound("PUNCHHIT", 7)
+			PFG3 A 0 A_SpawnItemEX("Blood", 0, -30, 32)
+			PFG3 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFG3 E 3 SetPlayerProperty(0, 1, 0)
+			PFG3 A 0 A_PlaySound("SPIPAIN2")
+			PFG3 FGGG 3 SetPlayerProperty(0, 1, 0)
+			PFG3 A 0 A_PlaySound("PUNCHHIT", 7)
+			PFG3 A 0 A_SpawnItemEX("MuchBlood", 0, -30, 32)
+			PFG3 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFG3 HIJK 3 SetPlayerProperty(0, 1, 0)
+			PFG3 A 0 A_SpawnItemEX("Blood", 0, 90, 0)
+			PFG3 LMNOPQRST 3 SetPlayerProperty(0, 1, 0)
+			PFG3 A 0 A_Jump(128, "PGFB") //hope this don't cause shit
+			PFG3 UVWXYYY 3 SetPlayerProperty(0, 1, 0)
+			PFG3 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFG3 Z 2 SetPlayerProperty(0, 1, 0)
+			PFG4 A 2 SetPlayerProperty(0, 1, 0)
+			PFG4 A 0 A_PlaySound("misc/xdeath1")
+			PFG4 A 0 A_SpawnItemEX("MuchBlood", 0, 90, 16)
+			PFG4 AAAAA 0 A_CustomMissile ("SmallBrainPiece", 16, 90, random (0, 360), 2, random (0, 160))
+			PFG4 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFG4 BCD 2 SetPlayerProperty(0, 1, 0)
+			PFG4 E 10
+			PFG4 A 0 A_TakeInventory("GoFatality", 1)
+			PFG4 A 0 A_TakeInventory("Arachnotron2FatalityA",1)
+			PFG4 A 0 A_SpawnItemEx("GrowingBloodPool", 0, -30)
+			PFG4 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 90)
+			PFG4 A 0 A_SpawnItemEx("NoLegsSpider2", 0, -30)
+			PFG4 A 0 A_SpawnItemEx("NAHDN0", 0, 90)
+			PFG4 A 0 A_GiveInventory("GiveHealth",200)
+			PFG4 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFG4 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFG4 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		PGFB: //Run to version
+			PFG4 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFG4 FGHIJ 3 SetPlayerProperty(0, 1, 0)
+			PFG4 A 0 A_PlaySound("misc/xdeath1")
+			PFG4 A 0 A_SpawnItemEX("MuchBlood", 0, 90, 16)
+			PFG4 AAAA 0 A_CustomMissile ("SmallBrainPiece", 16, 90, random (0, 360), 2, random (0, 160))
+			PFG4 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFG4 K 15
+			PFG4 A 0 A_TakeInventory("GoFatality", 1)
+			PFG4 A 0 A_TakeInventory("Arachnotron2FatalityA",1)
+			PFG4 A 0 A_SpawnItemEx("GrowingBloodPool", 0, -30)
+			PFG4 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 90)
+			PFG4 A 0 A_SpawnItemEx("NoLegsSpider2", 0, -30)
+			PFG4 A 0 A_SpawnItemEx("NAHDN0", 0, 90)
+			PFG4 A 0 A_GiveInventory("GiveHealth",200)
+			PFG4 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFG4 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFG4 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Beat down the Spider head till it comes a flying (batter up!)
+		PGF2:
+			PFG1 A 0 SetPlayerProperty(0, 1, 0) //Freeze player movement
+			PFG1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFG1 A 0 ACS_Execute(312, 0)
+			PFG1 A 10 SetPlayerProperty(0, 1, 0)
+			PFG1 ABCD 2 SetPlayerProperty(0, 1, 0)
+			PFG1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			//PFG1 A 0 A_PlaySound ("PSXDPN")
+			PFG1 A 0 Radius_Quake (4, 15, 0, 12, 0)
+			PFG1 A 0 A_SpawnItemEx ("Brutal_Blood", 0, 20, 40)
+			PFG1 EF 2 SetPlayerProperty(0, 1, 0)
+			PFG1 A 0 A_PlaySound("SPIPAIN2")
+			PFG1 GHIIIIIIJKLM 2 SetPlayerProperty(0, 1, 0)
+			PFG1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			//PFG1 A 0 A_PlaySound ("PSXDPN")
+			PFG1 A 0 Radius_Quake (4, 15, 0, 12, 0)
+			PFG1 A 0 A_SpawnItemEx ("Brutal_Blood", 0, 30, 40)
+			PFG1 NO 2 SetPlayerProperty(0, 1, 0)
+			PFG1 A 0 A_PlaySound("SPIPAIN2")
+			PFG1 PQQQQQQRST 2 SetPlayerProperty(0, 1, 0)
+			PFG1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			//PFG1 A 0 A_PlaySound ("PSXDPN")
+			PFG1 A 0 Radius_Quake (4, 15, 0, 12, 0)
+			PFG1 A 0 A_SpawnItemEx ("Brutal_Blood", 0, 40, 40)
+			PFG1 UV 2 SetPlayerProperty(0, 1, 0)
+			PFG1 A 0 A_PlaySound("SPIPAIN2")
+			PFG1 WX 2 SetPlayerProperty(0, 1, 0)
+			PFG1 YYYYYYZ 2 SetPlayerProperty(0, 1, 0)
+			PFG2 A 3 SetPlayerProperty(0, 1, 0)
+			PFG2 A 0 A_PlaySound("CLAP", 1)
+			PFG2 A 0 A_SpawnItemEX("MuchBlood", 0, 50, 40)
+			PFG2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFG2 A 0 A_CustomMissile ("XDeathArachnotronHead2X", 40, 50, random (0, 360), 2, random (50, 130))
+			PFG2 AAAA 0 A_CustomMissile ("XDEATH1", 30, 50, random (0, 360), 2, random (50, 130))
+			PFG2 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFG2 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFG2 BCDEFGH 4 SetPlayerProperty(0, 1, 0)
+			PFG2 I 10
+			PFG2 A 0 A_TakeInventory("GoFatality", 1)
+			PFG2 A 0 A_TakeInventory("Arachnotron2FatalityB",1)
+			PFG2 A 0 A_SpawnItemEx("GrowingBloodPool", 0, 0)
+			PFG2 A 0 A_SpawnItemEx("NoLegsSpider2", 0, 1, 1, 1, 1)
+			PFG2 A 0 A_GiveInventory("GiveHealth",200)
+			PFG2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFG2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Archvile Fatalities
+		//Punch in the face then do a massive series of Backbreakers!!
+		PVF:
+			PFV1 A 0 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFV1 A 0 ACS_NamedExecuteAlways("BDActivateCameraBig", 0, 0, 0, 0)
+			PFV1 A 0 ACS_Execute(312, 0)
+			PFV1 A 10
+			PFV1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFV1 BC 3 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFV1 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFV1 A 0 A_SpawnItemEx ("Blood", 0, -20, 60)
+			PFV1 DEFGHI 4 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFV1 JJJKK 2 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 A_PlaySound("vile/pain")
+			PFV1 LLLLM 2 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 A_PlaySound("CLAP", 1)
+			PFV1 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFV1 NOMM 2 SetPlayerProperty(0, 1, 0)
+			PFV1 LLLLM 2 SetPlayerProperty(0, 1, 0)
+			//Weird but cool random jumps start here XD
+			PFV1 A 0 A_Jump(128, 42) //Jump 1
+			PFV1 A 0 A_PlaySound("CLAP", 1)
+			PFV1 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFV1 A 0 A_SpawnItemEx ("Blood", 0, 0, 32)
+			PFV1 NOMM 2 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 A_PlaySound("vile/pain")
+			PFV1 LLLLM 2 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 A_Jump(128, 28) //Jump 2
+			PFV1 A 0 A_PlaySound("CLAP", 1)
+			PFV1 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFV1 A 0 A_SpawnItemEx ("Blood", 0, 0, 32)
+			PFV1 NOMM 2 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 A_PlaySound("vile/pain")
+			PFV1 LLLLM 2 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 A_Jump(128, 14) //Jump 3
+			PFV1 A 0 A_PlaySound("CLAP", 1)
+			PFV1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFV1 A 0 A_SpawnItemEx ("MuchBlood", 0, 0, 32)
+			PFV1 NOMM 2 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 A_PlaySound("vile/death")
+			PFV1 LLLLM 2 SetPlayerProperty(0, 1, 0)
+			////////////////////////////////////////
+			PFV1 A 0 A_PlaySound("CLAP", 1)
+			PFV1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFV1 A 0 A_SpawnItemEx ("MuchBlood", 0, 0, 32)
+			PFV1 NONN 2 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFV1 OPOPOPOPOPQQ 2 SetPlayerProperty(0, 1, 0)
+			PFV1 A 0 A_PlaySound("misc/xdeath1")
+			PFV1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFV1 A 0 A_CustomMissile ("XDeathArchvile", 32, 0, random (0, 360), 2, random (0, 60))
+			PFV1 A 0 A_CustomMissile ("XDeathArchvileArm", 32, 0, random (0, 360), 2, random (0, 60))
+			PFV1 AA 0 A_CustomMissile ("XDeathArchvileLeg", 24, 0, random (0, 360), 2, random (300, 360))
+			PFV1 AAA 0 A_CustomMissile ("XDeath1", 24, 0, random (0, 360), 2, random (0, 160))
+			PFV1 AA 0 A_CustomMissile ("XDeath2b", 24, 0, random (0, 360), 2, random (60, 120))
+			PFV1 AA 0 A_CustomMissile ("XDeath3b", 32, 0, random (0, 360), 2, random (60, 120))
+			PFV1 A 0 A_CustomMissile ("XDeath2", 32, 0, random (0, 360), 2, random (30, 120))
+			PFV1 A 0 A_CustomMissile ("XDeath3", 32, 0, random (0, 360), 2, random (30, 120))
+			PFV1 A 0 A_CustomMissile ("XDeathOrgan1", 16, 0, random (0, 360), 2, random (0, 160))
+			PFV1 A 0 A_CustomMissile ("XDeathOrgan2", 16, 0, random (0, 360), 2, random (0, 160))
+			PFV1 A 0 A_SpawnItem("MuchBlood2", 0, 30)
+			PFV1 AAAA 0 A_CustomMissile ("SuperWallRedBlood", 24, 0, random (170, 190), 2, random (0, 40))
+			PFV1 AAAA 0 A_CustomMissile ("BloodMistBig", 30, 0, random (0, 360), 2, random (30, 90))
+			PFV1 AAAA 0 A_CustomMissile ("Guts", 24, 0, random (0, 360), 2, random (60, 120))
+			PFV1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFV1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFV1 R 20
+			PFV1 A 0 A_TakeInventory("GoFatality", 1)
+			PFV1 A 0 A_TakeInventory("ArchVileFatality",1)
+			PFV1 AA 0 A_GiveInventory("HealthBonus",25)
+			PFV1 A 0 A_GiveInventory("GiveHealth",100)
+			PFV1 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFV1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFV1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Knock head off and crush the rest of the body (leaving nothing behind)!!
+		PVF2:
+			PFV2 A 0 SetPlayerProperty(0, 1, 0)
+			PFV2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFV2 A 0 ACS_Execute(312, 0)
+			PFV2 A 5
+			PFV2 BC 4
+			PFV2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFV2 DEF 3 SetPlayerProperty(0, 1, 0)
+			PFV2 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFV2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFV2 AAAAA 0 A_CustomMissile ("BloodMistBig", 40, 10, random (0, 360), 2, random (30, 90))
+			PFV2 AAAAA 0 A_CustomMissile ("Brutal_FlyingBlood", 40, 10, random (0, 360), 2, random (30, 90))
+			PFV2 A 0 A_CustomMissile ("Brains2", 40, 10, random (0, 360), 2, random (0, 160))
+			PFV2 A 0 A_CustomMissile ("Brains3", 40, 10, random (0, 360), 2, random (0, 160))
+			PFV2 AAA 0 A_CustomMissile ("SmallBrainPieceFast", random (45, 55), random (15, 5), random (170, 190), 2, random (-10, 10))
+			PFV2 AAAAA 0 A_CustomMissile ("SmallBrainPiece", 40, 10, random (0, 360), 2, random (0, 160))
+			PFV2 AAA 0 A_CustomMissile ("Teeth", 40, 10, random (0, 360), 2, random (0, 160))
+			PFV2 AAA 0 A_CustomMissile ("XDeath1", 40, 10, random (0, 360), 2, random (0, 160))
+			PFV2 AA 0 A_CustomMissile ("XDeath3b", 40, 10, random (0, 360), 2, random (50, 90))
+			PFV2 A 0 A_CustomMissile ("XDeath3b", 40, 10, random (0, 360), 2, random (50, 90))
+			PFV2 GHIJKL 4 SetPlayerProperty(0, 1, 0)
+			PFV2 A 0 A_PlaySound("CLAP", 1)
+			PFV2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFV2 A 0 A_CustomMissile ("XDeathArchvileArm", 12, 10, random (0, 360), 2, random (40, 120))
+			PFV2 AA 0 A_CustomMissile ("XDeathArchvileLeg", 6, 10, random (0, 360), 2, random (40, 120))
+			PFV2 AAA 0 A_CustomMissile ("XDeath1", 6, 10, random (0, 360), 2, random (0, 160))
+			PFV2 AA 0 A_CustomMissile ("XDeath2b", 12, 10, random (0, 360), 2, random (60, 120))
+			PFV2 AA 0 A_CustomMissile ("XDeath3b", 12, 10, random (0, 360), 2, random (60, 120))
+			PFV2 A 0 A_CustomMissile ("XDeath2", 12, 10, random (0, 360), 2, random (30, 120))
+			PFV2 A 0 A_CustomMissile ("XDeath3", 12, 10, random (0, 360), 2, random (30, 120))
+			PFV2 A 0 A_CustomMissile ("XDeathOrgan1", 4, 10, random (0, 360), 2, random (0, 160))
+			PFV2 A 0 A_CustomMissile ("XDeathOrgan2", 4, 10, random (0, 360), 2, random (0, 160))
+			PFV2 A 0 A_SpawnItem("MuchBlood2", 10, 40)
+			PFV2 AAAA 0 A_CustomMissile ("SuperWallRedBlood", 6, 10, random (170, 190), 2, random (0, 40))
+			PFV2 AAAA 0 A_CustomMissile ("BloodMistBig", 10, 10, random (0, 360), 2, random (30, 90))
+			PFV2 AAAA 0 A_CustomMissile ("Guts", 6, 10, random (0, 360), 2, random (60, 120))
+			PFV2 A 0 A_SpawnItem("BigBloodSpot")
+			PFV2 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFV2 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFV2 MMMNNOOPP 2
+			PFV2 A 0 A_GiveInventory("BootsSmearedWithRedBlood", 6)
+			PFV2 A 0 A_TakeInventory("GoFatality", 1)
+			PFV2 A 0 A_TakeInventory("ArchVileFatality2",1)
+			PFV2 AA 0 A_GiveInventory("HealthBonus",25)
+			PFV2 A 0 A_GiveInventory("GiveHealth",100)
+			PFV2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFV2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Belphegor Fatalities
+		//Slide to behind then pick up and slam down many times till he explodes!!!
+		PJF:
+			PFJ1 A 0 SetPlayerProperty(0, 1, 0)
+			PFJ1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFJ1 A 0 ACS_NamedExecuteAlways("BDActivateCameraBig", 0, 0, 0, 0)
+			PFJ1 A 0 ACS_Execute(312, 0)
+			PFJ1 A 10
+			PFJ1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFJ1 BCD 3 SetPlayerProperty(0, 1, 0)
+			PFJ1 A 0 A_PlaySound("SlideKickStart", 5)
+			PFJ1 EFGH 3 SetPlayerProperty(0, 1, 0)
+			PFJ1 A 0 A_PlaySound("SlideKickStop", 5)
+			PFJ1 I 10 SetPlayerProperty(0, 1, 0)
+			PFJ1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFJ1 JKLMNOPRST 4 SetPlayerProperty(0, 1, 0)
+			PFJ1 A 0 A_Jump(128, "PJFB") //Alternative ending
+			PFJ1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFJ1 U 4 SetPlayerProperty(0, 1, 0)
+			PFJ1 VVWWXXXYYYZ 2 SetPlayerProperty(0, 1, 0)
+			PFJ1 A 0 A_PlaySound("CLAP", 1)
+			PFJ2 ABB 2 SetPlayerProperty(0, 1, 0)
+			PFJ2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFJ2 A 0 A_SpawnItemEx ("MuchBloodGreen", 0, -10, 8)
+			PFJ2 CC 2 SetPlayerProperty(0, 1, 0)
+			PFJ2 A 0 A_PlaySound("PSXDPN") //First pound
+			PFJ1 VVWWXXXYYYZ 2 SetPlayerProperty(0, 1, 0)
+			PFJ1 A 0 A_PlaySound("CLAP", 1)
+			PFJ2 ABB 2 SetPlayerProperty(0, 1, 0)
+			PFJ2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFJ2 A 0 A_SpawnItemEx ("MuchBloodGreen", 0, -10, 8)
+			PFJ2 CC 2 SetPlayerProperty(0, 1, 0)
+			PFJ2 A 0 A_PlaySound("PSXDPN") //Second pound
+			PFJ1 VVWWXXXYYYZ 2 SetPlayerProperty(0, 1, 0)
+			PFJ1 A 0 A_PlaySound("CLAP", 1)
+			PFJ2 ABB 2 SetPlayerProperty(0, 1, 0)
+			PFJ2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFJ2 A 0 A_SpawnItemEx ("MuchBloodGreen", 0, -10, 8)
+			//PFJ2 CCC 1 SetPlayerProperty(0,1,0)
+			PFJ2 A 0 A_PlaySound("misc/xdeath1") //Final pound
+			PFJ2 AA 0 A_CustomMissile ("XDeath2bGreen", 15, -10, random (0, 360), 2, random (20, 90))
+			PFJ2 AA 0 A_CustomMissile ("XDeath3bGreen", 15, -10, random (0, 360), 2, random (20, 90))
+			PFJ2 AA 0 A_CustomMissile ("XDeath2Green", 15, -10, random (0, 360), 2, random (20, 90))
+			PFJ2 AA 0 A_CustomMissile ("XDeath3Green", 15, -10, random (0, 360), 2, random (20, 90))
+			PFJ2 AA 0 A_CustomMissile ("XDeath4Green", 15, -10, random (0, 360), 2, random (20, 90))
+			PFJ2 AA 0 A_CustomMissile ("XDeath5Green", 15, -10, random (0, 360), 2, random (20, 90))
+			PFJ2 AA 0 A_CustomMissile ("XDeath6Green", 15, -10, random (0, 360), 2, random (20, 90))
+			PFJ2 A 0 A_SpawnItemEx ("MuchBlood2Green", 0, -10, 12)
+			PFJ2 AAAA 0 A_CustomMissile ("GreenGuts", 12, -10, random (0, 360), 2, random (0, 160))
+			PFJ2 A 0 A_CustomMissile ("XDeathHalfHK", 24, -10, random (0, 360), 2, random (0, 160))
+			PFJ2 A 0 A_CustomMissile ("XDeathOrgan1Green", 15, -10, random (0, 360), 2, random (0, 160))
+			PFJ2 A 0 A_CustomMissile ("XDeathOrgan2Green", 15, -10, random (0, 360), 2, random (0, 160))
+			PFJ2 DEFG 4 SetPlayerProperty(0, 1, 0)
+			PFJ2 H 20
+			PFJ2 A 0 A_TakeInventory("GoFatality", 1)
+			PFJ2 A 0 A_TakeInventory("BelphegorFatality",1)
+			PFJ2 A 0 A_SpawnItemEx ("GreenGrowingBloodPool")
+			PFJ2 A 0 A_SpawnItemEx ("DeadBelphegorXDeath")
+			PFJ2 A 0 A_GiveInventory("GiveHealth",200) //copied Volcabus bonus to this
+			PFJ2 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFJ2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFJ2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Slide to behind then pick up and do a 360 degree swing, throwing him back down, and elbow drop on his back (making him suffer a bit)!!!
+		PJFB:
+			PFJ2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFJ2 I 4 SetPlayerProperty(0, 1, 0)
+			PFJ2 JJJJJKKKKKLLLLOOOOPPPQQQRRSS 1 SetPlayerProperty(0, 1, 0)
+			PFJ2 A 0 A_PlaySound("CLAP", 1)
+			PFJ2 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFJ2 A 0 A_SpawnItemEx ("Green_Blood", 0, -10, 8)
+			PFJ2 TTTTUUUVVV 1 SetPlayerProperty(0, 1, 0)
+			PFJ2 A 0 A_PlaySound("CLAP", 1)
+			PFJ2 WWWXXXXXXXXXXXXYYYYYY 1 SetPlayerProperty(0, 1, 0)
+			PFJ2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFJ2 Z 3 SetPlayerProperty(0, 1, 0)
+			PFJ3 ABC 3 SetPlayerProperty(0, 1, 0)
+			PFN1 A 0 A_PlaySound("player/cyborg/fist", 3) //trying to find a cracking sound :/
+			PFJ3 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFJ3 A 0 A_SpawnItemEx ("MuchBloodGreen", 0, -20, 24)
+			PFJ3 D 6 SetPlayerProperty(0, 1, 0)
+			//PFJ2 A 0 A_PlaySound("PSXDPN")
+			PFJ3 E 20
+			PFJ3 A 0 A_TakeInventory("GoFatality", 1)
+			PFJ3 A 0 A_TakeInventory("BelphegorFatality",1)
+			PFJ3 A 0 A_SpawnItemEx ("DyingBackBrokenBelph", 0, 1, 1, 1, 1)
+			PFJ3 A 0 A_GiveInventory("GiveHealth",200) //copied Volcabus bonus to this
+			PFJ3 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFJ3 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFJ3 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Arachnorb Fatalities
+		//Dig into head and then rip body in half!!!
+		PKF:
+			PFK1 A 0 SetPlayerProperty(0, 1, 0)
+			PFK1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFK1 A 0 ACS_Execute(312, 0)
+			PFK1 A 8
+			PFK1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFK1 A 8 SetPlayerProperty(0, 1, 0)
+			PFK1 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFK1 A 8 SetPlayerProperty(0, 1, 0)
+			PFK1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFK1 A 6 SetPlayerProperty(0, 1, 0)
+			PFK1 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFK1 A 6 SetPlayerProperty(0, 1, 0)
+			PFK1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFK1 A 4 SetPlayerProperty(0, 1, 0)
+			PFK1 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFK1 A 4 SetPlayerProperty(0, 1, 0)
+			PFK1 A 0 A_PlaySound("imp/melee")
+			PFK1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFK1 A 0 A_SpawnItemEX("MuchBlood", 0, 0, 32)
+			PFK1 AAAAAA 0 A_CustomMissile ("SmallBrainPiece", 32, 0, random (0, 360), 2, random (0, 160))
+			PFK1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFK1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFK1 BCDEF 5 SetPlayerProperty(0, 1, 0)
+			PFK1 G 20
+			PFK1 A 0 A_TakeInventory("GoFatality", 1)
+			PFK1 A 0 A_TakeInventory("AracnorbFatality",1)
+			PFK1 A 0 A_SpawnItemEx ("GrowingBloodPool")
+			PFK1 A 0 A_SpawnItemEx ("ACNBH0")
+			PFK1 A 0 A_GiveInventory("HealthBonus",10)
+			PFK1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFK1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//SuperDemon Fatality
+		//Jump to head, bring him down, then jump on his back... breaking his back!
+		PWF:
+			PFW1 A 0 SetPlayerProperty(0, 1, 0)
+			PFW1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFW1 A 0 ACS_NamedExecuteAlways("BDActivateCameraBig", 0, 0, 0, 0)
+			PFW1 A 0 ACS_Execute(312, 0)
+			PFW1 A 10
+			PFW1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFW1 B 3 SetPlayerProperty(0, 1, 0)
+			PFW1 CEGH 2 SetPlayerProperty(0, 1, 0) //purposely missing D and F sprites here
+			PFW1 A 0 A_PlaySound("CLAP", 1)
+			PFW1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFW1 IJ 2 SetPlayerProperty(0, 1, 0)
+			PFW1 A 0 A_PlaySound("CYBPAIN")
+			PFW1 JJJJJKL 2 SetPlayerProperty(0, 1, 0)
+			PFW1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFW1 MNO 2 SetPlayerProperty(0, 1, 0)
+			PFW1 A 0 A_PlaySound("misc/xdeath1")
+			PFW1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFW1 AA 0 A_CustomMissile ("XDeath2b", 20, 20, random (0, 360), 2, random (20, 90))
+			PFW1 AA 0 A_CustomMissile ("XDeath3b", 20, 20, random (0, 360), 2, random (20, 90))
+			PFW1 AA 0 A_CustomMissile ("XDeath2", 20, 20, random (0, 360), 2, random (20, 90))
+			PFW1 AA 0 A_CustomMissile ("XDeath3", 20, 20, random (0, 360), 2, random (20, 90))
+			PFW1 AA 0 A_CustomMissile ("XDeath4", 20, 20, random (0, 360), 2, random (20, 90))
+			PFW1 AA 0 A_CustomMissile ("XDeath5", 20, 20, random (0, 360), 2, random (20, 90))
+			PFW1 AA 0 A_CustomMissile ("XDeath6", 20, 20, random (0, 360), 2, random (20, 90))
+			PFW1 A 0 A_SpawnItemEx ("MuchBlood2", 0, 20, 12)
+			PFW1 P 15
+			PFW1 A 0 A_TakeInventory("GoFatality", 1)
+			PFW1 A 0 A_TakeInventory("SuperdemonFatality",1)
+			PFW1 A 0 A_SpawnItemEx ("GrowingBloodPool")
+			PFW1 A 0 A_SpawnItemEx ("DyingBackBrokenSuperDemon", 1, 1, 1, 1)
+			PFW1 A 0 A_GiveInventory("GiveHealth",400) //copied Cyberdemon bonus to this
+			PFW1 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFW1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFW1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto Standstill
+		//Avatar Fatality
+		//Slide to behind then pick up by tail, swing em around 360 style, and slam him, blowing him up!!!
+		PXF:
+			PFX1 A 0 SetPlayerProperty(0, 1, 0)
+			//PFX1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			//PFX1 A 0 ACS_NamedExecuteAlways("BDActivateCameraBig", 0, 0, 0, 0)
+			PFX1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFX1 A 0 ACS_Execute(312, 0)
+			PFX1 A 10
+			PFX1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFX1 BCD 3 SetPlayerProperty(0, 1, 0)
+			PFX1 A 0 A_PlaySound("SlideKickStart", 5)
+			PFX1 EFGH 3 SetPlayerProperty(0, 1, 0)
+			PFX1 A 0 A_PlaySound("SlideKickStop", 5)
+			PFX1 I 10 SetPlayerProperty(0, 1, 0)
+			PFX1 JKLMN 4 SetPlayerProperty(0, 1, 0)
+			PFX1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFX1 O 4 SetPlayerProperty(0, 1, 0)
+			PFX1 PPPPPQQQQQRRRRSSSSTTTUUUVVWW 1 SetPlayerProperty(0, 1, 0)
+			PFX1 A 0 A_PlaySound("CLAP", 1)
+			//PFX1 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFX1 WWWWWXXXXXXX 1 SetPlayerProperty(0, 1, 0)
+			PFX1 A 0 A_PlaySound("monster/avadth", 3)
+			PFX1 AAAAAAAAAAAAAA 0 A_CustomMissile ("XDeathWizardBlack", 8, random(-50, -30), random (0, 360), 2, random (30, 90))
+			PFX1 AAAAAAAAAAAAAAAA 0 A_CustomMissile ("XDeathWizardPurple", 8, random(-50, -30), random (0, 360), 2, random (30, 90))
+			PFX1 AAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("BluePlasmaParticleFast", 6, random(-50, -30), random (0, 360), 2, random (0, 360))
+			PFX1 AAA 0 A_CustomMissile ("FlyingMagicLava", 12, random(-50, -30), random (0, 360), 2, random (20, 80))
+			PFX1 AAA 0 A_CustomMissile ("FlyingMagicLava", 10, random(-50, -30), random (0, 360), 2, random (20, 80))
+			PFX1 AAAAAAAA 0 A_CustomMissile ("FlyingMagicLava", 12, random(-50, -30), random (0, 360), 2, random (30, 80))
+			PFX1 AAAAAAAAA 0 A_CustomMissile ("FlyingMagicLava", 10, random(-50, -30), random (0, 360), 2, random (30, 80))
+			PFX1 A 0 A_SpawnItemEx("TinyBurningPiece", random (-15, 15), random (-85, -15))
+			PFX1 A 0 A_SpawnItemEx("TinyBurningPiece2", random (-35, 35), random (-85, -15))
+			PFX1 A 0 A_SpawnItemEx("TinyBurningPiece3", random (-45, 45), random (-85, -15))
+			PFX1 Y 2 A_CustomMissile ("PyromancyInfernoExplosionFlames", 0, -40, random (0, 360), 2, random (0, 180))
+			PFX1 Y 2 A_CustomMissile ("PyromancyLargeExplosionFlames", 0, -40, random (0, 360), 2, random (0, 180))
+			PFX1 Y 2 A_CustomMissile ("PyromancyLargeExplosionFlames2", 0, -40, random (0, 360), 2, random (0, 180))
+			EXPL AAA 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 4, random(-50, -30), random (0, 360), 2, random (40, 160))
+			PFX1 ZZ 2 A_CustomMissile ("PyromancyLargeExplosionFlames", 0, -40, random (0, 360), 2, random (0, 180))
+			PFX1 ZZ 2 A_CustomMissile ("PyromancyInfernoExplosionFlames", 0, -40, random (0, 360), 2, random (0, 180))
+			EXPL AAA 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 4, -40, random (0, 360), 2, random (40, 160))
+			PFX1 ZZZZ 2 A_CustomMissile ("PyromancyLargeExplosionFlames2", 0, random(-30, -10), random (0, 360), 2, random (0, 180))
+			EXPL AAAAA 0 A_CustomMissile ("BigNeoSmoke", 0, random(-50, -30), random (0, 360), 2, random (0, 360))
+			FRFX ZZZ 0 BRIGHT A_CustomMissile ("BigNeoSmoke", 2, random(-50, -30), random (0, 360), 2, random (0, 360))
+			EXPL AAA 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 4, random(-50, -30), random (0, 360), 2, random (40, 160))
+			PFX1 A 0 A_Playsound("Pyromancy/FireballHit")
+			PFX1 Z 10
+			PFX1 A 0 A_TakeInventory("GoFatality", 1)
+			PFX1 A 0 A_TakeInventory("AvatarFatality",1)
+			PFW1 A 0 A_GiveInventory("GiveHealth",400) //copied Cyberdemon bonus to this
+			//PFX1 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFX1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFX1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Mastermind Fatalities
+		//It's much like the Marine/Arachnotron fatality (rip leg off and plant it in Mastermind's head XD)
+		PDF:
+			PFD1 A 0 SetPlayerProperty(0, 1, 0)
+			PFD1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFD1 A 0 ACS_NamedExecuteAlways("BDActivateCameraBig", 0, 0, 0, 0)
+			PFD1 A 0 ACS_Execute(312, 0)
+			PFD1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFD1 ABABABAB 2
+			PFD1 A 0 A_SpawnItemEx("Spark_UpOnce",0,-45,60)
+			PFD1 A 0 A_PlaySound("SPIPAIN1")
+			PFD1 CDEFGGGG 3 SetPlayerProperty(0, 1, 0)
+			//PFD1 A 0 A_PlaySound("SPIPAIN1")
+			//PFD1 FFFFGG 6 SetPlayerProperty(0,1,0)
+			PFD1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFD1 HGHGHGHG 2 SetPlayerProperty(0, 1, 0)
+			PFD1 A 0 A_SpawnItemEx("Spark_UpOnce",0,-80,10)
+			PFD1 A 0 A_PlaySound("SPIPAIN1")
+			PFD1 HIJKLMMMM 3 SetPlayerProperty(0, 1, 0)
+			//PFD1 A 0 A_PlaySound("SPIPAIN1")
+			//PFD1 LLLLMM 6 SetPlayerProperty(0,1,0)
+			PFD1 NO 3 SetPlayerProperty(0, 1, 0)
+			PFD1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFD1 PPP 3 SetPlayerProperty(0, 1, 0)
+			PFD1 A 0 A_PlaySound("spider/death")
+			PFD1 QR 5 SetPlayerProperty(0, 1, 0)
+			PFD1 A 0 A_CustomMissile ("RidiculousExplosionSpawner", 30, 0, random (0, 360), 2, 90)
+			EXPL A 0 Radius_Quake (8, 100, 0, 22, 0)
+			PFD1 AAAAAAAAAA 0 A_CustomMissile ("PEPart2SuperFast", 32, 0, random (0, 360), 2, random (0, 160))
+			PFD1 AAAAAAA 0 A_CustomMissile ("BloodMistXXBig", 40, 0, random (0, 360), 2, random (40, 90))
+			PFD1 AAAAAAAAAA 0 A_CustomMissile ("BloodMistXXBig", 100, 0, random (0, 360), 2, random (40, 90))
+			PFD1 AAA 0 A_CustomMissile ("MastermindLeg", 40, 0, random (0, 360), 2, random (40, 90))
+			PFD1 A 0 A_SpawnItem ("GiantBloodSpot")
+			PFD1 STTTT 5 SetPlayerProperty(0, 1, 0)
+//			PFD1 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFD1 A 0 A_SpawnItemEx("SPIDS0")
+			PFD1 A 0 A_TakeInventory("GoFatality", 1)
+			PFD1 A 0 A_TakeInventory("MastermindFatality",1)
+			PFD1 A 0 A_GiveInventory("GiveHealth",400)
+			PFD1 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFD1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFD1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//It's much like the other Marine/Arachnotron fatality (rip leg off and BONK it on Mastermind's head XD)
+		PDF2:
+			PFD1 A 0 SetPlayerProperty(0, 1, 0)
+			PFD1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFD1 A 0 ACS_NamedExecuteAlways("BDActivateCameraBig", 0, 0, 0, 0)
+			PFD1 A 0 ACS_Execute(312, 0)
+			PFD1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFD1 ABABABAB 2
+			PFD1 A 0 A_SpawnItemEx("Spark_UpOnce",0,-45,60)
+			PFD1 A 0 A_PlaySound("SPIPAIN1")
+			PFD1 CDEFGGGG 3 SetPlayerProperty(0, 1, 0)
+			//PFD1 A 0 A_PlaySound("SPIPAIN1")
+			//PFD1 FFFFGG 6 SetPlayerProperty(0,1,0)
+			PFD1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFD1 HGHGHGHG 2 SetPlayerProperty(0, 1, 0)
+			PFD1 A 0 A_SpawnItemEx("Spark_UpOnce",0,-80,10)
+			PFD1 A 0 A_PlaySound("SPIPAIN1")
+			PFD1 HIJKLMMMM 3 SetPlayerProperty(0, 1, 0)
+			//PFD1 A 0 A_PlaySound("SPIPAIN1")
+			//PFD1 LLLLMM 6 SetPlayerProperty(0,1,0)
+			PFD1 UV 3 SetPlayerProperty(0, 1, 0)
+			PFD1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFD1 WWW 3 SetPlayerProperty(0, 1, 0)
+			PFD1 A 0 A_PlaySound("spider/death")
+			PFD1 XY 5 SetPlayerProperty(0, 1, 0)
+			PFD1 A 0 A_CustomMissile ("RidiculousExplosionSpawner", 30, 0, random (0, 360), 2, 90)
+			EXPL A 0 Radius_Quake (8, 100, 0, 22, 0)
+			PFD1 AAAAAAAAAA 0 A_CustomMissile ("PEPart2SuperFast", 32, 0, random (0, 360), 2, random (0, 160))
+			PFD1 AAAAAAA 0 A_CustomMissile ("BloodMistXXBig", 40, 0, random (0, 360), 2, random (40, 90))
+			PFD1 AAAAAAAAAA 0 A_CustomMissile ("BloodMistXXBig", 100, 0, random (0, 360), 2, random (40, 90))
+			PFD1 AAA 0 A_CustomMissile ("MastermindLeg", 40, 0, random (0, 360), 2, random (40, 90))
+			PFD1 A 0 A_SpawnItem ("GiantBloodSpot")
+			PFD1 ZTTTT 5 SetPlayerProperty(0, 1, 0)
+//			PFD1 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFD1 A 0 A_SpawnItemEx("SPIDS0")
+			PFD1 A 0 A_TakeInventory("GoFatality", 1)
+			PFD1 A 0 A_TakeInventory("MastermindFatality",1)
+			PFD1 A 0 A_GiveInventory("GiveHealth",400)
+			PFD1 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFD1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFD1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Cyberdemon Fatalities
+		//Rip and tear guts out!!! Then do some kind of back flip throwdown on him (Suplex, hahahahahaha!!!!)
+		PNF:
+			PFN1 A 0 SetPlayerProperty(0, 1, 0)
+			PFN1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFN1 A 0 ACS_NamedExecuteAlways("BDActivateCameraBig", 0, 0, 0, 0)
+			PFN1 A 0 ACS_Execute(312, 0)
+			PFN1 A 8
+			PFN1 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFN1 BCDDD 4 SetPlayerProperty(0, 1, 0)
+			PFN1 EFGH 4 SetPlayerProperty(0, 1, 0)
+			PFN1 A 0 A_SpawnItemEX("MuchBlood", 0, -50, 54)
+			PFN1 A 0 A_SpawnItemEX("RipGuts", 0, -50, 54)
+			PFN1 A 0 A_PlaySound("BONECR1", 4)
+			PFN1 A 0 A_PlaySound("CYBPAIN", 1)
+			PFN1 IJKLMLMLMLMN 4 A_SpawnItemEX("Blood", 0, -50, 54)
+			PFN1 O 4 A_SpawnItemEX("Blood", 0, -70, 54)
+			PFN1 A 0 A_PlaySound("CYBPAIN", 1)
+			PFN1 PPPPQRSTU 4 A_SpawnItemEX("Blood", 0, -90, 54)
+			PFN1 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFN1 VWX 4 A_SpawnItemEX("Blood", 0, -90, 54)
+			PFN1 Y 4 A_SpawnItemEX("Blood", 0, -90, 36)
+			PFN1 Z 4 A_SpawnItemEX("Blood", 0, -90, 24)
+			PFN1 A 0 A_PlaySound("CLAP", 1)
+			PFN1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFN1 AAA 0 A_CustomMissile ("Guts2", 6, -90, random (0, 360), 2, random (10, 90))
+//			PFN1 AAA 0 A_CustomMissile ("SuperGoreSpawner", 6, -30, random (0, 360), 2, random (40, 70))
+			PFN1 A 0 A_SpawnItemEX("MuchBlood", 0, -90, 4)
+			PFN2 A 4 A_SpawnItemEX("Blood", 0, -90, 12)
+			PFN2 BBBB 4 A_SpawnItemEX("Blood", 0, -90, 4)
+			PFN2 C 4 A_SpawnItemEX("Blood", 0, -90, 4)
+			PFN2 A 0 A_PlaySound("Paladin/MediumExert", 3)
+			PFN2 D 4 A_SpawnItemEX("Blood", 0, -80, 12)
+			PFN2 E 4 A_SpawnItemEX("Blood", 0, -60, 36)
+			PFN2 F 4 A_SpawnItemEX("Blood", 0, -20, 60)
+			PFN2 G 4 A_SpawnItemEX("Blood", 0, 20, 60)
+			PFN2 H 4 A_SpawnItemEX("Blood", 0, 60, 48)
+			PFN2 I 4 A_SpawnItemEX("Blood", 0, 100, 24)
+			PFN2 J 5 A_SpawnItemEX("Blood", 0, 100, 12)
+			PFN2 A 0 A_PlaySound("CLAP", 1)
+			PFN2 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFN2 KL 5 SetPlayerProperty(0, 1, 0)
+			PFN2 A 0 A_PlaySound("cyber/death", 2)
+			PFN2 A 0 A_CustomMissile ("XDeathCyberdemonHead", 40, 80, random (0, 360), 2, random (0, 180))
+			PFN2 A 0 A_CustomMissile ("XDeathCyberdemonArm", 40, 80, random (0, 360), 2, random (0, 180))
+			PFN2 A 0 A_CustomMissile ("XDeathCyberdemonGun", 40, 80, random (0, 360), 2, random (0, 180))
+			PFN2 A 0 A_CustomMissile ("XDeathCyberdemonPiece", 40, 80, random (0, 360), 2, random (0, 180))
+			PFN2 A 0 A_CustomMissile ("XDeathCyberdemonTorso", 40, 80, random (0, 360), 2, random (0, 180))
+			PFN2 AAA 0 A_CustomMissile ("BDExplosionparticles3", 26, 80, random (0, 360), 2, random (40, 90))
+			PFN2 AAA 0 A_CustomMissile ("BDExplosionparticles4", 24, 80, random (0, 360), 2, random (40, 90))
+			PFN2 AA 0 A_CustomMissile ("ExplosionSpawner", 12, 80, random (0, 360), 2, random (10, 90))
+			EXPL AA 0 A_CustomMissile ("BigBlackSmokeLarger", 12, 80, random (0, 360), 2, random (10, 90))
+			PFN2 A 0 A_CustomMissile ("CyberXDeath", 0, 80, random (0, 360), 2, random (0, 160))
+			PFN2 MMMMNOPQQQQQ 4 SetPlayerProperty(0, 1, 0)
+//			PFN2 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFN2 A 0 A_TakeInventory("GoFatality", 1)
+			PFN2 A 0 A_TakeInventory("CyberdemonFatality",1)
+			PFN2 A 0 A_GiveInventory("GiveHealth",400)
+			PFN2 A 0 ACS_NamedExecuteAlways("BDDisableCameraBig", 0, 0, 0, 0)
+			PFN2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFN2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+
+//HEXEN FATALITY STATES
+
+		//Ettin Fatalities
+		//Overhead Ettin Ripper!!
+		PEF:
+			PFE1 A 0 SetPlayerProperty(0, 1, 0)
+			PFE1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFE1 A 0 ACS_Execute(312, 0)
+			PFE1 ABCD 2
+			PFE1 E 4
+			PFE1 F 2 A_PlaySound("Ettin/pain")
+			PFE1 G 2
+			PFE1 H 5 SetPlayerProperty(0, 1, 0)
+			PFE1 IJHJIHIJHJIHIJHJIHIJHJIH 2 SetPlayerProperty(0,1,0)
+			PFE1 A 0 A_CustomMissile ("CameraShakeMinor", 1, 0, random (0, 360), 2, random (0, 160))
+			PFE1 AAAAAAAAAAAA 0 A_CustomMissile ("CeilBloodLauncherLong", 50, 0, random (0, 360), 2, random (50, 130))
+			PFE1 A 0 A_CustomMissile ("XDeathHalfEttin", 50, 0, 270, 2, random (0, 160))
+			PFE1 A 0 A_CustomMissile ("XDeathHalfEttinLower", 50, 0, 90, 2, random (0, 160))
+			PFE1 AAAAAA 0 A_CustomMissile ("Guts", 60, 0, random (0, 360), 2, random (0, 160))
+			PFE1 AAA 0 A_CustomMissile ("XDeath1", 60, 0, random (0, 360), 2, random (0, 160))
+			PFE1 A 0 A_CustomMissile ("Muchblood2", 60, 0, random (0, 360), 2, random (0, 160))
+			PFE1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFE1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFE1 KL 2
+			PFE1 M 20
+			PFE1 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFE1 A 0 A_TakeInventory("GoFatality", 1)
+			PFE1 A 0 A_TakeInventory("EttinFatality",1)
+			PFE1 A 0 A_GiveInventory("HealthBonus",15)
+			PFE1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFE1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Beggin Ettin Beatdown to a pulp!
+		PEF2:
+			PFE2 A 0 SetPlayerProperty(0, 1, 0) //Freeze player movement
+			PFE2 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFE2 A 0 ACS_Execute(312, 0)
+
+			PFE2 A 10 SetPlayerProperty(0, 1, 0)
+			PFE2 ABCD 3 SetPlayerProperty(0, 1, 0)
+			PFE2 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFE2 A 0 A_PlaySound ("PSXDPN") //we may use that "PuppyBeat" instead
+			PFE2 A 0 Radius_Quake (4, 15, 0, 12, 0)
+			PFE2 A 0 A_SpawnItem ("Brutal_Blood", 0, 40)
+			PFE2 EFGH 3
+			PFE2 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFE2 A 0 A_PlaySound ("PSXDPN")
+			PFE2 A 0 Radius_Quake (4, 15, 0, 12, 0)
+			PFE2 A 0 A_SpawnItem ("Brutal_Blood", 0, 40)
+			PFE2 IJK 3
+			PFE2 ABCD 3
+			PFE2 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFE2 A 0 A_PlaySound ("PSXDPN")
+			PFE2 A 0 Radius_Quake (4, 15, 0, 12, 0)
+			PFE2 A 0 A_SpawnItem ("Brutal_Blood", 0, 40)
+			PFE2 EFGH 3
+			PFE2 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFE2 A 0 A_PlaySound ("PSXDPN")
+			PFE2 A 0 Radius_Quake (4, 15, 0, 12, 0)
+			PFE2 A 0 A_SpawnItem ("Brutal_Blood", 0, 40)
+			PFE2 IJK 3
+			PFE2 ABCD 3
+			PFE2 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFE2 A 0 A_PlaySound ("PSXDPN")
+			PFE2 A 0 Radius_Quake (4, 15, 0, 12, 0)
+			PFE2 A 0 A_SpawnItem ("Brutal_Blood", 0, 40)
+			PFE2 EFGH 3
+			PFE2 A 0 A_PlaySound("player/cyborg/fist", 3)
+			PFE2 A 0 A_PlaySound ("PSXDPN")
+			PFE2 A 0 Radius_Quake (4, 15, 0, 12, 0)
+			PFE2 A 0 A_SpawnItem ("Brutal_Blood", 0, 40)
+			PFE2 I 3
+			PFE2 A 0 A_CustomMissile ("FlyingDeadEttin", 15, 0, random (0, 360), 2, random (50, 130))
+			PFE2 AAAA 0 A_CustomMissile ("XDEATH1", 15, 0, random (0, 360), 2, random (50, 130))
+			PFE2 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFE2 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFE2 L 50
+
+			PFE2 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFE2 A 0 A_TakeInventory("GoFatality", 1)
+			PFE2 A 0 A_TakeInventory("EttinFatality2",1)
+			PFE2 A 0 A_TakeInventory("EttinFatality3",1)
+			PFE2 A 0 A_GiveInventory("HealthBonus",15)
+			PFE2 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFE2 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//FireDemon Fatalities
+		//Overhead throwdown and stepped on!
+		PFF:
+			PFF1 A 0 SetPlayerProperty(0, 1, 0) //Freeze player movement
+			PFF1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFF1 A 0 ACS_Execute(312, 0)
+
+			PFF1 A 0 A_PlaySound("FireDemonActive", 1)
+			PFF1 ABCDEFGH 3 BRIGHT SetPlayerProperty(0,1,0)
+			PFF1 A 0 A_PlaySound("WHOP", 1)
+			PFF1 IJKLM 3 BRIGHT SetPlayerProperty(0,1,0)
+			PFF1 A 0 A_PlaySound("CLAP", 1)
+			PFF1 A 0 A_PlaySound("FireDemonPain", 2)
+			PFF1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFF1 AAAAAA 0 A_CustomMissile ("FireDemon_Blood", 3, 0, random (0, 360), 2, random (0, 360))
+// 			PFF1 AAAAAAAAAA 0 A_CustomMissile ("ExplosionParticle1", 3, 0, random (0, 360), 2, random (0, 360))
+			PFF1 NOPQRRRRSTUVVVW 4 BRIGHT
+			PFF1 AAAAAAAAAAAAAAA 0 A_CustomMissile ("FireDemon_Blood", 3, 0, random (0, 360), 2, random (0, 360))
+// 			PFF1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("ExplosionParticle1", 3, 0, random (0, 360), 2, random (0, 360))
+			PFF1 A 0 A_CustomMissile ("XDeathHalfFireDemon", 10, 0, random (0, 360), 2, random (80, 100))
+			PFF1 AA 0 A_CustomMissile ("FireDemonRock1a", 10, 0, random (0, 360), 2, random (80, 100))
+			PFF1 AA 0 A_CustomMissile ("FireDemonRock2a", 10, 0, random (0, 360), 2, random (80, 100))
+			PFF1 AA 0 A_CustomMissile ("FireDemonRock3a", 10, 0, random (0, 360), 2, random (80, 100))
+			PFF1 A 0 A_CustomMissile ("FireDemonRock4a", 10, 0, random (0, 360), 2, random (80, 100))
+			PFF1 A 0 A_CustomMissile ("FireDemonRock5a", 10, 0, random (0, 360), 2, random (80, 100))
+			PFF1 A 0 A_PlaySound("misc/xdeath1")
+			PFF1 A 0 A_PlaySound("FireDemonPain", 2)
+			PFF1 A 0 A_CustomMissile ("CameraShake", 1, 0, random (0, 360), 2, random (0, 160))
+			PFF1 XYZZZZZZZZ 4
+			PFF1 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFF1 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFF1 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFF1 A 0 A_SpawnItemEx("PFF4A0")
+			PFF1 A 0 A_TakeInventory("GoFatality", 1)
+			PFF1 A 0 A_TakeInventory("FireDemonFatality",1)
+			PFF1 A 0 A_TakeInventory("FireDemonFatality2",1)
+			PFF1 A 0 A_TakeInventory("FireDemonFatality3",1)
+			PFF1 A 0 A_GiveInventory("HealthBonus",15)
+			PFF1 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFF1 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+		//Chaos Serpent Fatalities
+		//Make Serpent swallow a bomb and blow up!
+		PCF:
+			PFC1 A 0 SetPlayerProperty(0, 1, 0) //Freeze player movement
+			PFC1 A 0 ACS_NamedExecuteAlways("BDStartCamera", 0, 0, 0, 0)
+			PFC1 A 0 ACS_Execute(312, 0)
+
+			PFC1 A 10 SetPlayerProperty(0, 1, 0)
+			PFC1 A 0 A_PlaySound("SlideKickStart", 5)
+			PFC1 BCDEFGH 2 SetPlayerProperty(0,1,0)
+			PFC1 A 0 A_PlaySound("SlideKickStop", 5)
+			PFC1 IJKLMNOP 2
+			PFC1 A 0 A_PlaySound("DemonPain", 2)
+			PFC1 QRSTUVWXYZ 2
+			PFC4 ABC 2
+			PFC4 A 0 ACS_Execute(580, 0, 0, 0, 0)
+			PFC4 A 0 ACS_Execute(581, 0, 0, 0, 0)
+			PFC4 A 0 A_TakeInventory("IsCurbstompingZombieman",1)
+			PFC4 A 0 A_SpawnItemEx("GonnaBlowSerpent")
+			PFC4 A 0 A_TakeInventory("GoFatality", 1)
+			PFC4 A 0 A_TakeInventory("SerpentFatality",1)
+			PFC4 A 0 A_TakeInventory("SerpentFatality2",1)
+			PFC4 A 0 A_TakeInventory("SerpentFatality3",1)
+			PFC4 A 0 A_GiveInventory("HealthBonus",20)
+			PFC4 A 0 ACS_NamedExecuteAlways("BDStopCamera", 0, 0, 0, 0)
+			PFC4 A 0 SetPlayerProperty(0, 0, 0)
+			NULL A 0 A_TakeInventory("No_Overlay", 1)
+			Goto StandStill
+
+		Death.PussyGrab:
+			TNT1 A 0
+			TNT1 A 0 A_NoBlocking
+			TNT1 A 0 A_GiveToTarget("GrabbedAEvilMarine", 1)
+			TNT1 A 0 A_GiveToTarget("SoulAmmo", 10)
+			NULL A 1
+			NULL A -1
+			Stop
+
+		Death.Fatality:
+			NULL A 0 A_NoBlocking
+			NULL A 0 A_Scream
+			NULL A 0 A_GiveToTarget("GoFatality", 1)
+			NULL A 0 A_GiveToTarget("PVPFatality", 1)
+			NULL A 1
+			NULL A -1
+			Stop
+
+
+		Death.HKFT:
+		Death.BHFT:
+		Death.RVFT:
+			NULL A 1 A_PlayerScream
+			NULL A 1 A_NoBlocking
+			NULL A 0 A_GiveToTarget("Curbstomp_Marine",1)
+			NULL A -1
+			Stop
+
+
+		Death.ImpFatalityMarine:
+			NULL A 1 A_PlayerScream
+			NULL A 1 A_NoBlocking
+			NULL A 0 A_GiveToTarget("Fatality_Marine",1)
+			NULL A 40
+			TNT1 A 0 A_PlaySound("BIGSCRE", 4)
+			NULL A 500
+			NULL A -1
+			Stop
+
+		Pain.Blood:
+			NULL A 0 A_TakeInventory("BloodSplasherz", 1)
+			NULL A 0 A_Giveinventory("GiveHealth",1)
+			NULL A 0 A_Giveinventory("BloodOnVisor",1)
+			NULL A 0 A_GiveInventory("MeatAmmo", 1)
+			NULL A 0 ACS_Execute(580, 0, 0, 0, 0)
+			Goto StandStill
+
+		Pain.BlueBlood:
+			NULL A 0 A_Giveinventory("BlueBloodOnVisor",1)
+			NULL A 0 A_Giveinventory("GiveHealth",1)
+			NULL A 0 ACS_Execute(583, 0, 0, 0, 0)
+			Goto StandStill
+
+		Pain.GreenBlood:
+			TNT1 A 0
+			NULL A 0 A_Giveinventory("GiveHealth",1)
+			NULL A 0 ACS_Execute(582, 0, 0, 0, 0)
+			Goto StandStill
+
+		Pain.Water:
+			TNT1 A 0
+			NULL A 0 A_Giveinventory("Health",1)
+			NULL A 0 ACS_Execute(584, 0, 0, 0, 0)
+			Goto StandStill
+
+	}
+}

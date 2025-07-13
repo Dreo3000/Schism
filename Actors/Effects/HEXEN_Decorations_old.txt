@@ -1,0 +1,192 @@
+ACTOR BrutalChandelier Replaces ZChandelier
+{
+	Game Hexen
+	Radius 20
+	Height 60
+	+SPAWNCEILING
+	+NOGRAVITY
+	States
+	{
+	Spawn:
+		CDLR ABC 2 BRIGHT A_SpawnItem("YellowFlare", 0, 10)
+		Loop
+	}
+}
+
+
+
+ACTOR BrutalChandelierUnlit Replaces ZChandelierUnlit
+{
+	Game Hexen
+	Radius 20
+	Height 60
+	+SPAWNCEILING
+	+NOGRAVITY
+	States
+	{
+	Spawn:
+		CDLR D -1
+		Stop
+	}
+}
+
+
+ACTOR BrutalZCandle Replaces ZCandle
+{
+	Game Hexen
+	Radius 20
+	Height 16
+	+NOGRAVITY
+	+NOBLOCKMAP
+	States
+	{
+	Spawn:
+		CNDL ABC 2 Bright A_SpawnItem("YellowFlareSmall", 0, 20)
+		Loop
+	}
+}
+
+
+ACTOR BrutalBrassTorch Replaces BrassTorch
+{
+	Game Hexen
+	Radius 6
+	Height 72
+	+SOLID
+	States
+	{
+	Spawn:
+	    TNT1 A 0 A_CheckSight("Spawn2")
+		TNT1 A 0 A_SpawnItem("RedFlare", 0, 38)
+		TNT1 A 0 bright A_CustomMissile ("BrassParticle1", 40, 0, random (0, 360), 2, random (80, 100))
+		BRTR A 1 bright A_CustomMissile ("RealFlameTrails", 38, 0, random (0, 360), 2, random (70, 110))
+		BRTR AAA 1 Bright A_SpawnItem("RedFlare", 0, 38)
+		Loop
+	Spawn2:
+	    BRTR A 1 BRIGHT
+		Goto Spawn
+	}
+}
+
+
+
+ACTOR BrutalWallTorch Replaces ZWallTorch
+{
+	Game Hexen
+	+NOBLOCKMAP
+	+NOGRAVITY
+	+FIXMAPTHINGPOS
+	Radius 6.5
+	Height 32
+	States
+	{
+	Active:
+		WLTR A 0 Bright A_PlaySound("Ignite")
+	Spawn:
+		TNT1 A 0 A_CheckSight("Spawn2")
+		TNT1 A 0 A_SpawnItem("RedFlare", 0, 28)
+		WLTR I 1 bright A_CustomMissile ("SmallFlameTrails", 28, 0, random (0, 360), 2, random (80, 100))
+		WLTR II 1 Bright A_SpawnItem("RedFlare", 0, 28)
+		Loop
+	Spawn2:
+		WLTR I 1
+		Goto Spawn
+	Inactive:
+		WLTR I -1
+		Stop
+	}
+}
+
+
+
+ACTOR BrutalZTwinedTorch Replaces ZTwinedTorch
+{
+	Game Hexen
+	Radius 10
+	Height 96
+	+SOLID
+	States
+	{
+	Active:
+		TWTR A 0 Bright A_PlaySound("Ignite")
+	Spawn:
+		TNT1 A 0 A_CheckSight("Spawn2")
+		TNT1 A 0 A_SpawnItem("RedFlare", 0, 58)
+		TWTR A 1 bright A_CustomMissile ("SmallFlameTrails", 58, 0, random (0, 360), 2, random (80, 100))
+		TWTR AA 1 Bright A_SpawnItem("RedFlare", 0, 58)
+		Loop
+	Spawn2:
+		TWTR A 1
+		Goto Spawn
+	Inactive:
+		TWTR I -1
+		Stop
+	}
+}
+
+
+
+ACTOR BrutalFireThing Replaces FireThing
+{
+	Game Hexen
+	Radius 5
+	Height 10
+	+SOLID
+	States
+	{
+	Spawn:
+	    TNT1 A 0
+	    TNT1 A 0 A_CheckSight("Spawn2")
+		TNT1 A 0 A_SpawnItem("RedFlare", 0, 36)
+		FSKL A 1 bright A_CustomMissile ("SmallFlameTrails", 30, 0, random (0, 360), 2, random (80, 100))
+		FSKL AA 1 Bright A_SpawnItem("RedFlare", 0, 30)
+		Loop
+	Spawn2:
+		FSKL A 1 BRIGHT
+		Goto Spawn
+	}
+}
+
+
+
+ACTOR BrutalFireBull : SwitchableDecoration Replaces ZFireBull
+{
+	Game Hexen
+	Radius 20
+	Height 80
+	+FORCEYBILLBOARD
+	+SOLID
+	States
+	{
+	Active:
+		FBUL I 4 Bright A_PlaySound("Ignite")
+		FBUL J 4 Bright
+	Spawn:
+	    TNT1 A 0
+		TNT1 A 0 A_CheckSight("Spawn2")
+		TNT1 A 0 bright A_CustomMissile ("BrassParticle1", 50, 0, random (0, 360), 2, random (80, 100))
+		FBUL ABCD 2 BRIGHT A_SpawnItem("RedFlare", 0, 30)
+		TNT1 A 0 bright A_CustomMissile ("BrassParticle1", 50, 0, random (0, 360), 2, random (80, 100))
+		FBUL EFG 2 Bright A_SpawnItem("RedFlare", 0, 30)
+		
+		Loop
+		
+	Spawn2:	
+	    FBUL Y 1
+		Goto Spawn
+	Inactive:
+		FBUL JI 4 Bright
+		FBUL H -1
+		Stop
+	}
+}
+
+ACTOR BrutalFireBullUnlit : BrutalFireBull Replaces ZFireBullUnlit
+{
+	Game Hexen
+	States
+	{
+	Spawn:
+		Goto Super::Inactive+2
+	}
+}

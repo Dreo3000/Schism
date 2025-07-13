@@ -1,0 +1,213 @@
+ACTOR Belcher : Schism_Weapon
+{
+	Weapon.AmmoUse1 2
+	Weapon.AmmoGive1 50
+	Weapon.YAdjust 15
+	Weapon.AmmoType1 "BrutalMaceAmmo"
+	Weapon.SisterWeapon "BelcherPowered"
+	VisibleToPlayerClass Schism_Corvus
+	Inventory.RestrictedTo Schism_Corvus
+	Inventory.ForbiddenTo Schism_Ranger, Schism_Warrior, Schism_Sorcerer
+	Inventory.PickupMessage "You got the Belcher Cannon"
+	States{
+		Spawn:
+			FCAN Z 1
+			Goto Spawn
+
+		Deselect:
+			FCAN A 0 A_Lower
+			FCAN A 1 A_Lower
+			Loop
+
+		Select:
+			FCAN A 0 A_Raise
+			FCAN A 1 A_Raise
+			Loop
+
+		Ready:
+			FCAN A 0 A_WeaponReady
+			"####" F 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+			"####" F 0 A_JumpIfInventory("Taunting", 1, "ClearInv")
+			"####" F 0 A_JumpIfInventory("Reloading", 1, "ClearInv")
+			"####" F 0 A_JumpIfInventory("Salute1", 1, "ClearInv")
+			"####" F 0 A_JumpIfInventory("Salute2", 1, "ClearInv")
+			"####" F 0 A_JumpIfInventory("Unloading", 1, "ClearInv")
+			"####" F 0 A_JumpIfInventory("TossGrenade",1,"TossGrenade")
+			FCAN A 1 A_WeaponReady
+			Loop
+
+		Fire:
+			TNT1 A 0 A_PlaySound("Weapons/GrenadeFire")
+			FCAN B 2 A_FireCustomMissile("BelcherSpikeBall",random(-1,1),1,0,0,0,random(-1,1))
+			FCAN CDEFG 2
+			Goto Ready
+
+		AltFire:
+			TNT1 A 0 A_JumpIfInventory("BrutalMaceAmmo",20,1)
+			Goto Ready
+			TNT1 A 0 A_playsound("DSCANFIR")
+			TNT1 A 0 A_TakeInventory("BrutalMaceAmmo",20)
+			FCAN B 2 A_FireCustomMissile("BelcherCannonBall",random(-1,1),1,random(-2,2),0,0,random(-2,2))
+			FCAN CDEFG 2
+			Goto Ready
+
+		ClearInv:
+			"####" "#" 0 A_TakeInventory("StartDualWield", 1)
+			"####" "#" 0 A_TakeInventory("Taunting", 1)
+			"####" "#" 0 A_TakeInventory("Reloading", 1)
+			"####" "#" 0 A_TakeInventory("Salute1", 1)
+			"####" "#" 0 A_TakeInventory("Salute2", 2)
+			"####" "#" 0 A_TakeInventory("Unloading", 1)
+			Goto Ready}}
+
+ACTOR BelcherPowered : Belcher
+{
++WEAPON.POWERED_UP
+Weapon.AmmoGive 0
+Weapon.SisterWeapon "Belcher"
+States
+{
+		Fire:
+			TNT1 A 0 A_PlaySound("Weapons/GrenadeFire")
+			FCAN B 2 A_FireCustomMissile("FireArrow",random(-1,1),1,0,0,0,random(-1,1))
+			FCAN CDEFG 2
+			Goto Ready
+
+		AltFire:
+			TNT1 A 0 A_JumpIfInventory("BrutalMaceAmmo",20,1)
+			Goto Ready
+			TNT1 A 0 A_playsound("DSCANFIR")
+			TNT1 A 0 A_TakeInventory("BrutalMaceAmmo",20)
+			FCAN B 2 A_FireCustomMissile("BelcherFireBall",random(-1,1),1,random(-2,2),0,0,random(-2,2))
+			FCAN CDEFG 2
+			Goto Ready}}
+
+ACTOR BelcherSpikeBall
+{Radius 6 Height 6 Speed 58 Damage (random(60,60))
+PROJECTILE
++THRUGHOST +DONTHURTSPECIES
+Species "marines"
+damagetype "Blast"
+States{
+Spawn:
+	RIPP AABBCC 1 BRIGHT A_SpawnItem("GunFireSmoke")
+	Loop
+XDeath:
+	1XPL A 1 A_PlaySound("METALHIT", 7)
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	1XPL A 1 A_Explode(20,80,0)
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	1XPL BCDEF 2 Bright
+	Stop
+Death:
+	TNT1 A 0 A_PlaySound("METALHIT", 7)
+	TNT1 A 0 A_changeflag("nogravity",1)
+	RIPP A 10
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	1XPL A 1 A_Explode(40,80,0)
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	1XPL ABCDEF 2 Bright
+	Stop}}
+
+ACTOR BelcherCannonBall
+{Radius 6 Height 6 Speed 58 Damage (random(80,80))
+PROJECTILE
++THRUGHOST +DONTHURTSPECIES
+Species "marines"
+damagetype "Explosive"
+States{
+Spawn:
+	RIPP AABBCC 1 BRIGHT A_SpawnItem("GunFireSmoke")
+	Loop
+XDeath:
+	1XPL A 1 A_PlaySound("METALHIT", 7)
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 AAAAAAAA 0 A_CustomMissile("BelcherShrapnel",1,0,random(0,359),CMF_AIMDIRECTION|CMF_TRACKOWNER,random(-25,25))
+	1XPL A 1 A_Explode(40,80,0)
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	1XPL BCDEF 2 Bright
+	Stop
+Death:
+	TNT1 A 0 A_PlaySound("METALHIT", 7)
+	TNT1 A 0 A_changeflag("nogravity",1)
+	RIPP A 10
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_CustomMissile("BelcherShrapnel",1,0,random(0,359),CMF_AIMDIRECTION|CMF_TRACKOWNER,random(-25,25))
+	1XPL A 1 A_Explode(40,80,0)
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	1XPL ABCDEF 2 Bright
+	Stop}}
+
+ACTOR BelcherShrapnel : FastProjectile
+{	Radius 2 Height 2 Speed 50 Damage (random(10,10))
+	Projectile
+	+RANDOMIZE +FORCEXYBILLBOARD +BLOODSPLATTER +RIPPER +DOOMBOUNCE
+	BounceType Grenade
+	BounceCount 2
+	Scale 0.5
+	DamageType "Saw"
+	States{
+	Spawn:
+	 BLAD AAAAA 1 Bright
+	Death:
+	 TNT1 A 0
+	 Stop}}
+
+ACTOR BelcherFireBall
+{Radius 6 Height 6 Speed 58 Damage (random(100,100))
+PROJECTILE
++THRUGHOST +DONTHURTSPECIES
+Species "marines"
+damagetype "Explosive"
+Renderstyle Add
+Alpha 0.8
+States{
+Spawn:
+	FBL1 AABB 1 BRIGHT
+	Loop
+Death:
+	TNT1 A 0 A_PlaySound("METALHIT", 7)
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_Explode(100,120)
+	TNT1 A 1 A_CustomMissile ("RocketExplosion", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAAAAAAAAA 0 A_CustomMissile ("MediumExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAAAAAAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAAAAAAAAAAAAAAAAA 0 A_SpawnItemEx ("RealFlameTrailsMedium",0,0,0,random(-10,10),random(-10,10),random(-1,1),0,SXF_NOCHECKPOSITION,0)
+	TNT1 AAAAAAAAAA 4 A_SpawnItemEx("BelcherExplosion",Random(-100,100),Random(-100,100),Random(-40,40),0,0,0,0,SXF_NOCHECKPOSITION,0)
+	Stop}}
+
+actor BelcherExplosion
+{+MISSILE Radius 2 Height 2
+Damagetype ExplosiveImpact
+States{
+Spawn:
+Goto Death
+Death:
+TNT1 A 0
+TNT1 AAA 0 A_CustomMissile ("MediumExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+TNT1 AAAAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+TNT1 A 1 A_Explode(100,150)
+Stop}}
+
+//projectile 3 ??
+//projectile 4 cluster bomb?

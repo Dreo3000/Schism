@@ -1,0 +1,1533 @@
+Actor BrutalChandelier Replaces ZChandelier {
+	Game Raven
+	Radius 20
+	Height 60
+	+SPAWNCEILING
+	+NOGRAVITY
+	States {
+		Spawn:
+			CDLR ABC 2 BRIGHT// A_SpawnItem("YellowFlare", 0, 10)
+			Loop
+	}
+}
+
+Actor BrutalChandelierUnlit Replaces ZChandelierUnlit {
+	Game Raven
+	Radius 20
+	Height 60
+	+SPAWNCEILING
+	+NOGRAVITY
+	States {
+		Spawn:
+			CDLR D -1
+			Stop
+	}
+}
+
+Actor BrutalZCandle Replaces ZCandle {
+	Game Raven
+	Radius 20
+	Height 16
+	+NOGRAVITY
+	+NOBLOCKMAP
+	States {
+		Spawn:
+			CNDL ABC 2 Bright A_SpawnItem("YellowFlareSmall", 0, 20)
+			Loop
+	}
+}
+
+Actor Schism_HexenBrassTorch Replaces BrassTorch {
+	Game Raven
+	Radius 6
+	Height 72
+	+SOLID
+	States {
+		Spawn:
+			"BRTR" "A" 0
+			"####" "#" 1 A_CheckSight("Spawn2")
+			"####" "#" 1
+			"####" "#" 0 //A_SpawnItem("RedFlare", 0, 38)
+			"####" "#" 0 A_CustomMissile ("BrassParticle1", 40, 0, random (0, 360), 2, random (80, 100))
+			SpawnLoop:
+			"BRTR" "A" 1 BRIGHT // Light("largeflame")
+			"####" "#" 0 A_SpawnItem("RedFlare", 0, 38)
+			"####" "#" 0 A_CustomMissile ("RealFlameTrails", 38, 0, random (0, 360), 2, random (70, 110))
+			"BRTR" "A" 1 BRIGHT //Light("largeflame") 
+			"####" "#" 0 A_SpawnItem("RedFlare", 0, 38)
+			"BRTR" "A" 1 BRIGHT //Light("largeflame") 
+			"####" "#" 0 A_SpawnItem("RedFlare", 0, 38)
+			"BRTR" "A" 1 BRIGHT //Light("largeflame") 
+			"####" "#" 0 A_SpawnItem("RedFlare", 0, 38)
+			Loop
+			
+		Spawn2:
+			BRTR A 1 BRIGHT
+			Goto Spawn
+	}
+}
+
+Actor Schism_HexenWallTorch Replaces ZWallTorch {
+	Game Raven
+	+NOBLOCKMAP
+	+NOGRAVITY
+	+FIXMAPTHINGPOS
+	+RANDOMIZE
+	Radius 6.5
+	Height 32
+	States {
+/*	Active:
+		WLTR A 0 Bright A_PlaySound("Ignite")
+	Spawn:
+		TNT1 A 0 A_CheckSight("Spawn2")
+		TNT1 A 0 A_SpawnItem("RedFlare", 0, 28)
+		WLTR I 1 bright A_CustomMissile ("SmallFlameTrails", 28, 0, random (0, 360), 2, random (80, 100))
+		WLTR II 1 Bright A_SpawnItem("RedFlare", 0, 28)
+		Loop
+	Spawn2:
+		WLTR I 1
+		Goto Spawn
+	Inactive:
+		WLTR I -1
+		Stop
+*/
+	Spawn:
+		"WLTR" "A" 0
+		"####" "#" 1 A_CheckSight("NoSpecialFX")
+		"####" "#" 1
+		"####" "#" 0 A_Playsound("HETorch", 1, 1, 1)
+		"####" "#" 0 A_SPawnItem("WallTorch_Flames",0,32)
+		"####" "#" 0 A_SpawnItem("WallTorch_Flare",0,32)
+		Stay:
+		"WLTR" "II" 16 BRIGHT A_CustomMissile("RealisticFireSparks", 32, 0, random (0, 140), 2, random (0, 160))
+		Loop
+		
+	NoSpecialFX:
+		"WLTR" "ABC" 4 Bright
+		Goto Spawn
+	}		
+}
+
+Actor Schism_HexenTwinedTorch Replaces ZTwinedTorch {
+	Game Raven
+	Radius 10
+	Height 96
+	+SOLID
+	States {
+		Active:
+			TWTR A 0 A_PlaySound("Ignite")
+		Spawn:
+			"TWTR" "A" 0
+			"####" "#" 1 A_CheckSight("Spawn2")
+			"####" "#" 0 A_SpawnItem("RedFlare", 0, 58)
+			TWTR A 1 bright A_CustomMissile ("SmallFlameTrails", 58, 0, random (0, 360), 2, random (80, 100))
+			TWTR AA 1 Bright A_SpawnItem("RedFlare", 0, 58)
+			Loop
+		Spawn2:
+			TWTR A 1
+			Goto Spawn
+		Inactive:
+			TWTR I -1
+			Stop
+	}
+}
+
+Actor Schism_HexenTwinedTorchUnlit : SwitchableDecoration replaces ZTwinedTorchUnlit {
+	Game Raven
+	Radius 10
+	Height 96
+	+SOLID
+	States {
+		Spawn:
+			TWTR A 1
+			Loop
+			
+		Active:
+			"TWTR" "A" 0 A_PlaySound("Ignite")
+		Alit:
+			"TWTR" "A" 0
+			"####" "#" 1 A_CheckSight("Spawn2")
+			"####" "#" 1
+			"####" "#" 0 A_SpawnItem("RedFlare", 0, 58)
+			TWTR A 1 bright A_CustomMissile ("SmallFlameTrails", 58, 0, random (0, 360), 2, random (80, 100))
+			TWTR AA 1 Bright A_SpawnItem("RedFlare", 0, 58)
+			Loop
+			
+		Spawn2:
+			TWTR A 1
+			Goto Alit
+			
+		Inactive:
+			TWTR I -1
+			Stop
+	}
+}
+
+Actor Schism_HexenFireThing Replaces FireThing {
+	Game Raven
+	Radius 5
+	Height 10
+	+SOLID
+	States {
+		Spawn:
+			"FSKL" "A" 0
+			"####" "#" 1 A_CheckSight("Spawn2")
+			"####" "#" 1
+			"####" "#" 0 A_SpawnItem("RedFlare", 0, 36)
+			SpawnLoop:
+			"FSKL" "A" 1 bright A_CustomMissile ("SmallFlameTrails", 30, 0, random (0, 360), 2, random (80, 100))
+			"FSKL" "AA" 1 Bright A_SpawnItem("RedFlare", 0, 30)
+			Loop
+			
+		Spawn2:
+			"FSKL" "A" 1 BRIGHT
+			Goto Spawn
+	}
+}
+
+Actor BrutalFireBull : SwitchableDecoration Replaces ZFireBull {
+	Game Raven
+	Radius 20
+	Height 80
+	+FORCEYBILLBOARD
+	+SOLID
+	States
+	{
+	Active:
+		FBUL I 4 Bright A_PlaySound("Ignite")
+		FBUL J 4 Bright
+	Spawn:
+	    "FBUL" "A" 0
+		"####" "#" 1 A_CheckSight("Spawn2")
+		"####" "#" 1
+		"####" "#" 0 A_CustomMissile ("BrassParticle1", 50, 0, random (0, 360), 2, random (80, 100))
+		SpawnLoop:
+		"FBUL" "ABCD" 2 BRIGHT A_SpawnItem("RedFlare", 0, 30)
+		"####" "#" 0 A_CustomMissile ("BrassParticle1", 50, 0, random (0, 360), 2, random (80, 100))
+		"FBUL" "EFG" 2 Bright A_SpawnItem("RedFlare", 0, 30)
+		Loop
+	Spawn2:	
+	    FBUL Y 1
+		Goto Spawn
+	Inactive:
+		FBUL JI 4 Bright
+		FBUL H -1
+		Stop
+	}
+}
+
+Actor BrutalFireBullUnlit : BrutalFireBull Replaces ZFireBullUnlit
+{
+	Game Raven
+	States
+	{
+	Spawn:
+		Goto Super::Inactive+2
+}}
+
+Actor BrutalZBannerTattered replaces ZBannerTattered
+{
+  Game Raven
+  Radius 8
+  Height 120
+  Health 40
+  DeathHeight 120
+  Mass 99999
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +NOICEDEATH
+  States
+  {
+  Spawn:
+    BNR1 A 1
+    Loop
+  Death:
+	BNR1 BBBB 1 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+    BNR1 CCCC 1 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	BNR1 DDDD 1 A_CustomMissile ("WoodParticleSmall", 45, 0, random (0, 360), 2, random (0, 160))
+	BNR1 EEEE 1 A_CustomMissile ("WoodParticleTiny", 65, 0, random (0, 360), 2, random (0, 160))
+	BNR1 F -1
+    Stop
+  Burn:
+  Death.Fire:
+  Death.plasma:
+	TNT1 A 0 A_CheckSight("BurnNotReally")
+	TNT1 A 0 Bright A_SpawnItem("RedFlare",0,80)
+	BNR1 G 1 bright A_CustomMissile ("RealFlameTrails",80,random(-12,12),random(0,360),2,random(70,110))
+	Loop
+  BurnNotReally:
+	BNR1 G 1 bright
+	Goto Burn
+}}
+
+Actor BrutalZBarrel Replaces ZBarrel
+{
+  Game Raven
+  Radius 15
+  Height 32
+  Mass 99999
+  Health 40
+  +SOLID +SHOOTABLE +NOBLOOD +NOICEDEATH
+  DropItem "CrystalVial" 100
+  DropItem "QuartzFlaskRandomizer" 50
+  DropItem "Schism_Repulse" 20
+  DropItem "Mana1" 25
+  DropItem "Mana2" 25
+  DropItem "RocketExplosion" 5
+  States
+  {
+  Spawn:
+    ZBAR A -1
+    Stop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAAAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAA 0 A_CustomMissile ("WoodParticleSmall", 45, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAAAA 0 A_CustomMissile ("WoodParticleTiny", 65, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAAAAAAAA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+	TNT1 A 1 A_noblocking
+	Stop
+}}
+
+Actor BrutalZVasePillar replaces ZVasePillar
+{
+  Game Raven
+  Radius 12
+  Height 54
+  Health 5
+  DeathHeight 50
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD +NOICEDEATH
+  States
+  {
+  Spawn:
+    VASE A 1
+    Loop
+  Death:
+	TNT1 AAAAAAAAAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAAAAAAAAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	VASE B -1
+	Stop
+}}
+
+Actor BrutalZWingedStatue replaces ZWingedStatue
+{
+  Game Raven
+  Radius 10
+  Height 62
+  Health 120
+  DeathHeight 62
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD +NOICEDEATH
+  States
+  {
+  Spawn:
+    STTW A 1
+    Loop
+  Death:
+	TNT1 AAAAA 0 A_CustomMissile ("XJunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAAAA 0 A_CustomMissile ("XJunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	STTW B -1
+	Stop
+}}
+
+Actor BrutalTableShit1 Replaces TableShit1
+{
+  Game Raven
+  Radius 20
+  Height 16
+  Health 1
+  +SHOOTABLE +NOBLOOD +NOICEDEATH
+  States
+  {
+  Spawn:
+    TST1 A 1
+    Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 A 1
+	Stop
+}}
+
+Actor BrutalTableShit2 Replaces TableShit2
+{
+  Game Raven
+  Radius 20
+  Height 16
+  Health 1
+  +SHOOTABLE +NOBLOOD +NOICEDEATH
+  States
+  {
+  Spawn:
+    TST2 A 1
+    Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 A 1
+	Stop
+}}
+
+Actor BrutalTableShit6 Replaces TableShit6
+{
+  Game Raven
+  Radius 20
+  Height 16
+  Health 1
+  +SHOOTABLE +NOBLOOD +NOICEDEATH
+  States
+  {
+  Spawn:
+    TST6 A 1
+    Loop
+  Death:
+	TNT1 A 0 A_spawnItemEx("Brutal_BloodSpot",0,0,1,0,0,0,0,SXF_NOCHECKPOSITION)
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 A 1
+	Stop
+}}
+
+Actor BrutalTableShit7 Replaces TableShit7
+{
+  Game Raven
+  Radius 20
+  Height 16
+  Health 1
+  +SHOOTABLE +NOBLOOD +NOICEDEATH
+  States
+  {
+  Spawn:
+    TST7 A 1
+    Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 A 1
+	Stop
+}}
+
+Actor BrutalTableShit8 Replaces TableShit8
+{
+  Game Raven
+  Radius 20
+  Height 16
+  Health 1
+  +SHOOTABLE +NOBLOOD +NOICEDEATH
+  States
+  {
+  Spawn:
+    TST8 A 1
+    Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 A 1
+	Stop
+}}
+
+Actor BrutalTableShit9 Replaces TableShit9
+{
+  Game Raven
+  Radius 20
+  Height 16
+  Health 1
+  +SHOOTABLE +NOBLOOD +NOICEDEATH
+  States
+  {
+  Spawn:
+    TST9 A 1
+    Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 A 1
+	Stop
+}}
+
+Actor BrutalTableShit3 : SwitchableDecoration Replaces TableShit3 //cobwebCandle
+{ Radius 20 Height 16
+  +USESPECIAL
+  Activation THINGSPEC_Switch
+  States{
+  Spawn:
+    TST3 A 1
+	Loop
+  Active:
+	TST3 A 1 A_SpawnItemEx("YellowFlareSmall",0,0,24)
+  Alit:
+	TST3 A 1 A_SpawnItemEx("YellowFlareSmall",0,0,24,0,0,1)
+	Loop
+  Inactive:
+ 	TST3 AAA 1 A_SpawnItemEx("GunFireSmoke",0,0,23,0,0,Random(1,2))
+    Goto Spawn}}
+
+Actor BrutalTableShit4 : SwitchableDecoration Replaces TableShit4
+{ Radius 20 Height 16
+  +USESPECIAL
+  Activation THINGSPEC_Switch
+  States{
+  Spawn:
+    TST4 A 1
+	Loop
+  Active:
+	TST4 A 1 A_SpawnItemEx("YellowFlareSmall",0,0,22)
+  Alit:
+	TST4 A 1 A_SpawnItemEx("YellowFlareSmall",0,0,22,0,0,1)
+	Loop
+  Inactive:
+ 	TST4 AAA 1 A_SpawnItemEx("GunFireSmoke",0,0,21,0,0,Random(1,2))
+    Goto Spawn}}
+
+Actor BrutalTableShit5 : SwitchableDecoration Replaces TableShit5
+{ Radius 20 Height 16
+  +USESPECIAL
+  Activation THINGSPEC_Switch
+  States{
+  Spawn:
+    TST5 A 1
+	Loop
+  Active:
+	TST5 A 1 A_SpawnItemEx("YellowFlareSmall",0,0,24)
+  Alit:
+	TST5 A 1 A_SpawnItemEx("YellowFlareSmall",0,0,24,0,0,1)
+	Loop
+  Inactive:
+ 	TST5 AAA 1 A_SpawnItemEx("GunFireSmoke",0,0,23,0,0,Random(1,2))
+    Goto Spawn}}
+
+Actor BrutalZIronMaiden replaces ZIronMaiden
+{
+  Game Raven
+  Radius 12
+  Height 60
+  Health 20
+  DeathHeight 60
+  Mass 99999
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +NOICEDEATH
+  States
+  {
+  Spawn:
+    IRON A 1
+    Loop
+  Death:
+	IRON A 3
+	IRON B 5
+	IRON C -1
+	Stop
+}}
+
+Actor BrutalZCorpseKabob replaces ZCorpseKabob
+{
+  Game Raven
+  Radius 10
+  Height 92
+  +SOLID
+  +SHOOTABLE
+  +NOBLOOD
+  +NOICEDEATH
+  Health 80
+  DeathHeight 92
+  Mass 99999
+  DropItem "RewardFlaskHealth" 100
+  DropItem "RewardFlaskArmor" 100
+  States
+  {
+  Spawn:
+    CPS1 A 1
+    Loop
+  Death:
+	TNT1 AA 0 A_CustomMissile ("XDeath1", 76, 0, random (0, 360), 2, random (0, 160))
+	TNT1 A 0 A_CustomMissile ("XDeath2b", 76, 0, random (0, 360), 2, random (0, 160))
+	TNT1 A 0 A_CustomMissile ("XDeath3b", 76, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAA 0 A_CustomMissile ("XDeathSkinPiece2", 76, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAA 0 A_CustomMissile ("XDeathSkinPiece1", 76, 0, random (0, 360), 2, random (0, 160))
+	CPS1 B -1
+	Stop
+}}
+
+Actor BrutalZCorpseHanging replaces ZCorpseHanging
+{
+  Game Raven
+  Radius 6
+  Height 75
+  +SOLID +SPAWNCEILING +NOGRAVITY +SHOOTABLE +NOICEDEATH +DONTFALL -pushable
+  Health 80
+  Mass 99999
+  DropItem "RewardFlaskHealth" 100
+  DropItem "RewardFlaskArmor" 100
+  States
+  {
+  Spawn:
+    CPS3 A 1
+    Loop
+  Death:
+	TNT1 A 0 A_noBlocking
+	TNT1 A 0 A_stop
+	TNT1 A 0 A_CustomMissile ("XDeath1", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 A 0 A_CustomMissile ("XDeath2b", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 A 0 A_CustomMissile ("XDeath3b", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAA 0 A_CustomMissile ("XDeathSkinPiece2", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAA 0 A_CustomMissile ("XDeathSkinPiece1", 20, 0, random (0, 360), 2, random (0, 160))
+  	CPS3 BCDC 2
+	CPS3 BCDCBCDC 3
+	CPS3 BCDCBCDCBCDC 4
+	CPS3 BCDCBCDCBCDCBCDC 5
+	CPS3 C -1
+	Stop}}
+
+Actor BrutalZCorpseLynched Replaces ZCorpseLynched
+{
+  Game Raven
+  Radius 11
+  Height 95
+  +SOLID +SPAWNCEILING +NOGRAVITY +SHOOTABLE +NOICEDEATH +DONTFALL
+  Health 80
+  Mass 99999
+  DropItem "RewardFlaskHealth" 100
+  DropItem "RewardFlaskArmor" 100
+  DropItem "RewardFlaskHealth" 180
+  DropItem "RewardFlaskArmor" 180
+  States
+  {
+  Spawn:
+    CPS4 A -1
+    Stop
+  Death:
+	TNT1 A 0 A_noBlocking
+	TNT1 AAAAA 0 A_CustomMissile ("XDeath1", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("XDeath2b", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("XDeath3b", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAA 0 A_CustomMissile ("XDeathSkinPiece2", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAA 0 A_CustomMissile ("XDeathSkinPiece1", 20, 0, random (0, 360), 2, random (0, 160))
+  	CPS4 BCDC 2 A_stop
+	CPS4 BCDCBCDC 3
+	CPS4 BCDCBCDCBCDC 4
+	CPS4 BCDCBCDCBCDCBCDC 5
+	CPS4 C -1
+	Stop}}
+
+Actor BrutalZCorpseLynchedNoHeart : ZCorpseLynchedNoHeart replaces ZCorpseLynchedNoHeart
+{
+  Game Raven
+  Radius 10
+  Height 100
+  +SOLID +SPAWNCEILING +NOGRAVITY +SHOOTABLE +NOICEDEATH +DONTFALL
+  Health 80
+  Mass 99999
+  DropItem "RewardFlaskHealth" 180
+  DropItem "RewardFlaskArmor" 180
+  States
+  {
+  Spawn:
+    CPS5 A 140 A_CorpseBloodDrip
+    Loop
+  Death:
+	TNT1 A 0 A_noBlocking
+	TNT1 AAAAA 0 A_CustomMissile ("XDeath1", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("XDeath2b", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("XDeath3b", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAA 0 A_CustomMissile ("XDeathSkinPiece2", 20, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAA 0 A_CustomMissile ("XDeathSkinPiece1", 20, 0, random (0, 360), 2, random (0, 160))
+  	CPS5 BCDC 2 A_stop
+	CPS5 BCDCBCDC 3
+	CPS5 BCDCBCDCBCDC 4
+	CPS5 BCDCBCDCBCDCBCDC 5
+	CPS5 C -1
+	Stop}}
+
+Actor BrutalZCorpseSitting : ZCorpseSitting Replaces ZCorpseSitting
+{
+  Health 30
+  Radius 15
+  Height 35
+  +SOLID +SHOOTABLE +NOBLOOD +NOICEDEATH
+  DropItem "CrystalVial" 80
+  DropItem "QuartzFlaskRandomizer" 10
+  DropItem "Schism_Urn" 2
+  DeathSound "FireDemonDeath"
+  States
+  {
+  Spawn:
+    CPS6 A -1
+    Stop
+  Death:
+	TNT1 A 0 A_NoBlocking
+    CPS6 A 1 A_CorpseExplode
+    Stop
+}}
+
+//icicles//
+Actor BrutalZStalactiteIceLarge Replaces ZStalactiteIceLarge
+{
+  Game Raven
+  Radius 8
+  Height 66
+  Health 50
+  Mass 99999
+  +SOLID +SPAWNCEILING +NOGRAVITY +SHOOTABLE +NOBLOOD +DONTFALL
+  States
+  {
+  Spawn:
+    ICT1 A 1
+    Loop
+  Death:
+	TNT1 AAAAAAAAAAA 0 A_CustomMissile ("XIceChunk1", 2, 0, random (0, 360), 2, random (-90,0))
+	TNT1 AAAAAAAAAAA 0 A_CustomMissile ("XIceChunk2", 2, 0, random (0, 360), 2, random (-90,0))
+	TNT1 AAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk3", 2, 0, random (0, 360), 2, random (-90,0))
+	ICT1 B -1
+	Stop
+}}
+
+Actor BrutalZStalactiteIceMedium Replaces ZStalactiteIceMedium
+{
+  Game Raven
+  Radius 5
+  Height 50
+  Health 40
+  Mass 99999
+  +SOLID +SPAWNCEILING +NOGRAVITY +SHOOTABLE +NOBLOOD +DONTFALL
+  States
+  {
+  Spawn:
+    ICT2 A 1
+    loop
+  Death:
+	TNT1 AAAAAAAA 0 A_CustomMissile ("XIceChunk1", 2, 0, random (0, 360), 2, random (-90,0))
+	TNT1 AAAAAAAA 0 A_CustomMissile ("XIceChunk2", 2, 0, random (0, 360), 2, random (-90,0))
+	TNT1 AAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk3", 2, 0, random (0, 360), 2, random (-90,0))
+	ICT2 B -1
+	Stop
+}}
+
+Actor BrutalZStalactiteIceSmall replaces ZStalactiteIceSmall
+{
+  Game Raven
+  Radius 4
+  Height 32
+  Health 30
+  Mass 99999
+  +SOLID +SPAWNCEILING +NOGRAVITY +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+    ICT3 A -1
+    Stop
+  Death:
+	TNT1 A 0 A_jump(128,"DeathDrop")
+	TNT1 AAAAA 0 A_CustomMissile ("XIceChunk1", 2, 0, random (0, 360), 2, random (-90,0))
+	TNT1 AAAAA 0 A_CustomMissile ("XIceChunk2", 2, 0, random (0, 360), 2, random (-90,0))
+	TNT1 AAAAAAA 0 A_CustomMissile ("XIceChunk3", 2, 0, random (0, 360), 2, random (-90,0))
+	TNT1 A 1
+	Stop
+  DeathDrop:
+	ICT3 A 1 A_checkfloor("CrashFloor")
+	Loop
+  CrashFloor:
+	TNT1 AAAAA 0 A_CustomMissile ("XIceChunk1", 8, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("XIceChunk2", 8, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAA 0 A_CustomMissile ("XIceChunk3", 8, 0, random (0, 360), 2, random (40, 120))
+	TNT1 A 1
+	Stop
+}}
+
+Actor BrutalZStalactiteIceTiny replaces ZStalactiteIceTiny
+{
+  Game Raven
+  Radius 4
+  Height 8
+  Health 20
+  Mass 99999
+  +SOLID +SPAWNCEILING +NOGRAVITY +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+	ICT4 A 1
+	Loop
+  Death:
+	TNT1 A 0 A_jump(128,"DeathDrop")
+	TNT1 AAA 0 A_CustomMissile ("XIceChunk1", 2, 0, random (0, 360), 2, random (-90,0))
+	TNT1 AAA 0 A_CustomMissile ("XIceChunk2", 2, 0, random (0, 360), 2, random (-90,0))
+	TNT1 AAAAA 0 A_CustomMissile ("XIceChunk3", 2, 0, random (0, 360), 2, random (-90,0))
+	TNT1 A 1
+	Stop
+  DeathDrop:
+	ICT4 A 1 A_checkfloor("CrashFloor")
+	Loop
+  CrashFloor:
+	TNT1 AAA 0 A_CustomMissile ("XIceChunk1", 8, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAA 0 A_CustomMissile ("XIceChunk2", 8, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("XIceChunk3", 8, 0, random (0, 360), 2, random (40, 120))
+	TNT1 A 1 //A_explode(5,20)
+	Stop
+}}
+
+Actor BrutalZStalagmiteIceLarge Replaces ZStalagmiteIceLarge 
+{
+  Game Raven
+  Radius 8
+  Height 66
+  DeathHeight 30
+  Health 50
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+    ICM1 A 1
+    Loop
+  Death:
+	TNT1 AAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk1", 48, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk2", 48, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk3", 48, 0, random (0, 360), 2, random (40, 120))
+	ICM1 B -1
+	Stop
+}}
+
+Actor BrutalZStalagmiteIceMedium Replaces ZStalagmiteIceMedium
+{
+  Game Raven
+  Radius 5
+  Height 50
+  DeathHeight 25
+  Health 40
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+    ICM2 A 1
+    Loop
+  Death:
+	TNT1 AAAAAAAAAA 0 A_CustomMissile ("XIceChunk1", 48, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAAAAA 0 A_CustomMissile ("XIceChunk2", 48, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk3", 48, 0, random (0, 360), 2, random (40, 120))
+	ICM2 B -1
+	Stop
+}}
+
+Actor BrutalZStalagmiteIceSmall replaces ZStalagmiteIceSmall
+{
+  Game Raven
+  Radius 4
+  Height 32
+  Health 30
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+    ICM3 A 1
+    Loop
+  Death:
+	TNT1 AAAAA 0 A_CustomMissile ("XIceChunk1", 48, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("XIceChunk2", 48, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAAA 0 A_CustomMissile ("XIceChunk3", 48, 0, random (0, 360), 2, random (40, 120))
+	TNT1 A 1 A_NoBlocking
+	Stop
+}}
+
+Actor BrutalZStalagmiteIceTiny Replaces ZStalagmiteIceTiny
+{
+  Game Raven
+  Radius 4
+  Height 8
+  Health 20
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+    ICM4 A 1
+    Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("XIceChunk1", 48, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAA 0 A_CustomMissile ("XIceChunk2", 48, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("XIceChunk3", 48, 0, random (0, 360), 2, random (40, 120))
+	TNT1 A 1 A_NoBlocking
+	Stop
+}}
+//
+
+Actor BrutalZStalactiteLarge Replaces ZStalactiteLarge
+{
+  Game Raven
+  Radius 8
+  Height 66
+  Mass 99999
+  Health 100
+  +SOLID +SPAWNCEILING +NOGRAVITY +SHOOTABLE +NOBLOOD +DONTFALL
+  States
+  {
+  Spawn:
+    SLC1 A 1
+	Loop
+  Death:
+	TNT1 A 0 A_stop
+	TNT1 AAAAAAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (-90,0))
+	TNT1 AAAAAAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (-90,0))
+	SLC1 B -1
+	Stop
+}}
+
+Actor BrutalZStalactiteMedium Replaces ZStalactiteMedium
+{
+  Game Raven
+  Radius 6
+  Height 50
+  Mass 99999
+  Health 60
+  +SOLID +SPAWNCEILING +NOGRAVITY +SHOOTABLE +NOBLOOD +DONTFALL
+  States
+  {
+  Spawn:
+	SLC2 A 1
+	Loop
+  Death:
+  TNT1 AAAAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (-90,0))
+  TNT1 AAAAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (-90,0))
+  SLC2 B -1
+  Stop
+}}
+
+Actor BrutalZStalactiteSmall Replaces ZStalactiteSmall
+{
+  Game Raven
+  Radius 8
+  Height 40
+  Mass 99999
+  Health 40
+  +SOLID +SPAWNCEILING +NOGRAVITY +SHOOTABLE +NOBLOOD +DONTFALL
+  States
+  {
+  Spawn:
+    SLC3 A 1
+	Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (-90,0))
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (-90,0))
+	SLC3 B -1
+	Stop
+}}
+
+Actor BrutalZStalagmiteLarge replaces ZStalagmiteLarge
+{
+  Game Raven
+  Radius 8
+  Height 48
+  DeathHeight 26
+  Health 100
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+	SGM1 A 1
+	Loop
+  Death:
+	TNT1 AAAAAAAAAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAAAAAAAAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	SGM1 B -1
+	Stop
+}}
+
+Actor BrutalZStalagmiteMedium Replaces ZStalagmiteMedium
+{
+  Game Raven
+  Radius 6
+  Height 40
+  DeathHeight 22
+  Health 60
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+	SGM2 A 1
+	Loop
+  Death:
+	TNT1 AAAAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAAAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	SGM2 B -1
+	Stop
+}}
+
+Actor BrutalZStalagmiteSmall replaces ZStalagmiteSmall
+{
+  Game Raven
+  Radius 8
+  Height 36
+  DeathHeight 12
+  Health 40
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+	SGM3 A 1
+	Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	SGM3 B -1
+	Stop
+}}
+
+//tree stuff//
+
+Actor BrutalZLog replaces ZLog
+{
+  Game Raven
+  Radius 20
+  Height 25
+  Health 120
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  DropItem "RewardFlaskHealth" 250
+  DropItem "RewardFlaskArmor" 250
+  DropItem "RewardFlaskHealth" 120
+  DropItem "RewardFlaskArmor" 120
+  DropItem "RewardFlaskHealth" 100
+  DropItem "RewardFlaskArmor" 100
+  States
+  {
+  Spawn:
+    LOGG A 1
+    Loop
+  Death:
+    TNT1 AAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleSmall", 45, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleTiny", 65, 0, random (0, 360), 2, random (0, 160))
+	TNT1 A 1 A_noblocking
+	Stop
+}}
+
+Actor BrutalZTree Replaces ZTree
+{
+  Game Raven
+  Radius 15
+  Height 128
+  Health 180
+  DeathHeight 52
+  //PainChance 255
+  PainChance "Plasma", 255 PainChance "fire", 200
+  PainChance "Freeze", 255 PainChance "Frost", 255 PainChance "Ice", 255
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+	TRE1 A 1
+	Loop
+  /*Pain:
+	TNT1 AAAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TRE1 A 1
+	Goto Spawn*/
+  Pain.Fire:
+  Pain.plasma:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("RealFlameTrails",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TR11 C 0
+	Goto OnFire
+  OnFire:
+	TNT1 A 0 A_CheckSight("BurnNotReally")
+	TNT1 A 0 A_SpawnItemEx("TreeFireParticle",random(-20,20),random(-20,20),random(40,80),0,0,1)
+	TNT1 AAA 0 A_SpawnItemEx("RealFlameTrails",random(-20,20),random(-20,20),random(40,80),random(-2,2),random(-2,2),random(3,6))
+	TR11 C 1 BRIGHT A_SpawnItemEx("RedFlare",random(-30,30),random(-30,30),random(40,100))
+	Loop
+  BurnNotReally:
+	TR11 C 1 bright
+	Goto OnFire
+  Pain.Ice:
+  Pain.Freeze:
+  Pain.Frost:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("CryoSmoke",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TR11 CCCCcCCCCc 1 A_SpawnItemEx("BlueFlare",random(-30,30),random(-30,30),random(40,100))
+	Goto Blighted
+  Blighted:
+	TR11 C 20 A_SpawnItemEx("MiniCryoSmoke1",random(-20,20),random(-20,20),random(40,80),random(-1,1),random(-1,1),-1)
+	Loop
+  Death:
+	TNT1 A 0 A_changeflag("shootable",0)
+	TNT1 AAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleSmall", 45, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleTiny", 65, 0, random (0, 360), 2, random (0, 160))
+	TR11 B -1
+	Stop}}
+
+Actor BrutalZTreeDead : BrutalZTree
+{Game Raven Radius 10 Height 96}
+
+Actor BrutalZTreeLarge1 Replaces ZTreeLarge1
+{
+  Game Raven
+  Radius 15
+  Height 180
+  Health 180
+  DeathHeight 52
+  //PainChance 255
+  PainChance "Plasma", 255 PainChance "fire", 200
+  PainChance "Freeze", 255 PainChance "Frost", 255 PainChance "Ice", 255
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+    TRE4 A 1
+    Loop
+  /*Pain:
+	TNT1 AAAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TRE4 A 1
+	Goto Spawn*/
+  Pain.Fire:
+  Pain.plasma:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("RealFlameTrails",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TRE4 C 0
+	Goto OnFire
+  OnFire:
+	TNT1 A 0 A_CheckSight("BurnNotReally")
+	TNT1 A 0 A_SpawnItemEx("TreeFireParticle",random(-20,20),random(-20,20),random(40,80),0,0,0)
+	TNT1 AAA 0 A_SpawnItemEx("RealFlameTrails",random(-20,20),random(-20,20),random(40,80),random(-2,2),random(-2,2),random(3,6))
+	TRE4 C 1 BRIGHT A_SpawnItemEx("RedFlare",random(-30,30),random(-30,30),random(40,100))
+	Loop
+  BurnNotReally:
+	TRE4 C 1 bright
+	Goto OnFire
+  Pain.Ice:
+  Pain.Freeze:
+  Pain.Frost:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("CryoSmoke",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TRE4 CCCCcCCCCc 1 A_SpawnItemEx("BlueFlare",random(-30,30),random(-30,30),random(40,100))
+	Goto Blighted
+  Blighted:
+	TRE4 C 20 A_SpawnItemEx("MiniCryoSmoke1",random(-20,20),random(-20,20),random(40,80),random(-1,1),random(-1,1),-1)
+	Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleSmall", 45, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleTiny", 65, 0, random (0, 360), 2, random (0, 160))
+	TRE4 B -1
+	Stop
+}}
+
+Actor BrutalZTreeLarge2 Replaces ZTreeLarge2
+{
+  Game Raven
+  Radius 15
+  Height 180
+  Health 180
+  DeathHeight 52
+  //PainChance 255
+  PainChance "Plasma", 255 PainChance "fire", 200
+  PainChance "Freeze", 255 PainChance "Frost", 255 PainChance "Ice", 255
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+    TRE5 A 1
+    Loop
+  /*Pain:
+	TNT1 AAAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TRE5 A 1
+	Goto Spawn*/
+  Pain.Fire:
+  Pain.plasma:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("RealFlameTrails",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TRE5 C 0
+	Goto OnFire
+  OnFire:
+	TNT1 A 0 A_CheckSight("BurnNotReally")
+	TNT1 A 0 A_SpawnItemEx("TreeFireParticle",random(-20,20),random(-20,20),random(40,80),0,0,0)
+	TNT1 AAA 0 A_SpawnItemEx("RealFlameTrails",random(-20,20),random(-20,20),random(40,80),random(-2,2),random(-2,2),random(3,6))
+	TRE5 C 1 BRIGHT A_SpawnItemEx("RedFlare",random(-30,30),random(-30,30),random(40,100))
+	Loop
+  BurnNotReally:
+	TRE5 C 1 bright
+	Goto OnFire
+  Pain.Ice:
+  Pain.Freeze:
+  Pain.Frost:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("CryoSmoke",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TRE5 CCCCcCCCCc 1 A_SpawnItemEx("BlueFlare",random(-30,30),random(-30,30),random(40,100))
+	Goto Blighted
+  Blighted:
+	TRE5 C 20 A_SpawnItemEx("MiniCryoSmoke1",random(-20,20),random(-20,20),random(40,80),random(-1,1),random(-1,1),-1)
+	Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleSmall", 45, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleTiny", 65, 0, random (0, 360), 2, random (0, 160))
+	TRE5 B -1
+	Stop}}
+
+Actor BrutalZTreeGnarled1 Replaces ZTreeGnarled1
+{
+  Game Raven
+  Radius 22
+  Height 100
+  Health 180
+  DeathHeight 52
+  //PainChance 255
+  PainChance "Plasma", 255 PainChance "fire", 200
+  PainChance "Freeze", 255 PainChance "Frost", 255 PainChance "Ice", 255
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+    TRE6 A 1
+    Loop
+  /*Pain:
+	TNT1 AAAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TRE6 A 1
+	Goto Spawn*/
+  Pain.Fire:
+  Pain.plasma:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("RealFlameTrails",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TRE6 C 0
+	Goto OnFire
+  OnFire:
+	TNT1 A 0 A_CheckSight("BurnNotReally")
+	TNT1 A 0 A_SpawnItemEx("TreeFireParticle",random(-20,20),random(-20,20),random(40,80),0,0,0)
+	TNT1 AAA 0 A_SpawnItemEx("RealFlameTrails",random(-20,20),random(-20,20),random(40,80),random(-2,2),random(-2,2),random(3,6))
+	TRE6 C 1 BRIGHT A_SpawnItemEx("RedFlare",random(-30,30),random(-30,30),random(40,100))
+	Loop
+  BurnNotReally:
+	TRE6 C 1 bright
+	Goto OnFire
+  Pain.Ice:
+  Pain.Freeze:
+  Pain.Frost:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("CryoSmoke",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TRE6 CCCCcCCCCc 1 A_SpawnItemEx("BlueFlare",random(-30,30),random(-30,30),random(40,100))
+	Goto Blighted
+  Blighted:
+	TRE6 C 20 A_SpawnItemEx("MiniCryoSmoke1",random(-20,20),random(-20,20),random(40,80),random(-1,1),random(-1,1),-1)
+	Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleSmall", 45, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleTiny", 65, 0, random (0, 360), 2, random (0, 160))
+	TRE6 B -1
+	Stop}}
+
+Actor BrutalZTreeGnarled2 Replaces ZTreeGnarled2
+{
+  Game Raven
+  Radius 22
+  Height 100
+  Health 180
+  DeathHeight 52
+  //PainChance 255
+  PainChance "Plasma", 255 PainChance "fire", 200
+  PainChance "Freeze", 255 PainChance "Frost", 255 PainChance "Ice", 255
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+    TRE7 A 1
+    Loop
+  /*Pain:
+	TNT1 AAAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TRE7 A 1
+	Goto Spawn*/
+  Pain.Fire:
+  Pain.plasma:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("RealFlameTrails",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TRE7 C 0
+	Goto OnFire
+  OnFire:
+	TNT1 A 0 A_CheckSight("BurnNotReally")
+	TNT1 A 0 A_SpawnItemEx("TreeFireParticle",random(-20,20),random(-20,20),random(40,80),0,0,0)
+	TNT1 AAA 0 A_SpawnItemEx("RealFlameTrails",random(-20,20),random(-20,20),random(40,80),random(-2,2),random(-2,2),random(3,6))
+	TRE7 C 1 BRIGHT A_SpawnItemEx("RedFlare",random(-30,30),random(-30,30),random(40,100))
+	Loop
+  BurnNotReally:
+	TRE7 C 1 bright
+	Goto OnFire
+  Pain.Ice:
+  Pain.Freeze:
+  Pain.Frost:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("CryoSmoke",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TRE7 CCCCcCCCCc 1 A_SpawnItemEx("BlueFlare",random(-30,30),random(-30,30),random(40,100))
+	Goto Blighted
+  Blighted:
+	TRE7 C 20 A_SpawnItemEx("MiniCryoSmoke1",random(-20,20),random(-20,20),random(40,80),random(-1,1),random(-1,1),-1)
+	Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleSmall", 45, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleTiny", 65, 0, random (0, 360), 2, random (0, 160))
+	TRE7 B -1
+	Stop}}
+
+Actor BrutalZTreeSwamp120 Replaces ZTreeSwamp120
+{
+  Game Raven
+  Radius 10
+  Height 120
+  Health 180
+  DeathHeight 52
+  //PainChance 255
+  PainChance "Plasma", 255 PainChance "fire", 200
+  PainChance "Freeze", 255 PainChance "Frost", 255 PainChance "Ice", 255
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+    TRE3 A 1
+    Loop
+  /*Pain:
+	TNT1 AA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TRE3 A 1
+	Goto Spawn*/
+  Pain.Fire:
+  Pain.plasma:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("RealFlameTrails",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TR33 C 0
+	Goto OnFire
+  OnFire:
+	TNT1 A 0 A_CheckSight("BurnNotReally")
+	TNT1 A 0 A_SpawnItemEx("TreeFireParticle",random(-20,20),random(-20,20),random(40,80),0,0,0)
+	TNT1 AAA 0 A_SpawnItemEx("RealFlameTrails",random(-20,20),random(-20,20),random(40,80),random(-2,2),random(-2,2),random(3,6))
+	TR33 C 1 BRIGHT A_SpawnItemEx("RedFlare",random(-30,30),random(-30,30),random(40,100))
+	Loop
+  BurnNotReally:
+	TR33 C 1 bright
+	Goto OnFire
+  Pain.Ice:
+  Pain.Freeze:
+  Pain.Frost:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("CryoSmoke",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TR33 CCCCcCCCCc 1 A_SpawnItemEx("BlueFlare",random(-30,30),random(-30,30),random(40,100))
+	Goto Blighted
+  Blighted:
+	TR33 C 20 A_SpawnItemEx("MiniCryoSmoke1",random(-20,20),random(-20,20),random(40,80),random(-1,1),random(-1,1),-1)
+	Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleSmall", 45, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleTiny", 65, 0, random (0, 360), 2, random (0, 160))
+	TR33 B -1
+	Stop}}
+
+Actor BrutalZTreeSwamp150 Replaces ZTreeSwamp150
+{
+  Game Raven
+  Radius 10
+  Height 150
+  Health 180
+  DeathHeight 52
+  PainChance "Plasma", 255 PainChance "fire", 200
+  PainChance "Freeze", 255 PainChance "Frost", 255 PainChance "Ice", 255
+  Mass 99999
+  +SOLID +SHOOTABLE +NOBLOOD
+  States
+  {
+  Spawn:
+    TRE2 A 1
+    Loop
+  /*Pain:
+	TNT1 AA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TRE2 A 1*/
+  Pain.Fire:
+  Pain.plasma:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("RealFlameTrails",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TR22 C 0
+	Goto OnFire
+  OnFire:
+	TNT1 A 0 A_CheckSight("BurnNotReally")
+	TNT1 A 0 A_SpawnItemEx("TreeFireParticle",random(-20,20),random(-20,20),random(40,80),0,0,0)
+	TNT1 AAA 0 A_SpawnItemEx("RealFlameTrails",random(-20,20),random(-20,20),random(40,80),random(-2,2),random(-2,2),random(3,6))
+	TR22 C 1 BRIGHT A_SpawnItemEx("RedFlare",random(-30,30),random(-30,30),random(40,100))
+	Loop
+  BurnNotReally:
+	TR22 C 1 bright
+	Goto OnFire
+  Pain.Ice:
+  Pain.Freeze:
+  Pain.Frost:
+	TNT1 AAAAaAAAAaAAAAaAAAAa 0 A_SpawnItemEx("CryoSmoke",random(-5,5),random(-5,5),50,random(-5,5),random(-5,5),random(-5,5))
+	TR22 CCCCcCCCCc 1 A_SpawnItemEx("BlueFlare",random(-30,30),random(-30,30),random(40,100))
+	Goto Blighted
+  Blighted:
+	TR22 C 20 A_SpawnItemEx("MiniCryoSmoke1",random(-20,20),random(-20,20),random(40,80),random(-1,1),random(-1,1),-1)
+	Loop
+  Death:
+	TNT1 AAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleSmall", 45, 0, random (0, 360), 2, random (0, 160))
+	TNT1 AAAAAA 0 A_CustomMissile ("WoodParticleTiny", 65, 0, random (0, 360), 2, random (0, 160))
+	TR22 B -1
+	Stop}}
+
+Actor TreeFireParticle
+{ Height 1 Radius 1
+  Mass 0
+  +Missile +NoBlockMap +DontSplash +FORCEXYBILLBOARD +CLIENTSIDEONLY +THRUActorS +GHOST +THRUGHOST +NOTELEPORT
+  RenderStyle Add
+  Scale 0.5
+  States{
+  Spawn:
+	TNT1 A 0 A_ChangeVelocity (frandom(-1,1),frandom(-1,1),frandom(1,2),1)
+    SPKO B 1 Bright A_FadeOut(0.02)
+    Loop}}
+
+//////////////////Glass fragments//////////////////
+
+//Blue
+Actor SchismSGShard1 : GlassShard Replaces SGShard1 
+{speed 30
+RenderSTyle Add
+Alpha 0.75
+States{
+ Spawn:
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)//zandronum compatibility, dont's ask... - Lord Lothar
+	loop
+ Fly:
+	TNT1 A 0
+	SGSA A 4 BRIGHT A_spawnitem("BlueFlareSmall")
+	SGSA BCDE 4
+	Loop
+ Death:
+	SGSA E 2 A_fadeout(0.01)
+	Loop}}
+
+//yellow
+Actor SchismSGShard2 : GlassShard Replaces SGShard2
+{speed 30
+RenderSTyle Add
+Alpha 0.75
+States{
+ Spawn:
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)//zandronum compatibility, dont's ask... - Lord Lothar
+	loop
+ Fly:
+	TNT1 A 0
+    SGSA F 4 BRIGHT A_spawnitem("YellowFlareSmall")
+	SGSA GHIJ 4
+    Loop
+  Death:
+    SGSA J 2 A_fadeout(0.01)
+    Loop}}
+
+//purple
+Actor SchismSGShard3 : GlassShard Replaces SGShard3
+{speed 30
+RenderSTyle Add
+Alpha 0.75
+States{
+ Spawn:
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)//zandronum compatibility, dont's ask... - Lord Lothar
+	loop
+ Fly:
+	TNT1 A 0
+    SGSA K 4 BRIGHT A_spawnitem("PinkIonFlare")
+	SGSA LMNO 4
+    Loop
+  Death:
+    SGSA O 2 A_fadeout(0.01)
+    Loop}}
+
+//green
+Actor SchismSGShard4 : GlassShard Replaces SGShard4
+{speed 30
+RenderSTyle Add
+Alpha 0.75
+States{
+ Spawn:
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)//zandronum compatibility, dont's ask... - Lord Lothar
+	loop
+ Fly:
+	TNT1 A 0
+    SGSA P 4 BRIGHT A_spawnitem("GreenFlareSmall")
+	SGSA QRST 4
+    Loop
+  Death:
+    SGSA T 2 BRIGHT A_fadeout(0.01)
+    Loop}}
+
+//orange
+Actor SchismSGShard5 : GlassShard Replaces SGShard5
+{speed 30
+RenderSTyle Add
+Alpha 0.75
+States{
+ Spawn:
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)
+	TNT1 A 0 A_Jump(64,6)//zandronum compatibility, dont's ask... - Lord Lothar
+	loop
+ Fly:
+	TNT1 A 0
+    SGSA U 4 BRIGHT A_spawnitem("RedFlareSmall")
+	SGSA VWXY 4
+    Loop
+  Death:
+    SGSA Y 2 A_fadeout(0.01)
+    Loop}}
+
+Actor Schism_FireBall Replaces FireBall
+{
+  Speed 2
+  Radius 8
+  Height 8
+  Damage 4
+  DamageType Fire
+  +MISSILE +NOBLOCKMAP +NOGRAVITY +DROPOFF +NOTELEPORT +DONTFALL
+  RenderStyle Add
+  DeathSound "Fireball"
+  States
+  {
+  Spawn:
+	FBL1 AAAABBBB 1 Bright A_Spawnitem("YellowFlareSmall")
+	Loop
+  Death:
+	1XPL A 4 Bright
+	TNT1 AAaAAAAaAA 0 A_CustomMissile("SmallFlameTrails",0,0,random(0,360),2,random(-110,110))
+	1XPL BCDEF 4 Bright
+	Stop}}

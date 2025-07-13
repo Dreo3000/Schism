@@ -1,0 +1,1080 @@
+Actor Schism_PlasmaRifleGiver : Schism_BaseWeaponGiver
+{
+	scale 0.8
+	Inventory.PickupSound "PLSDRAW"
+	Inventory.PickupMessage "$GOTPLASMA"
+	Inventory.ForbiddenTo Schism_Warrior, Schism_Sorcerer, Schism_Corvus, BaronPlayer, RevenantPlayer
+	States
+	{
+		Spawn:
+			PLAS A -1
+			Stop
+
+		Pickup:
+			TNT1 A 0
+// 			TNT1 A 0 A_JumpIfInventory("Schism_DualPlasmaRifles", 1, "GiveAmmo")
+			TNT1 A 0 A_JumpIfInventory("Schism_PlasmaRifle", 1, "Dual")
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CounInvG", 6) >= 2, "DontGive")
+			TNT1 A 0 A_GiveInventory("Schism_PlasmaRifle", 1)
+			Goto GiveAmmo
+
+		Dual:
+			TNT1 A 0
+			TNT1 A 0 A_GiveInventory("Schism_LeftPlasmaGunMag", 50)
+// 			TNT1 A 0 A_GiveInventory("Schism_DualPlasmaRifles", 1)
+			TNT1 A 0 A_GiveInventory("Schism_PlasmaCell", 50)
+			Stop
+
+		GiveAmmo:
+			TNT1 A 0 A_GiveInventory("Schism_PlasmaCell", 50)
+			Stop
+
+		DontGive:
+			TNT1 A 0 A_Print("You can't carry more than 2 energy weapons", -30)
+			PLAS A 30
+			Fail
+
+	}
+}
+
+Actor Schism_PlasmaRifleEmptyGiver : Schism_BaseWeaponGiver
+{
+	scale 0.8
+	Inventory.PickupSound "PLSDRAW"
+	Inventory.PickupMessage "$GOTPLASMA"
+	Inventory.ForbiddenTo Schism_Warrior, Schism_Sorcerer, Schism_Corvus, BaronPlayer, RevenantPlayer
+	States
+	{
+		Spawn:
+			PLAS A -1
+			Stop
+
+		Pickup:
+			TNT1 A 0
+// 			TNT1 A 0 A_JumpIfInventory("Schism_DualPlasmaRifles", 1, "DontGiveSecondWeapon")
+			TNT1 A 0 A_JumpIfInventory("Schism_PlasmaRifle", 1, "Dual")
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CounInvG", 6) >= 2, "DontGive")
+			TNT1 A 0 A_GiveInventory("Schism_PlasmaRifle", 1)
+			Stop
+
+		Dual:
+// 			TNT1 A 0 A_GiveInventory("Schism_DualPlasmaRifles", 1)
+			Stop
+
+		DontGive:
+			TNT1 A 0 A_Print("You can't carry more than 2 energy weapons", -30)
+			PLAS A 30
+			Fail
+
+		DontGiveSecondWeapon:
+			PLAS A 30
+			Fail
+
+	}
+}
+
+Actor Schism_PlasmaRifle : Schism_Weapon
+{
+	Weapon.SelectionOrder 110
+	Weapon.AmmoUse1 0
+	Weapon.AmmoGive1 0
+	Weapon.AmmoUse2 0
+	Weapon.AmmoGive2 0
+	Inventory.MaxAmount 2
+    Inventory.PickupSound "PLSDRAW"
+	Obituary "%o was fried by %k's Plasma Rifle."
+	Weapon.AmmoType1 "Schism_PlasmaGunMag"
+	Weapon.AmmoType2 "Schism_PlasmaCell"
+    +WEAPON.NOAUTOAIM
+	Tag "Plasma Rifle"
+	Inventory.PickupMessage "$GOTPLASMA"
+	Inventory.ForbiddenTo Schism_Sorcerer, Schism_Corvus
+	States
+	{
+		Spawn:
+			TNT1 A 2
+			TNT1 A 1 A_SpawnItem("Schism_PlasmaRifleEmptyGiver", 50)
+			Stop
+
+		Select:
+			TNT1 A 0 A_Raise
+			Wait
+
+		Deselect:
+			PLSN A 0 A_Takeinventory("Reloading",1)
+			PLSN A 0 A_Takeinventory("HasPlasmaWeapon",1)
+			TNT1 A 0 A_GunFlash("LightDone", GFF_NOEXTCHANGE)
+			//PLS9 CBA 1
+			PLRS FEDCB 1
+			DeselectLoop:
+			TNT1 A 0 A_Lower
+			TNT1 A 1 A_Lower
+			Loop
+
+		Ready:
+			TNT1 A 0 A_PlaySound("PLSDRAW")
+			PLRS BCDEF 1 A_WeaponReady(WRF_NOFIRE)
+			ReadyLoop:
+			TNT1 A 0 A_GunFlash("LightDone", GFF_NOEXTCHANGE)
+			PLRG A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			PLSN A 0 A_Giveinventory("HasPlasmaWeapon",1)
+			PLSN A 0 A_JumpIfInventory("Reloading", 1, "Reload")
+			PLSN A 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+			PLSN A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			PLSN A 0 A_SetCrosshair(18)
+			Loop
+
+		Fire:
+			PLSN A 0 A_CheckReload
+			PLSN A 0 A_JumpIfInventory("Reloading",1,"Reload")
+			PLSN A 0 A_JumpIfInventory("Schism_PlasmaGunMag",1,2)
+			Goto Reload
+			TNT1 AAAA 0
+			PLSN A 0 A_PlaySound("PLSM9", 1)
+			PLSN A 0 A_GunFlash("Flash")
+			PLSN A 0 A_JumpIfInventory("DMgame", 1, "FireDM")
+			PLSN A 0 A_ZoomFactor(0.99)
+			PLRF A 1 BRIGHT A_WeaponReady(WRF_NOFIRE)
+			TNT1 A 0 A_FireCustomMissile("Plasma_Ball", 0, 1, 0, -5)
+			PLSN A 0 A_ZoomFactor(1.0)
+			PLRF B 1 BRIGHT A_WeaponReady(WRF_NOFIRE)
+			PLRF C 1 A_WeaponReady(WRF_NOFIRE)
+			PLRF D 1 A_WeaponReady(WRF_NOFIRE)
+			PLSN A 0 A_Takeinventory("Schism_PlasmaGunMag",1)
+			Goto ReadyLoop
+
+		FireDM:
+			PLSN A 0 A_ZoomFactor(0.99)
+			PLRF A 1 BRIGHT A_WeaponReady(WRF_NOFIRE)
+			TNT1 A 0 A_FireCustomMissile("PlasmaBallDM", 0, 1, 0, 0)
+			PLSN A 0 A_ZoomFactor(1.0)
+			PLRF B 1 BRIGHT A_WeaponReady(WRF_NOFIRE)
+			PLRF C 1 A_WeaponReady(WRF_NOFIRE)
+			PLRF D 1 A_WeaponReady(WRF_NOFIRE)
+			PLSN A 0 A_Takeinventory("Schism_PlasmaGunMag",1)
+			Goto ReadyLoop
+
+
+// Charging up secondary ------------------------------------------------------------
+
+		AltFire:
+			PLSN A 0 A_JumpIfInventory("Reloading", 1, "Reload")
+			PLSN A 0 A_JumpIfInventory("Schism_PlasmaGunMag", 10, 1)
+			Goto Reload
+			TNT1 A 0
+			TNT1 A 0 A_SetCrosshair(90)
+
+			PLSN A 0 A_PlaySound("PLSCHARG")
+			PLSN A 0 A_GunFlash("LightDone", GFF_NOEXTCHANGE)
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Takeinventory("Schism_PlasmaGunMag",2)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Takeinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Takeinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Takeinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Takeinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Takeinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Takeinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Takeinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Takeinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+
+			PLSN A 0 A_PlaySound("PLSFULL", 6, 0.8, 1)
+			PLSN A 0 A_ReFire
+
+// Holding Charge ------------------------------------------------------------
+
+		AltHold:
+
+			PLSN A 0 A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSN A 0 A_JumpIfInventory("Reloading",1,"Cancel")
+			PLFA A 1 BRIGHT offset (0, 32)
+
+			PLSN A 0 A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSN A 0 A_JumpIfInventory("Reloading",1,"Cancel")
+			PLFA C 1 BRIGHT offset (0, 33)
+
+			PLSN A 0 A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSN A 0 A_JumpIfInventory("Reloading",1,"Cancel")
+			PLFA A 1 BRIGHT offset (1, 32)
+
+			PLSN A 0 A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSN A 0 A_JumpIfInventory("Reloading",1,"Cancel")
+			PLFA C 1 BRIGHT offset (-1, 32)
+
+			PLSN A 0 A_ReFire
+
+// Let Fly --------------------------------------------------------------------------
+
+			PLSN A 0 A_StopSound(6)
+			PLRF A 1 A_PlaySound("PLSALTFR")
+			PLSN A 0 A_ZoomFactor(0.9)
+			PLRF B 2 BRIGHT A_Recoil(3)
+			PLSN A 0 A_StopSound(6)
+			PLSN A 0 A_ZoomFactor(1.0)
+			TNT1 A 0 A_JumpIfInventory("DMGame", 1, "LetFlyDM")
+			PLSN A 0 A_FireCustomMissile("Plasma_Ball", -8, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("Plasma_Ball", -6, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("Plasma_Ball", -4, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("Plasma_Ball", -2, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("Plasma_Ball", 0, 0, -1, 0, 0, 0)
+			PLSN A 0 A_FireCustomMissile("Plasma_Ball", 1, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("Plasma_Ball", 2, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("Plasma_Ball", 4, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("Plasma_Ball", 6, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("Plasma_Ball", 8, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("PlasmaFlareSpawn",-5,0,0,0)
+			PLSN KLKJ 1
+			PLSN A 0 A_SetPitch(pitch - 8.0)
+			PLSN BCD 1
+			PLSN EEEEEEEEEEEE 3 A_FireCustomMissile("SmokeSpawner",0,0,10,5)
+			PLSN DCB 1
+			PLSN A 0 A_PlaySound("BEPBEP")
+			PLSN A 0 A_PlaySound("BEPBEP", 6)
+			Goto ReadyLoop
+
+		LetFlyDM:
+			PLSN A 0 A_FireCustomMissile("PlasmaBallDM", -8, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("PlasmaBallDM", -6, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("PlasmaBallDM", -4, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("PlasmaBallDM", -2, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("PlasmaBallDM", 0, 0, -1, 0, 0, 0)
+			PLSN A 0 A_FireCustomMissile("PlasmaBallDM", 1, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("PlasmaBallDM", 2, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("PlasmaBallDM", 4, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("PlasmaBallDM", 6, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("PlasmaBallDM", 8, 0, -1, 0, 0, random(-2,2))
+			PLSN A 0 A_FireCustomMissile("PlasmaFlareSpawn",-5,0,0,0)
+			PLSN KLKJ 1
+			PLSN A 0 A_SetPitch(pitch - 8.0)
+			PLSN BCD 1
+			PLSN EEEEEEEEEEEE 3 A_FireCustomMissile("SmokeSpawner",0,0,10,5)
+			PLSN DCB 1
+			PLSN A 0 A_JumpIfInventory("Schism_PlasmaGunMag",1,2)
+			Goto Reload
+			TNT1 AAAA 0
+			PLSN A 0 A_PlaySound("BEPBEP")
+			PLSN A 0 A_PlaySound("BEPBEP", 6)
+			Goto ReadyLoop
+
+// Cancel Charge --------------------------------------------------------------------------------------------
+
+		Cancel:
+			PLSN A 0 A_TakeInventory("Reloading",1)
+			PLSN A 0 A_StopSound(6)
+			PLSN A 0 A_PlaySound("decharg", 5)
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Giveinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Giveinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Giveinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Giveinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Giveinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Giveinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT A_PlaySound("plscool", 7)
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Giveinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Giveinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Giveinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSA A 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA B 1 BRIGHT A_Giveinventory("Schism_PlasmaGunMag",1)
+			PLSA C 1 BRIGHT A_FireCustomMissile("PlasmaFlareSpawn",0,0,0,0)
+			PLSA D 1 BRIGHT
+			PLSN A 0 A_TakeInventory("Reloading",1)
+			PLSN A 0 A_PlaySound("BEPBEP", 5, 1.2)
+			PLSN A 0 A_ClearReFire
+			Goto ReadyLoop
+
+//  ------------------------------------------------------------------------------
+		Reload:
+			"####" "#" 0 A_ZoomFactor(1.0)
+			"####" "#" 0 A_TakeInventory("Zoomed", 1)
+			"####" "#" 0 A_TakeInventory("ADSmode", 1)
+			"####" "#" 0 A_TakeInventory("Reloading", 1)
+			"####" "#" 0 A_JumpIfInventory("Schism_PlasmaGunMag", 60, "ReadyLoop")
+			"####" "#" 0 A_JumpIfInventory("Schism_PlasmaCell", 1, 1)
+			Goto ReadyLoop
+			"####" "#" 0 A_GiveInventory("Reloading2", 1)
+			"####" "#" 0 A_GunFlash("FlashReload")
+			ReloadLoop:
+			"TNT1" "A" 1 A_WeaponReady(WRF_NOFIRE)
+			"####" "#" 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		FlashReload:
+			PLSN A 0 A_PlaySound("BEP")
+			PLER A 4 A_WeaponReady(WRF_NOFIRE)
+			PLSN A 0 A_PlaySound("BEP")
+			PLER A 4 A_WeaponReady(WRF_NOFIRE)
+			TNT1 AAAA 0
+			PLSN A 0 A_PlaySound("PLREADY")
+			PLSN A 0 A_FireCustomMissile("PlasmaCaseSpawn",-210,0,20,-20)
+			MPR1 ABCDEFGHIJKLMNOPQRSTUVWXYZ 1 A_WeaponReady(WRF_NOFIRE)
+			MPR2 ABCDEFGHIJKLMNOPQRSTUVW 1 A_WeaponReady(WRF_NOFIRE)
+			Goto ReFill
+
+		Refill:
+			PLSN A 0 A_TakeInventory("Schism_PlasmaCell", 1, TIF_NOTAKEINFINITE)
+			PLSN A 0 A_GiveInventory("Schism_PlasmaGunMag", 1)
+			PLSN A 0 A_JumpIfInventory("Schism_PlasmaGunMag", 60, "FinishReload")
+			PLSN A 0 A_JumpIfInventory("Schism_PlasmaCell", 1, "Refill")
+			Goto FinishReload
+
+		FinishReload:
+			PLSN A 0 A_TakeInventory("Reloading2", 1)
+			PLSN A 0 A_JumpIfInventory("Kicking", 1, "KickFlash")
+			PLRG A 2100
+			Stop
+
+		
+
+		Steady:
+			TNT1 A 1
+			Goto ReadyLoop
+
+		DoKick: //14 tic
+			TNT1 A 0
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("KickFlash")
+			TNT1 A 0 A_TakeInventory("Kicking", 1)
+			TNT1 A 0 A_TakeInventory("Zoomed", 1)
+			TNT1 A 0 A_ZoomFactor(1.0)
+			TNT1 A 0 A_TakeInventory("ADSmode", 1)
+			TNT1 A 0 A_JumpIf (momZ > 0, "KickInAir")
+			TNT1 A 0 A_JumpIf (momZ < 0, "KickInAir")
+			TNT1 A 0 A_JumpIf((Abs(VelY) < 1) && (Abs(VelX) < 1), 2)
+			TNT1 A 0 A_JumpIfInventory("IsCrouching", 1, "SlideAttack")
+			TNT1 A 0 A_PlaySound("KICK")
+			TNT1 A 0 SetPlayerProperty(0, 1, 0)
+			K1CK A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2CK A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KICK A 0
+			"####" BCD 1
+			"####" A 0 A_GiveInventory("Schism_Kick", 1)
+			"####" H 3
+			"####" IGF 1
+			"####" "#" 0 SetPlayerProperty(0, 0, 0)
+			"####" EDCBA 1 A_JumpIfInventory("Kicking", 1, "KickRight")
+			TNT1 A 0 A_JumpIfInventory("Kicking", 1, "KickRight")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		KickRight: // 15 tic
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("RightKickFlash")
+			K1K2 A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2K2 A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KIK2 A 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" ABC 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0
+			"####" A 0 A_SetPitch(pitch-9)
+			"####" A 0 A_SetAngle(angle+9)
+			"####" A 0 A_GiveInventory("Schism_Kick", 1)
+			"####" D 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle-2)
+			"####" D 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle-2)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" C 1 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" B 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 1 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		KickInAir: // 18 tics
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("KickInAirFlash")
+			TNT1 A 0 A_TakeInventory("Kicking", 1)
+			K1CK J 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2CK J 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KICK J 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0 A_Recoil(-15)
+			"####" JKLMN 1
+			"####" A 0 A_GiveInventory("Schism_AirKick", 1)
+			"####" O 3
+			"####" PQ 2
+			"####" RS 1
+			"####" T 1 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 1 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		LeftFinishingKick: // 11 tics
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("LeftKickFlash")
+			K1K3 A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2K3 A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KIK3 A 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" A 0 A_Recoil(-10)
+			"####" ABC 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0 A_SetPitch(pitch-9)
+			"####" A 0 A_SetAngle(angle-9)
+			"####" D 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" F 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" G 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+2)
+			"####" H 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+2)
+			"####" I 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+1)
+			"####" J 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+1)
+			"####" K 1
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		SlideAttack:
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("SlideKickFlashStart")
+			TNT1 A 0 SetPlayerProperty(0, 1, 0)
+			KICK A 0 A_TakeInventory("Kicking", 1)
+			TNT1 A 0 A_PlaySound("KICK")
+			TNT1 A 0 A_Recoil(-16)
+			TNT1 A 0 A_PlaySound("SlideKickStart", CHAN_5)
+			S1DK A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			S2DK A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SLDK A 1
+			"####" ABC 1
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_GiveInventory("Schism_SlideKick", 1)
+			"####" E 1
+			"####" A 0 A_Recoil(-14)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-12)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-8)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-6)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-4)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-4)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-3)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-3)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-3)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-2)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-1)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-1)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-2)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			"####" A 0 A_TakeInventory("KickHasHit", 1)
+			Goto FinishSlide
+
+		FinishSlide:  //10 tic
+			TNT1 A 0 A_TakeInventory("Kicking",1)
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("SlideKickFlashEnd")
+			TNT1 A 0 A_PlaySound("SlideKickStop", CHAN_5)
+			S1DK H 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			S2DK H 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SLDK H 0
+			"####" A 0 SetPlayerProperty(0, 0, 0)
+			"####" A 0 A_JumpIfInventory("IsPaladin", 1, 2)
+			"####" A 0 A_Jump(256,5)
+			"####" A 0 A_JumpIfInventory("FiredSecondary", 1, 2)
+			"####" A 0 A_Jump(256,3)
+			"####" A 0 A_GiveInventory("DoUppercutNow", 1)
+			"####" A 0 A_SelectWeapon("Berserker_Melee_Attacks")
+			"####" HD 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 0 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" CBA 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 0 A_Takeinventory("Kicking", 1)
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		FinishSlideHitwall:
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("SlideKickFlashEnd")
+			S1DK H 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			S2DK H 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SLDK H 0
+			"####" A 0 A_Stop
+			"####" HDCBA 2
+			"####" A 0 A_TAkeInventory("KickHasHit", 1)
+			"####" A 0 A_Takeinventory("Kicking", 1)
+			"####" A 0 SetPlayerProperty(0, 0, 0)
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		KickFlash:
+			PLKC ABCEFGHH 1
+			PLKC HGFECBA 1
+			Stop
+
+		KickInAirFlash:
+			PLKC ABC 1
+			PLKC EFGHHHHHHHGFE 1
+			PLKC CBA 1
+			Stop
+
+		RightKickFlash:
+			PLKC DEFGHHHHGFED 1
+			PLKC CBA 1
+			Stop
+
+		LeftKickFlash:
+			PLKC EFGHGFED 1
+			PLKC CBA 1
+			Stop
+
+		SlideKickFlashStart:
+			PLKC ABC 1
+			PLKC DEFGH 1
+			PLKC G 19
+			Stop
+
+		SlideKickFlashEnd:
+			PLKC GGGGGFED 1
+			PLKC CBA 1
+			Stop
+
+		Flash:
+			TNT1 A 1 A_Light2
+			TNT1 A 1 A_Light1
+			Goto LightDone
+
+	}
+}
+
+
+ACTOR Plasma_Ball: FastProjectile
+{
+	Radius 10
+	Height 2
+	Speed 60
+	Damage (random(40, 40))
+    DamageType Plasma
+	Decal "SmallerScorch"
+	Projectile
+	+RANDOMIZE
+	+SPECTRAL
+	-NOBLOCKMAP
+	+NOBLOOD
+	+NORADIUSDMG
+	+THRUSPECIES
+	+MTHRUSPECIES
+	+FORCEXYBILLBOARD
+	Species "Marines"
+	damagefactor "Blood", 0.0 damagefactor "BlueBlood", 0.0 damagefactor "GreenBlood", 0.0 damagefactor "Taunt", 0.0 damagefactor "KillMe", 0.0 damagefactor "Shrapnel", 0.0
+	Health 5
+	Scale 1.0
+	renderstyle ADD
+	alpha 0.99
+	DeathSound "weapons/plasmax"
+	//SeeSound "PLSM9"
+    SeeSound "None"
+	Obituary "$OB_MPPLASMARIFLE"
+	States
+	{
+
+	Spawn:
+		PLSS ABAB 1 Bright A_SpawnItem("BlueFlareSmall")
+		Loop
+	Death:
+	    PLSN A 0
+		PLSN A 0 A_CustomMissile ("BluePlasmaFire", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 B 1 //A_Explode(5,50,0)
+		PLSE ABC 2 BRIGHT A_SpawnItem("BlueFlare")
+		PLSE DE 2 Bright A_SpawnItem("BlueFlareSmall")
+		TNT2 AAA 9 A_CustomMissile ("PlasmaSmoke", 1, 0, random (0, 360), 2, random (0, 160))
+		Stop
+
+
+	XDeath:
+	    PLSN A 0
+		PLSN A 0 A_CustomMissile ("BluePlasmaFire", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 B 1 A_Explode(5,50,0)
+		PLSE ABC 2 BRIGHT A_SpawnItem("BlueFlare")
+		PLSE DE 2 Bright A_SpawnItem("BlueFlareSmall")
+		Stop
+	}
+}
+
+
+ACTOR PlasmaBall75: Plasma_Ball
+{
+	Damage (random(50, 50))
+	SeeSound "PLSM9"
+}
+ACTOR PlasmaBall99: Plasma_Ball
+{
+	Damage (random(60, 60))
+	SeeSound "PLSM9"
+}
+
+ACTOR PlasmaBallDM: Plasma_Ball Replaces PlasmaBall
+{
+	Speed 50
+	-THRUSPECIES
+	-MTHRUSPECIES
+	Species "None"
+	Damage (random(40, 40))
+}
+
+
+
+
+
+
+
+
+ACTOR InvisiblePLasmaAmmo: CustomInventory
+{
+ scale 1.0
+ radius 16
+ height 4
+ damage 0
+   Mass 1
+   Inventory.PickupMessage "Plasma Cells."
+    States
+    {
+
+	 Spawn:
+		CELL D -1
+		Stop
+	Pickup:
+	    PLSN A 0
+		PLSN A 0 A_GiveInventory("Schism_PlasmaCell", 50)
+		Stop
+}}
+
+
+
+ACTOR SmartPlasmaBall // : FastProjectile
+{
+  Radius 4
+  Height 4
+  Speed 42
+  Damage (random(40,40))
+  DamageType "Plasma"
+  Decal "SmallerScorch"
+  //Species "Player"
+  //+THRUSPECIES
+  +THRUGHOST
+  +FORCEXYBILLBOARD
+  +BLOODLESSIMPACT
+  +SEEKERMISSILE
+  +BOUNCEONWALLS
+  +BOUNCEONCEILINGS
+  +BOUNCEONFLOORS
+  BounceType Grenade
+  +NOGRAVITY
+  +USEBOUNCESTATE
+  BounceFactor 0.9 //no momentum decreasing
+  BounceCount 2 //bounces only once
+  Projectile
+  RenderStyle Add
+  Alpha 1.0
+  Scale 1.0
+  States
+  {
+  Spawn:
+    TNT1 A 1 Light("FDBlasterGreenGlow")
+	TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(0.01*momx)/-35.0, -(0.01*momy)/-35.0, 2+(0.01*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(0.5*momx)/-35.0, -(0.5*momy)/-35.0, 2+(0.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (1 *momx)/-35.0, -(1 *momy)/-35.0, 2+(1 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(1.5*momx)/-35.0, -(1.5*momy)/-35.0, 2+(1.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (2 *momx)/-35.0, -(2 *momy)/-35.0, 2+(2 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(2.5*momx)/-35.0, -(2.5*momy)/-35.0, 2+(2.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (3 *momx)/-35.0, -(3 *momy)/-35.0, 2+(3 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(3.5*momx)/-35.0, -(3.5*momy)/-35.0, 2+(3.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (4 *momx)/-35.0, -(4 *momy)/-35.0, 2+(4 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(4.5*momx)/-35.0, -(4.5*momy)/-35.0, 2+(4.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (5 *momx)/-35.0, -(5 *momy)/-35.0, 2+(5 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(5.5*momx)/-35.0, -(5.5*momy)/-35.0, 2+(5.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (6 *momx)/-35.0, -(6 *momy)/-35.0, 2+(6 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(6.5*momx)/-35.0, -(6.5*momy)/-35.0, 2+(6.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (7 *momx)/-35.0, -(7 *momy)/-35.0, 2+(7 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(7.5*momx)/-35.0, -(7.5*momy)/-35.0, 2+(7.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (8 *momx)/-35.0, -(8 *momy)/-35.0, 2+(8 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+     Loop
+
+  BOUNCE:
+	TNT1 A 0
+	Goto RicochetSuccess
+  RicochetStart:
+	TNT1 A 0 A_SeekerMissile (90,90, SMF_LOOK | SMF_PRECISE, 256, 6)
+    TNT1 A 0 A_Jump (256, 1,3,6)
+	TNT1 AAAAAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+    Goto Ricochet
+  Ricochet:
+    TNT1 A 0 A_Warp (AAPTR_TRACER, 0,0,0, 0, WARPF_NOCHECKPOSITION | WARPF_TESTONLY, "RicochetSuccess")
+	TNT1 A 0 A_Jump(256, "XDeath")
+    Goto XDeath
+  RicochetSuccess:
+//	TNT1 A 10 A_CustomMissile ("FDBTSXShotgunProjectileRicochet")//, 0,0, 0, CMF_TRACKOWNER, AAPTR_TRACER)
+//    Stop
+
+    TNT1 A 1 A_SeekerMissile (90,90, SMF_LOOK | SMF_PRECISE, 256, 12)
+	TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(0.01*momx)/-35.0, -(0.01*momy)/-35.0, 2+(0.01*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(0.5*momx)/-35.0, -(0.5*momy)/-35.0, 2+(0.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (1 *momx)/-35.0, -(1 *momy)/-35.0, 2+(1 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(1.5*momx)/-35.0, -(1.5*momy)/-35.0, 2+(1.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (2 *momx)/-35.0, -(2 *momy)/-35.0, 2+(2 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(2.5*momx)/-35.0, -(2.5*momy)/-35.0, 2+(2.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (3 *momx)/-35.0, -(3 *momy)/-35.0, 2+(3 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(3.5*momx)/-35.0, -(3.5*momy)/-35.0, 2+(3.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (4 *momx)/-35.0, -(4 *momy)/-35.0, 2+(4 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(4.5*momx)/-35.0, -(4.5*momy)/-35.0, 2+(4.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (5 *momx)/-35.0, -(5 *momy)/-35.0, 2+(5 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(5.5*momx)/-35.0, -(5.5*momy)/-35.0, 2+(5.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (6 *momx)/-35.0, -(6 *momy)/-35.0, 2+(6 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(6.5*momx)/-35.0, -(6.5*momy)/-35.0, 2+(6.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (7 *momx)/-35.0, -(7 *momy)/-35.0, 2+(7 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail",(7.5*momx)/-35.0, -(7.5*momy)/-35.0, 2+(7.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXShotgunProjectileTrail", (8 *momx)/-35.0, -(8 *momy)/-35.0, 2+(8 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+     Loop
+
+
+//	Death:
+//	    PLSN A 0
+//		PLSN A 0 A_CustomMissile ("BluePlasmaFire", 0, 0, random (0, 360), 2, random (0, 360))
+//		TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+//		TNT1 B 1 //A_Explode(5,50,0)
+//		PLSE ABC 2 BRIGHT A_SpawnItem("BlueFlare")
+//		PLSE DE 2 Bright A_SpawnItem("BlueFlareSmall")
+//		TNT2 AAA 9 A_CustomMissile ("PlasmaSmoke", 1, 0, random (0, 360), 2, random (0, 160))
+//		Stop
+
+	Death:
+	XDeath:
+	    PLSN A 0
+		PLSN A 0 A_CustomMissile ("BluePlasmaFire", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 B 1 A_Explode(5,50,0)
+		PLSE ABC 2 BRIGHT A_SpawnItem("BlueFlare")
+		PLSE DE 2 Bright A_SpawnItem("BlueFlareSmall")
+		Stop
+
+  /*XDeath:
+    TNT1 A 0 A_PlaySound("btsxshotgun/hit", CHAN_WEAPON, 0.35, 0, 1.1)
+    TNT1 A 0 A_PlaySound("btsx/energyimpact", 7, 0.5, 0, 1.5)
+    TNT1 A 0 A_SetScale (1.2)
+	TNT1 A 0 A_JumpIf(CallACS("FD_particles") == 0, "NoParticles")
+    TNT1 A 0 A_Jump (256, 1,5,10)
+	TNT1 AAAAAAAAAAAAAAAAAAAAAAAAA 0 A_SpawnParticle (44ff44, SPF_FULLBRIGHT | SPF_RELATIVE, random(15,25), random(1,3), frandom(0,360), 0,0,0, frandom(0.2,12.0),frandom(-0.2,0.2),frandom(-6.0,6.0), 0,0,0, 0.98, -1)
+    TNT1 A 0 A_SpawnItemEx ("FDBTSXShotgunLightningField", 0,0,0, 0,0,0, 0, SXF_NOCHECKPOSITION)
+	TNT1 A 0 A_Jump(256, "NoParticles")
+    Goto NoParticles
+  NoParticles:
+    TNT1 A 0 A_Jump (256, 1,2)
+    TNT1 A 0 A_SetScale (scalex - (scalex * 2), scaley) // randomly flip horizontally
+	XSPR A random(3,4) Bright Light("FDGreenGlowHit1")
+	XSPR B random(3,4) Bright Light("FDGreenGlowHit2")
+	XSPR C random(3,4) Bright Light("FDGreenGlowHit3")
+	XSPR D random(3,4) Bright Light("FDGreenGlowHit4")
+	XSPR E random(3,4) Bright Light("FDGreenGlowHit5")
+	Stop */
+  }
+}
+
+ACTOR FDBTSXShotgunProjectileRicochet : SmartPlasmaBall
+{
+  Damage (random(40, 40))
+  //-SEEKERMISSILE
+  States
+  {
+  Death:
+	TNT1 A 0
+	Goto XDeath
+  }
+}
+
+actor FDBTSXShotgunProjectileTrail
+{
+    Scale 0.08
+    RenderStyle Add
+    Alpha 0.95
+    +FORCEXYBILLBOARD
+    +NOINTERACTION
+    States
+    {
+    Spawn:
+		TNT1 A 0 NoDelay A_Jump (256, "SpawnA", "SpawnB", "SpawnC")
+    SpawnA:
+        PBFC A 2 Bright
+        stop
+    SpawnB:
+        PBFC B 2 Bright
+        stop
+    SpawnC:
+        PBFC C 2 Bright
+        stop
+    }
+}
+
+actor FDBTSXFancyShotgunProjectileTrail : FDBTSXShotgunProjectileTrail
+{
+    Scale 0.08
+    States
+    {
+    Spawn:
+        OGLP A 2 Bright
+        stop
+    }
+}
+
+ACTOR FDBTSXFancyShotgunProjectile : SmartPlasmaBall
+{
+  Scale 0.35
+  States
+  {
+  Spawn:
+    TNT1 A 1 Light("FDBlasterGreenGlow")
+	TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail",(0.01*momx)/-35.0, -(0.01*momy)/-35.0, 2+(0.01*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail",(0.5*momx)/-35.0, -(0.5*momy)/-35.0, 2+(0.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail", (1 *momx)/-35.0, -(1 *momy)/-35.0, 2+(1 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail",(1.5*momx)/-35.0, -(1.5*momy)/-35.0, 2+(1.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail", (2 *momx)/-35.0, -(2 *momy)/-35.0, 2+(2 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail",(2.5*momx)/-35.0, -(2.5*momy)/-35.0, 2+(2.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail", (3 *momx)/-35.0, -(3 *momy)/-35.0, 2+(3 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail",(3.5*momx)/-35.0, -(3.5*momy)/-35.0, 2+(3.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail", (4 *momx)/-35.0, -(4 *momy)/-35.0, 2+(4 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail",(4.5*momx)/-35.0, -(4.5*momy)/-35.0, 2+(4.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail", (5 *momx)/-35.0, -(5 *momy)/-35.0, 2+(5 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail",(5.5*momx)/-35.0, -(5.5*momy)/-35.0, 2+(5.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail", (6 *momx)/-35.0, -(6 *momy)/-35.0, 2+(6 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail",(6.5*momx)/-35.0, -(6.5*momy)/-35.0, 2+(6.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail", (7 *momx)/-35.0, -(7 *momy)/-35.0, 2+(7 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail",(7.5*momx)/-35.0, -(7.5*momy)/-35.0, 2+(7.5*momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+    TNT1 A 0 A_SpawnItemEx("FDBTSXFancyShotgunProjectileTrail", (8 *momx)/-35.0, -(8 *momy)/-35.0, 2+(8 *momz)/-35.0, 0, 0, 0, 0, SXF_ABSOLUTEANGLE | SXF_NOCHECKPOSITION)
+	TNT1 A 0 A_JumpIf(CallACS("FD_particles") == 0, "Spawn")
+//    TNT1 A 0 A_Jump (256, 1,3,6)
+//	TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 360))
+    Loop
+
+  RicochetSuccess:
+	TNT1 A 10 A_CustomMissile ("FDBTSXShotgunProjectileRicochet", 0,0, 0, CMF_TRACKOWNER, AAPTR_TRACER)//, 0, AAPTR_TRACER)
+    Stop
+/*
+  NoParticles:
+    TNT1 A 0 A_Jump (192, 2)
+	TNT1 A 0 A_CustomRailgun (0, 0, "None", "Green", RGF_SILENT | RGF_FULLBRIGHT, 0, 25, "FDHarmlessPuff", frandom(0,359), frandom(-45,45), random(64,128), 1, 0.2, 0, "None", -4)
+    TNT1 A 0 A_Jump (192, 2)
+	TNT1 A 0 A_CustomRailgun (0, 0, "None", "White", RGF_SILENT | RGF_FULLBRIGHT, 0, 25, "FDHarmlessPuff", frandom(0,359), frandom(-45,45), random(64,128), 1, 0.2, 0, "None", -4)
+	TNT1 A 0 A_JumpIf (alpha <= 0.2, "GlowLevel4")
+	TNT1 A 0 A_JumpIf (alpha <= 0.4, "GlowLevel3")
+	TNT1 A 0 A_JumpIf (alpha <= 0.6, "GlowLevel2")
+	TNT1 A 0 A_JumpIf (alpha <= 0.8, "GlowLevel1")
+	OGLP A 1 Bright Light("FDGreenGlowHit1") A_SetScale (scalex * 1.03)
+    TNT1 A 0 A_FadeTo (0, 0.05, 1)
+	TNT1 A 0 A_Jump(256, "NoParticles")
+    Goto NoParticles
+  GlowLevel1:
+	OGLP A 1 Bright Light("FDGreenGlowHit2") A_SetScale (scalex * 1.03)
+    TNT1 A 0 A_FadeTo (0, 0.05, 1)
+	TNT1 A 0 A_Jump(256, "NoParticles")
+    Goto NoParticles
+  GlowLevel2:
+	OGLP A 1 Bright Light("FDGreenGlowHit3") A_SetScale (scalex * 1.03)
+    TNT1 A 0 A_FadeTo (0, 0.05, 1)
+	TNT1 A 0 A_Jump(256, "NoParticles")
+    Goto NoParticles
+  GlowLevel3:
+	OGLP A 1 Bright Light("FDGreenGlowHit4") A_SetScale (scalex * 1.03)
+    TNT1 A 0 A_FadeTo (0, 0.05, 1)
+	TNT1 A 0 A_Jump(256, "NoParticles")
+    Goto NoParticles
+  GlowLevel4:
+	OGLP A 1 Bright Light("FDGreenGlowHit5") A_SetScale (scalex * 1.03)
+    TNT1 A 0 A_FadeTo (0, 0.05, 1)
+	TNT1 A 0 A_Jump(256, "NoParticles")
+    Goto NoParticles*/
+  }
+}
+
+ACTOR FDBTSXFancyShotgunProjectileRicochet : FDBTSXFancyShotgunProjectile
+{
+  Damage (6*random(1,3))
+  -SEEKERMISSILE
+  States
+  {
+  Death:
+	TNT1 A 0
+	Goto XDeath
+  }
+}
+
+actor FDBTSXShotgunLightningField : FDBTSXShotgunProjectileTrail
+{
+	var int user_lightningtimer;
+    States
+    {
+    Spawn:
+		TNT1 A 0
+		TNT1 A 0 A_Jump (256, 1,2,3,4,5)
+		TNT1 AAAA 0 A_CustomRailgun (0, 0, "None", "Green", RGF_SILENT | RGF_FULLBRIGHT, 0, 25, "FDHarmlessPuff", frandom(0,359), frandom(-45,45), random(64,128), 1, 0.2, 0, "None", -4)
+		TNT1 A 0 A_Jump (256, 1,2,3,4,5)
+		TNT1 AAAA 0 A_CustomRailgun (0, 0, "None", "White", RGF_SILENT | RGF_FULLBRIGHT, 0, 25, "FDHarmlessPuff", frandom(0,359), frandom(-45,45), random(64,128), 1, 0.2, 0, "None", -4)
+		TNT1 A 0 A_SetUserVar("user_lightningtimer", 20)
+    EmitLightning:
+		TNT1 A 0 A_Jump (192, "NoEmit")
+		TNT1 A 0 A_Jump (256, 1,2)
+		TNT1 A 1 Light("FDWhiteGlowZapSmall") A_CustomRailgun (0, 0, "None", "Green", RGF_SILENT | RGF_FULLBRIGHT, 0, 25, "FDHarmlessPuff", frandom(0,359), frandom(-45,45), random(24,64), 1, 0.2, 0, "None", -8)
+        Goto Loopery
+		TNT1 A 1 Light("FDGreenGlowZapSmall") A_CustomRailgun (0, 0, "None", "White", RGF_SILENT | RGF_FULLBRIGHT, 0, 25, "FDHarmlessPuff", frandom(0,359), frandom(-45,45), random(24,64), 1, 0.2, 0, "None", -8)
+        Goto Loopery
+    NoEmit:
+        TNT1 A 1
+        Goto Loopery
+    Loopery:
+        TNT1 A 0
+		TNT1 A 0 A_SetUserVar("user_lightningtimer", user_lightningtimer - 1)
+		TNT1 A 0 A_JumpIf (user_lightningtimer <= 0, "NoMoreLightning")
+        Goto EmitLightning
+
+    NoMoreLightning:
+        TNT1 A 0
+        Stop
+    }
+}

@@ -1,0 +1,50 @@
+//WereDragn HitBoxes
+
+actor HeadshotTarget2w: HeadshotTarget2
+{
+Radius 15
+Height 28
++DONTRIP
+}
+
+actor HeadshotTarget4w: HeadshotTarget4
+{
+Radius 15
+Height 28
++DONTRIP
+}
+
+actor HeadshotTarget6w: HeadshotTarget6
+{
+Radius 15
+Height 28
++DONTRIP
+}
+
+actor HeadshotTarget8w: HeadshotTarget8
+{
+Radius 15
+Height 28
++DONTRIP
+}
+
+actor HeadshotTarget10w: HeadshotTarget10
+{
+Radius 15
+Height 28
++DONTRIP
+}
+
+actor HeadshotTarget20w: HeadshotTarget20
+{
+Radius 15
+Height 28
++DONTRIP
+}
+
+actor HeadshotTarget30w: HeadshotTarget30
+{
+Radius 15
+Height 28
++DONTRIP
+}

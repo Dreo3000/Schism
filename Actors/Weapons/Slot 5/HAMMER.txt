@@ -1,0 +1,1481 @@
+Actor Schism_Arrancadora : Schism_Weapon Replaces FWeapHammer {
+	Weapon.BobRangeX 0.3
+	Weapon.BobRangeY 0.5
+	Weapon.BobStyle InverseSmooth
+	Weapon.BobSpeed 1.5
+	Weapon.Kickback 150
+	Weapon.ReadySound "none"
+	Weapon.UpSound "Weapons/Sledge/Swing"
+	Obituary "%o was hammered in by %k"
+	+WEAPON.WIMPY_WEAPON
+	+WEAPON.MELEEWEAPON
+    +WEAPON.NOALERT
+    +WEAPON.NOAUTOAIM
+	+WEAPON.NOAUTOFIRE
+	//Weapon.SlotNumber 1
+    //Weapon.SlotPriority 1
+	Inventory.ForbiddenTo Schism_Ranger, Schism_Sorcerer, Schism_Corvus
+	Scale 1.25
+	States {
+
+		Select:
+			TNT1 A 0
+			TNT1 A 0 A_Raise
+			Wait
+
+		Deselect:
+			TNT1 A 0 A_PlaySound("weapons/changing", 1)
+			TNT1 A 0 A_Takeinventory("HasCutingWeapon",1)
+			TNT1 A 0 A_Takeinventory("Reloading",1)
+			TNT1 A 0 A_Takeinventory("TossGrenade",1)
+			TNT1 A 0 A_Takeinventory("QuietusIsCharged",1)
+			WHMR GFEDCBA 2
+			TNT1 A 0 A_Lower
+			TNT1 A 1 A_Lower
+			Wait
+
+		Steady:
+			TNT1 A 1
+			Goto Ready
+		Ready:
+		ReadyLoop:
+		RightReadyAnim: //Going to ready anim also default select anim - hammer appears from right side
+			TNT1 A 0 A_JumpIfInventory("InHold2",1,"LeftReadyAnim")
+			WHMR ABCDEFG 2
+		RightReady: //Default ready state
+			TNT1 AAA 0
+			//TNT1 A 0 A_JumpIfInventory("InHold2",1,"LeftReady")
+			TNT1 A 0 A_JumpIfInventory("QuietusIsCharged",1,"ReadyZeal")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoStance")
+			TNT1 A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			TNT1 A 0 A_JumpIfInventory("Kicking",1,"DoKick")
+			TNT1 A 0 A_JumpIfInventory("Taunting",1,"ZealPowerup")
+
+			//TNT1 A 0 A_TakeInventory("InHold2",1)
+			WHMF A 1 A_WeaponReady
+			TNT1 A 0 A_JumpIfInventory("rage",1,1)
+			goto ready+8
+			TNT1 A 0 A_TakeInventory("rage",4)
+			TNT1 A 0 A_GiveInventory("zeal",1)
+			goto ready+8
+
+		LeftReadyAnim: //Going to ready in stance anim - hammer appears from left side
+			WHML GFEDCBA 2
+		LeftReady: //Stance ready state
+			TNT1 A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			TNT1 A 0 A_JumpIfInventory("Kicking",1,"DoKick")
+			TNT1 A 0 A_JumpIfInventory("Taunting",1,"ZealPowerup")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoReady")
+			WHMC L 1 A_WeaponReady
+			Loop
+
+		ReadyZeal:
+			TNT1 A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			TNT1 A 0 A_JumpIfInventory("Kicking",1,"DoKick")
+			TNT1 A 0 A_JumpIfInventory("Taunting",1,"ZealPowerup")
+			TNT1 A 0 A_JumpIfInventory("Salute1", 1, "Salute")
+			TNT1 A 0 A_JumpIfInventory("Salute2", 1, "Salute")
+			TNT1 A 0 A_JumpIfInventory("TossGrenade",1,"TossGrenade")
+			WHMF K 1 A_WeaponReady
+			Loop
+
+		ZealPowerup:
+			TNT1 A 0 A_Takeinventory("Taunting",1)
+			TNT1 A 0 A_JumpIfInventory("zeal",20,"ZealCharger")
+			TNT1 A 0 A_Print("Not enough \caZeal")
+			Goto Ready +8
+		ZealCharger:
+			WHMF K 5
+			//WHMF ABCDEFGHGFEDCBA 2
+			TNT1 A 0 A_GiveInventory("QuietusIsCharged",1)
+			Goto Ready+8
+
+		Fire:
+			TNT1 A 0 A_JumpIfInventory("QuietusIsCharged",1,"ZealFire")
+			//we're using here quietus charge token - not most elegant solution, but anyway it ALWAYS clears when you deselect quietus
+			TNT1 A 0 A_JumpIfInventory("InHold2",1,"LeftFire")
+			WHMF BCDEFG 3
+		Hold:
+			WHMF H 1 Offset(-32, 32)
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight") //A_JumpIfInventory("FiredSecondary",1,"HammerToss")
+			TNT1 A 0 A_Refire
+		StanceSwingRight:
+			TNT1 A 0 A_JumpIfInventory("IsCrouching",1,"HammerJab")//Let's try to add more flexibility to moveset
+			TNT1 A 0 A_PlaySound("weapons/gswing", 1)
+			TNT1 A 0 A_Recoil(-7)
+			WHM1 A 1 A_SetAngle((6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -45,0,10, 0, 0, 2)
+			WHM1 B 1 A_SetAngle((6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -38,0,10, 0, 0, 2) //
+			WHM1 C 1 A_SetAngle((6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -30,0,10, 0, 0, 2) //
+			WHM1 D 1 A_SetAngle((6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -20,0,10, 0, 0, 2) //
+			WHM1 E 1 A_SetAngle((6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -10,0,10, 0, 2)
+			WHM1 F 1 A_SetAngle((6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 0,0,10, 0, 2)
+			WHM1 G 1 A_SetAngle((6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 10,0,10, 0, 2)
+			WHM1 H 1 A_SetAngle((6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 20,0,10, 0, 2)
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+			WHM1 I 1 A_SetAngle((6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 30,0,10, 0, 2)
+			WHM1 J 1 A_SetAngle((6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 38,0,10, 0, 2)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 45,0,10, 0, 2)
+			TNT1 A 0 A_jumpifinventory("PowerStrength",1,6)
+			WHM1 JJ 1 A_SetAngle(angle+4)
+			TNT1 AA 1 A_SetAngle(angle+2)
+			TNT1 AA 1 A_SetAngle(angle+1)
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+
+			//6 tic DELAY after swing allowing to continue attack with second swing or Left Slam
+			//depending on primary or secondary attack tokens, also switching to opposite hand stance
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamLeft")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamLeft")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamLeft")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamLeft")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamLeft")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamLeft")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+
+			//end of delay. We all know that this is spaghetti code, but it's necessary measure for Zandronum compatibility
+			//fucking zandro doesn't know what anonimous functions are, so each simultaneous actions should be described through TNT A 0, per tic
+
+			TNT1 A 0 A_WeaponReady
+			TNT1 A 0 A_JumpIfInventory("InHold2",1,"GotoLeftReady")
+		Goto	GotoRightReady
+	//	GotoRightReady:
+	//		WHMF BBCCDDEE 1 A_SetAngle(angle+2)
+	//		Goto Ready
+	//	GotoLeftReady:
+	//		WHM7 BBCCDDEE 1 A_SetAngle(angle+2)
+	//		goto LeftReadyAnim
+
+		LeftFire:
+			TNT1 A 0 A_JumpIfInventory("QuietusIsCharged",1,"ZealFire")
+			//TNT1 A 0 A_JumpIfInventory("InHold2",1,"LeftFire")
+			WHM7 BCDEFG 3
+		LeftHold:
+			WHM7 H 1 Offset(-32, 32)
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft") //A_JumpIfInventory("FiredSecondary",1,"HammerToss")
+			TNT1 A 0 A_Refire("LeftHold")
+		StanceSwingLeft:
+			TNT1 A 0 A_JumpIfInventory("IsCrouching",1,"HammerJab")//Let's try to add more flexibility to moveset
+			WHM2 J 1
+			TNT1 A 0 A_PlaySound("weapons/gswing", 1)
+			TNT1 A 0 A_Recoil(-7)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 45,0,-10, 0, 2)
+			WHM2 I 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 38,0,-10, 0, 2)
+			WHM2 H 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 30,0,-10, 0, 2)
+			WHM2 G 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 20,0,-10, 0, 2)
+			WHM2 F 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 10,0,-10, 0, 2)
+			WHM2 E 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 0,0,-10, 0, 2)
+			WHM2 D 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -10,0,-10, 0, 2)
+			WHM2 C 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -20,0,-10, 0, 2)
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+			WHM2 B 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -30,0,-10, 0, 2)
+			WHM2 A 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -38,0,-10, 0, 2)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -45,0,-10, 0, 2)
+			TNT1 A 0 A_jumpifinventory("PowerStrength",1,6)
+			WHM2 AA 1 A_SetAngle(angle-4)
+			TNT1 AA 1 A_SetAngle(angle-2)
+			TNT1 AA 1 A_SetAngle(angle-1)
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+
+			//6 tic DELAY after swing allowing to continue attack with Hammer Jab or Right Slam
+			//depending on primary or secondary attack tokens, also switching to opposite hand stance
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+
+			//end of delay. We all know that this is spaghetti code, but it's necessary measure for Zandronum compatibility
+			//fucking zandro doesn't know what anonimous functions are, so each simultaneous actions should be described through TNT A 0, per tic
+
+
+			TNT1 A 0 A_WeaponReady
+
+			TNT1 A 0 A_JumpIfInventory("InHold2",1,"GotoLeftReady")
+		Goto GotoRightReady
+	//	GotoRightReady:
+	//		WHMF BBCCDDEE 1 A_SetAngle(angle+2)
+	//		Goto Ready
+	//	GotoLeftReady:
+	//		WHM7 BBCCDDEE 1 A_SetAngle(angle+2)
+	//		goto LeftReadyAnim
+
+		Attack2:
+			TNT1 AA 2
+			WHM2 J 1
+			TNT1 A 0 A_PlaySound("weapons/gswing", 1)
+			TNT1 A 0 A_Recoil(-7)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 0,0,-40, 0, 2)
+			WHM2 I 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -5,0,-40, 0, 2)
+			WHM2 H 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 15,0,-40, 0, 2)
+			WHM2 G 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -22,0,-40, 0, 2)
+			WHM2 F 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 10,0,-40, 0, 2)
+			WHM2 E 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 25,0,-40, 0, 2)
+			WHM2 D 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 40,0,-40, 0, 2)
+			WHM2 C 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -20,0,-40, 0, 2)
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+			WHM2 B 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -35,0,-40, 0, 2)
+			WHM2 A 1 A_SetAngle((-6)+angle)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -50,0,-40, 0, 2)
+			TNT1 A 0 A_jumpifinventory("PowerStrength",1,6)
+			WHM2 AA 1 A_SetAngle(angle-4)
+			TNT1 AA 1 A_SetAngle(angle-2)
+			TNT1 AA 1 A_SetAngle(angle-1)
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+
+			//8 tic DELAY after swing allowing to continue attack with Hammer Jab or Right Slam
+			//depending on primary or secondary attack tokens, also switching to opposite hand stance
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "StanceSlamRight")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			//end of delay. We all know that this is spaghetti code, but it's necessary measure for Zandronum compatibility
+			//fucking zandro doesn't know what anonimous functions are, so each simultaneous actions should be described through TNT A 0, per tic
+			TNT1 A 0 A_WeaponReady
+
+			TNT1 A 0 A_JumpIfInventory("InHold2",1,"GotoLeftReady")
+		GotoRightReady:
+			WHMF BBCCDDEE 1 A_SetAngle(angle+2)
+			Goto Ready
+		GotoLeftReady:
+			WHM7 BBCCDDEE 1 A_SetAngle(angle+2)
+			goto LeftReadyAnim
+
+		HammerJab:
+			TNT1 AA 2
+			TNT1 A 0 A_PlaySound("weapons/gswing", 1)
+			TNT1 A 0 A_ChangeVelocity(8*Cos(pitch),0,-8*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			WHM3 A 1 Offset(10,82)
+			TNT1 A 0 A_ChangeVelocity(12*Cos(pitch),0,-12*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			WHM3 A 1 Offset(8,66)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 15,0,0,0,2)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 5,0,0,0,2)
+			TNT1 A 0 A_FireCustomMissile("HammerSonicBoom", 0,0,0,0,2)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -5,0,0,0,2)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -15,0,0,0,2)
+
+			TNT1 A 0 A_ChangeVelocity(24*Cos(pitch),0,-24*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			//TNT1 A 0 A_FireCustomMissile("AxeMeleeStrikePaladin", 0,0,0,0,2)
+			WHM3 AAAAA 1 Offset(2,32) A_FireCustomMissile("HammerStrikePaladin", 5,0,0,0,2)
+
+			WHM3 A 2 Offset(-4,44)
+			TNT1 A 0 A_stop
+			WHM3 A 2 Offset(-10,62)
+			WHM3 A 1 Offset(-12,84)
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+			TNT1 AA 1 A_SetAngle(angle+2)
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+
+			//8 tic DELAY after swing allowing to continue attack with Left or Right Slam
+			//depending on primary or secondary attack tokens, also switching to opposite hand stance
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "LeftSLAM")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "SLAM")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "LeftSLAM")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "SLAM")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "LeftSLAM")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "SLAM")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "LeftSLAM")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "SLAM")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "LeftSLAM")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "SLAM")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "LeftSLAM")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "SLAM")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "LeftSLAM")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "SLAM")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "LeftSLAM")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "SLAM")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			//end of delay. We all know that this is spaghetti code, but it's necessary measure for Zandronum compatibility
+			//fucking zandro doesn't know what anonimous functions are, so each simultaneous actions should be described through TNT A 0, per tic
+
+			TNT1 A 0 A_WeaponReady
+			WHMF BCDE 2 A_SetAngle(angle-1)
+			Goto Ready
+
+		AltFire:
+			TNT1 A 0 A_JumpIfInventory("InHold2",1,"LeftSLAM")
+			TNT1 A 0 A_JumpIfInventory("QuietusIsCharged",1,"ZealAltFire")
+
+		SLAM:
+			TNT1 A 0 A_TakeInventory("Reloading",1)
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+			"####" A 0 A_PlaySound("Paladin/MediumExert", 3)
+			WHMR GFEDCBA 1
+
+		StanceSlamRight:
+			WHMF BCDEFGH 1
+		AltHold:
+			WHMF H 1
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceSwingRight")
+			TNT1 A 0 A_Refire
+
+		SlamRightRelease:
+			"####" A 0 A_PlaySound("Paladin/SpellCastLarge", 2)
+			WHMS ABC 1 A_FireCustomMissile("ShakeYourAssMinor", 0, 0, 0, 0)
+			TNT1 A 0 A_PlaySound("Weapons/Sledge/Swing")
+			WHMS DEF 1
+			TNT1 A 0 A_Stop
+			TNT1 A 0 A_JumpIfInventory("PowerStrength", 1, 3)
+			TNT1 A 0 A_FireCustomMissile("PaladinStomp", 0, 0, 0, -9)
+			TNT1 A 0 A_Jump(256,2)
+			TNT1 A 0 A_FireCustomMissile("HammerStomp", 0, 0, 0, -9)
+			WHMS GHII 1 A_Stop
+			TNT1 A 0 A_WeaponReady
+
+			//6 tic DELAY after swing allowing to continue attack with Hammer Jab or Left Swing
+			//depending on primary or secondary attack tokens, also switching to opposite hand stance
+			WHMS J 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+			//meaning - if you press reload during attack anim - it throws you to opposite hand stance
+
+			WHMS J 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			WHMS J 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			WHMS J 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+
+			TNT1 A 0 A_JumpIfInventory("InHold2",1,"GotoLeftReady")
+			//just like if you had InHold2 token, but said token is given in reload state, so here we just take
+			//"Reloading" token AS if it'd be "InHold2" and redirect in both cases to opposite hand stace.
+			//If there is no any of this tokens, then we're going to default stance:
+		GotoRightReady:
+
+		//[UNUSED, IGNORE THAT COMMENT FOR NOW]
+		//For those who don't get it - here we simultaneosly restoring camera angle after swing
+		//AND in same moment - checks for performing next slam just right after first one, allowing
+		//to make endless "slam-mill" from left and right side alternately - LL
+		//As fuel for that we use tapping reloading key while attacking, so character is supposed to change
+		//stance from left handed to right handed and oppositely after each slam.
+		//[UNUSED]
+
+			TNT1 A 0 A_TakeInventory("Reloading",1) //clear reloading token
+			TNT1 A 0 A_TakeInventory("InHold2",1) //taking eventually reloading stance token
+			WHMF B 1 A_SetAngle(angle+2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight")
+			WHMF B 1 A_SetAngle(angle+2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight")
+			WHMF C 1 A_SetAngle(angle+2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight")
+			WHMF C 1 A_SetAngle(angle+2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight")
+			WHMF D 1 A_SetAngle(angle+2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight")
+			WHMF D 1 A_SetAngle(angle+2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight")
+			WHMF E 1 A_SetAngle(angle+2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight")
+			WHMF E 1 A_SetAngle(angle+2)
+			Goto Ready
+		GotoLeftReady:
+		//Same shit here
+			TNT1 A 0 A_TakeInventory("Reloading",1) //clear reloading token
+			TNT1 A 0 A_GiveInventory("InHold2",1) //giving instead of eventually reloading stance token
+			//normally we can get here only having that token, so it doesn't affect logic of events. I hope... - LL
+			WHM7 B 1 A_SetAngle(angle-2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft")
+			WHM7 B 1 A_SetAngle(angle-2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft")
+			WHM7 C 1 A_SetAngle(angle-2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft")
+			WHM7 C 1 A_SetAngle(angle-2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft")
+			WHM7 D 1 A_SetAngle(angle-2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft")
+			WHM7 D 1 A_SetAngle(angle-2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft")
+			WHM7 E 1 A_SetAngle(angle-2)
+			//TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft")
+			WHM7 E 1 A_SetAngle(angle-2)
+			goto LeftReadyAnim
+
+
+		LeftSLAM:
+			TNT1 A 0 A_TakeInventory("Reloading",1)
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+			"####" A 0 A_PlaySound("Paladin/MediumExert", 3)
+			WHML ABCDEFG 1
+
+		StanceSlamLeft:
+			WHM7 ABCDEFGH 1
+		AltLeftHold:
+			WHM7 H 1 Offset(-32, 32)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceSwingLeft")
+			TNT1 A 0 A_Refire("AltLeftHold")
+		SlamLeftRelease:
+			"####" A 0 A_PlaySound("Paladin/SpellCastLarge", 2)
+			WHM8 ABC 1 A_FireCustomMissile("ShakeYourAssMinor", 0, 0, 0, 0)
+			TNT1 A 0 A_PlaySound("Weapons/Sledge/Swing")
+			WHM8 DEF 1
+			TNT1 A 0 A_Stop
+			TNT1 A 0 A_JumpIfInventory("PowerStrength", 1, 3)
+			TNT1 A 0 A_FireCustomMissile("PaladinStomp", 0, 0, 0, -9)
+			TNT1 A 0 A_Jump(256,2)
+			TNT1 A 0 A_FireCustomMissile("HammerStomp", 0, 0, 0, -9)
+			WHM8 GHII 1 //A_Stop
+			TNT1 A 0 A_Stop
+			TNT1 A 0 A_WeaponReady
+
+			//6 tic DELAY after swing allowing to continue attack with Hammer Jab or Left Swing (Attack 2)
+			//depending on primary or secondary attack tokens, also switching to opposite hand stance
+			WHM8 J 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+			//meaning - if you press reload during attack anim - it throws you to opposite hand stance
+
+			WHM8 J 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+
+			WHM8 J 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+
+			WHM8 J 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+
+			TNT1 A 1 A_JumpIfInventory("FiredPrimary", 1, "StanceSwingRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "HammerJab")
+			TNT1 A 0 A_JumpIfInventory("Reloading",1,"GotoRightReady")
+
+			TNT1 A 0 A_JumpIfInventory("InHold2",1,"GotoLeftReady")
+			//DO NOT CONFUSE goto RightReady with goto GotoRightReady!!!!!!!
+			Goto GotoRightReady //Don't ask about this naming lmfao - Lord Lothar
+
+		StanceFireLeft:
+			WHMQ A 2
+			goto StanceFire
+		StanceFireRight:
+			WHMQ B 2
+			goto StanceFire
+		StanceFire: //meaning - lunge attack perfomed when you press attack in between of changing stances from right hand to left hand
+			TNT1 A 0 A_TakeInventory("Reloading",1)
+			TNT1 A 0 A_PlaySound("weapons/gswing", 1)
+			TNT1 A 0
+			WHMQ C 1 A_ChangeVelocity(30*Cos(pitch),0,-30*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			TNT1 A 0
+			WHMQ C 1 A_ChangeVelocity(29*Cos(pitch),0,-29*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			TNT1 A 0 A_FireCustomMissile("HammerSonicBoom", 0,0,0,0,2)
+			WHMQ DD 1 A_ChangeVelocity(28*Cos(pitch),0,-28*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -15,0,0,0,2)
+			WHMQ E 2 A_ChangeVelocity(26*Cos(pitch),0,-26*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -5,0,0,0,2)
+			WHMQ F 2 A_ChangeVelocity(25*Cos(pitch),0,-25*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 5,0,0,0,2)
+			WHMQ G 2 A_ChangeVelocity(24*Cos(pitch),0,-24*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 15,0,0,0,2)
+			WHMQ G 1 A_ChangeVelocity(12*Cos(pitch),0,-12*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 15,0,0,0,2)
+			WHMQ H 1 A_ChangeVelocity(8*Cos(pitch),0,-8*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 15,0,0,0,2)
+
+			WHMQ IJKL 2
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+			TNT1 AA 1 A_SetAngle(angle+2)
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+			TNT1 AA 1 A_JumpIfInventory("FiredPrimary", 1, "Attack2")
+			TNT1 A 0 A_WeaponReady
+			WHMF BCDE 1 A_SetAngle(angle-1)
+			Goto Ready
+
+	//	AltFire:
+	//		TNT1 A 0 A_JumpIfInventory("InHold2",1,"LeftSLAM")
+	//		TNT1 A 0 A_JumpIfInventory("QuietusIsCharged",1,"ZealAltFire")
+	//		"####" A 0 A_PlaySound("Paladin/MediumExert", 3)
+	//		WHMR GFEDCBA 1
+	//		WHMF BCDEFGH 1
+	//		"####" A 0 A_PlaySound("Paladin/SpellCastLarge", 2)
+	//		WHMS ABC 2 A_FireCustomMissile("ShakeYourAssMinor", 0, 0, 0, 0)
+	//		TNT1 A 0 A_PlaySound("Weapons/Sledge/Swing")
+	//		WHMS DEF 1
+	//		TNT1 A 0 A_Stop
+	//		TNT1 A 0 A_JumpIfInventory("PowerStrength", 1, 3)
+	//		TNT1 A 0 A_FireCustomMissile("PaladinStomp", 0, 0, 0, -9)
+	//		TNT1 A 0 A_Jump(256,2)
+	//		TNT1 A 0 A_FireCustomMissile("HammerStomp", 0, 0, 0, -9)
+	//		TNT1 A 0 A_FireCustomMissile("BoulderConjurer", 0, 0, 0, -9)
+	//		WHMS GHII 1 //A_Stop
+	//		TNT1 A 0 A_Stop
+	//		WHMS JJJJ 1 A_JumpIfInventory("Reloading",1,"GotoLeftReady")
+			//TNT1 A 2 A_Refire("AltHold")
+	//		TNT1 A 0
+	//		Goto GotoRightReady //Goto Ready
+
+	//	AltHold:
+	//		TNT1 A 6
+	//		WHM1 D 1 A_Recoil(-7)
+	//		TNT1 A 0 A_PlaySound("weapons/gswing", 1)
+	//		TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -5, 0, -40, 0, 2)
+	//		TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -5, 0, -40, 0, 2)
+	//		TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 15, 0, -40, 0, 2)
+	//		TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -22, 0, -40, 0, 2)
+	//		TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 10, 0,-40, 0, 2)
+	//		TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 25, 0,-40, 0, 2)
+	//		TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", 40,0, -40, 0, 2)
+	//		TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -20, 0,-40, 0, 2)
+	//		TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -35, 0,-40, 0, 2)
+	//		TNT1 A 0 A_FireCustomMissile("HammerStrikePaladin", -50, 0, -40, 0, 2)
+	//		WHM1 D 1 Offset(50, 33)
+	//		WHM1 E 1 Offset(120, 36)
+	//		WHM1 E 1 Offset(260, 40)
+	//		WHM1 C 1 Offset(320, 49)
+	//		WHM1 C 1 Offset(490, 59)
+	//		WHM1 C 1 Offset(620, 72)
+	//		TNT1 A 10 A_clearRefire
+	//		Goto Ready
+
+		ZealFire:
+			TNT1 A 0 A_Takeinventory("QuietusIsCharged",1)
+			"####" A 0 A_PlaySound("Paladin/MediumExert", 3)
+			WHMR GFEDCBA 1
+			WHMF BCDEFGH 1
+			"####" A 0 A_PlaySound("Paladin/SpellCastLarge", 2)
+			WHMS ABC 2 A_FireCustomMissile("ShakeYourAssMinor", 0, 0, 0, 0)
+			TNT1 A 0 A_PlaySound("Weapons/Sledge/Swing")
+			WHMS DEF 1
+			TNT1 A 0 A_Stop
+			TNT1 A 0 A_TakeInventory("Zeal",20)
+			TNT1 A 0 A_FireCustomMissile("HammerStomp", 0, 0, 0, -9)
+			WHMS GHIJ 1 A_Stop
+			TNT1 A 0
+			WHMS J 10 A_Stop
+			TNT1 A 5 A_WeaponReady(1)
+			TNT1 A 0
+			Goto Ready
+
+		ZealAltFire:
+			TNT1 A 0 A_Takeinventory("QuietusIsCharged",1)
+			"####" A 0 A_PlaySound("Paladin/MediumExert", 3)
+			WHMR GFEDCBA 1
+			WHMF BCDEFGH 1
+			"####" A 0 A_PlaySound("Paladin/SpellCastLarge", 2)
+			WHMS ABC 2 A_FireCustomMissile("ShakeYourAssMinor", 0, 0, 0, 0)
+			TNT1 A 0 A_PlaySound("Weapons/Sledge/Swing")
+			WHMS DEF 1
+			TNT1 A 0 A_TakeInventory("Zeal",20)
+			TNT1 AAAAAAAAAA 0 A_FireCustomMissile("VolcanicRift",Random(-5,5), 0, 0, -9)
+			TNT1 A 0 A_FireCustomMissile("HammerPowerWave", 0, 0, 0, -9)
+			TNT1 A 0 A_Stop
+			WHMS GHIJ 1 A_Stop
+			TNT1 A 0
+			WHMS J 10 A_Stop
+			TNT1 A 5 A_WeaponReady(1)
+			TNT1 A 0
+			Goto Ready
+		HammerToss:
+			TNT1 A 0 A_TakeInventory("FiredSecondary")
+			TNT1 A 0 A_JumpIfInventory("zeal",20,3)
+			TNT1 A 0 A_Print("Not enough \caZeal")
+			Goto Ready
+			TNT1 A 0
+			TNT1 A 0 A_fireCustomMissile("TossedHammer",0,0,0,-8)
+			TNT1 A 0 A_TakeInventory("Zeal",20)
+			TNT1 A 0 A_ClearReFire
+			WTFL GHIJKL 2
+			TNT1 AAAAaAAAAaAAAAaAAAAaAAAAa 1 A_jumpIfInventory("BladeIsCharged",1,"CatchHammer")
+			TNT1 AAAAaAAAAaAAAAaAAAAaAAAAa 1 A_jumpIfInventory("BladeIsCharged",1,"CatchHammer")
+			TNT1 AAAAaAAAAaAAAAaAAAAaAAAAa 1 A_jumpIfInventory("BladeIsCharged",1,"CatchHammer")
+			Goto Ready
+		CatchHammer:
+			WHMF A 1 A_takeInventory("BladeIsCharged",1)
+			WHMR GFEDCBA 1
+			Goto Ready
+		Spawn:
+			HRMR A -1
+			Stop
+
+		GotoStance:
+			TNT1 A 0 A_TakeInventory("Reloading",1)
+			TNT1 A 0 A_JumpIfInventory("InHold2",1,"GotoReady")
+			TNT1 A 0 A_GiveInventory("InHold2",1)
+			WHMC A 1 A_PlaySound("Paladin/ShortExert", 2)
+			WHMC A 1 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceFireLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"HammerJab")
+			WHMC B 1
+			WHMC C 1 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceFireLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"HammerJab")
+			WHMC D 1
+			WHMC E 1 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceFireLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"HammerJab")
+			WHMC F 1
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceFireLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"HammerJab")
+			WHMC G 1
+			WHMC H 1 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft")
+			WHMC I 1
+			WHMC J 1 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft")
+			WHMC K 1
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft")
+			WHMC L 2 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceSwingLeft")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamLeft")
+
+		Goto LeftReady
+
+
+		GotoReady:
+			TNT1 A 0
+			TNT1 A 0 A_TakeInventory("Reloading",1)
+			TNT1 A 0 A_TakeInventory("InHold2",1)
+			WHMC L 1 A_PlaySound("Paladin/ShortExert", 2)
+			WHMC L 1 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceFireRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"HammerJab")
+			WHMC K 1
+			WHMC J 1 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceFireRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"HammerJab")
+			WHMC I 1
+			WHMC H 1 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceFireRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"HammerJab")
+			WHMC G 1 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceFireRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"HammerJab")
+			WHMC F 1
+			WHMC E 1 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceSwingRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight")
+			WHMC D 1
+			WHMC C 1 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceSwingRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight")
+			WHMC B 1
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceSwingRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight")
+			WHMC A 2 A_SpawnItemEx("ShieldDefense", 25,5,15,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary",1,"StanceSwingRight")
+			TNT1 A 0 A_JumpIfInventory("FiredSecondary",1,"StanceSlamRight")
+			Goto RightReady
+	}
+}
+
+
+
+Actor SledgeMeleeStrike1 : FastProjectile {
+	+FORCEXYBILLBOARD
+	+NOEXTREMEDEATH
+	+BLOODSPLATTER
+	DamageType Kick
+	Speed 45
+	ProjectileKickBack 150
+	Damage 18
+	Projectile
+	Speed 30
+	Decal "Crack"
+	DeathSound "SLEDWALL"
+	States
+	{
+		Spawn:
+			TNT1 A 1 BRIGHT
+			Stop
+		Death:
+			TNT1 A 0
+			PUFF A 3 A_PlaySound("Weapons/Sledge/Hit")
+			PUFF BCD 3
+			Stop
+	}
+}
+
+
+
+Actor HammerStrikePaladin : FastProjectile {
+	Radius 4
+	Height 8
+	DamageType ExtremePunches
+	+MISSILE
+	+FORCEXYBILLBOARD
+	//+FORCERADIUSDMG
+	+BLOODSPLATTER
+	+FORCEPAIN
+	RenderStyle Add
+	Alpha 0.9
+    Damage (random(50,75))
+    Speed 55
+	SeeSound "none"
+	DeathSound "none"
+//	decal "SawVertical"
+	Scale 0.05
+	States
+	{
+	Spawn:
+		AXEG A 0
+		TNT1 A 1 BRIGHT
+		Stop
+	Death:
+				AXEG A 0
+				AXEG A 0
+				TNT1 AB 0 bright
+				TNT1 A 0 A_giveToTarget("AxeHit", 1)
+				AXEG A 0 Radius_Quake (2, 6, 0, 5, 0)//(intensity, duration, damrad, tremrad, tid)
+				AXEG A 0 A_CheckFloor("SpawnFloor")
+				AXEG A 0 A_SpawnItem ("Sparks", 0)
+				TNT1 A 0 A_PlaySound("SLMETA", 1)
+				//AXEG A 0 A_PlaySound("AXECLN", 6)
+				AXEG A 0 A_ALertMonsters(400)
+
+				//TNT1 AAAAAAAAAAAAAAAA 0 A_CustomMissile ("SparkX", 2, 0, random (0, 360), 2, random (30, 170))
+				AXEG A 0 A_JumpIfInTargetInventory("PowerStrength", 1, "Explodez")
+				Stop
+
+
+	SpawnFloor:
+	AXEG A 0
+	AXEG A 0 Acs_namedexecutealways("BDCheckFloorType", 0, 0, 0, 0)//Check if is under a liquid
+	TNT1 A 2
+	AXEG A 0 A_ALertMonsters(400)
+	AXEG A 0 A_JumpIfInventory("IsOverWater", 1, "SpawnWater")
+	AXEG A 0 A_JumpIfInventory("IsOverNukage", 1, "SpawnNukage")
+	AXEG A 0 A_JumpIfInventory("IsOverSlime", 1, "SpawnSlime")
+	AXEG A 0 A_JumpIfInventory("IsOverBlood", 1, "SpawnBlood")
+	AXEG A 0 A_JumpIfInventory("IsOverLava", 1, "SpawnLava")
+	AXEG A 0 A_JumpIfInventory("IsOverGrass", 1, "SpawnDirt")
+	AXEG A 0 A_JumpIfInventory("IsOverSand", 1, "SpawnSand")
+
+	TNT1 A 0 A_PlaySound("SLMETA", 1)
+	PUFF A 0 bright A_PlaySound("ricochet/hit")
+	AXEG A 0 A_SpawnItem ("YellowFlareSmall", 0)
+	AXEG A 0 A_SetScale(-0.6)
+    AXEG A 0 A_Jump (132, 15)
+    FX58 ABCD 1 BRIGHT
+	AXEG A 0 A_CustomMissile("OldschoolRocketSmokeTrail2Bigger", 2, 0, random (0, 360), 2, random (0, 360))
+	FX58 EFGHIJ 1 bright
+    Stop
+    TNT1 AAAAA 0
+    FX57 ABCD 1 BRIGHT
+	AXEG A 0 A_CustomMissile("OldschoolRocketSmokeTrail2Bigger", 2, 0, random (0, 360), 2, random (0, 360))
+	FX57 EFGHIJ 1 bright
+    stop
+
+	SpawnWater:
+	AXEG A 0
+	TNT1 A 0 A_PlaySound("bigspl1", 1)
+	TNT1 AAAAA 0 A_CustomMissile ("WaterParticleXFAster", 8, 0, random (0, 360), 2, random (30, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("WaterParticleXSuperFast", 24, 0, random (0, 360), 2, random (30, 160))
+	AXEG A 0 A_SpawnItem("WaterSplashWaves")
+	AXEG A 0 A_SetScale(0.5, 0.5)
+	SPHW ABCDE 3
+	Stop
+
+	SpawnSlime:
+	AXEG A 0
+	TNT1 A 0 A_PlaySound("bigspl1", 1)
+	TNT1 AAAAA 0 A_CustomMissile ("SLimeParticleXFAster", 8, 0, random (0, 360), 2, random (30, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("SlimeParticleXFAster", 24, 0, random (0, 360), 2, random (30, 160))
+	AXEG A 0 A_SpawnItem("SlimeSplashWaves")
+	AXEG A 0 A_SetScale(0.5, 0.5)
+	SPHB ABCDE 3
+	Stop
+
+
+	SpawnNukage:
+	AXEG A 0
+	TNT1 A 0 A_PlaySound("bigspl1", 1)
+	TNT1 AAAAA 0 A_CustomMissile ("nukageParticleXFAster", 8, 0, random (0, 360), 2, random (30, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("nukageParticleXFAster", 24, 0, random (0, 360), 2, random (30, 160))
+	AXEG A 0 A_SpawnItem("NukageSplashWaves")
+	AXEG A 0 A_SetScale(0.5, 0.5)
+	SPHG ABCDE 3
+	Stop
+
+	SpawnBlood:
+	AXEG A 0
+	TNT1 A 0 A_PlaySound("bigspl1", 1)
+	TNT1 AAAAA 0 A_CustomMissile ("BloodParticleXFAster", 8, 0, random (0, 360), 2, random (30, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("BloodParticleXFAster", 24, 0, random (0, 360), 2, random (30, 160))
+	AXEG A 0 A_SpawnItem("BloodSplashWaves")
+	AXEG A 0 A_SetScale(0.5, 0.5)
+	SPHR ABCDE 3
+	Stop
+
+	SpawnLava:
+	AXEG A 0
+	AXEG A 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 12, 0, random (160, 210), 2, random (10, 90))
+	AXEG A 0 A_SpawnItemEx("TinyBurningPiece3", random (-5, 5), random (-5, 5))
+	TNT1 AAAAA 0 A_CustomMissile ("ExplosionParticleHeavy", 10, 0, random (0, 180), 2, random (10, 90))
+	AXEG A 0 A_SetScale(0.5, 0.5)
+	INFE ABCDEFGHIJKLMNOPQR 1 BRIGHT
+	INFE ST 1 BRIGHT A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 32, 0, random (160, 210), 2, random (10, 90))
+	TNT1 AAA 4 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 14, 0, random (160, 210), 2, random (10, 90))
+	Stop
+
+
+	SpawnDirt:
+	AXEG A 0
+	AXEG A 0 A_CustomMissile ("BrownCloudSmallLong", 0, 0, random (0, 360), 2, random (10, 150))
+	TNT1 AA 0 A_CustomMissile ("DirtChunk3", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AA 0 A_CustomMissile ("DirtChunk4", 0, 0, random (0, 360), 2, random (30, 150))
+	AXEG A 0 A_CustomMissile ("MudDustSmall", 4, 0, random (0, 360), 2, random (30, 150))
+	AXEG A 0 A_SpawnItem("DirtRicochet")
+	Stop
+
+
+	SpawnSand:
+	AXEG A 0
+	AXEG A 0 A_CustomMissile ("SandCloudSmallLong", 0, 0, random (0, 360), 2, random (10, 90))
+	AXEG A 0 A_CustomMissile ("SandCloudSmall", 0, 0, random (0, 360), 2, random (10, 90))
+	AXEG A 0 A_CustomMissile ("SandDustSmall", 4, 0, random (0, 360), 2, random (30, 150))
+	Stop
+
+
+
+
+	XDeath:
+	Melee:
+			AXEG A 0
+			TNT1 A 0 A_GiveToTarget("Rage",5)
+			TNT1 A 0 A_giveToTarget("AxeHit", 1)
+			PUFF A 0 A_PlaySound("player/cyborg/fist", 3)
+			AXEG A 0 A_PlaySound("SLMETA", 1)
+			AXEG A 0 A_SpawnItemEx ("PLOFT2",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			AXEG A 0 Radius_Quake (2, 6, 0, 5, 0)//(intensity, duration, damrad, tremrad, tid)
+			AXEG A 0 A_JumpIfInTargetInventory("PowerStrength", 1, "Berserk")
+			TNT1 A 10
+			Stop
+
+	Crash:
+	    TNT1 A 1 Radius_Quake (2, 10, 0, 2, 0)
+		TNT1 A 1
+		TNT1 A 1 A_PlaySound("SLMETA", 1)
+		Stop
+
+
+	Berserk:
+		TNT1 A 1
+		TNT1 A 0 A_GiveToTarget("Rage",5)
+
+		Explodez:
+	    EXPL A 0 Radius_Quake (6, 54, 0, 15, 0)
+		AXEG A 0 A_explode(70, 30, 0)
+		TNT1 A 0 A_PlaySound("skeleton/tracex")
+		TNT1 A 0 A_SpawnItem("WhiteShockwaveSmall")
+		//EXPL A 0 A_CustomMissile ("ExplosionSmoke", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		//TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+        TNT1 A 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+		//TNT1 A 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+		EXPL A 0
+        TNT1 A 0 A_CustomMissile ("ExtraSmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+		TNT1 A 0
+		Stop
+
+		TNT1 A 10
+		Stop
+
+	}
+}
+
+ACTOR SledgeMeleeStrike2 : FastProjectile
+{
+	Height 6
+	Radius 6
+	DamageType Shotgun
+	Projectile
+	+FORCEXYBILLBOARD
+	+NOEXTREMEDEATH
+	+BLOODSPLATTER
+	Damage 45
+	Speed 45
+	ProjectileKickBack 300
+	DeathSound "SLEDWALL"
+	Decal "Crack"
+	States
+	{
+	Spawn:
+		TNT1 A 1 BRIGHT
+		Stop
+	Death:
+		TNT1 A 0
+		PUFF A 3 A_PlaySound("Weapons/Sledge/Hit")
+		TNT1 A 0 A_Explode(1,75,0)
+		PUFF BCD 3
+		Stop
+	}
+}
+
+ACTOR BerserkSledgeMeleeStrike1: FastProjectile
+{
++FORCEXYBILLBOARD
+	+NOEXTREMEDEATH
+	+BLOODSPLATTER
+	DamageType Kick
+	Speed 45
+	ProjectileKickBack 150
+	Damage 35
+	Projectile
+	Speed 30
+	Decal "Crack"
+	DeathSound "SLEDWALL"
+States
+{
+	Spawn:
+		TNT1 A 1 BRIGHT
+		Stop
+	Death:
+	    TNT1 A 0
+		PUFF A 3 A_PlaySound("Weapons/Sledge/Hit")
+		TNT1 A 0 A_Explode(1,75,0)
+		PUFF BCD 3
+		Stop
+}
+}
+
+ACTOR BerserkSledgeMeleeStrike2 : FastProjectile
+{
+	Height 8
+	Radius 12
+	DamageType SSG
+	Projectile
+	+FORCEXYBILLBOARD
+	+NOEXTREMEDEATH
+	+BLOODSPLATTER
+	Damage 80
+	Speed 45
+	ProjectileKickBack 300
+	DeathSound "SLEDWALL"
+	Decal "Crack"
+	States
+	{
+	Spawn:
+		TNT1 A 1 BRIGHT
+		Stop
+	Death:
+		TNT1 A 0
+		PUFF A 3 A_PlaySound("Weapons/Sledge/Hit")
+		TNT1 A 0 A_Explode(2,150,0)
+		PUFF BCD 3
+		Stop
+	}
+}
+
+
+ACTOR HammerStomp: PaladinStomp
+{
+	Radius 12
+	Height 8
+	+MISSILE
+	Speed 30
+    Damage 100
+	renderstyle translucent
+	alpha 0.9
+	DamageType Explosive//Stomp
+    Gravity 1.0
+	Scale 0.8
+    Decal "Cracks"
+	-NOGRAVITY
+    +EXTREMEDEATH
+	+NOTELEPORT
+	//+THRUACTORS
+	Obituary "%o was squished by a %k's HAMMER."
+	HitObituary "%o was squished by a %k's HAMMER."
+	States
+	{
+	Spawn:
+        TNT1 A 1
+		TNT1 A 0 ThrustThingZ(0, -35, 0, 0)
+		TNT1 A 5
+
+	Death:
+		MARN A 0 A_SpawnItemEx("FootStepStrong", 0, 0, 8, 0, 0)
+		TNT1 A 0 A_SpawnItem("HammerPowerExplosion")
+        TNT1 A 0 A_PlaySound("CLAP", 1)
+		EXPL AA 0 A_CustomMissile ("ExplosionSmoke", 0, 0, random (0, 360), 2, random (10, 12))
+		TNT1 A 0 Radius_Quake(6, 15, 0, 15, 0)
+		TNT1 A 0 Radius_Quake(3, 30, 0, 45, 0)
+		EXPL A 0 A_Explode(40,120,0)
+		SM8K BCDEFHIJKLMNPRSTUVYXZ 1
+		Stop
+}}
+
+ACTOR HammerPowerWave
+{
+	Radius 10
+	Height 10
+	Speed 20
+	Damage 5
+    DamageType Explosive
+	Decal "Scorch"
+	Projectile
+	BounceType Grenade
+	BounceFactor 0.4
+	+MISSILE
+	+DOOMBOUNCE
+	+RANDOMIZE
+	+MOVEWITHSECTOR
+	+FLOORHUGGER
+	+RIPPER
+	//+EXTREMEDEATH
+renderstyle ADD
+alpha 0.90
+Scale 1.0
+Species "Marines"
+	+THRUSPECIES
+	+MTHRUSPECIES
+	+DONTHURTSPECIES
+	DeathSound "weapons/plasmax"
+    SeeSound "None"
+	Obituary "$OB_MPPLASMARIFLE"
+	States
+	{
+	Spawn:
+	    TNT1 A 3
+        TNT1 A 3 A_SpawnItem("HammerPowerExplosion")  //A_SpawnItem("InverseGroundExplosion")
+		TNT1 A 0 A_SpawnItem("VolcanicSpike")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 4 A_SpawnItem("HammerPowerExplosion")
+		TNT1 A 0 A_SpawnItem("VolcanicSpike")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 4 A_SpawnItem("HammerPowerExplosion")
+		TNT1 A 0 A_SpawnItem("VolcanicSpike")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 5 A_SpawnItem("HammerPowerExplosion")
+		TNT1 A 0 A_SpawnItem("VolcanicSpike")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 5 A_SpawnItem("HammerPowerExplosion")
+		TNT1 A 0 A_SpawnItem("VolcanicSpike")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 6 A_SpawnItem("HammerPowerExplosion")
+		TNT1 A 0 A_SpawnItem("VolcanicSpike")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 6 A_SpawnItem("HammerPowerExplosion")
+		TNT1 A 0 A_SpawnItem("VolcanicSpike")
+		//TNT1 A 0 A_Explode(200,300)
+		TNT1 A 6 A_SpawnItem("HammerPowerExplosion")
+		TNT1 A 0 A_SpawnItem("VolcanicSpike")
+		//TNT1 A 0 A_Explode(200,300)
+
+		//TNT1 A 0 A_Explode(200,300)
+		 Stop
+	Death:
+	TNT1 A 0 A_SpawnItem("GroundExplosion")
+	Stop
+	}
+}
+
+ACTOR Volcanicrift
+{
+   Radius 8
+   Height 48
+   Speed 16
+   Damage 5
+   ReactionTime 16
+   PROJECTILE
+   Damagetype "fire"
+   +RIPPER
+   +FLOORHUGGER
+   +THRUGHOST
+   -NOGRAVITY
+   States
+   {
+   Spawn:
+      TNT1 A 0 A_ChangeVelocity (1,frandom(-8,8),0,1)
+	  DAEF A 1 A_spawnItemEx("RiftHeat",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+	  TNT1 A 0 A_Weave(random(-8,8),0,random(16,-16),0)
+	  DAEF B 1 A_spawnItemEx("RiftHeat",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+      TNT1 A 0 A_Countdown
+      loop
+   Death:
+      TNT1 A 1 Bright
+      stop}}
+
+Actor RiftHeat
+{
+Radius 1
+Height 1
+Speed 0
+Damage 0
+DamageType "Fire"
+RenderStyle Add
++NOCLIP
++DONTSPLASH
+States
+{
+Spawn:
+CFCF AA 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF B 1  A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF CC 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF DD 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF EE 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF FF 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF GG 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF HH 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF II 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF JJ 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF KK 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF LL 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF MM 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF AA 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF B 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF CC 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF DD 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF EE 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF FF 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF GG 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF HH 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF II 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF JJ 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF KK 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF LL 1 A_SpawnItem("RedFlaresmall")
+TNT1 A 0 A_explode(2,28,0)
+CFCF MM 1 A_SpawnItem("RedFlaresmall")
+
+Death:
+CFCF NNOOPP 1 A_SpawnItem("RedFlaresmall")
+Stop
+}}
+
+Actor VolcanicSpike
+{
+Radius 16
+Height 80
+Speed 0
+Damage (random(60,60))
+DamageType "Blast"
+RenderStyle normal
+Projectile
++RIPPER
+States
+{Spawn:
+HSPK CCC 1 Bright A_explode(200,24,0)
+HSPK BBBB 1 Bright A_explode(200,24,0)
+HSPK A 10 Bright
+HSPK BB 1 Bright
+HSPK C 1 Bright
+Stop}}
+
+actor HammerSonicBoom
+{
++MISSILE
+Radius 2
+Height 2
+speed 40
+Damage (random(50,75))
+Damagetype ExplosiveImpact
+States{
+Spawn:
+	TNT1 AAA 1
+	Stop
+Death:
+	TNT1 A 1 A_SpawnItem("WhiteShockWave")
+	TNT1 A 1 A_Explode(100,180,0)
+	Stop}}
+
+ACTOR BoulderConjurer
+{
+	Radius 2
+	Height 2
+	+MISSILE
+	Speed 30
+	renderstyle translucent
+	alpha 0.9
+    +EXTREMEDEATH
+	+NOTELEPORT
+	+floorhugger
+	States
+	{
+	Spawn:
+		TNT1 AA 1 A_SpawnItem ("OldschoolRocketSmokeTrail2")
+	Death:
+		TNT1 AA 0 A_CustomMissile ("MudDust", 6, 0, random (0, 360), 2, random (70, 85))
+		TNT1 A 0 A_CustomMissile ("MudDust", 6, 0, random (0, 360), 2, random (85, 90))
+		TNT1 AAA 0 A_CustomMissile ("MudDust", 4, 0, random (0, 360), 2, random (50, 55))
+		TNT1 AAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("BrownCloud", 20, 0, random (0, 360), 2, random (10, 90))
+		TNT1 A 0 A_CustomMissile ("BrownCloud", 60, 0, random (0, 360), 2, random (40, 90))
+		TNT1 A 1
+		TNT1 A 0 A_SpawnItemEx("HammerBoulder",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+		Stop}}
+
+ACTOR HammerBoulder
+{ Radius 17 Height 72
+  -SOLID +SHOOTABLE +NOBLOOD +NOICEDEATH +STANDSTILL
+  Mass 9999
+  PainSound "Clap"
+  DeathSound "Clap"
+  Health 500
+  PainChance "Extremepunches", 256
+  PainChance "Explosive", 256
+  damagefactor "Burn", 0.0
+//damagefactor "fire", 0.01
+//ReactionTime 30
+  States
+  {
+  Spawn:
+  	TNT1 A 0 A_CustomMissile("ExplosionSplashSpawner")
+    RKBL A 2 A_SetScale(0.25,15)
+	RKBL A 2 A_SetScale(0.5,5)
+	RKBL A 2 A_SetScale(1,1)
+	RKBL A 1 A_ChangeFlag("solid",1)
+  SolidStanding:
+	RKBL A 1
+	//TNT1 A 0 A_CountDown
+	Loop
+ Pain.ExtremePunches:
+	TNT1 A 0 A_Changeflag("FRIENDLY", 0)
+	RKBL A 1 A_CustomMissile ("ExplosionSmoke", 0, 0, random (0, 360), 2, random (10, 12))
+	TNT1 A 0 A_PlaySound("weapons/barrelpain", 1)
+	TNT1 A 0 A_Chase("","")
+	RKBL A 1 A_FaceTarget
+	TNT1 A 0 HealThing(100)
+	TNT1 AAAAA 0 A_CustomMissile("RockChunks",40,0,Random(170,190),CMF_AIMDIRECTION,Random(-2,7))
+	TNT1 A 1 A_CustomMissile ("ExplosionSmoke", 0, 0, random (0, 360), 2, random (10, 12))
+	TNT1 AA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	Stop
+ Pain.Explosive:
+	TNT1 A 0 A_Changeflag("FRIENDLY", 0)
+	RKBL A 1 A_CustomMissile ("ExplosionSmoke", 0, 0, random (0, 360), 2, random (10, 12))
+	TNT1 A 0 A_PlaySound("weapons/barrelpain", 1)
+	TNT1 A 0 A_Chase("","")
+	RKBL A 1 A_FaceTarget
+	TNT1 A 0 HealThing(100)
+	TNT1 AAAA 0 A_CustomMissile("Firebolt",40,0,Random(177,183),CMF_AIMDIRECTION,Random(0,2))
+	TNT1 A 0 A_CustomMissile("Firespear",40,0,180,CMF_AIMDIRECTION,Random(0,2))
+	TNT1 A 1 A_CustomMissile ("ExplosionSmoke", 0, 0, random (0, 360), 2, random (10, 12))
+	TNT1 AA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	Stop
+  Death:
+	TNT1 A 0 A_CustomMissile ("ExplosionSmoke", 0, 0, random (0, 360), 2, random (10, 12))
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AAA 0 A_CustomMissile ("MudDust", 6, 0, random (0, 360), 2, random (70, 85))
+	TNT1 AAA 0 A_CustomMissile ("MudDust", 6, 0, random (0, 360), 2, random (85, 90))
+	TNT1 AAA 0 A_CustomMissile ("MudDust", 4, 0, random (0, 360), 2, random (50, 55))
+	TNT1 A 1
+	Stop}}
+
+ACTOR RockChunks
+{
+	Radius 2
+	Height 2
+	Speed 42
+	Damage (random(60,60))
+	Projectile
+	DamageType "Shotgun"
+	RenderStyle normal
+	gravity 1.0
+	Decal "Crack"
+	Species "Marines"
+	+THRUSPECIES
+	+MTHRUSPECIES
+	-NOGRAVITY
+	States
+	{
+	Spawn:
+		RCK2 A 3 Bright
+		Loop
+	Death:
+		TNT1 AA 0 A_CustomMissile ("DirtChunk1", 0, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("DirtChunk2", 0, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 1
+		Stop}}
+
+ACTOR TossedHammer
+{	Projectile
+	Radius 8 Height 4 Speed 50 Damage (random(200,200))
+	DamageType "ExtremePunches"
+    Decal "Scorch"
+	+NOGRAVITY +THRUSPECIES +MTHRUSPECIES //+RIPPER
+	//Species "Marines"
+	States{
+	Spawn:
+	    FHFY ABCDABCD 2 BRIGHT
+		TNT1 A 0 A_CustomMissile("ReturnHammer")
+		Stop
+	Death:
+		TNT1 A 0 A_CustomMissile("ReturnHammer")
+        EXPL A 0 Radius_Quake (3, 8, 0, 15, 0)//(intensity, duration, damrad, tremrad, tid)
+		TNT1 A 0 A_CustomMissile("ExplosionSplashSpawner")
+        TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	    TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	    TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+        TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+        TNT1 AAAAAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+		TNT1 AAAA 0 A_CustomMissile ("MediumExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_SpawnItemEx ("RocketExplosion",0,0,13,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 2 A_explode(100,100,0)
+		TNT1 A 0 A_SpawnItemEx ("LiquidExplosionEffectSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		Stop}}
+
+ACTOR ReturnHammer
+{	Projectile
+	Radius 8 Height 4 Speed 25 Damage (random(80,80))
+	DamageType "ExtremePunches"
+    Decal "Scorch"
+	+NOGRAVITY +SEEKERMISSILE +RIPPER -FRIENDLY
+	BounceType "Hexen"
+	States{
+	Spawn:
+		TNT1 A 0 A_SeekerMissile(45,45,SMF_LOOK|SMF_PRECISE)
+		FHFX ABCD 2 BRIGHT A_JumpIfCloser(120,"Pocketed")
+		TNT1 A 0 A_SeekerMissile(45,45,SMF_LOOK|SMF_PRECISE)
+		FHFX EFGH 2 BRIGHT A_JumpIfCloser(120,"Pocketed")
+		TNT1 A 0 A_SeekerMissile(45,45,SMF_LOOK|SMF_PRECISE)
+		FHFX ABCD 2 BRIGHT A_JumpIfCloser(120,"Pocketed")
+		TNT1 A 0 A_SeekerMissile(45,45,SMF_LOOK|SMF_PRECISE)
+		FHFX EFGH 2 BRIGHT A_JumpIfCloser(120,"Pocketed")
+		Stop
+	Pocketed:
+		TNT1 A 0 A_GiveToTarget("BladeIsCharged",1,AAPTR_FRIENDPLAYER)
+		TNT1 AAA 1 A_SpawnItem("RedFlareSmall")
+		Stop}}

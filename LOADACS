@@ -1,24 +1,19 @@
 COMMANDS
 CHASECAM
 BLOODSPLASH
+greenbloodsplash
+bluebloodsplash
 PAINEFFECT
 REALISM
 CVARS
-CVARSPATCH
 BOSSHEALTH
 SSPLASH
-SPAWNER
 DYNAMICLEV
 VEHICLECONTROL
 SCOUTER
-Nadegiver
-HOMING
 SlowingFreeze
 BLINK2_LITE
-BLINK
-TLPORTAL
 ScalyScum	// You know you love us. -Dino
 LFSHITEM //shield sphere artifact acs
 TELEPORT
-SPAWNER
-Players_Scripts
+Schism_Scripts

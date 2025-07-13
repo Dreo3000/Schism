@@ -1,0 +1,585 @@
+Actor Schism_ManaConverter : CustomInventory {
+	Inventory.MaxAmount 1
+	Inventory.InterHubAmount 1
+	Inventory.Icon "MNCNVRTR"
+	+INVENTORY.INVBAR
+	+INVENTORY.ALWAYSPICKUP
+	+INVENTORY.KEEPDEPLETED
+	Tag "Converts all of your mana to plasma."
+	States {
+		Spawn:
+			ACON ABCDEEEEEEDCBAAAAAA 3 BRIGHT
+			Loop
+
+		Use:
+			TNT1 A 1 ACS_NamedExecuteAlways("Schism_ManaConvert", 0, 0, 0, 0)
+			Wait
+	}
+}
+
+ACTOR Schism_AmuletOfWarding : BasicArmorPickup //replaces AmuletOfWarding
+{
+  Radius 20
+  Height 16
+  +nogravity
+  Inventory.PickupMessage "$TXT_ARMOR4" // "AMULET OF WARDING"
+  Inventory.Icon "ARM1A0"
+  Armor.SavePercent 33.335
+  Armor.SaveAmount 100
+  States
+  {
+  Spawn:
+    AR_4 A -1
+    Stop
+}}
+
+ACTOR Schism_PlatinumHelm : BasicArmorPickup replaces PlatinumHelm
+{
+  Radius 20
+  Height 16
+  +nogravity
+  Inventory.PickupMessage "$TXT_ARMOR3" // "PLATINUM HELMET"
+  Inventory.Icon "ARM1A0"
+  Armor.SavePercent 33.335
+  Armor.SaveAmount 100
+  States
+  {
+  Spawn:
+    AR_3 A -1
+    Stop
+}}
+
+ACTOR Schism_MeshArmor : BasicArmorPickup replaces MeshArmor
+{
+  Radius 20
+  Height 16
+  +nogravity
+  Inventory.PickupMessage "$TXT_ARMOR1" // "MESH ARMOR"
+  Inventory.Icon "ARM2A0"
+  Armor.SavePercent 50
+  Armor.SaveAmount 200
+  States
+  {
+  Spawn:
+    AR_1 A -1
+    Stop
+}}
+
+ACTOR Schism_FalconShield : BasicArmorPickup replaces FalconShield
+{
+  Radius 20
+  Height 16
+  +nogravity
+  Inventory.PickupMessage "$TXT_ARMOR2" // "FALCON SHIELD"
+  Inventory.Icon "ARM2A0"
+  Armor.SavePercent 50
+  Armor.SaveAmount 200
+  States
+  {
+  Spawn:
+    AR_2 A -1
+    Stop
+}}
+
+
+
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+////////////////Items///////////////////////////
+////////////////////////////////////////////////
+////////////////////////////////////////////////
+
+ACTOR Schism_Flecch : CustomInventory replaces ArtiPoisonBag
+{
+  +FLOATBOB
+  Inventory.DefMaxAmount
+  Inventory.PickupFlash "PickupFlash"
+  Radius 8
+  Height 8
+  +FANCYPICKUPSOUND
+  //Inventory.Icon "ARTIPSBG"
+  Inventory.PickupSound "misc/p_pkup"
+  Inventory.PickupMessage "$TXT_ARTIPOISONBAG" // "FLECHETTE"
+  States
+  {
+ Spawn:
+    PSBG A -1
+    Stop
+   Pickup:
+	TNT1 A 0 A_JumpIfInventory("Melee_Attacks",1,"MarinePickup")
+	TNT1 A 0 A_JumpIfInventory("IsPaladin",1,"PaladinPickup")
+	TNT1 A 0 A_JumpIfInventory("IsSorcerer",1,"Sorcerer")
+	TNT1 A 0 A_JumpIfInventory("IsHeretic",1,"CorvusPickup")
+  PaladinPickup:
+	TNT1 A 0 A_GiveInventory("ArtiPoisonBag3",1)
+    Stop
+  Sorcerer:
+	TNT1 A 0 A_GiveInventory("ArtiPoisonBag2",1)
+    Stop
+  MarinePickup:
+	TNT1 A 0 A_GiveInventory("grenadeammo",1)
+	Stop
+  CorvusPickup:
+    TNT1 A 0 A_GiveInventory("ArtiPoisonBag1",1)
+    Stop
+}}
+
+ACTOR schism_ThrowingBomb : Throwingbomb replaces ThrowingBomb
+{
+  Health 48
+  Speed 12
+  Radius 8
+  Height 10
+  DamageType "Fire"
+  +NOBLOCKMAP
+  +DROPOFF
+  +MISSILE
+  Damagetype "Shrapnel"
+  BounceType "HexenCompat"
+  SeeSound "FlechetteBounce"
+  DeathSound "FlechetteExplode"
+
+  States
+  {
+  Spawn:
+    THRW A 4 A_CheckThrowBomb
+    THRW BCDE 3 A_CheckThrowBomb
+    THRW F 3 A_CheckThrowBomb2
+    Loop
+    THRW G 6 A_CheckThrowBomb
+    THRW F 4 A_CheckThrowBomb
+    THRW H 6 A_CheckThrowBomb
+    THRW F 4 A_CheckThrowBomb
+    THRW G 6 A_CheckThrowBomb
+    THRW F 3 A_CheckThrowBomb
+    Wait
+  Death:
+    CFCF Q 2 Bright A_NoGravity
+	TNT1 A 0 A_Explode(100,80)
+	TNT1 A 0 A_SpawnItemEx ("ExplosionSplashSpawner", 0, 0, -20)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 AAAAAAAAAA 0 A_CustomMissile ("BDExplosionparticlesBig", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 Radius_Quake (2, 24, 0, 15, 0)
+	CFCF R 2 Bright A_Scream
+    CFCF STUWXZ 2 Bright
+    Stop
+}}
+
+ACTOR SorcerorElementalbomb replaces firebomb
+{
+  projectile
+  speed 28
+  DamageType "explosive"
+  -NOGRAVITY +DONTFALL
+  +FOILINVUL
+  +FRIENDLY +LOOKALLAROUND
+  RenderStyle Translucent
+  Alpha 1
+  DeathSound "FlechetteExplode"
+  States
+  {
+  Spawn:
+    THRW ABCDEFGH 2
+	Loop
+  Death:
+  TNT1 A 0 A_setTranslucent(0.6)
+  TNT1 A 0 A_ChangeFlag("noGravity", true)
+  Stuck:
+	PSBG A 1 A_LookEx(LOF_NOSOUNDCHECK,0,100,0,0,"Kaboom")
+	Loop
+  Kaboom:
+    PSBG B 2 A_Scream
+	PSBG C 2
+	TNT1 A 0 A_SpawnItemEx ("BottleFire",0,0,13,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("BottleIce",0,0,13,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("BottleElectro",0,0,13,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    XPL1 ABCDEF 2 Bright
+    Stop
+}}
+
+ACTOR BottleFire
+{
+	Game Doom
+	Damage 60
+	Height 2
+	Radius 2
+	Projectile
+	+MISSILE
+	+FORCEXYBILLBOARD
+	+THRUGHOST
+	gravity 0.3
+	RenderStyle Translucent
+    DamageType Fire
+	States
+	{
+	Spawn:
+	Death:
+	TNT1 A 0 A_Explode(100,80)
+	TNT1 A 0 A_ChangeFlag("NOGRAVITY", 0)
+	TNT1 AAAA 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 AA 0 A_CustomMissile ("PyromancyLargeSparksFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 2 A_CustomMissile ("PyromancyInfernoExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 A_Explode(20,80)
+	TNT1 A 2 A_CustomMissile ("PyromancyLargeExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 A_Explode(20,80)
+	TNT1 A 2 A_CustomMissile ("PyromancyLargeExplosionFlames2", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 A_Explode(20,80)
+	TNT1 AA 2 A_CustomMissile ("PyromancyExplosion2Flames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 A_Explode(20,80)
+	TNT1 A 2 A_CustomMissile ("PyromancyInfernoExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 A_Explode(20,80)
+	TNT1 AAAA 2 A_CustomMissile ("PyromancyExplosion2Flames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAA 2 A_Explode(20,80)
+	Stop
+}}
+actor BottleIce
+{
++NOBLOCKMAP
++MISSILE
++DONTSPLASH
+Damagetype "Freeze"
+RenderStyle Add
++NODAMAGETHRUST
++FORCEXYBILLBOARD
++FORCERADIUSDMG
+Decal "IceScorch"
+States
+{
+	Spawn:
+	TNT1 A 0
+	TNT1 A 0 A_SpawnItemEx ("BluePlasmaParticleSpawner", 0, 0, -20)
+	TNT1 A 0 A_SpawnItemEx ("BlueFlareSpawn",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("BlueFlare3",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 AAAAAAAA 0 A_CustomMissile ("BluePlasmaFireXL", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAAA 0 A_CustomMissile ("BluePlasmaParticle", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAA 0 A_CustomMissile ("RealisticFireSparks1Blue", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("RealisticFireSparks1Blue", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("BigPlasmaParticleX", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAA 0 A_CustomMissile ("BigPlasmaParticleX", 0, 0, random (0, 360), 2, random (0, 360))
+    TNT1 A 0 A_ALertMonsters
+	TNT1 A 0 A_PlaySound("FRZFIRE2", 3, 3)
+	TNT1 A 0 A_SpawnItem("CryoSmoke")
+	BXPL A 0 Bright A_ChangeFlag("ICEDAMAGE", 1)
+	BXPL A 0 Bright A_ChangeFlag("NODAMAGETHRUST", 0)
+	BXPL A 0 Bright A_Explode(40,80)
+	BXPL AAAAAAAAAAA 0 Bright A_SpawnItemEx("CryoSmoke", 0, 0, 0, random(10, 30)*0.1, 0, random(0, 10)*0.1, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION)
+	BXPL AAAAAAAAAAA 0 Bright A_SpawnItemEx("CryoSmoke", 0, 0, 0, random(10, 30)*0.1, 0, random(0, 10)*0.1, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION)
+	BXPL AAAAA 0 Bright A_SpawnItemEx("CryoSmoke3", 0, 0, 0, random(10, 30)*0.04, 0, random(0, 10)*0.04, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION,64)
+	BXPL AAAAAA 0 Bright A_SpawnItemEx("FreezerTrailSparksSmall", random(5,-5), random(5,-5), random(5,-5), random(10, 30)*0.04, 0, random(0, 10)*0.04, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION,64)
+	BXPL AAAAAAAAA 0 Bright A_SpawnItemEx("CryoSmoke", 0, 0, 0, random(10, 30)*0.1, 0, random(0, 10)*0.1, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION)
+	BXPL AAAAAA 0 Bright A_SpawnItemEx("CryoSmoke2", 0, 0, 0, random(10, 30)*0.04, 0, random(0, 10)*0.04, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION,64)
+	BXPL AAAAAA 0 Bright A_SpawnItemEx("CryoSmoke2", 0, 0, 0, random(10, 30)*0.04, 0, random(0, 10)*0.04, random(1,360), SXF_CLIENTSIDE|SXF_NOCHECKPOSITION,64)
+	BXPL ABCDEFGH 1 Bright
+	BXPL IJKLLM 1 Bright A_FadeOut(0.1)
+	Stop
+}}
+Actor BottleElectro
+{
+   PROJECTILE
+   RENDERSTYLE ADD
+   Damagetype Lightning
+   +THRUGHOST
+   +FRIENDLY
+   +FORCEXYBILLBOARD
+   States
+   {
+	Spawn:
+	Death:
+	TNT1 A 0 A_SpawnItem ("StunGrenadeExplosion", 0,0)
+    BFSK ABCD 1 BRIGHT A_SpawnItem("BallLightningZapper")
+    TNT1 A 0 Bright A_SpawnItem ("LightningFog", 0,0)
+	TNT1 AAAAAAAAAA 0 A_SpawnItem ("BigElectroBlastTrailX", 0,0)
+	TNT1 AAAAAAAAAA 0 A_CustomMissile("ElectroBlast",6,0,random(0,359),CMF_AIMDIRECTION|CMF_TRACKOWNER,random(-40,40))
+	BFSK DEFGH 1 Bright A_SpawnItem("BallLightningZapperHeavy")
+	TNT1 AAA 2 A_SpawnItem("BallLightningZapperHeavy")
+	TNT1 AAAAA 3 A_SpawnItem("BallLightningZapper")
+	XELC ABCDEF 3 Bright
+	  Stop
+}}
+
+
+//corvus poison bomb
+
+//////repulse/////
+ACTOR Schism_Repulse : CustomInventory replaces ArtiBlastRadius
+{
+  +FLOATBOB
+  Inventory.DefMaxAmount
+  Inventory.PickupFlash "PickupFlash"
+  Radius 8
+  Height 8
+  +FANCYPICKUPSOUND
+  Inventory.PickupSound "misc/p_pkup"
+  Inventory.PickupMessage "$TXT_ARTIBLASTRADIUS"
+  States
+  {
+ Spawn:
+    BLST ABCDEFGH 4 Bright
+    loop
+   Pickup:
+	TNT1 A 0 A_JumpIfInventory("Melee_Attacks",1,"MarinePickup")
+	TNT1 A 0 A_JumpIfInventory("IsPaladin",1,"PaladinPickup")
+	TNT1 A 0 A_JumpIfInventory("IsSorcerer",1,"Sorcerer")
+	TNT1 A 0 A_JumpIfInventory("IsHeretic",1,"CorvusPickup")
+  PaladinPickup:
+	TNT1 A 0 A_GiveInventory("Basic_repulse",1)
+    Stop
+  Sorcerer:
+	TNT1 A 0 A_GiveInventory("Basic_repulse",1)
+    Stop
+  MarinePickup:
+	TNT1 AAAA 0 A_GiveInventory("ArmorShardFatalityBonus")
+	Stop
+  CorvusPickup:
+    TNT1 A 0 A_GiveInventory("Basic_repulse",1)
+    Stop
+}}
+
+ACTOR Basic_repulse : CustomInventory
+{
+  Inventory.DefMaxAmount
+  +INVBAR
+  Inventory.Icon "ARTIBLST"
+  Tag "$TAG_ARTIBLASTRADIUS"
+  States
+  {
+  Spawn:
+    BLST A 4 Bright
+    Loop
+  Use:
+	TNT1 A 0 A_JumpIfInventory("IsPaladin",1,"PaliUse")
+	TNT1 A 0 A_JumpIfInventory("IsSorcerer",1,"WizurUse")
+    TNT1 A 0 A_Blast//(0,0,400,500)
+	stop
+  PaliUse:
+	TNT1 A 0 A_giveinventory("PaladinRoar")
+	stop
+  WizurUse:
+	TNT1 A 0 A_giveinventory("WizardClock")
+	stop
+}}
+
+ACTOR wizurd_repulse : CustomInventory
+{
+  Inventory.DefMaxAmount
+  +INVBAR
+  Inventory.Icon "ARTIBLST"
+  Tag "$TAG_ARTIBLASTRADIUS"
+  States
+  {
+  Spawn:
+    BLST A 4 Bright
+    Loop
+  Use:
+    TNT1 A 0 A_giveinventory("WizardClock")
+	stop
+}}
+
+ACTOR Pali_repulse : CustomInventory
+{
+  Inventory.DefMaxAmount
+  +INVBAR
+  Inventory.Icon "ARTIBLST"
+  Tag "$TAG_ARTIBLASTRADIUS"
+  States
+  {
+  Spawn:
+    BLST A 4 Bright
+    Loop
+  Use:
+    TNT1 A 0 A_giveinventory("PaladinRoar")
+	stop
+}}
+
+ACTOR PaladinRoar : PowerupGiver
+{
+   -COUNTITEM +INVENTORY.AUTOACTIVATE +INVENTORY.ALWAYSPICKUP +INVENTORY.ADDITIVETIME
+   Inventory.MaxAmount 0
+   Powerup.Type Frightener
+   powerup.duration -5
+   States
+   {
+   Spawn:
+       TNT1 A 1 Bright
+       Loop
+}}
+
+Actor WizardClock : PowerupGiver
+{
+  -CountItem +Inventory.AutoActivate +Inventory.AlwaysPickup +INVENTORY.ADDITIVETIME
+  Inventory.MaxAmount 0
+  Powerup.Duration -5
+  Powerup.Type TimeFreezer
+  States
+  {
+  Spawn:
+    TNT1 A 1 Bright
+    Loop
+}}
+
+//////////Krater-o-might/////////
+ACTOR Schism_Krater : CustomInventory replaces ArtiBoostMana
+{
+  +FLOATBOB
+  +NOGRAVITY
+  +COUNTITEM
+  +INVENTORY.INVBAR
+  +INVENTORY.PICKUPFLASH
+  +INVENTORY.FANCYPICKUPSOUND
+  Inventory.DefMaxAmount
+  Inventory.Icon "ARTIBMAN"
+  Inventory.PickupSound "misc/p_pkup"
+  Inventory.PickupMessage "$TXT_ARTIBOOSTMANA" // "KRATER OF MIGHT"
+  Tag "$TAG_ARTIBOOSTMANA"
+  States
+  {
+  Spawn:
+    KRAT ABC 6 bright
+    Loop
+  Use:
+    TNT1 A 0 A_JumpIfInventory("Melee_Attacks",1,"MarinePickup")
+	TNT1 A 0 A_JumpIfInventory("IsPaladin",1,"PaladinPickup")
+	TNT1 A 0 A_JumpIfInventory("IsSorcerer",1,"Sorcerer")
+	TNT1 A 0 A_JumpIfInventory("IsHeretic",1,"CorvusPickup")
+  PaladinPickup:
+	TNT1 A 0 A_GiveInventory("zeal",250)
+    TNT1 A 0 A_GiveInventory("megasphere")
+    Stop
+  Sorcerer:
+	TNT1 A 0 A_GiveInventory("RuneAmmo",20)
+    Stop
+  MarinePickup:
+	TNT1 A 0 A_GiveInventory("NewBackPack")
+	Stop
+  CorvusPickup:
+    TNT1 A 0 A_GiveInventory("NewBackPack")
+    Stop
+}}
+////////Bracers//////////
+Actor Schism_DragonArmor : BasicArmorPickup replaces ArtiBoostArmor
+{
+  Game Doom
+  Radius 8
+  Height 8
+  +FLOORCLIP
+  Inventory.Pickupmessage "Dragon armor."
+  Inventory.PickupSound "ARMOR"
+  Inventory.Icon "SLSLA0"
+  Armor.Savepercent 75
+  Armor.Saveamount 400
+  States
+  {
+	Spawn:
+		BRAC ABCDEFGH 4 Bright
+		loop
+}}
+////////QuartzFlask//////////
+Actor Schism_QFlask : CustomInventory Replaces ArtiHealth {
+	+FLOATBOB
+	+NOGRAVITY
+	+COUNTITEM
+	+INVENTORY.INVBAR
+	+INVENTORY.PICKUPFLASH
+	+INVENTORY.FANCYPICKUPSOUND
+	Inventory.DefMaxAmount
+	Inventory.Icon "ARTIPTN2"
+	Inventory.PickupSound "misc/p_pkup"
+	Inventory.PickupMessage "$TXT_ARTIHEALTH" // "QUARTZ FLASK"
+	Tag "$TAG_ARTIHEALTH"
+	States {
+		Spawn:
+			PTN2 ABC 4
+			Loop
+		Use:
+			TNT1 A 0 A_giveInventory("medikit2")
+			TNT1 A 0 A_giveInventory("AfterHeal")
+			Stop
+	}
+}
+
+Actor AfterHeal : PowerupGiver {
+	Game Doom
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.HUBPOWER
+	+INVENTORY.PERSISTENTPOWER
+	+INVENTORY.ALWAYSPICKUP
+	+INVENTORY.ADDITIVETIME
+	powerup.duration -10
+	Powerup.Strength 2
+// 	powerup.color "none"
+	powerup.type Regeneration
+}
+///////////Urn///////////
+ACTOR Schism_Urn : CustomInventory replaces ArtiSuperHealth
+{
+  Inventory.DefMaxAmount
+  Radius 8
+  Height 8
+  +FANCYPICKUPSOUND +FLOATBOB
+  Inventory.Icon ARTISPHL
+  Inventory.PickupSound "misc/p_pkup"
+  Inventory.PickupMessage "$TXT_ARTISUPERHEALTH" // "MYSTIC URN"
+  Tag "$TAG_ARTISUPERHEALTH"
+  States
+  {
+   Spawn:
+    SPHL A 1
+    Loop
+   Pickup:
+	TNT1 A 0 A_JumpIfInventory("Melee_Attacks",1,"MarinePickup")
+	TNT1 A 0 A_JumpIfInventory("IsPaladin",1,"PaladinPickup")
+	TNT1 A 0 A_JumpIfInventory("IsSorcerer",1,"Sorcerer")
+	TNT1 A 0 A_JumpIfInventory("IsHeretic",1,"CorvusPickup")
+  PaladinPickup:
+	TNT1 A 0 A_GiveInventory("DivineHealth")
+    Stop
+  Sorcerer:
+	TNT1 A 0 A_GiveInventory("megasphere")
+    Stop
+  MarinePickup:
+	TNT1 AAAA 0 A_GiveInventory("SoulSphere")
+	Stop
+  CorvusPickup:
+    TNT1 A 0 A_GiveInventory("SoulSphere")
+    Stop
+}}
+actor DivineHealth : UpgradeStamina
+{
+  Radius 20
+  Scale 0.75
+  Inventory.Amount 10 //this controls how much health boost you receive
+  Inventory.MaxAmount 500 //this controls how high your health can get
+  +INVENTORY.ALWAYSPICKUP
+  Inventory.PickupMessage "The gods grant you life"
+  States
+  {
+  Spawn:
+    TNT1 A 1
+    loop
+}}
+
+//////////bonus//////////
+actor HealthScroll : PowerupGiver
+{
+	Game Doom
+	inventory.pickupmessage "Scroll of healing bullshit!."
+	inventory.maxamount 0
+	powerup.duration -600
+	Powerup.Strength 15
+	powerup.color "none"
+	powerup.type Regeneration
+	+COUNTITEM
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+	States
+	{
+	Spawn:
+		HRAD ABCDEFGHIJKLMNOPPPPPPONMLKJIHGFEDCBAAA 4 Bright
+		Loop
+}}

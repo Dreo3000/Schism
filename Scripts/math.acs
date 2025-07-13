@@ -1,0 +1,26 @@
+Function int min (int a, int b) {
+	If (a < b) return a;
+	return b;
+}
+
+Function int max (int a, int b) {
+	If (a > b)return a;
+	return b;
+}
+
+Function int abs(int x) {
+    If (x < 0) return -x;
+    return x;
+}
+
+Function int pow (int num, int power) {
+	num = f2i(num);
+	for(int i = 1; i != power; i++) {
+		num *= num;
+	}
+	return num;
+}
+// Напоминалка: fixed с int не складываются
+Function int inverseParabola(int x, int a, int c) {
+	return f2i((-1. / a) * x*x) + c;
+}

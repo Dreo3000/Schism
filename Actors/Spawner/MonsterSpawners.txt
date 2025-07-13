@@ -1,0 +1,769 @@
+//////////////////////////////////////////////////////////////
+//															//
+//			ADVANCED MONSTER SPAWNING SYSTEM 				//
+//															//
+//		PRESENCE OF BOSSES CHANGES MONSTER SPAWNING			//
+//															//
+//////////////////////////////////////////////////////////////
+//	Idea - Lord Lothar
+//	Code solution - Dreo
+//
+
+Actor Schism_BaseSpawner {
+	+ISMONSTER
+	+SHOOTABLE
+	+NOBLOCKMAP
+	+THRUACTORS
+	+NOINTERACTION
+	+DONTBLAST
+	+NOTARGET
+	+NOPAIN
+	+NODAMAGE
+	+RANDOMIZE
+	+NOTONAUTOMAP
+	+NEVERRESPAWN
+	+SERVERSIDEONLY
+	Health 2147483647
+	Mass 2147483647
+	Speed 0
+	var int user_tid;
+	var int user_class;
+	States {
+		Check:
+			"TNT1" "A" 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_GetTracersHealth") <= 0, "Execute")
+			"####" "#" 5 A_Warp(AAPTR_TRACER, 0, 0, 0, 0, WARPF_NOCHECKPOSITION | WARPF_INTERPOLATE | WARPF_COPYINTERPOLATION)
+			Loop
+
+		Execute:
+			"TNT1" "A" 2 A_Die
+			Goto Death
+			Death:
+			"TNT1" "A" 5 A_Fall
+			Stop
+	}
+}
+
+Actor Schism_ZombiemanSpawner : Schism_BaseSpawner Replaces ZombieMan {
+	Game Doom
+	Radius 16
+	Height 44
+    Scale 0.98
+	States {
+		Spawn:
+			"PSSS" "A" 4
+// 			"####" "#" 1 A_CheckSightOrRange(1000, 2)
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn10001:
+			"TNT1" "A" 0 A_SpawnItemEx("RifleZombie", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10002:
+			"TNT1" "A" 0 A_SpawnItemEx("PistolZombie", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10003:
+			"TNT1" "A" 0 A_SpawnItemEx("Labguy", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10004:
+			"TNT1" "A" 0 A_SpawnItemEx("ChainsawZombie", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10005:
+			"TNT1" "A" 0 A_SpawnItemEx("Schism_RifleCommando", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn20001:
+		Spawn30001:
+			"TNT1" "A" 0 A_SpawnItemEx("PZombie", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		SpawnImp: //reserved for brutal doom system
+			"TNT1" "A" 0 A_SpawnItemEx("Imp", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+
+Actor Schism_SergeantSpawner : Schism_BaseSpawner Replaces ShotgunGuy {
+	Game Doom
+	Radius 16
+	Height 44
+    Scale 0.98
+	States {
+		Spawn:
+			"SHID" "A" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn10001:
+			"TNT1" "A" 0 A_SpawnItemEx ("ShotgunGuy1",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10002:
+			"TNT1" "A" 0 A_SpawnItemEx ("SMGGuy",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10003:
+			"TNT1" "A" 0 A_SpawnItemEx ("Schism_CyborgZombie", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER , 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn20001:
+			"TNT1" "A" 0 A_SpawnItemEx("Schism_HereticWizard", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_CommandoSpawner : Schism_BaseSpawner Replaces ChaingunGuy {
+	Game Doom
+	Radius 16
+	Height 44
+	States {
+		Spawn:
+			"MPOS" "A" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn10001:
+			"TNT1" "A" 0 A_SpawnItemEx ("ChaingunGuy1",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10002:
+			"TNT1" "A" 0 A_SpawnItemEx ("Schism_RifleCommando",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_ImpSpawner : Schism_BaseSpawner Replaces DoomImp {
+	Game Doom
+	Scale 1.04
+	Radius 16
+	Height 48
+	States {
+		Spawn:
+			"TROS" "A" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn10001:
+			"TNT1" "A" 0 A_SpawnItemEx("Imp",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10002:
+			"TNT1" "A" 0 A_SpawnItemEx("Schism_CyberImp",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10003:
+			"TNT1" "A" 0 A_SpawnItemEx("ShieldedImp",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn20001: //MummyLeader
+			"TNT1" "A" 0 A_SpawnItemEx("GolemLeader",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_DemonSpawner : Schism_BaseSpawner Replaces Demon {
+	Game Doom
+	Scale 1.1
+	Height 56
+	Radius 20
+	States {
+		Spawn:
+			"SARG" "Y" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn10001:
+			"TNT1" "A" 0 A_SpawnItemEx("BullDemon",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10002:
+			"TNT1" "A" 0 A_SpawnItemEx("MechDemon",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10003:
+			"TNT1" "A" 0 A_SpawnItemEx("DemonSkeleton",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+
+		Spawn10004:
+			"TNT1" "A" 0 A_SpawnItemEx("Spectro", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn30001:
+			"TNT1" "A" 0 A_SpawnItemEx("BrutalEttin", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn20001:
+			"TNT1" "A" 0 A_SpawnItemEx("Golem",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_SpectreSpawner : Schism_BaseSpawner Replaces Spectre {
+	Game Doom
+	Scale 1.1
+	Height 56
+	Radius 20
+	States {
+		Spawn:
+			"SPEC" "A" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+			
+		Spawn10001:
+			"TNT1" "A" 0 A_SpawnItemEx("Spectro", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn10002:
+			"TNT1" "A" 0 A_SpawnItemEx("DemonSkeleton",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+			
+		Spawn30001:
+			"TNT1" "A" 0 A_SpawnItemEx("BrutalEttin", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn20001:
+			"TNT1" "A" 0 A_SpawnItemEx("GolemGhost",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_KnightSpawner : Schism_BaseSpawner Replaces HellKnight {
+	Game Doom
+	Scale 1.0
+	Height 56
+	Radius 16
+	States {
+		Spawn:
+			"BOS2" "B" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn10001:
+			"TNT1" "A" 0 A_SpawnItemEx("HellKnight2",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+
+		Spawn10002:
+			"TNT1" "A" 0 A_SpawnItemEx("Belphegor2",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+
+		Spawn10003:
+			"TNT1" "A" 0 A_SpawnItemEx("Schism_Afrit",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn30001:
+			"TNT1" "A" 0 A_SpawnItemEx("Schism_ChaosSerpent",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn20001:
+			"TNT1" "A" 0 A_SpawnItemEx("BrutalBeast",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_BaronSpawner : Schism_BaseSpawner Replaces BaronOfHell {
+	Game Doom
+	Scale 1.1
+	Height 56
+	Radius 16
+	+BossDeath
+	States {
+		Spawn:
+			"BARO" "B" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, 0, 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn10001:
+			"TNT1" "A" 0 A_SpawnItemEx("BaronofHell2", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10002:
+			"TNT1" "A" 0 A_SpawnItemEx("CyberBaron", 0, 0, 0 ,0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+
+        Spawn10003:
+			"TNT1" "A" 0 A_SpawnItemEx("Schism_DukeOfHell", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+
+		Spawn10004:
+			"TNT1" "A" 0 A_SpawnItemEx("Schism_LordAfrit", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+			
+		Spawn30001:
+			"TNT1" "A" 0 A_SpawnItemEx("Schism_ChaosSerpent",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Boss1:
+			"TNT1" "A" 0 A_SpawnItemEx ("BaronBoss1", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Boss2:
+			"TNT1" "A" 0 A_SpawnItemEx ("BaronBoss2", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Execute:
+			"TNT1" "A" 2 A_Die
+			Goto Death
+		Death:
+			"TNT1" "A" 5 A_Fall
+			"TNT1" "A" 2 A_BossDeath
+			Stop
+	}
+}
+
+Actor Schism_CacodemonSpawner : Schism_BaseSpawner Replaces Cacodemon {
+	//$Arg4 Cacodemon Type
+	//$Arg4Type 11
+	//$Arg4Enum {1 = "Power Mage"; 2 = "Avatar Acolyte"; 3 = "Cacodemon"; 4 = "Aracnorb";}
+	Radius 24
+	Height 56
+	Scale 0.9
+	States {
+		Spawn:
+			"HEAD" "A" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn10001:
+			"TNT1" "A" 0 A_SpawnItemEx("Cacodemon_",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+
+		Spawn10002:
+			"TNT1" "A" 0 A_SpawnItemEx("Aracnorb",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+
+		Spawn10003:
+			"TNT1" "A" 0 A_SpawnItemEx("AracnorbQueen",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+			
+		Spawn20001:
+			"TNT1" "A" 0 A_SpawnItemEx("DarkServant",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+			
+		Spawn30001:
+			"TNT1" "A" 0 A_SpawnItemEx("SkullWizard",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+            Goto Check
+	}
+}
+
+Actor Schism_LostSoulSpawner : Schism_BaseSpawner Replaces LostSoul {
+	Game Doom
+	Radius 16
+	Height 32
+	States {
+		Spawn:
+			"LSOL" "A" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+			
+		Spawn1001:
+			"TNT1" "A" 0 A_SpawnItemEx("TehLostSoul",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS , 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn2001:
+			"TNT1" "A" 0 A_SpawnItemEx("Schism_Gargoyle",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS , 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn3001:			
+			"TNT1" "A" 0 A_SpawnItemEx("BrutalFireDemon",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS , 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_PainElementalSpawner : Schism_BaseSpawner Replaces PainElemental {
+	//$Arg4 Pain Elemental Type
+	//$Arg4Type 11
+	//$Arg4Enum {1 = "Necromancer"; 2 = "Lich"; 3 = "Pain Elemental";}
+	Radius 31
+	Height 56
+	States {
+		Spawn:
+			"PAIN" "A" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn1001:
+			"TNT1" "A" 0 A_SpawnItemEx("PainElemental1",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn2001:
+			"TNT1" "A" 0 A_SpawnItemEx("BrutalLich",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+				
+		Spawn3001:
+			"TNT1" "A" 0 A_SpawnItemEx("Necromancer",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_RevenantSpawner : Schism_BaseSpawner Replaces Revenant {
+	Game Doom
+	Radius 12
+	Height 60
+	Scale 0.9
+	States {
+		Spawn:
+			"SKEL" "B" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn1001:
+			"TNT1" "A" 0 A_SpawnItemEx("Revenant1",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn2001:
+			"TNT1" "A" 0 A_SpawnItemEx("HKnight",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_MancubusSpawner : Schism_BaseSpawner Replaces Fatso {
+	Game Doom
+	Scale 1.1
+	Radius 24
+	Height 60
+	+BossDeath
+	States {
+		Spawn:
+			"FATT" "B" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn1001:
+			"TNT1" "A" 0 A_SpawnItemEx("Mancubus",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		SpawnA:
+			"TNT1" "A" 0 A_SpawnItemEx("Volcabus",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn3001:
+			"TNT1" "A" 0 A_SpawnItemEx("BrutalIceGuy",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Execute:
+			"TNT1" "A" 2 A_Die
+			Goto Death
+		Death:
+			"TNT1" "A" 5 A_Fall
+			"TNT1" "A" 2 A_BossDeath
+			Stop
+	}
+}
+
+Actor Schism_ArachnotronSpawner : Schism_BaseSpawner replaces Arachnotron {
+	Scale 1.1
+	Radius 24
+	Height 60
+	+BossDeath
+	States {
+		Spawn:
+			"BSPI" "A" 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+
+		Spawn1001:
+			"TNT1" "A" 0 A_SpawnItemEx("Arachnotron1",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		SpawnA:
+			"TNT1" "A" 0 A_SpawnItemEx("Arachnotron2",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Check:
+			"TNT1" "A" 5 A_JumpIf(ACS_NamedExecuteWithResult("Live_Check", user_tid) != 1, "Execute")
+			"TNT1" "A" 5 ACS_NamedExecuteAlways("Get_Spawner_Status", 0, user_tid)
+			Loop
+
+		Execute:
+			"TNT1" "A" 2 A_Die
+			Goto Death
+		Death:
+			"TNT1" "A" 5 A_Fall
+			"TNT1" "A" 2 A_BossDeath
+			Stop
+	}
+}
+
+Actor Schism_ArchvileSpawner : Schism_BaseSpawner Replaces Archvile {
+	Radius 20
+	Height 56
+	States {
+		Spawn:
+			ARCH B 4
+			"####" "#" 1 A_SetUserVar("user_class", 11)
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, 0, 0, 0)
+			ARCH B 1
+			Wait
+
+		Spawn10001:
+			"TNT1" "A" 0 A_SpawnItemEx ("TehArchvile", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10002:
+			"TNT1" "A" 0 A_SpawnItemEx ("Diabolist", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_CyberdemonSpawner : Schism_BaseSpawner Replaces CyberDemon {
+	Scale 1.2
+	Radius 45
+	Height 94
+	+BOSSDEATH
+	States {
+		Spawn:
+			CYBR D 1
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			CYBR D 1
+			Wait
+
+		Spawn10001:
+			"TNT1" "A" 0 A_SpawnItemEx("TheCyberDemon",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10002:
+			"TNT1" "A" 0 A_SpawnItemEx("SuperDemon",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		Spawn10003:
+		Spawn30001:
+		Spawn20001:
+			"TNT1" "A" 0 A_SpawnItemEx("Avatar",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER ,0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		ReplaceForBOSS:
+			"TNT1" "A" 0 ACS_NamedExecuteAlways("MapEnhancementE2M8")
+			"TNT1" "A" 0 A_SpawnItemEx("CyberdemonBoss", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Stop
+
+		Check:
+			"TNT1" "A" 5 A_JumpIf(ACS_NamedExecuteWithResult("Live_Check", user_tid) != 1, "Execute")
+			"TNT1" "A" 5 ACS_NamedExecuteAlways("Get_Spawner_Status", 0, user_tid)
+			Loop
+
+		Execute:
+			"TNT1" "A" 2 A_Die
+			Goto Death
+		Death:
+			"TNT1" "A" 5 A_Fall
+			"TNT1" "A" 2 A_BossDeath
+			Stop
+	}
+}
+
+Actor Schism_MasterMindSpawner : Schism_BaseSpawner Replaces SpiderMastermind {
+	Scale 1.1
+	Radius 60
+	Height 100
+	+BOSSDEATH
+	States {
+		Spawn:
+			SPID A 4
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			SPID A 1
+			Wait
+
+		Spawn1001:
+			"TNT1" "A" 0 A_SpawnItemEx("TheSpiderMastermind", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Goto Check
+
+		ReplaceForBOSS:
+			"TNT1" "A" 0 ACS_NamedExecuteAlways("MapEnhancementE3M8")
+			"TNT1" "A" 0 A_SpawnItemEx("RocketBox", 64, 64)
+			"TNT1" "A" 0 A_SpawnItemEx("RocketBox", -64, 64)
+			"TNT1" "A" 0 A_SpawnItemEx("RocketBox", -64, -64)
+			"TNT1" "A" 0 A_SpawnItemEx("RocketBox", 64, -64)
+			"TNT1" "A" 0 A_SpawnItemEx("SuperMastermind", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Stop
+
+		ReplaceForMotherDemon1:
+			"TNT1" "A" 0 A_SpawnItemEx("MotherDemon", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Stop
+
+
+		ReplaceForMotherDemon2:
+			"TNT1" "A" 0 A_JumpIf(y != 0, "RealSpawn")
+			"TNT1" "A" 0 A_JumpIf(z != 48, "RealSpawn")
+			"TNT1" "A" 0 A_SpawnItemEx("MotherDemon", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, ACS_NamedExecuteWithResult("Schism_GetandSettemporaryTID"))
+			Stop
+
+		Execute:
+			"TNT1" "A" 2 A_Die
+			Goto Death
+		Death:
+			"TNT1" "A" 5 A_Fall
+			"TNT1" "A" 2 A_BossDeath
+			Stop
+	}
+}
+
+Actor Schism_NaziSpawner : Schism_BaseSpawner {
+	Radius 14
+	Height 56
+	States {
+		Spawn:
+			NAZI A 1
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, 0, 0, 0)
+			NAZI A 1
+			Wait
+
+		RealSpawn:
+			"TNT1" "A" 0 A_SpawnItemEx ("EvilMarineRifle",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_CLEARCALLERTID,0, 27)
+			Goto Check
+
+		ReplaceForPlasma:
+			"TNT1" "A" 0 A_SpawnItemEx ("EvilMarinePlasma",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_CLEARCALLERTID,0, 27)
+			Goto Check
+
+		ReplaceForNazi:
+			"TNT1" "A" 0 A_SpawnItemEx("Nazi", 0, 0, 28, 0, 0, 0, 0, SXF_SETMASTER | SXF_TRANSFERAMBUSHFLAG)
+			Goto Check
+
+		ReplaceForUbersoldat:
+			"TNT1" "A" 0 A_SpawnItemEx("Ubersoldat", 0, 0, 28, 0, 0, 0, 0, SXF_SETMASTER | SXF_TRANSFERAMBUSHFLAG)
+			Goto Check
+
+		ReplaceForEasyMarine:
+			"TNT1" "A" 0 A_SpawnItemEx("EasyMarineRifleAlive", 0, 0, 28, 0, 0, 0, 0, SXF_SETMASTER | SXF_TRANSFERAMBUSHFLAG)
+			Goto Check
+
+		ReplaceForMrX:
+			"TNT1" "A" 0 A_SpawnItemEx("MrX", 0, 0, 28, 0, 0, 0, 0, SXF_SETMASTER | SXF_TRANSFERAMBUSHFLAG)
+			Goto Check
+
+		Check:
+			"TNT1" "A" 5 A_JumpIf(ACS_NamedExecuteWithResult("Live_Check", user_tid) == 0, "Execute")
+			"TNT1" "A" 5 ACS_NamedExecuteAlways("Get_Spawner_Status", 0, user_tid)
+			Loop
+
+		Execute:
+			"TNT1" "A" 2 A_Die
+			Goto Death
+		Death:
+			"TNT1" "A" 5 A_Fall
+			Stop
+	}
+}
+
+Actor Schism_TestSpawner : Schism_BaseSpawner {
+	States {
+		Spawn:
+			PLAY A 1
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, 0, 0, 0)
+			PLAY A 1
+			Wait
+	}
+}
+
+Actor Schism_FireDemonSpawner : Schism_BaseSpawner Replaces FireDemon {
+	Game Hexen
+	States {
+		Spawn:
+			"FDMN" "A" 1
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+			
+		Spawn3001:
+			"####" "#" 0 A_SpawnItemEx("BrutalFireDemon", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn1001:
+			"####" "#" 0 A_SpawnItemEx("TehLostSoul", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_EttinSpawner : Schism_BaseSpawner Replaces Ettin {
+	Game Hexen
+	States {
+		Spawn:
+			"ETTN" "A" 1
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+			
+		Spawn30001:
+			"####" "#" 0 A_SpawnItemEx("BrutalEttin", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn10001:
+			"####" "#" 0 A_SpawnItemEx("DemonSkeleton", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_SerpentSpawner : Schism_BaseSpawner Replaces Demon1 {
+	Game Hexen
+	States {
+		Spawn:
+			"ETTN" "A" 1
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+			
+		Spawn3001:
+			"####" "#" 0 A_SpawnItemEx("Schism_ChaosSerpent", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn1001:
+			"####" "#" 0 A_SpawnItemEx("HellKnight2", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_HereticImpSpawner : Schism_BaseSpawner Replaces HereticImp {
+	Game Heretic
+	States {
+		Spawn:
+			"GARG" "A" 1
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+			
+		Spawn2001:
+			"####" "#" 0 A_SpawnItemEx("Schism_Gargoyle", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn1001:
+			"####" "#" 0 A_SpawnItemEx("TehLostSoul", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}
+
+Actor Schism_GolemSpawner : Schism_BaseSpawner Replaces mummy {
+	Game Heretic
+	States {
+		Spawn:
+			"GARG" "A" 1
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, ARGS[4], 0, 0)
+			"####" "#" 1
+			Wait
+			
+		Spawn2001:
+			"####" "#" 0 A_SpawnItemEx("Golem", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+			
+		Spawn1001:
+			"####" "#" 0 A_SpawnItemEx("BullDemon", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_SETMASTER, 0, CallACS("Schism_GetandSettemporaryTID"))
+			Goto Check
+	}
+}

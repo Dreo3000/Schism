@@ -1,0 +1,1117 @@
+////////////////////////////////////////////////////////////////////////////////
+//																			  //
+//					Gauntlets of Necromacer									  //
+//																			  //
+//----------------------------------------------------------------------------//
+//																			  //
+//					Code by Dreo|Updated 07.06.2023							  //
+//																			  //
+////////////////////////////////////////////////////////////////////////////////
+
+Actor Schism_NecroLightning // <-- redo into puff
+{
+	Projectile
+	Height 6
+	Radius 6
+	Speed 50
+	Damage 3
+	DamageType LifeDrain
+	+FORCEPAIN
+	+FORCERADIUSDMG
+	+HITTRACER
+	+NODAMAGETHRUST
+	+NOEXTREMEDEATH
+	+BLOODLESSIMPACT
+	+PIERCEARMOR
+	-DOHARMSPECIES
+	var int user_timer;
+	States
+	{
+		Spawn:
+			TNT1 A 0 NODELAY A_Playsound("Sparks/Spawn")
+			TNT1 A 0 A_SetUserVar("user_timer", 0)
+			TNT1 A 1
+			TNT1 A 1
+			Stop
+
+		XDeath:
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CheckMissileForWarping") == 0, "Death")
+			TNT1 A 0 A_JumpIfInventory("Schism_NecroLitLimit", 1, "Heal", AAPTR_TRACER)
+			TNT1 A 0 A_GiveInventory("Schism_NecroLitLimit", 1, AAPTR_TRACER)
+			Drain:
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CheckMissileForWarping") == 0, "Exit")
+			TNT1 A 0 A_JumpIf(user_timer == 30, "Exit")
+			TNT1 A 0 A_SetUserVar("user_timer", user_timer+1)
+			TNT1 A 0 A_GiveInventory("Schism_Health100", 1, AAPTR_TARGET)
+			TNT1 A 0 A_Explode(3, 8, 0)
+			TNT1 A 0 A_Warp(AAPTR_TRACER, 0, 0, ACS_NamedExecuteWithResult("Schism_GetTracersHeight") * 0.7, 0, WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE|WARPF_COPYINTERPOLATION)
+			TNT1 A 11 A_SpawnItemEx("Schism_GreenLightning")
+			Loop
+
+		Death:
+		Crash:
+			TNT1 A 0 A_SpawnItem("Schism_GreenLightning")
+			Stop
+
+		Heal:
+			TNT1 A 0 A_SpawnItem("Schism_GreenLightning")
+			TNT1 A 0 A_GiveInventory("Schism_Health100", 1, AAPTR_TARGET)
+			Stop
+
+		Exit:
+			TNT1 A 0 A_GiveInventory("Schism_LitLimitRemover", 1, AAPTR_TRACER)
+			TNT1 A 0 A_SpawnItem("Schism_GreenLightning")
+			Stop
+	}
+}
+
+Actor Schism_StrongNecroLightning : Schism_NecroLightning
+{
+	Speed 50
+	States
+	{
+		Spawn:
+			TNT1 A 0 NODELAY A_Playsound("Sparks/Spawn")
+			TNT1 A 0 A_SetUserVar("user_timer", 0)
+			TNT1 A 5
+			Stop
+
+		XDeath:
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CheckMissileForWarping") == 0, "Death")
+			TNT1 A 0 A_JumpIfInventory("Schism_NecroLitLimit", 1, "Heal", AAPTR_TRACER)
+			TNT1 A 0 A_GiveInventory("Schism_NecroLitLimit", 1, AAPTR_TRACER)
+			Drain:
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CheckMissileForWarping") == 0, "Exit")
+			TNT1 A 0 A_JumpIf(user_timer == 45, "Exit")
+			TNT1 A 0 A_SetUserVar("user_timer", user_timer+1)
+			TNT1 A 0 A_GiveInventory("Schism_LifeDrainHealth", 3, AAPTR_TARGET)
+			TNT1 A 0 A_Explode(3, 8, 0)
+			TNT1 A 0 A_Warp(AAPTR_TRACER, 0, 0, ACS_NamedExecuteWithResult("Schism_GetTracersHeight") * 0.7, 0, WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE|WARPF_COPYINTERPOLATION)
+			TNT1 A 11 A_SpawnItemEx("Schism_RedLightning")
+			Loop
+
+		Death:
+		Crash:
+			TNT1 A 0 A_SpawnItem("Schism_RedLightning")
+			Stop
+
+		Heal:
+			TNT1 A 0 A_SpawnItem("Schism_RedLightning")
+			TNT1 A 0 A_GiveInventory("Schism_LifeDrainHealth", 2, AAPTR_TARGET)
+			Stop
+
+		Exit:
+			TNT1 A 0 A_GiveInventory("Schism_LitLimitRemover", 1, AAPTR_TRACER)
+			TNT1 A 0 A_SpawnItem("Schism_RedLightning")
+			Stop
+	}
+}
+
+Actor Schism_Curse
+{
+	Projectile
+	Height 6
+	Radius 6
+	Speed 50
+	Damage 0
+	DamageType Curse
+	+HITTRACER
+	+FORCERADIUSDMG
+	+NODAMAGETHRUST
+	+NOEXTREMEDEATH
+	+BLOODLESSIMPACT
+	var int user_timer;
+	States
+	{
+		Spawn:
+			TNT1 A 0 NODELAY A_SetUserVar("user_timer", 0)
+			TNT1 A 2
+			Stop
+
+		XDeath:
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CheckMissileForWarping") == 0, "Death")
+			Cursing:
+			TNT1 A 11 A_SpawnItem("Schism_GreenLightning")
+			TNT1 A 0 A_SetUserVar("user_timer", user_timer+1)
+			TNT1 A 0 A_Warp(AAPTR_TRACER, 0, 0, ACS_NamedExecuteWithResult("Schism_GetTracersHeight") * 0.7, 0, WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE|WARPF_COPYINTERPOLATION)
+			TNT1 A 0 A_JumpIf(user_timer == 60, "Exit")
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CheckMissileForWarping") == 0, "Death")
+			Loop
+
+		Death:
+		Crash:
+			TNT1 A 0 A_SpawnItem("Schism_GreenLightning")
+			Stop
+
+		Exit:
+			TNT1 A 0 A_GiveInventory("SetFriend", 1, AAPTR_TRACER)
+			Stop
+	}
+}
+
+Actor Schism_Resurrector
+{
+	Monster
+	Health 50
+	Radius 16
+	Height 32
+	Mass 50
+	Speed 10
+	Damage 2
+	MeleeDamage 1
+	Alpha 0.67
+	RenderStyle Add
+	Translation "0:255=%[0.00,0.00,0.00]:[0.00,2.00,0.00]"
+	Obituary "A wraith had it's way with %o."
+	HitObituary "%o got bitten by a wraith too many times."
+	PainChance 64
+	+DONTGIB
+	+NOTARGET
+	+NOGRAVITY
+	+FLOAT
+	+DONTFALL
+	+DONTHURTSPECIES
+	+THRUGHOST
+	+GHOST
+	AttackSound "monster/sprsit"
+	MeleeSound "monster/spratk"
+	PainSound "archvile/pain"
+	DeathSound "monster/sprdth"
+	States
+	{
+
+		Spawn:
+			WRAI AB 10 A_Look
+			Loop
+		See:
+			WRAI AABB 3 A_Chase("", "", CHF_RESURRECT)
+			Loop
+
+		Heal:
+			WRAI AB 3
+			WRAI A 0 A_Die
+			Goto Death
+
+		Pain:
+			WRAI A 3
+			WRAI A 3 A_Pain
+			Goto See
+
+		Death:
+			WRAI E 4 A_Noblocking
+			WRAI F 5 A_Scream
+			WRAI GHIJ 4
+			Stop
+
+   }
+}
+
+Actor Schism_ResurrectorPlayer : Schism_Resurrector
+{
+	+FRIENDLY
+	Translation "0:255=%[0.00,0.00,0.00]:[2.00,0.00,0.00]"
+}
+
+Actor Schism_NecroGauntlets : Schism_Weapon replaces Gauntlets
+{
+	Weapon.SelectionOrder 2300
+	Weapon.Kickback 0
+	Weapon.SisterWeapon "Schism_NecroGauntletsPowered"
+// 	Weapon.YAdjust 15
+	+BLOODSPLATTER
+	+WEAPON.WIMPY_WEAPON
+	+WEAPON.MELEEWEAPON
+	+WEAPON.NOALERT
+	+WEAPON.NOAUTOAIM
+	Inventory.PickupMessage "$TXT_WPNGAUNTLETS"
+	Inventory.ForbiddenTo Schism_Warrior
+	Obituary "$OB_MPGAUNTLETS"
+	Tag "$TAG_GAUNTLETS"
+	States
+	{
+		Spawn:
+			WGNT A -1
+			Stop
+
+		Select:
+			TNT1 A 0 A_SetCrosshair(41)
+			SelectLoop:
+			GAUN A 0 A_Raise
+			GAUN A 1 A_Raise
+			Loop
+
+		Deselect:
+// 			TNT1 A 0 A_GiveInventory("ClearWeaponTokens", 1)
+			DeselectLoop:
+			GAUN A 0 A_Lower
+			GAUN A 1 A_Lower
+			Loop
+
+		Ready:
+			GAUN A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			GAUN A 0 A_JumpIfInventory("Quickspell", 1, "Quickspell")
+			GAUN A 0 A_JumpIfInventory("Reloading", 1, "Reload") //WIP
+			GAUN A 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+			GAUN A 0 A_JumpIfInventory("StartDualWield", 1, "User1")
+			GAUN A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			Loop
+
+		Fire:
+			TNT1 A 0 A_JumpIfInventory("IsHeretic", 1, "LifeDrain")
+			TNT1 A 0 A_JumpIfInventory("IsSorcerer", 1, "CastLightning")
+// 			TNT1 A 0 A_JumpIfInventory("IsCrouching", 1, "RightHook")
+			TNT1 A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			TNT1 A 0 A_GiveInventory("GoSpecial", 1)
+			TNT1 A 0 A_GiveInventory("Punching", 1)
+			Goto RightJab
+
+		RightJab:
+			GPRS A 1
+			GPRS BC 1
+			TNT1 A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			TNT1 A 0 A_Playsound("fstatk", CHAN_WEAPON)
+			GPRS D 1 A_GiveInventory("Schism_Punch", 1)
+			GPRS DC 1
+			GPRS BA 1
+			TNT1 A 0 A_ReFire("LeftJab")
+			Goto Ready
+
+		LeftJab:
+			GPlS A 1
+			GPlS BC 1
+			TNT1 A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			TNT1 A 0 A_Playsound("fstatk", CHAN_WEAPON)
+			GPlS D 1 A_GiveInventory("Schism_Punch", 1)
+			GPlS DC 1
+			GPlS BA 1
+			TNT1 A 0 A_ReFire("DoKick")
+			Goto Ready
+
+		RightHook:
+			GPRH ABC 1
+			GPRH C 1
+			TNT1 A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			TNT1 A 0 A_PlaySound("WHOP", CHAN_WEAPON)
+			GPRH D 1 A_CustomPunch(10, FALSE, 0, "MeleePuff", 120)
+			GPRH DC 1
+			GPRH BA 1
+			Goto Ready
+
+		LeftHook:
+			GPlH ABC 1
+			GPlH C 1
+			TNT1 A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			TNT1 A 0 A_PlaySound("WHOP", CHAN_WEAPON)
+			GPlH D 1 A_CustomPunch(10, FALSE, 0, "MeleePuff", 120)
+			GPlH DC 2
+			GPlH BA 1
+			Goto Ready
+
+		AltFire:
+			TNT1 A 0 A_JumpIfInventory("IsHeretic", 1, "Cursing")
+			TNT1 A 0 A_JumpIfInventory("IsSorcerer", 1, "IcyWind")
+			Goto LifeDrain
+
+		LifeDrain:
+			TNT1 A 0 A_AlertMonsters
+			GAUN BC 2
+			Draining:
+			TNT1 A 0 A_PlaySound("SHOCK", CHAN_WEAPON)
+			GAUN DEF 2 BRIGHT A_FireCustomMissile("Schism_NecroLightning", 0, 0)
+			TNT1 A 0 A_FireCustomMissile("Schism_NecroLightning", 0, 0)
+			GAUN C 4 A_ReFire("Draining")
+			GAUN B 2 A_ReFire("LifeDrain")
+			Goto Ready
+
+		Cursing:
+			TNT1 A 0 A_AlertMonsters
+			GAUN BC 2
+			CursingLoop:
+			TNT1 A 0 A_PlaySound("SHOCK", CHAN_WEAPON)
+			GAUN DEF 2 BRIGHT A_FireCustomMissile("Schism_Curse", 0, 0)
+			TNT1 A 0 A_FireCustomMissile("Schism_Curse", 0, 0)
+			GAUN C 4 A_ReFire("CursingLoop")
+			GAUN B 2
+			Goto Ready
+
+		CastFireball: //Frames from paladin drain sprites
+			TNT1 A 0 A_AlertMonsters
+			GAUN BC 2
+			CastFireballHold:
+			TNT1 A 0 A_FireCustomMissile("MageFireBall", 0, 0, 30, -10)
+			TNT1 A 0 A_FireCustomMissile("MageFireBall", 0, 0, -30, -10)
+			FPCH FGH 2 BRIGHT
+			GAUN C 4 A_ReFire("CastFireballHold")
+			Goto Ready
+
+		CastLightning:
+			TNT1 A 0 A_AlertMonsters
+			GAUN BC 2
+			CastLightningHold:
+			TNT1 A 0 A_PlaySound("SHOCK", CHAN_WEAPON)
+			GAUN L 2 BRIGHT A_RailAttack(15,15,0,none,"9F 9F FF", RGF_SILENT|RGF_FULLBRIGHT,25,"TeslaPuff",3,3,400,5,0.001,3.0,"StormTrailParticle",-15)
+			TNT1 A 0 A_RailAttack(15,-15,0,none,"9F 9F FF", RGF_SILENT|RGF_FULLBRIGHT,25,"TeslaPuff",3,3,400,5,0.001,3.0,"StormTrailParticle",-15)
+			TNT1 A 0 A_PlaySound("SHOCK", CHAN_WEAPON)
+			GAUN M 2 BRIGHT A_RailAttack(15,15,0,none,"9F 9F FF", RGF_SILENT|RGF_FULLBRIGHT,25,"TeslaPuff",3,3,400,5,0.001,3.0,"StormTrailParticle",-15)
+			TNT1 A 0 A_RailAttack(15,-15,0,none,"9F 9F FF", RGF_SILENT|RGF_FULLBRIGHT,25,"TeslaPuff",3,3,400,5,0.001,3.0,"StormTrailParticle",-15)
+			TNT1 A 0 A_PlaySound("SHOCK", CHAN_WEAPON)
+			GAUN N 2 BRIGHT A_RailAttack(15,15,0,none,"9F 9F FF", RGF_SILENT|RGF_FULLBRIGHT,25,"TeslaPuff",3,3,400,5,0.001,3.0,"StormTrailParticle",-15)
+			TNT1 A 0 A_RailAttack(15,-15,0,none,"9F 9F FF", RGF_SILENT|RGF_FULLBRIGHT,25,"TeslaPuff",3,3,400,5,0.001,3.0,"StormTrailParticle",-15)
+			GAUN C 4 A_ReFire("CastLightningHold")
+			GAUN B 4 A_ReFire("CastLightning")
+			Goto Ready
+
+		IcyWind:
+			TNT1 A 0 A_AlertMonsters(200)
+			GAUN BC 2
+			WindLoop:
+			GAUN L 2 BRIGHT A_FireCustomMissile("FreezeCloud4", 0, 0, 10, 5)
+			TNT1 A 0 A_FireCustomMissile("FreezeCloud4", 0, 0, -10, 5)
+			TNT1 AAA 0 A_FireCustomMissile("IceShardSmall", frandom(-5, 5), 0, 0, -10)
+			GAUN M 2 BRIGHT A_FireCustomMissile("FreezeCloud4", 0, 0, 10, 5)
+			TNT1 A 0 A_FireCustomMissile("FreezeCloud4", 0, 0, -10, 5)
+			TNT1 AAA 0 A_FireCustomMissile("IceShardSmall", frandom(-5, 5), 0, 0, -10)
+			GAUN N 2 BRIGHT A_FireCustomMissile("FreezeCloud4", 0, 0, 10, 5)
+			TNT1 A 0 A_FireCustomMissile("FreezeCloud4", 0, 0, -10, 5)
+			TNT1 AAA 0 A_FireCustomMissile("IceShardSmall", frandom(-5, 5), 0, 0, -10)
+			GAUN C 4 A_ReFire("WindLoop")
+			Goto Ready
+
+		Reload:
+// 			GPBB A 0 A_GiveInventory("ClearWeaponTokens", 1)
+			TNT1 A 0 A_TakeInventory("Reloading", 1)
+			GPBB A 0 A_GiveInventory("IsBlocking", 1)
+			GPBB A 1 A_SpawnItemEx("Schism_ArmShield", 25, 5, 15, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			Block:
+			GPBB A 1
+			GPBB A 0 A_JumpIfInventory("Reloading", 1, "BlockEnd")
+			GPBB A 0 A_JumpIfInventory("IsBlocking", 1, "Block")
+			BlockEnd:
+			TNT1 A 0 A_TakeInventory("IsBlocking", 1)
+			TNT1 A 0 A_TakeInventory("Reloading", 1)
+			Goto Ready
+
+		User1:
+// 			TNT1 A 0 A_GiveInventory("ClearWeaponTokens", 1)
+			TNT1 A 0 A_GiveInventory("SelectFatalityModes", 1)
+			Goto Ready
+
+		Steady:
+			TNT1 A 1
+			Goto Ready
+
+		Taunt:
+// 			TNT1 A 0 A_GiveInventory("ClearWeaponTokens", 1)
+			TNT1 A 0 A_JumpIfInventory("IsSorcerer", 1, "TauntBlinkTeleport")
+			TNT1 A 0 A_FireCustomMissile("Taunter", 0, 0, -1, 0)
+			TNT1 A 0 A_FireCustomMissile("Taunter", -9, 0, -1, 0)
+			TNT1 A 0 A_FireCustomMissile("Taunter", 9, 0, -1, 0)
+			TNT1 A 0 A_PlaySound("FUCK", 2)
+			TNT1 A 0 A_AlertMonsters
+			Goto Ready
+
+		TauntBlinkTeleport: //17 tic
+			TNT1 A 0 A_TakeInventory("Taunting", 1)
+// 			TNT1 A 0 A_GunFlash("GrenadeFlash")
+			BlinkageHold:
+			TNT1 A 8
+			TNT1 A 0 A_ChangeFlag("SPECTRAL", 1)
+			TNT1 A 0 A_ChangeFlag("THRUACTORS", 1)
+			MLNG ABCD 2 BRIGHT
+			TNT1 A 0 A_SpawnItemEx("BlinkTargetMissile", 36*Cos(pitch), 0, 30-36*Sin(pitch), 100*Cos(pitch), 0, -100*Sin(pitch))
+			BlinkageHold2:
+			MLNG E 1
+			TNT1 A 0 A_ChangeVelocity(100*Cos(pitch), 0, -100*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			MLNG FG 2 BRIGHT A_ZoomFactor(0.70, ZOOM_INSTANT)
+			MLNG HI 2 BRIGHT A_ZoomFactor(1.00)
+			MLNG H 0 A_ChangeVelocity(0, 0, 0, CVF_REPLACE)
+			TNT1 A 0 A_ChangeFlag("THRUACTORS", 0)
+			TNT1 A 0 A_ChangeFlag("SPECTRAL", 0)
+			Goto Select
+
+		QuickSpell:
+			TNT1 A 0 A_GiveInventory("ClearWeaponTokens", 1)
+// 			TNT1 A 0 A_JumpIfInventory("IsSorcerer", 0, "Ready")
+			TNT1 A 0 A_JumpIfInventory("QuickFireSpellSelected", 1, "QuickFireSpell")
+			TNT1 A 0 A_JumpIfInventory("QuickLightningSpellSelected", 1, "QuickLightningSpell")
+			TNT1 A 0 A_JumpIfInventory("QuickFrostSpellSelected", 1, "QuickFrostSpell")
+			Goto Ready
+
+		QuickFireSpell:
+			TNT1 A 0 A_AlertMonsters
+			GAUN BC 2
+			TNT1 A 0 A_FireCustomMissile("MageFireBall", 0, 0, 30, -10)
+			TNT1 A 0 A_FireCustomMissile("MageFireBall", 0, 0, -30, -10)
+			FPCH FGH 2 BRIGHT
+			GAUN CB 4
+			Goto Ready
+
+		QuickLightningSpell:
+			TNT1 A 0 A_AlertMonsters
+			TNT1 A 0 A_PlaySound("TPortalZap", CHAN_WEAPON, 2)
+			TNT1 AAAAA 0 A_FireCustomMissile("LightningMissile3", 0, 0, 0,-10)
+			GAUN BCLMNCB 2 BRIGHT
+			Goto Ready
+
+		QuickFrostSpell:
+			TNT1 A 0 A_AlertMonsters
+			GAUN BC 2
+			TNT1 A 0 A_FireCustomMissile("FreezerBall", 0, 0, 30, -10)
+			TNT1 A 0 A_FireCustomMissile("FreezerBall", 0, 0, -30, -10)
+			GAUN LMNCB 2 BRIGHT
+			Goto Ready
+
+		
+
+		DoKick: //14 tic
+			TNT1 A 0 A_GunFlash("KickFlash")
+			TNT1 A 0 A_TakeInventory("Kicking", 1)
+			TNT1 A 0 A_Takeinventory("Zoomed", 1)
+			TNT1 A 0 A_Takeinventory("PowerLightAmp", 1)
+			TNT1 A 0 A_ZoomFactor(1.0)
+			TNT1 A 0 A_Takeinventory("ADSmode", 1)
+			TNT1 A 0 A_JumpIf (momZ > 0, "KickInAir")
+			TNT1 A 0 A_JumpIf (momZ < 0, "KickInAir")
+			TNT1 A 0 A_JumpIf((Abs(VelY) < 1) && (Abs(VelX) < 1), 2)
+			TNT1 A 0 A_JumpIfInventory("IsCrouching", 1, "SlideAttack")
+			TNT1 A 0 A_PlaySound("KICK")
+			TNT1 A 0 SetPlayerProperty(0, 1, 0)
+			K1CK A 0 A_JumpIfInventory("IsHeretic", 1, 3)
+			K2CK A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KICK A 0
+			"####" BCD 1
+			"####" A 0 A_GiveInventory("Schism_Kick", 1)
+			"####" H 3
+			"####" IGF 1
+			"####" "#" 0 SetPlayerProperty(0, 0, 0)
+			"####" EDCBA 1 A_JumpIfInventory("Kicking", 1, "KickRight")
+			TNT1 A 0 A_JumpIfInventory("Kicking", 1, "KickRight")
+			Goto Ready
+
+		KickRight: // 15 tic
+			TNT1 A 0 A_GunFlash("RightKickFlash")
+			K1K2 A 0 A_JumpIfInventory("IsHeretic", 1, 3)
+			K2K2 A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KIK2 A 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" ABC 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0
+			"####" A 0 A_SetPitch(pitch-9)
+			"####" A 0 A_SetAngle(angle+9)
+			"####" A 0 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" D 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle-2)
+			"####" D 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle-2)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" C 1 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" B 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 1 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			Goto Ready
+
+		KickInAir: // 18 tics
+			TNT1 A 0 A_GunFlash("KickInAirFlash")
+			TNT1 A 0 A_TakeInventory("Kicking", 1)
+			K1CK J 0 A_JumpIfInventory("IsHeretic", 1, 3)
+			K2CK J 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KICK J 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0 A_Recoil(-15)
+			"####" JKLMN 1
+			"####" A 0 A_GiveInventory("Schism_AirKick", 1)
+			"####" O 3
+			"####" PQ 2
+			"####" RS 1
+			"####" T 1 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 1 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			Goto Ready
+
+		LeftFinishingKick: // 11 tics
+			TNT1 A 0 A_GunFlash("LeftKickFlash")
+			K1K3 A 0 A_JumpIfInventory("IsHeretic", 1, 3)
+			K2K3 A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KIK3 A 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" A 0 A_Recoil(-10)
+			"####" ABC 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0 A_SetPitch(pitch-9)
+			"####" A 0 A_SetAngle(angle-9)
+			"####" D 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" F 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" G 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+2)
+			"####" H 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+2)
+			"####" I 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+1)
+			"####" J 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+1)
+			"####" K 1
+			Goto Ready
+
+		SlideAttack:
+			TNT1 A 0 A_GunFlash("SlideKickFlashStart")
+			TNT1 A 0 SetPlayerProperty(0,1,0)
+			KICK A 0 A_Takeinventory("Kicking",1)
+			TNT1 A 0 A_PlaySound("KICK")
+			TNT1 A 0 A_Recoil (-16)
+			TNT1 A 0 A_PlaySound("SlideKickStart", 5)
+			S1DK A 0 A_JumpIfInventory("IsHeretic",1,3)
+			S2DK A 0 A_JumpIfInventory("IsSorcerer",1,2)
+			SLDK A 1
+			"####" ABC 1
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" E 1
+			"####" A 0 A_Recoil (-14)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-12)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-8)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-6)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-4)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-4)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-3)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-3)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-3)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-2)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-1)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-1)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-2)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			"####" A 0 A_TakeInventory("KickHasHit", 1)
+			Goto FinishSlide
+
+		FinishSlide:  //10 tic
+			TNT1 A 0 A_Takeinventory("Kicking",1)
+			TNT1 A 0 A_GunFlash("SlideKickFlashEnd")
+			TNT1 A 0 A_PlaySound("SlideKickStop", 5)
+			S1DK H 0 A_JumpIfInventory("IsHeretic",1,3)
+			S2DK H 0 A_JumpIfInventory("IsSorcerer",1,2)
+			SLDK H 0
+			"####" A 0 SetPlayerProperty(0,0,0)
+			"####" HD 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 0 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" CBA 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 0 A_Takeinventory("Kicking",1)
+			Goto Ready
+
+		FinishSlideHitwall:
+			TNT1 A 0 A_GunFlash("SlideKickFlashEnd")
+			S1DK H 0 A_JumpIfInventory("IsHeretic",1,3)
+			S2DK H 0 A_JumpIfInventory("IsSorcerer",1,2)
+			SLDK H 1
+			"####" A 0 A_Stop
+			"####" HDCBA 2
+			"####" A 0 A_TAkeInventory("KickHasHit", 1)
+			"####" A 0 A_Takeinventory("Kicking",1)
+			"####" A 0 SetPlayerProperty(0,0,0)
+			Goto Ready
+
+		KickFlash:
+			TNT1 A 14
+			Stop
+
+		RightKickFlash:
+			TNT1 A 15
+			Stop
+
+		LeftKickFlash:
+			TNT1 A 11
+			Stop
+
+		KickInAirFlash:
+			TNT1 A 18
+			Stop
+
+		SlideKickFlashStart:
+			TNT1 A 20
+			Stop
+
+		SlideKickFlashEnd:
+			TNT1 A 11
+			Stop
+
+	}
+}
+
+ACTOR Schism_NecroGauntletsPowered : Schism_NecroGauntlets
+{
+	+WEAPON.POWERED_UP
+	Weapon.SisterWeapon "Schism_NecroGauntlets"
+	States
+	{
+
+		Select:
+			GAUN G 0 A_Raise
+			GAUN G 1 A_Raise
+			Loop
+
+		Deselect:
+// 			GAUN G 0 A_GiveInventory("ClearWeaponTokens", 1)
+			DeselectLoop:
+			GAUN G 0 A_Lower
+			GAUN G 1 A_Lower
+			Loop
+
+		Ready:
+			GAUN A 0 A_JumpIfInventory("Quickspell", 1, "Quickspell")
+			GAUN A 0 A_JumpIfInventory("Taunting", 1, "Taunt") //WIP
+			GAUN A 0 A_JumpIfInventory("Reloading", 1, "Reload") //WIP
+			GAUN A 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+// 			GAUN A 0 A_JumpIfInventory("StartDualWield", 1, "DualWield") // Propbably weapon mode change
+			GAUN A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			FPCH A 4 A_WeaponReady(WRF_ALLOWRELOAD)
+			GAUN A 0 A_JumpIfInventory("Quickspell", 1, "Quickspell")
+			GAUN A 0 A_JumpIfInventory("Taunting", 1, "Taunt") //WIP
+			GAUN A 0 A_JumpIfInventory("Reloading", 1, "Reload") //WIP
+			GAUN A 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+// 			GAUN A 0 A_JumpIfInventory("StartDualWield", 1, "DualWield") // Propbably weapon mode change
+			GAUN A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			FPCH B 4 A_WeaponReady(WRF_ALLOWRELOAD)
+			GAUN A 0 A_JumpIfInventory("Quickspell", 1, "Quickspell")
+			GAUN A 0 A_JumpIfInventory("Taunting", 1, "Taunt") //WIP
+			GAUN A 0 A_JumpIfInventory("Reloading", 1, "Reload") //WIP
+			GAUN A 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+// 			GAUN A 0 A_JumpIfInventory("StartDualWield", 1, "DualWield") // Propbably weapon mode change
+			GAUN A 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			FPCH C 4 A_WeaponReady(WRF_ALLOWRELOAD)
+			Loop
+
+		Fire:
+			TNT1 A 0 A_JumpIfInventory("IsHeretic", 1, "LifeDrain")
+			TNT1 A 0 A_JumpIfInventory("IsSorcerer", 1, "LifeDrain")
+			Goto RightJab
+
+		RightJab:
+			GPRS A 1
+			GPRS BC 1 A_Recoil(-1)
+			TNT1 A 0 A_Playsound("fstatk", CHAN_WEAPON)
+			GPRS D 1 A_FireCustomMissile("Schism_LifeDrainingPunch", 0, 0)
+			GPRS DC 1
+			GPRS BA 1
+			TNT1 A 0 A_ReFire("LeftJab")
+			Goto Ready
+
+		LeftJab:
+			GPlS A 1
+			GPlS BC 1 A_Recoil(-1)
+			TNT1 A 0 A_Playsound("fstatk", CHAN_WEAPON)
+			GPlS D 1 A_FireCustomMissile("Schism_LifeDrainingPunch", 0, 0)
+			GPlS DC 1
+			GPlS BA 1
+			TNT1 A 0 A_ReFire("RightJab")
+			Goto Ready
+
+		AltFire:
+			TNT1 A 0 A_JumpIfInventory("IsHeretic", 1, "Resurrect")
+			TNT1 A 0 A_JumpIfInventory("IsSorcerer", 1, "Resurrect")
+			Goto LifeDrain
+
+		LifeDrain:
+			TNT1 A 0 A_AlertMonsters
+			FPCH DE 2
+			Draining:
+			FPCH FGH 2 BRIGHT A_FireCustomMissile("Schism_StrongNecroLightning", 0, 0)
+			TNT1 A 0 A_FireCustomMissile("Schism_StrongNecroLightning", 0, 0)
+			GAUN C 4 A_ReFire("Draining")
+			Goto Ready
+
+		Resurrect:
+			FPCH DE 2
+			TNT1 A 0 A_AlertMonsters
+			TNT1 A 0 DamageThing(10) // <-- Redo this
+			TNT1 A 0 A_SpawnItemEx("Schism_ResurrectorPlayer", 50, 5, 15, 15, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			FPCH FGH 2 BRIGHT
+			FPCH E 4 A_WeaponReady(WRF_NOFIRE|WRF_NOSECONDARY)
+			FPCH D 2 A_WeaponReady(WRF_NOFIRE|WRF_NOSECONDARY)
+			Goto Ready
+
+		Reload:
+// 			GPBB A 0 A_GiveInventory("ClearWeaponTokens", 1)
+			TNT1 A 0 A_TakeInventory("Reloading", 1)
+			GPBB A 0 A_GiveInventory("IsBlocking", 1)
+			GPBB A 1 A_SpawnItemEx("Schism_ArmShield", 25, 5, 15, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			Block:
+			GPBB A 1
+			GPBB A 0 A_JumpIfInventory("Reloading", 1, "BlockEnd")
+			GPBB A 0 A_JumpIfInventory("IsBlocking", 1, "Block")
+			BlockEnd:
+			TNT1 A 0 A_TakeInventory("IsBlocking", 1)
+			TNT1 A 0 A_TakeInventory("Reloading", 1)
+			Goto Ready
+
+		Steady:
+			TNT1 A 1
+			Goto Ready
+
+		DoKick: //14 tic
+			TNT1 A 0 A_GunFlash("KickFlash")
+			TNT1 A 0 A_TakeInventory("Kicking", 1)
+			TNT1 A 0 A_Takeinventory("Zoomed", 1)
+			TNT1 A 0 A_Takeinventory("PowerLightAmp", 1)
+			TNT1 A 0 A_ZoomFactor(1.0)
+			TNT1 A 0 A_Takeinventory("ADSmode", 1)
+			TNT1 A 0 A_JumpIf (momZ > 0, "KickInAir")
+			TNT1 A 0 A_JumpIf (momZ < 0, "KickInAir")
+			TNT1 A 0 A_JumpIf((Abs(VelY) < 1) && (Abs(VelX) < 1), 2)
+			TNT1 A 0 A_JumpIfInventory("IsCrouching", 1, "SlideAttack")
+			TNT1 A 0 A_PlaySound("KICK")
+			TNT1 A 0 SetPlayerProperty(0, 1, 0)
+			K1CK A 0 A_JumpIfInventory("IsHeretic", 1, 3)
+			K2CK A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KICK A 0
+			"####" BCD 1
+			"####" A 0 A_GiveInventory("Schism_Kick", 1)
+			"####" H 3
+			"####" IGF 1
+			"####" "#" 0 SetPlayerProperty(0, 0, 0)
+			"####" EDCBA 1 A_JumpIfInventory("Kicking", 1, "KickRight")
+			TNT1 A 0 A_JumpIfInventory("Kicking", 1, "KickRight")
+			Goto Ready
+
+		KickRight: // 15 tic
+			TNT1 A 0 A_GunFlash("RightKickFlash")
+			K1K2 A 0 A_JumpIfInventory("IsHeretic", 1, 3)
+			K2K2 A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KIK2 A 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" ABC 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0
+			"####" A 0 A_SetPitch(pitch-9)
+			"####" A 0 A_SetAngle(angle+9)
+			"####" A 0 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" D 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle-2)
+			"####" D 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle-2)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" C 1 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" B 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 1 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			Goto Ready
+
+		KickInAir: // 18 tics
+			TNT1 A 0 A_GunFlash("KickInAirFlash")
+			TNT1 A 0 A_TakeInventory("Kicking", 1)
+			K1CK J 0 A_JumpIfInventory("IsHeretic", 1, 3)
+			K2CK J 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KICK J 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0 A_Recoil(-15)
+			"####" JKLMN 1
+			"####" A 0 A_GiveInventory("Schism_AirKick", 1)
+			"####" O 3
+			"####" PQ 2
+			"####" RS 1
+			"####" T 1 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 1 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			Goto Ready
+
+		LeftFinishingKick: // 11 tics
+			TNT1 A 0 A_GunFlash("LeftKickFlash")
+			K1K3 A 0 A_JumpIfInventory("IsHeretic", 1, 3)
+			K2K3 A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KIK3 A 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" A 0 A_Recoil(-10)
+			"####" ABC 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0 A_SetPitch(pitch-9)
+			"####" A 0 A_SetAngle(angle-9)
+			"####" D 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" F 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" G 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+2)
+			"####" H 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+2)
+			"####" I 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+1)
+			"####" J 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+1)
+			"####" K 1
+			Goto Ready
+
+		SlideAttack:
+			TNT1 A 0 A_GunFlash("SlideKickFlashStart")
+			TNT1 A 0 SetPlayerProperty(0,1,0)
+			KICK A 0 A_Takeinventory("Kicking",1)
+			TNT1 A 0 A_PlaySound("KICK")
+			TNT1 A 0 A_Recoil (-16)
+			TNT1 A 0 A_PlaySound("SlideKickStart", 5)
+			S1DK A 0 A_JumpIfInventory("IsHeretic",1,3)
+			S2DK A 0 A_JumpIfInventory("IsSorcerer",1,2)
+			SLDK A 1
+			"####" ABC 1
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" E 1
+			"####" A 0 A_Recoil (-14)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-12)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-8)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-6)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-4)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-4)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-3)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-3)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-3)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-2)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-1)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-1)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_FireCustomMissile("SlideAttack", 0, 0, 0, 10)
+			"####" A 0 A_Recoil (-2)
+			"####" A 0 A_SetPItch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			"####" A 0 A_TakeInventory("KickHasHit", 1)
+			Goto FinishSlide
+
+		FinishSlide:  //10 tic
+			TNT1 A 0 A_Takeinventory("Kicking",1)
+			TNT1 A 0 A_GunFlash("SlideKickFlashEnd")
+			TNT1 A 0 A_PlaySound("SlideKickStop", 5)
+			S1DK H 0 A_JumpIfInventory("IsHeretic",1,3)
+			S2DK H 0 A_JumpIfInventory("IsSorcerer",1,2)
+			SLDK H 0
+			"####" A 0 SetPlayerProperty(0,0,0)
+			"####" HD 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 0 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" CBA 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 0 A_Takeinventory("Kicking",1)
+			Goto Ready
+
+		FinishSlideHitwall:
+			TNT1 A 0 A_GunFlash("SlideKickFlashEnd")
+			S1DK H 0 A_JumpIfInventory("IsHeretic",1,3)
+			S2DK H 0 A_JumpIfInventory("IsSorcerer",1,2)
+			SLDK H 1
+			"####" A 0 A_Stop
+			"####" HDCBA 2
+			"####" A 0 A_TAkeInventory("KickHasHit", 1)
+			"####" A 0 A_Takeinventory("Kicking",1)
+			"####" A 0 SetPlayerProperty(0,0,0)
+			Goto Ready
+
+		KickFlash:
+			TNT1 A 14
+			Stop
+
+		RightKickFlash:
+			TNT1 A 15
+			Stop
+
+		LeftKickFlash:
+			TNT1 A 11
+			Stop
+
+		KickInAirFlash:
+			TNT1 A 18
+			Stop
+
+		SlideKickFlashStart:
+			TNT1 A 20
+			Stop
+
+		SlideKickFlashEnd:
+			TNT1 A 11
+			Stop
+	}
+}

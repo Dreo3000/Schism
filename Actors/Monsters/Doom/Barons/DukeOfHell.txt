@@ -1,0 +1,896 @@
+Actor Schism_DukeSlam {
+	+NOBLOCKMAP
+	+MISSILE
+	Radius 2
+	Height 2
+	Damagetype ExplosiveImpact
+	Obituary "$OB_DUKEHIT"
+	States {
+		Spawn:
+			TNT1 A 0
+			TNT1 AA 0 A_CustomMissile("ExplosionSmoke", 0, 0, random (0, 360), 2, random (10, 12))
+			TNT1 A 0 A_Explode(random(100, 150), 118, 0)
+			Stop
+	}
+}
+
+Actor Schism_DukeAttack {
+	Game Doom
+	Projectile
+	Radius 24
+	Height 16
+	Damage (Random(50, 68))
+	Speed 32
+	SeeSound "none"
+	DeathSound "none"
+	Decal "none"
+	States {
+		Spawn:
+			TNT1 A 2
+			TNT1 A 2
+			Stop
+		Death:
+		XDeath:
+		Crash:
+			TNT1 A 0
+			Stop
+	}
+}
+
+Actor Schism_DukeStrongAttack : Schism_DukeAttack {
+	Damage (Random(70, 80))
+}
+
+Actor Schism_DukeOnePunch : Schism_DukeAttack {
+	Damage (Random(100, 150))
+}
+
+Actor Schism_DukeOfHell {
+	Game Doom
+	Monster
+	Height 76
+	Radius 27
+	Mass 2500
+    Health 2500
+	GibHealth 100
+	Speed 16
+	FastSpeed 22
+// 	MeleeThreshold 300
+// 	MeleeDamage (Random(70, 80))
+	MinMissileChance 60
+	YScale 0.8
+	XScale 1.0
+
+
+	PainChance 20
+// 	PainThreshold 100
+	PainChance "HangingHook", 0
+	PainChance "Kick", 255
+	PainChance "Leg", 255
+	PainChance "ExtremePunches", 255
+	PainChance "SuperPunch", 255
+	PainChance "LowKick", 220
+	PainChance "Head", 150
+	PainChance "Explosive", 178
+
+	PainChance "Saw", 150
+	PainChance "Cut", 150
+	PainChance "Minor", 20
+	PainChance "Stun", 250
+	PainChance "Railgun", 178
+	PainChance "Freeze", 225
+
+	DamageFactor "Fire", 0.0
+	DamageFactor "Minor", 0.0
+	DamageFactor "Bullet", 0.0
+	DamageFactor "MonsterBullet", 0.0
+	DamageFactor "Shotgun", 0.2
+	DamageFactor "SSG", 0.25
+	DamageFactor "Minigun", 0.3
+
+	DamageFactor "Blast", 0.4
+	DamageFactor "Railgun", 1.2
+	DamageFactor "Ice", 1.2
+	DamageFactor "Plasma", 1.2
+	DamageFactor "Desintegrate", 2.0
+	DamageFactor "Freeze", 1.2
+	DamageFactor "Tesla", 1.2
+	DamageFactor "Lightning", 1.2
+
+	DamageFactor "Crush", 10.0
+	DamageFactor "GibRemoving", 0.0
+	DamageFactor "Fatality", 1.0
+	DamageFactor "CauseSplash", 0.0
+	DamageFactor "CauseObjectsToSplashSlime", 0.0
+	DamageFactor "CauseObjectsToSplashNukage", 0.0
+	DamageFactor "CauseObjectsToSplashBlood", 0.0
+	DamageFactor "CauseObjectsToSplashLava", 0.0
+	DamageFactor "Avoid", 0.0
+	DamageFactor "Blood", 0.0
+	DamageFactor "BlueBlood", 0.0
+	DamageFactor "GreenBlood", 0.0
+	DamageFactor "TeleportRemover", 0.0
+	PainSound "PSXDPN"
+	DeathHeight 0
+	BurnHeight 0
+
+	+FASTER
+	+ALWAYSFAST
+	+NOBLOCKMONST
+	+DONTHURTSPECIES
+
+	MaxStepHeight 24
+	MaxDropOffHeight 32
+    BloodType "Green_Blood", "GreenSawBlood", "GreenSawBlood"
+	BloodColor "DarkGreen"
+	Obituary "$OB_DUKE"
+	HitObituary "$OB_DUKEHIT"
+	Tag "$SM_DUKEOFHELL"
+	var int user_rage;
+	var int user_paintimer;
+	var int user_tryoneshot;
+	var int user_firstsight;
+	var int user_deathcause;
+	var int user_prevhealth;
+	States {
+
+		Spawn:
+			TNT1 A 0 NODELAY
+			SpawnLoop:
+			DUKE Z 5 A_Look
+			Loop
+
+		See:
+			TNT1 A 0
+			TNT1 A 0 A_SetUserVar("user_prevhealth", Health)
+			TNT1 A 0 A_JumpIf(user_rage > 20, "RageSee")
+			DUKE AA 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack")
+			DUKE AA 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack")
+
+			DUKE BB 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack")
+			DUKE BB 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack")
+
+			DUKE CC 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack")
+			DUKE CC 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack")
+
+			DUKE DD 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack")
+			DUKE DD 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack")
+			TNT1 A 0 A_JumpIfInTargetInventory("IsInvisible", 1, "ForgetTarget")
+			Loop
+
+		RageSee:
+			TNT1 A 0 A_SetUserVar("user_prevhealth", Health)
+			DUKE AA 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack", CHF_FASTCHASE)
+			DUKE AA 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack", CHF_FASTCHASE)
+
+			DUKE BB 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack", CHF_FASTCHASE)
+			DUKE BB 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack", CHF_FASTCHASE)
+
+			DUKE CC 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack", CHF_FASTCHASE)
+			DUKE CC 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack", CHF_FASTCHASE)
+
+			DUKE DD 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack", CHF_FASTCHASE)
+			DUKE DD 2 A_Chase("DecideMeleeAttack", "DecideMissileAttack", CHF_FASTCHASE)
+			Loop
+
+		Idle:
+			DUKE Z 15 A_Look
+			TNT1 A 0 A_SetAngle(angle - 40)
+
+			DUKE Z 15 A_Look
+			TNT1 A 0 A_SetAngle(angle + 40)
+
+			DUKE Z 15 A_Look
+			TNT1 A 0 A_SetAngle(angle + 40)
+
+			DUKE Z 15 A_Look
+			TNT1 A 0 A_SetAngle(angle - 40)
+
+			DUKE Z 70 A_Look
+			Goto Idle
+
+		ForgetTarget:
+			TNT1 A 0
+			TNT1 A 0 A_ClearTarget
+			Goto Idle
+
+		DecideMeleeAttack:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIf(user_tryoneshot == 0, "OneshotComboAttack")
+			TNT1 A 0 A_JumpIfCloser(150, "Melee")
+			Goto Pounce
+
+		DecideMissileAttack:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIf(user_tryoneshot == 0, "StrongMissile")
+			TNT1 A 0 A_JumpIfInTargetInventory("IsPaladin", 1, "FastCharge")
+			TNT1 A 0 A_JumpIf(user_rage > 11, "FastCharge")
+			TNT1 A 0 A_JumpIfCloser(950, "Charge")
+			TNT1 A 0 A_JumpIfCloser(250, "POUNCE")
+			Goto Missile
+
+		Melee:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIf(user_rage > 3, "StrongerPunch")
+			DUKE E 6 A_FaceTarget
+			TNT1 A 0 A_PlaySound("weapons/gswing")
+			DUKE F 6 A_FaceTarget
+			DUKE G 6 A_FaceTarget
+			DUKE H 6 A_CustomMissile("Schism_DukeAttack", 10, 0, 0, 0)
+			DUKE I 4
+			Goto See
+
+		StrongerPunch:
+			DUKE E 5 A_FaceTarget
+			TNT1 A 0 A_PlaySound("weapons/gswing")
+			DUKE F 5 A_FaceTarget
+			DUKE G 5 A_FaceTarget
+			DUKE H 5 A_CustomMissile("Schism_DukeStrongAttack", 10, 0, 0, 0)
+			DUKE I 4
+			Goto See
+
+		OneshotComboAttack:
+			TNT1 A 0
+			TNT1 A 0 A_SetUserVar("user_tryoneshot", 1)
+			DUKE E 6 A_FaceTarget
+			TNT1 A 0 A_PlaySound("weapons/gswing")
+			DUKE F 6 A_FaceTarget
+			TNT1 A 0 A_JumpIfCloser(150, 2)
+			TNT1 A 0 A_CustomMissile("SuperDemonBall", 45, 0, 0, 1)
+			TNT1 A 0
+			DUKE G 6 A_FaceTarget
+			DUKE H 6 A_CustomMissile("Schism_DukeOnePunch", 10, 0, 0, 0)
+			DUKE I 4
+			Goto See
+
+		Missile:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIfInTargetInventory("TargetIsACyberdemon", 1, "CheckRetreat")
+			TNT1 A 0 A_JumpIfInTargetInventory("TargetIsAMastermind", 1, "CheckRetreat")
+			DUKE E 3 BRIGHT A_FaceTarget
+
+			DUKE E 2 BRIGHT A_FaceTarget
+			TNT1 A 0 A_CustomMissile("SmallFlameTrails", 54, 30, random (0, 360), 2, random (70, 110))
+			TNT1 A 0 A_CustomMissile("ImBallGettingReady", 54, 30, random (0, 140), 2, random (0, 160))
+			DUKE E 2 BRIGHT A_FaceTarget
+			TNT1 A 0 A_CustomMissile("SmallFlameTrails", 54, 30, random (0, 360), 2, random (70, 110))
+			TNT1 A 0 A_CustomMissile("ImBallGettingReady", 54, 30, random (0, 140), 2, random (0, 160))
+			DUKE E 2 BRIGHT A_FaceTarget
+			TNT1 A 0 A_CustomMissile("SmallFlameTrails", 54, 30, random (0, 360), 2, random (70, 110))
+			TNT1 A 0 A_CustomMissile("ImBallGettingReady", 54, 30, random (0, 140), 2, random (0, 160))
+			DUKE E 2 BRIGHT A_FaceTarget
+			TNT1 A 0 A_CustomMissile("SmallFlameTrails", 54, 30, random (0, 360), 2, random (70, 110))
+			TNT1 A 0 A_CustomMissile("ImBallGettingReady", 54, 30, random (0, 140), 2, random (0, 160))
+			DUKE E 2 BRIGHT A_FaceTarget
+			TNT1 A 0 A_CustomMissile("SmallFlameTrails", 54, 30, random (0, 360), 2, random (70, 110))
+			TNT1 A 0 A_CustomMissile("ImBallGettingReady", 54, 30, random (0, 140), 2, random (0, 160))
+			DUKE E 2 BRIGHT A_FaceTarget
+			TNT1 A 0 A_CustomMissile("SmallFlameTrails", 54, 30, random (0, 360), 2, random (70, 110))
+			TNT1 A 0 A_CustomMissile("ImBallGettingReady", 54, 30, random (0, 140), 2, random (0, 160))
+			DUKE E 2 BRIGHT
+
+			DUKE F 8 BRIGHT A_FaceTarget
+			DUKE G 8 BRIGHT A_CustomMissile("SmallFireArrow", 54, 30, 0, 0)
+			DUKE HI 4
+			DUKE I 0 A_SetUserVar("user_rage", user_rage+5)
+			Goto See
+
+		StrongMissile:
+			TNT1 A 0
+			TNT1 A 0 A_SetUserVar("user_tryoneshot", 1)
+			TNT1 A 0 A_CustomMissile("SmallFlameTrails", 54, 30, random (0, 360), 2, random (70, 110))
+			TNT1 A 0 A_CustomMissile("ImBallGettingReady", 54, 30, random (0, 140), 2, random (0, 160))
+			DUKE E 2 BRIGHT A_FaceTarget
+
+			TNT1 A 0 A_CustomMissile("SmallFlameTrails", 54, 30, random (0, 360), 2, random (70, 110))
+			TNT1 A 0 A_CustomMissile("ImBallGettingReady", 54, 30, random (0, 140), 2, random (0, 160))
+			DUKE E 2 BRIGHT A_FaceTarget
+
+			DUKE F 2 BRIGHT A_FaceTarget
+
+			DUKE F 2 BRIGHT A_FaceTarget
+
+			DUKE G 8 BRIGHT A_CustomMissile("SuperDemonBall", 54, 30, 0, 0)
+
+			DUKE H 4
+			DUKE I 4
+			Goto See
+
+		Charge:
+			TNT1 A 0 A_Recoil(-6)
+			DUKE AA 2 A_FaceTarget
+		//	TNT1 A 0 A_JumpIf(Momx == 0 || Momy == 0, "JustMissile")
+			TNT1 A 0 A_Recoil(-6)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 22, 52,0)
+			TNT1 A 0 A_PlaySound("knight/step",4)
+			DUKE BB 2 A_FaceTarget
+		//	TNT1 A 0 A_JumpIf(Momx == 0 || Momy == 0, "JustMissile")
+			TNT1 A 0 A_Recoil(-6)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 22, 52,0)
+			TNT1 A 0 A_JumpIfCloser(400, "POUNCE")
+			DUKE CC 2 A_FaceTarget
+			TNT1 A 0 A_JumpIf(Momx == 0 || Momy == 0, "Missile")
+			TNT1 A 0 A_Recoil(-6)
+			TNT1 A 0 A_PlaySound("knight/step",5)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 22, 52,0)
+			DUKE DD 2 A_FaceTarget
+			TNT1 A 0 A_Recoil(-6)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 22, 52,0)
+			TNT1 A 0 A_JumpIfCloser(400, "POUNCE")
+			TNT1 A 0 A_JumpIf(Momx == 0 || Momy == 0, "Missile")
+			Loop
+
+		FastCharge:
+			TNT1 A 0 A_Recoil(-8)
+			DUKE AA 2 A_FaceTarget
+			TNT1 A 0 A_Recoil(-8)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 22, 52,0)
+			TNT1 A 0 A_PlaySound("knight/step",4)
+			DUKE BB 2 A_FaceTarget
+			TNT1 A 0 A_Recoil(-8)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 22, 52,0)
+			TNT1 A 0 A_JumpIfCloser(400, "POUNCE")
+			DUKE CC 2 A_FaceTarget
+			TNT1 A 0 A_JumpIf(Momx == 0 || Momy == 0, "Missile")
+			TNT1 A 0 A_Recoil(-8)
+			TNT1 A 0 A_PlaySound("knight/step",5)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 22, 52,0)
+			DUKE DD 2 A_FaceTarget
+			TNT1 A 0 A_Recoil(-8)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 22, 52,0)
+			TNT1 A 0 A_JumpIfCloser(400, "POUNCE")
+			TNT1 A 0 A_JumpIf(Momx == 0 || Momy == 0, "Missile")
+			Loop
+
+		Pounce:
+			TNT1 A 0 A_JumpIf(user_rage >= 25, "InstantPounce")
+			TNT1 A 0 A_Recoil(-10)
+			TNT1 A 0 ThrustThingZ(0,17,0,1)
+			TNT1 A 0 //ThrustThing(angle,10)
+			TNT1 A 0 A_PlaySound("weapons/fistwhoosh", 1)
+			DUKE JJJJJJ 1 A_FaceTarget
+			DUKE KKK 2
+			TNT1 A 0 A_PlaySound("CLAP", 2)
+			TNT1 A 0 A_CustomMissile("CyberStep",10,0,0,0)
+			TNT1 A 0 A_CustomMissile("Schism_DukeSlam",10,0,0,0)
+			TNT1 A 0 A_CustomMissile("BigRicoChet")
+			TNT1 A 0 A_SpawnItem ("BigRicoChet", 0, -30)
+			TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			EXPL A 0 Radius_Quake (2, 24, 0, 15, 0)
+			TNT1 A 0 A_Stop
+			DUKE L 25
+			Goto See
+
+		InstantPounce:
+			TNT1 A 0 A_Recoil(-10)
+			TNT1 A 0 ThrustThingZ(0,17,0,1)
+			TNT1 A 0 //ThrustThing(angle,10)
+			TNT1 A 0 A_PlaySound("weapons/fistwhoosh", 1)
+			DUKE JJJJJJ 1 A_FaceTarget
+			DUKE KKK 2
+			TNT1 A 0 A_PlaySound("CLAP", 2)
+			TNT1 A 0 A_CustomMissile("CyberStomp",10,0,0,0)
+			TNT1 A 0 A_CustomMissile("BigRicoChet")
+			TNT1 A 0 A_SpawnItem ("BigRicoChet", 0, -30)
+			TNT1 A 0 A_SpawnItemEx("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			EXPL A 0 Radius_Quake(2, 24, 0, 15, 0)
+			TNT1 A 0 A_Stop
+			DUKE L 25
+			Goto See
+
+		CheckRetreat:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIfCloser(500, "Retreat")
+			Goto Missile+5
+
+		Retreat:
+			TNT1 A 0
+			//TNT1 A 0 A_SpawnItemEx("FootSep", 0, 0)
+			TNT1 A 0 A_FaceTarget
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 0, 66,0)
+			DUKE DD 2 A_Recoil(2)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 0, 66,0)
+			DUKE DD 2 A_Recoil(2)
+			TNT1 A 0 A_FaceTarget
+
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 0, 66,0)
+			DUKE CC 2 A_Recoil(1)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 0, 66,0)
+			DUKE CC 2 A_Recoil(1)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 0, 66,0)
+			DUKE BB 2 A_Recoil(1)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 0, 66,0)
+			DUKE BB 2 A_Recoil(1)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 0, 66,0)
+			DUKE AA 2 A_Recoil(1)
+			TNT1 A 0 A_SpawnItem("HeadshotTarget8b", 0, 66,0)
+			DUKE AA 2 A_Recoil(1)
+			Goto Missile+5
+
+		Rage:
+			TNT1 A 0
+			TNT1 A 0 A_SetInvulnerable
+			TNT1 A 0 A_SetUserVar("user_rage", user_rage-10)
+			TNT1 A 0 HealThing(250)
+			TNT1 A 0 A_PlaySound("weapons/fistwhoosh", 1)
+			DUKE JJJJJJ 1 //A_FaceTarget
+			DUKE KKK 2
+			TNT1 A 0 A_PlaySound("CLAP", 2)
+	 		TNT1 A 0 A_CustomMissile("SuperHammerFX", 1, 0, 0, 0)
+			TNT1 A 0 A_CustomMissile("SuperHammerFX", 1, 0, 72, 0)
+			TNT1 A 0 A_CustomMissile("SuperHammerFX", 1, 0, 144, 0)
+			TNT1 A 0 A_CustomMissile("SuperHammerFX", 1, 0, 216, 0)
+			TNT1 A 0 A_CustomMissile("SuperHammerFX", 1, 0, 288, 0)
+			TNT1 A 0 A_CustomMissile("BigRicoChet")
+			TNT1 A 0 A_SpawnItem ("BigRicoChet", 0, -30)
+			TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			EXPL A 0 Radius_Quake (2, 24, 0, 15, 0)
+			TNT1 A 0 A_UnSetInvulnerable
+			DUKE L 25
+			Goto See
+
+		Pain:
+			TNT1 A 0
+			TNT1 A 0 A_SetUserVar("user_paintimer", user_paintimer+1)
+			TNT1 A 0 A_JumpIfInventory("Curbstomp_Marine", 1, "CurbstompMarine")
+			TNT1 A 0 A_SpawnItem("HeadshotTarget4b", 18, 56,0)
+			TNT1 A 0 A_TakeInventory("StopKickingMyBallsMotherFucker", 1)
+			DUKE N 3
+			TNT1 A 0 A_SpawnItem("HeadshotTarget4b", 18, 56,0)
+			DUKE N 3 A_Pain
+			Goto ClearTimer
+
+		ClearTimer:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIf(user_paintimer >= 25, "IncreaseRage")
+			Goto See
+
+		IncreaseRage:
+			TNT1 A 0
+			TNT1 A 0 A_SetUserVar("user_paintimer", 0)
+			TNT1 A 0 A_SetUserVar("user_rage", user_rage+1)
+			Goto See
+
+		Pain.Explosive:
+			TNT1 A 0
+			TNT1 A 0 A_SpawnItemEx("MuchBlood2Green", 0, 0, 60)
+			TNT1 A 0 ThrustThingZ(0,10,0,1)
+			Goto Pain
+
+		Pain.Freeze:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIfInventory("IsSlowed", 1, "Pain")
+			TNT1 A 0 ACS_NamedExecute("SlowingFreeze",0)
+			TNT1 A 0 A_GiveInventory("IsSlowed", 1)
+			Goto Pain
+
+		Pain.Lightning:
+		Pain.Stun:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIf(user_rage > 55, "Rage")
+			TNT1 A 0 A_SetUserVar("user_rage", user_rage+1)
+			TNT1 A 0 A_SpawnItemEx ("StunElectrocute", random (-4, 4), random (-4, 4),  random (16, 32), 0, 0)
+			DUKE N 1 A_Pain
+			DUKE NNNNNNNNNN 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+			DUKE N 1 A_Pain
+			DUKE NNNNNNNNNN 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+			DUKE N 1 A_Pain
+			DUKE NNNNNNNNNN 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+			DUKE N 1 A_Pain
+			DUKE NNNNNNNNNN 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+			DUKE N 1 A_Pain
+			DUKE NNNNNNNNNN 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+			DUKE N 1 A_Pain
+			Goto See
+
+
+		Pain.Extremepunches:
+		Pain.SuperPunch:
+		Pain.HeavyImpact:
+			TNT1 A 0 A_FaceTarget
+			TNT1 A 0 A_ChangeFLag("NOPAIN", 1)
+			TNT1 A 0 ThrustThingZ(0,30,0,1)
+			TNT1 A 0 A_Recoil(8)
+			DUKE N 3
+			TNT1 A 0 A_SpawnItem("HeadshotTarget4b", 18, 56,0)
+			DUKE N 3 A_Pain
+			TNT1 A 0 A_ChangeFLag("NOPAIN", 0)
+			Goto See
+
+		Pain.Kick:
+			Goto DecideMeleeAttack
+
+		Death:
+			TNT1 A 0
+			//TNT1 A 0 A_Jump(64, "Death.Arm")
+			DUKE O 8
+			DUKE P 8 A_Scream
+			DUKE Q 8
+			DUKE R 8 A_NoBlocking
+			//TNT1 A 0 A_SpawnItem("DeadKnight")
+			DUKE S -1
+			Stop
+
+		Death.Minigun:
+			TNT1 A 0 A_XScream
+			TNT1 A 0 A_NoBlocking
+			TNT1 A 0 A_SpawnItem("DyingDuke",1, 5)
+			Stop
+
+		Death.Head:
+			TNT1 AAAAAAAAAA 0 A_CustomMissile ("XDeath2Green", 40, 0, random (0, 360), 2, random (0, 160))
+			TNT1 AAAAAAAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+			TNT1 AAAAAA 0 A_CustomMissile ("XDeath1Green", 40, 0, random (0, 360), 2, random (0, 160))
+			TNT1 AAAAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+			DUHE ABCD 5
+			DUHE D -1
+			Stop
+
+		XDeath:
+		Death.SSG:
+		Death.Railgun:
+		Death.Explosive:
+			TNT1 A 0 A_XScream
+			TNT1 A 0 A_NoBlocking
+			TNT1 AAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XDeath2Green", 40, 0, random (0, 360), 2, random (0, 160))
+			TNT1 AAAAAA 0 A_CustomMissile ("XDeath1Green", 40, 0, random (0, 360), 2, random (0, 160))
+			TNT1 AA 0 A_CustomMissile ("XDeathArmDuke", 40, 0, random (0, 360), 2, random (0, 160))
+			TNT1 AAAAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+			TNT1 A 0 A_SpawnItem("DukeLegs",1, 5)
+			Stop
+
+		Death.Plasma:
+		Death.Plasma2:
+			TNT1 A 0 A_XScream
+			TNT1 A 0 A_NoBlocking
+			DUKP ABCDE 5 A_CustomMissile ("PlasmaSmoke", 1, 0, random (0, 360), 2, random (0, 160))
+			TNT1 AAAAAA 0 A_CustomMissile ("PlasmaSmoke", 1, 0, random (0, 360), 2, random (0, 160))
+			DUKP E -1
+			Stop
+
+		Raise:
+			DUKE O 8
+			DUKE NMLKJI  8
+			Goto See2
+
+		Death.Ice:
+		Death.Freeze:
+		Death.Frost:
+			TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+			TNT1 A 0 A_ChangeFlag("SOLID", 0)
+			TNT1 A 0 A_SpawnItemEx("FrozenBaron", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS, 0, tid)
+			Stop
+
+		Death.Massacre:
+			Goto Death
+
+
+		Death.Stomp:
+			TNT1 A 0 A_Scream
+			TNT1 A 0 A_NoBlocking
+			DUKE JKL 2
+			TNT1 AA 0 A_SpawnItem("MeatDeathSmall")
+			TNT1 AAA 0 bright A_CustomMissile ("SuperGoreSpawner", 5, 0, random (0, 360), 2, random (30, 180))
+			TNT1 AAAA 0 bright A_CustomMissile ("XDeath1Green", 5, 0, random (0, 360), 2, random (30, 180))
+			TNT1 AA 0 bright A_CustomMissile ("XDeath2bGreen", 55, 0, random (0, 360), 2, random (30, 180))
+			TNT1 AA 0 bright A_CustomMissile ("XDeath3bGreen", 55, 0, random (0, 360), 2, random (30, 180))
+			TNT1 A 0 A_SpawnItem ("GreenGrowingBloodPool")
+			TNT1 A 0 A_SpawnItem ("CrushedRemains")
+			TNT1 A 1
+			TNT1 A 1 A_XScream
+			Stop
+
+		Crush:
+			TNT1 A 0
+			TNT1 AAAAAA 0 A_SpawnItemEx ("BodyRemovalThing",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 1 A_XScream
+			Stop
+	}
+}
+
+Actor DyingDuke : Schism_DukeOfHell
+{
++SHOOTABLE
+Health 225
+-SOLID
++FLOORCLIP
+//  +FORCEXYBILLBOARD													//R12.3
+DamageFactor "CauseWaterSplash", 0.0  DamageFactor "CauseObjectsToSplash", 0.0
++FRIENDLY
+-COUNTKILL
++NOBLOCKMONST
++NOTARGET
++NOPAIN
+DropItem "None"
+States
+{
+	See:
+	Spawn:
+		TNT1 AAAAAAAA 0 A_CustomMissile ("XDeath2Green", 62, 0, random (0, 360), 2, random (50, 130))
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		DUMI ABCD 5
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Pain
+		TNT1 AA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		DUMI EDAB 5
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 A 0 A_Pain
+		TNT1 AA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		DUMI ABCD 5
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Pain
+		TNT1 A 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		DUMI EDAB 5
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Pain
+		TNT1 AA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		DUMI ABCD 5
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Pain
+		TNT1 AA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		DUMI EDAB 5
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Pain
+		TNT1 AA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 A 0 A_Changeflag ("SHOOTABLE", 0)
+		TNT1 A 0 A_Scream
+		TNT1 A 0 A_NoBlocking
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		DMIU ADG 5
+		DMIU G -1
+		Stop
+	Death.Minigun:
+	Death:
+		TNT1 A 0 A_Changeflag ("SHOOTABLE", 0)
+		TNT1 A 0 A_NoBlocking
+		TNT1 AAAAA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 A 0 A_CustomMissile ("XDeathArmDuke", 50, 0, random (150, 210), 2, random (10, 50))
+		TNT1 AAAAAAAAA 0 A_CustomMissile ("XDeath2Green", 62, 0, random (0, 360), 2, random (50, 130))
+		TNT1 A 0 A_SpawnItem ("DyingDuke1", 1, 4)
+		TNT1 AAAAA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 AAAAAA 0 A_CustomMissile ("XDeath1Green", 40, 0, random (0, 360), 2, random (0, 160))
+        TNT1 AAAAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		Stop
+	Death.SSG:
+	XDeath:
+	Death.Explosive:
+		TNT1 A 0 A_Changeflag ("SHOOTABLE", 0)
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_SpawnItem ("DukeLegs", 1, 4)
+		TNT1 AAAA 0 A_CustomMissile ("GreenGuts", 40, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAAA 0 A_CustomMissile ("XDeath2Green", 62, 0, random (0, 360), 2, random (50, 130))
+		TNT1 AAAAA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 A 0 A_CustomMissile ("XDeathArmDuke", 50, 0, random (150, 210), 2, random (10, 50))
+		TNT1 AAAAAAAAAA 0 A_CustomMissile ("XDeath1Green", 40, 0, random (0, 360), 2, random (0, 160))
+        TNT1 AAAAAAAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		Stop
+
+}
+}
+
+Actor DyingDuke1 : Schism_DukeOfHell
+{
++SHOOTABLE
+Health 225
++FLOORCLIP
+-SOLID
+//  +FORCEXYBILLBOARD													//R12.3
+DamageFactor "CauseWaterSplash", 0.0  DamageFactor "CauseObjectsToSplash", 0.0
++FRIENDLY
+-COUNTKILL
++NOBLOCKMONST
++NOTARGET
++NOPAIN
+DropItem "None"
+States
+{
+	See:
+	Spawn:
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		DUMI FGFH 3
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Pain
+		TNT1 A 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		DUMI FGFH 3
+		TNT1 AA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 AA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Pain
+		DUMI FGFH 4
+		TNT1 AA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 AA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Pain
+		DUMI FGFH 3
+		TNT1 A 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 AA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Pain
+		DUMI FGFH 3
+		TNT1 A 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 AA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Pain
+		TNT1 A 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		DUMI FGFH 4
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Pain
+		TNT1 A 0 A_Changeflag ("SHOOTABLE", 0)
+		TNT1 A 0 A_Scream
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		DMIU BEH 5
+		DMIU H -1
+		Stop
+	Death.Minigun:
+	Death:
+		TNT1 A 0 A_Changeflag ("SHOOTABLE", 0)
+		TNT1 A 0 A_NoBlocking
+		TNT1 AAAAA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 A 0 A_SpawnItem ("DyingDuke2", 1, 4)
+		TNT1 AAAAAA 0 A_CustomMissile ("XDeath1Green", 40, 0, random (0, 360), 2, random (0, 160))
+        TNT1 AAAAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		Stop
+	Death.SSG:
+	XDeath:
+	Death.Explosive:
+		TNT1 A 0 A_Changeflag ("SHOOTABLE", 0)
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_SpawnItem ("DukeLegs", 1, 4)
+		TNT1 AAAA 0 A_CustomMissile ("GreenGuts", 40, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAAA 0 A_CustomMissile ("XDeath1Green", 62, 0, random (0, 360), 2, random (50, 130))
+		TNT1 AAAAA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 AAAAAAAAAA 0 A_CustomMissile ("XDeath1Green", 40, 0, random (0, 360), 2, random (0, 160))
+        TNT1 AAAAAAAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		Stop
+
+}
+}
+
+Actor DyingDuke2 : Schism_DukeOfHell
+{
++SHOOTABLE
+Health 225
+-SOLID
++FLOORCLIP
+//  +FORCEXYBILLBOARD													//R12.3
+DamageFactor "CauseWaterSplash", 0.0  DamageFactor "CauseObjectsToSplash", 0.0
++FRIENDLY
+-COUNTKILL
++NOBLOCKMONST
++NOTARGET
++NOPAIN
+DropItem "None"
+States
+{
+	See:
+	Spawn:
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		DUMI IIIIIIIIIIIIIIIIIIIIIIIII 2 A_SpawnItem("XDeath1Green", 0, 62)
+		DMIU CFI 5
+		DMIU I -1
+		Stop
+	Death.Minigun:
+	Death:
+	TNT1 AAAAA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 A 0 A_Changeflag ("SHOOTABLE", 0)
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_SpawnItem ("DukeLegs", 1, 4)
+		TNT1 AAAA 0 A_CustomMissile ("XDeath2Green", 40, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAA 0 A_CustomMissile ("GreenGuts", 40, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAAAA 0 A_CustomMissile ("XDeath1Green", 40, 0, random (0, 360), 2, random (0, 160))
+        TNT1 AAAAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		Stop
+	Death.SSG:
+	XDeath:
+	Death.Explosive:
+		TNT1 A 0 A_Changeflag ("SHOOTABLE", 0)
+		TNT1 A 0 A_NoBlocking
+		TNT1 AAAA 0 A_CustomMissile ("XDeath2Green", 40, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_SpawnItem ("DukeLegs", 1, 4)
+		TNT1 AAAAA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 AAAA 0 A_CustomMissile ("XDeath2Green", 40, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAAAAA 0 A_CustomMissile ("XDeath1Green", 40, 0, random (0, 360), 2, random (0, 160))
+        TNT1 AAAAAAAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		Stop
+
+}
+}
+
+Actor DukeLegs : Schism_DukeOfHell
+{
++SHOOTABLE
+Health 225
++FLOORCLIP
+//  +FORCEXYBILLBOARD													//R12.3
+DamageFactor "CauseWaterSplash", 0.0  DamageFactor "CauseObjectsToSplash", 0.0
++FRIENDLY
+-COUNTKILL
+-SOLID
++NOBLOCKMONST
++NOTARGET
++NOPAIN
+DropItem "None"
+States
+{
+	See:
+	Spawn:
+		TNT1 AAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		DUMI JJJJJJJJJJJJJJJJJJ 2 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_ChangeFlag ("SHOOTABLE", 0)
+		DUMI KLM 5
+		DUMI M -1
+		Stop
+	Death:
+	TNT1 AAAAA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 A 0 A_Changeflag ("SHOOTABLE", 0)
+		TNT1 AAAAA 0 A_CustomMissile ("XDeath1Green", 62, 0, random (0, 360), 2, random (50, 130))
+		TNT1 A 0 A_NoBlocking
+		TNT1 AAAAAAAAA 0 A_CustomMissile ("XDeath2Green", 40, 0, random (0, 360), 2, random (0, 160))
+        TNT1 AAAAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		DMIU KLM 5
+		DMIU M -1
+		Stop
+	Death.Minigun:
+	Death.SSG:
+	XDeath:
+	Death.Explosive:
+	TNT1 AAAAA 0 A_SpawnItem("MuchBlood2Green", 0, 62)
+		TNT1 A 0 A_Changeflag ("SHOOTABLE", 0)
+		TNT1 A 0 A_NoBlocking
+
+		TNT1 AAAAA 0 A_CustomMissile ("XDeath2Green", 62, 0, random (0, 360), 2, random (50, 130))
+		TNT1 AA 0 A_CustomMissile ("XDeathLegDuke", 50, 0, random (150, 210), 2, random (10, 50))
+		TNT1 AAAAAAAAAA 0 A_CustomMissile ("XDeath1Green", 40, 0, random (0, 360), 2, random (0, 160))
+        TNT1 AAAAAAAA 0 A_CustomMissile ("Green_FlyingBlood", 15, 0, random (0, 360), 2, random (0, 160))
+		Stop
+
+}
+}
+
+ACTOR XDeathLegDuke: XDeathArm1
+	{
+		Scale 1
+		Speed 6
+		BounceFactor 0.4
+		+NOBLOCKMAP
+		-SOLID
+		+NOBLOCKMONST
+		States
+		{
+		Spawn:
+			TNT1 A 0 A_SpawnItem ("Green_BloodSpot", 0, 1)
+			TNT1 A 0 A_JumpIf(waterlevel > 1, "Death")
+			DUHE E 3 A_CustomMissile ("Green_FlyingBloodTrail", 0, 0, random (0, 360), 2, random (0, 360))
+			DUGI ABCDEFG 3 A_CustomMissile ("Green_FlyingBloodTrail", 0, 0, random (0, 360), 2, random (0, 360))
+			Loop
+		Death:
+			TNT1 A 0 A_Jump(130, "Death1")
+			DUGI R -1
+			Stop
+		Death1:
+			DUGI S -1
+			Stop
+		}
+	}
+
+ACTOR XDeathArmDuke: XDeathArm1
+	{
+		Scale 1
+		Speed 6
+		+NOBLOCKMAP
+		+NOBLOCKMONST
+		-SOLID
+		BounceFactor 0.4
+		States
+		{
+		Spawn:
+			TNT1 A 0 A_SpawnItem ("Green_BloodSpot", 0, 1)
+			TNT1 A 0 A_JumpIf(waterlevel > 1, "Death")
+			DUGI hijklmno 3 A_CustomMissile ("Green_FlyingBloodTrail", 0, 0, random (0, 360), 2, random (0, 360))
+			Loop
+		Death:
+			TNT1 A 0 A_Jump(130, "Death1")
+			DUGI P -1
+			Stop
+		Death1:
+			DUGI Q -1
+			Stop
+		}
+	}

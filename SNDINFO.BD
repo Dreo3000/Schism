@@ -1,13 +1,92 @@
+MSCHISM MSCHISM
+AXECHARG AXECHARG
+AXEDECHR AXEDECHR
+AXETHROW AXETHROW
+AXETELE AXETELE
+AXEKNOCK AXEKNOCK
+
+	//////////////////////////////////
+	// Heretic sounds
+	//////////////////////////////////
+	//Elven Wand / Gold Wand
+	WHOPD WHOPD
+	WHOPF WHOPF
+	WHOPH WHOPH //staff
+
+	GoldWand/Fire     "Sounds/Heretic/Gold Wand/Fire.ogg"
+
+	$random GoldWand/FireAdd	{ GoldWand/FireAdd1 GoldWand/FireAdd2 GoldWand/FireAdd3 GoldWand/FireAdd4 }
+	GoldWand/FireAdd1     "Sounds/Heretic/Gold Wand/FireAdd1.ogg"
+	GoldWand/FireAdd2     "Sounds/Heretic/Gold Wand/FireAdd2.ogg"
+	GoldWand/FireAdd3     "Sounds/Heretic/Gold Wand/FireAdd3.ogg"
+	GoldWand/FireAdd4     "Sounds/Heretic/Gold Wand/FireAdd4.ogg"
+
+	$random GoldWand/AltFireAdd	{ GoldWand/AltFireAdd1 GoldWand/AltFireAdd2 GoldWand/AltFireAdd3 }
+	GoldWand/AltFireAdd1     "Sounds/Heretic/Gold Wand/AltFireAdd1.ogg"
+	GoldWand/AltFireAdd2     "Sounds/Heretic/Gold Wand/AltFireAdd2.ogg"
+	GoldWand/AltFireAdd3     "Sounds/Heretic/Gold Wand/AltFireAdd3.ogg"
+
+	//Ethereal Crossbow
+	$random EtherealCrossbow/Fire	{ EtherealCrossbow/Fire1 EtherealCrossbow/Fire2 EtherealCrossbow/Fire3 EtherealCrossbow/Fire4 }
+	EtherealCrossbow/Fire1     "Sounds/Heretic/Ethereal Crossbow/Fire1.ogg"
+	EtherealCrossbow/Fire2     "Sounds/Heretic/Ethereal Crossbow/Fire2.ogg"
+	EtherealCrossbow/Fire3     "Sounds/Heretic/Ethereal Crossbow/Fire3.ogg"
+	EtherealCrossbow/Fire4     "Sounds/Heretic/Ethereal Crossbow/Fire4.ogg"
+
+	EtherealCrossbow/Tension "Sounds/Heretic/Ethereal Crossbow/Tension.ogg"
+
+	$random EtherealCrossbow/PrimaryFireAdd	{ EtherealCrossbow/PrimaryFireAdd1 EtherealCrossbow/PrimaryFireAdd2 }
+	EtherealCrossbow/PrimaryFireAdd1     "Sounds/Heretic/Ethereal Crossbow/PrimaryFireAdd1.ogg"
+	EtherealCrossbow/PrimaryFireAdd2     "Sounds/Heretic/Ethereal Crossbow/PrimaryFireAdd2.ogg"
+
+	$random EtherealCrossbow/SecondaryFireAdd	{ EtherealCrossbow/SecondaryFireAdd1 EtherealCrossbow/SecondaryFireAdd2 }
+	EtherealCrossbow/SecondaryFireAdd1     "Sounds/Heretic/Ethereal Crossbow/SecondaryFireAdd1.ogg"
+	EtherealCrossbow/SecondaryFireAdd2     "Sounds/Heretic/Ethereal Crossbow/SecondaryFireAdd2.ogg"
+
+	$random EtherealCrossbow/PrimaryHit	{ EtherealCrossbow/PrimaryHit1 EtherealCrossbow/PrimaryHit2 }
+	EtherealCrossbow/PrimaryHit1     "Sounds/Heretic/Ethereal Crossbow/PrimaryHit1.ogg"
+	EtherealCrossbow/PrimaryHit2     "Sounds/Heretic/Ethereal Crossbow/PrimaryHit2.ogg"
+
+	EtherealCrossbow/SecondaryHit     "Sounds/Heretic/Ethereal Crossbow/SecondaryHit.ogg"
+
+	//Phoenix Rod
+	$random PhoenixRod/PrimaryFire	{PhoenixRod/Fire PhoenixRod/Fire1 PhoenixRod/Fire2 PhoenixRod/Fire3 }
+	PhoenixRod/Fire		 "Sounds/Heretic/Phoenix Rod/Fire.ogg"
+	PhoenixRod/Fire1     "Sounds/Heretic/Phoenix Rod/Fire1.ogg"
+	PhoenixRod/Fire2     "Sounds/Heretic/Phoenix Rod/Fire2.ogg"
+	PhoenixRod/Fire3     "Sounds/Heretic/Phoenix Rod/Fire3.ogg"
+
+	$random PhoenixRod/FireAdd	{ PhoenixRod/FireAdd1 PhoenixRod/FireAdd2 PhoenixRod/FireAdd3 }
+	PhoenixRod/FireAdd1     "Sounds/Heretic/Phoenix Rod/FireAdd1.ogg"
+	PhoenixRod/FireAdd2     "Sounds/Heretic/Phoenix Rod/FireAdd2.ogg"
+	PhoenixRod/FireAdd3     "Sounds/Heretic/Phoenix Rod/FireAdd3.ogg"
+
+	PhoenixRod/AltFireLoop    "Sounds/Heretic/Phoenix Rod/AltFireLoop.ogg"
+
+	//Hell Staff
+	$random HellStaff/SecondaryFireAdd	{ HellStaff/SecondaryFireAdd1 HellStaff/SecondaryFireAdd2 HellStaff/SecondaryFireAdd3  HellStaff/SecondaryFireAdd4 HellStaff/SecondaryFireAdd5 HellStaff/SecondaryFireAdd6 }
+	HellStaff/SecondaryFireAdd1     "Sounds/Heretic/Hell Staff/SecondaryFireAdd1.ogg"
+	HellStaff/SecondaryFireAdd2     "Sounds/Heretic/Hell Staff/SecondaryFireAdd2.ogg"
+	HellStaff/SecondaryFireAdd3     "Sounds/Heretic/Hell Staff/SecondaryFireAdd3.ogg"
+	HellStaff/SecondaryFireAdd4     "Sounds/Heretic/Hell Staff/SecondaryFireAdd4.ogg"
+	HellStaff/SecondaryFireAdd5     "Sounds/Heretic/Hell Staff/SecondaryFireAdd5.ogg"
+	HellStaff/SecondaryFireAdd6     "Sounds/Heretic/Hell Staff/SecondaryFireAdd6.ogg"
+
+	HellStaff/HellScourge     "Sounds/Heretic/Hell Staff/HellScourge.wav"
+
+	HellStaff/HellStaffLaserLoop "Sounds/Heretic/Hell Staff/HellStaffLaserLoop.ogg"
+	HellStaff/HellStaffLaserStop "Sounds/Heretic/Hell Staff/HellStaffLaserStop.ogg"
+
 	//Rebalance
-	ICYWIND	"sounds/rebalance/ICYWIND.mp3" 
+	ICYWIND	"sounds/rebalance/ICYWIND.mp3"
 	//MK sounds I edited for Paladin's fists yesterday
 	$RANDOM HVPNHIT {HVPNHIT1 HVPNHIT2 HVPNHIT3 HVPNHIT4}
-	HVPNHIT1 HVPNHIT1 
+	HVPNHIT1 HVPNHIT1
 	HVPNHIT2 HVPNHIT2
 	HVPNHIT3 HVPNHIT3
 	HVPNHIT4 HVPNHIT4
 	$RANDOM PUNCHHIT {PNCHHIT1 PNCHHIT2 PNCHHIT3 PNCHHIT4 PNCHHIT5 PNCHHIT6 PNCHHIT7}
-	PNCHHIT1 PNCHHIT1 
+	PNCHHIT1 PNCHHIT1
 	PNCHHIT2 PNCHHIT2
 	PNCHHIT3 PNCHHIT3
 	PNCHHIT4 PNCHHIT4
@@ -15,14 +94,14 @@
 	PNCHHIT6 PNCHHIT6
 	PNCHHIT7 PNCHHIT7
 	$RANDOM METALHIT {METLHIT1 METLHIT2 METLHIT3}
-	METLHIT1 METLHIT1 
+	METLHIT1 METLHIT1
 	METLHIT2 METLHIT2
 	METLHIT3 METLHIT3
 	$RANDOM KICKHIT {KICKHIT1 KICKHIT2 KICKHIT3 KICKHIT4 KICKHIT5}
 	KICKHIT1 KICKHIT1
-	KICKHIT2 KICKHIT2 
-	KICKHIT3 KICKHIT3 
-	KICKHIT4 KICKHIT4 
+	KICKHIT2 KICKHIT2
+	KICKHIT3 KICKHIT3
+	KICKHIT4 KICKHIT4
 	KICKHIT5 KICKHIT5
 	$RANDOM FLESHHIT {FLESHIT1 FLESHIT2 FLESHIT3 FLESHIT4 FLESHIT5}
 	FLESHIT1 FLESHIT1
@@ -30,217 +109,219 @@
 	FLESHIT3 FLESHIT3
 	FLESHIT4 FLESHIT4
 	FLESHIT5 FLESHIT5
-	//Paladin's Voice
-	$playeralias	Paladin	male	*death		    Paladin/Death
-	$playeralias	Paladin	male	*xdeath		    Paladin/XDeath
-	$playeralias	Paladin	male	*gibbed		    DSSLOP
-	$playersounddup	Paladin	male	*wimpydeath 	*death
-	$playersounddup	Paladin	male	*crazydeath	    *death
-	$playersounddup	Paladin	male	*burndeath	    *xdeath
-	$playeralias	Paladin	male	*pain100	    Paladin/Pain100
-	$playeralias	Paladin	male	*pain75		    Paladin/Pain75
-	$playeralias	Paladin	male	*pain50 	    Paladin/Pain50
-	$playeralias	Paladin	male	*pain25		    Paladin/Pain25
-	$playeralias	Paladin	male	*grunt		    Paladin/ShortExert
-	$playeralias	Paladin	male	*land		    Paladin/Land
-	$playeralias	Paladin	male	*jump		    Paladin/Jump
-	$playersound	Paladin	male	*fist		    dsnone
-	$playersounddup	Paladin	male	*usefail		*grunt
-	$playeralias	Paladin	male	*weaponlaugh	Paladin/Laugh
-	$playersounddup	Paladin	male	*evillaugh	    *weaponlaugh
-	$random Paladin/Pain100	    { Paladin/Pain100_1 Paladin/Pain100_2 Paladin/Pain100_3 Paladin/Pain100_4 Paladin/Pain100_5 Paladin/Pain100_6 Paladin/Pain100_7 Paladin/Pain100_8 }
-	$random Paladin/Pain75	        { Paladin/Pain75_1 Paladin/Pain75_2 Paladin/Pain75_3 }
-	$random Paladin/Pain50	        { Paladin/Pain50_1 Paladin/Pain50_2 Paladin/Pain50_3 }
-	$random Paladin/Pain25	        { Paladin/Pain25_1 Paladin/Pain25_2 }
-	$random Paladin/Death	        { Paladin/Death1 Paladin/Death2 Paladin/Death3 }
-	$random Paladin/ShortExert	    { Paladin/ShortExert1 Paladin/ShortExert2 Paladin/ShortExert3 }
-	$random Paladin/MediumExert	{ Paladin/MediumExert1 Paladin/MediumExert2 Paladin/MediumExert3 }
-	$random Paladin/LargeExert	    { Paladin/LargeExert1 Paladin/LargeExert2 Paladin/LargeExert3 }
-	$random Paladin/SpellCast	    { Paladin/SpellCast1 Paladin/SpellCast2 }
-	$random Paladin/SpellCastLarge	{ Paladin/SpellCastLarge1 Paladin/SpellCastLarge2 Paladin/SpellCastLarge3 }
-	Paladin/Pain100_1          "Sounds/Paladin/Pain100_1.ogg"
-	Paladin/Pain100_2          "Sounds/Paladin/Pain100_2.ogg"
-	Paladin/Pain100_3          "Sounds/Paladin/Pain100_3.ogg"
-	Paladin/Pain100_4          "Sounds/Paladin/Pain100_4.ogg"
-	Paladin/Pain100_5          "Sounds/Paladin/Pain100_5.ogg"
-	Paladin/Pain100_6          "Sounds/Paladin/Pain100_6.ogg"
-	Paladin/Pain100_7          "Sounds/Paladin/Pain100_7.ogg"
-	Paladin/Pain100_8          "Sounds/Paladin/Pain100_8.ogg"
-	Paladin/Pain75_1           "Sounds/Paladin/Pain75_1.ogg"
-	Paladin/Pain75_2           "Sounds/Paladin/Pain75_2.ogg"
-	Paladin/Pain75_2           "Sounds/Paladin/Pain75_3.ogg"
-	Paladin/Pain50_1           "Sounds/Paladin/Pain50_1.ogg"
-	Paladin/Pain50_2           "Sounds/Paladin/Pain50_2.ogg"
-	Paladin/Pain50_3           "Sounds/Paladin/Pain50_3.ogg"
-	Paladin/Pain25_1           "Sounds/Paladin/Pain25_1.ogg"
-	Paladin/Pain25_2           "Sounds/Paladin/Pain25_2.ogg"
-	Paladin/Death1             "Sounds/Paladin/Death1.ogg"
-	Paladin/Death2             "Sounds/Paladin/Death2.ogg"
-	Paladin/Death3             "Sounds/Paladin/Death3.ogg"
-	Paladin/XDeath             "Sounds/Paladin/XDeath.ogg"
-	Paladin/Jump               "Sounds/Paladin/Jump.ogg"
-	Paladin/Land               "Sounds/Paladin/Land.ogg"
-	Paladin/Laugh              "Sounds/Paladin/Taunts/Laugh.ogg"
-	Paladin/ShortExert1        "Sounds/Paladin/Exerts/Short1.ogg"
-	Paladin/ShortExert2        "Sounds/Paladin/Exerts/Short2.ogg"
-	Paladin/ShortExert3        "Sounds/Paladin/Exerts/Short3.ogg"
-	Paladin/MediumExert1       "Sounds/Paladin/Exerts/Medium1.ogg"
-	Paladin/MediumExert2       "Sounds/Paladin/Exerts/Medium2.ogg"
-	Paladin/MediumExert3       "Sounds/Paladin/Exerts/Medium3.ogg"
-	Paladin/LargeExert1        "Sounds/Paladin/Exerts/Large1.ogg"
-	Paladin/LargeExert2        "Sounds/Paladin/Exerts/Large2.ogg"
-	Paladin/LargeExert3        "Sounds/Paladin/Exerts/Large3.ogg"
-	Paladin/SpellCast1         "Sounds/Paladin/Exerts/SpellCast1.ogg"
-	Paladin/SpellCast2         "Sounds/Paladin/Exerts/SpellCast2.ogg"
-	Paladin/SpellCastLarge1    "Sounds/Paladin/Exerts/SpellCastLarge1.ogg"
-	Paladin/SpellCastLarge2    "Sounds/Paladin/Exerts/SpellCastLarge2.ogg"
-	Paladin/SpellCastLarge3    "Sounds/Paladin/Exerts/SpellCastLarge3.ogg"
-	$random Paladin/Taunt	
-	{ 
+//Paladin's Voice
+$playeralias	Paladin	male	*death		    Paladin/Death
+$playeralias	Paladin	male	*xdeath		    Paladin/XDeath
+$playeralias	Paladin	male	*gibbed		    DSSLOP
+$playersounddup	Paladin	male	*wimpydeath 	*death
+$playersounddup	Paladin	male	*crazydeath	    *death
+$playersounddup	Paladin	male	*burndeath	    *xdeath
+$playeralias	Paladin	male	*pain100	    Paladin/Pain100
+$playeralias	Paladin	male	*pain75		    Paladin/Pain75
+$playeralias	Paladin	male	*pain50 	    Paladin/Pain50
+$playeralias	Paladin	male	*pain25		    Paladin/Pain25
+$playeralias	Paladin	male	*grunt		    Paladin/ShortExert
+$playeralias	Paladin	male	*land		    Paladin/Land
+$playeralias	Paladin	male	*jump		    Paladin/Jump
+$playersound	Paladin	male	*fist		    dsnone
+$playersounddup	Paladin	male	*usefail		*grunt
+$playeralias	Paladin	male	*weaponlaugh	Paladin/Laugh
+$playersounddup	Paladin	male	*evillaugh	    *weaponlaugh
+$playeralias	Paladin male	*taunt			Paladin/Taunt
+$random Paladin/Pain100	    { Paladin/Pain100_1 Paladin/Pain100_2 Paladin/Pain100_3 Paladin/Pain100_4 Paladin/Pain100_5 Paladin/Pain100_6 Paladin/Pain100_7 Paladin/Pain100_8 }
+$random Paladin/Pain75	        { Paladin/Pain75_1 Paladin/Pain75_2 Paladin/Pain75_3 }
+$random Paladin/Pain50	        { Paladin/Pain50_1 Paladin/Pain50_2 Paladin/Pain50_3 }
+$random Paladin/Pain25	        { Paladin/Pain25_1 Paladin/Pain25_2 }
+$random Paladin/Death	        { Paladin/Death1 Paladin/Death2 Paladin/Death3 }
+$random Paladin/ShortExert	    { Paladin/ShortExert1 Paladin/ShortExert2 Paladin/ShortExert3 }
+$random Paladin/MediumExert	{ Paladin/MediumExert1 Paladin/MediumExert2 Paladin/MediumExert3 }
+$random Paladin/LargeExert	    { Paladin/LargeExert1 Paladin/LargeExert2 Paladin/LargeExert3 }
+$random Paladin/SpellCast	    { Paladin/SpellCast1 Paladin/SpellCast2 }
+$random Paladin/SpellCastLarge	{ Paladin/SpellCastLarge1 Paladin/SpellCastLarge2 Paladin/SpellCastLarge3 }
+Paladin/Pain100_1          "Sounds/Paladin/Pain100_1.ogg"
+Paladin/Pain100_2          "Sounds/Paladin/Pain100_2.ogg"
+Paladin/Pain100_3          "Sounds/Paladin/Pain100_3.ogg"
+Paladin/Pain100_4          "Sounds/Paladin/Pain100_4.ogg"
+Paladin/Pain100_5          "Sounds/Paladin/Pain100_5.ogg"
+Paladin/Pain100_6          "Sounds/Paladin/Pain100_6.ogg"
+Paladin/Pain100_7          "Sounds/Paladin/Pain100_7.ogg"
+Paladin/Pain100_8          "Sounds/Paladin/Pain100_8.ogg"
+Paladin/Pain75_1           "Sounds/Paladin/Pain75_1.ogg"
+Paladin/Pain75_2           "Sounds/Paladin/Pain75_2.ogg"
+Paladin/Pain75_2           "Sounds/Paladin/Pain75_3.ogg"
+Paladin/Pain50_1           "Sounds/Paladin/Pain50_1.ogg"
+Paladin/Pain50_2           "Sounds/Paladin/Pain50_2.ogg"
+Paladin/Pain50_3           "Sounds/Paladin/Pain50_3.ogg"
+Paladin/Pain25_1           "Sounds/Paladin/Pain25_1.ogg"
+Paladin/Pain25_2           "Sounds/Paladin/Pain25_2.ogg"
+Paladin/Death1             "Sounds/Paladin/Death1.ogg"
+Paladin/Death2             "Sounds/Paladin/Death2.ogg"
+Paladin/Death3             "Sounds/Paladin/Death3.ogg"
+Paladin/XDeath             "Sounds/Paladin/XDeath.ogg"
+Paladin/Jump               "Sounds/Paladin/Jump.ogg"
+Paladin/Land               "Sounds/Paladin/Land.ogg"
+Paladin/Laugh              "Sounds/Paladin/Taunts/Laugh.ogg"
+Paladin/ShortExert1        "Sounds/Paladin/Exerts/Short1.ogg"
+Paladin/ShortExert2        "Sounds/Paladin/Exerts/Short2.ogg"
+Paladin/ShortExert3        "Sounds/Paladin/Exerts/Short3.ogg"
+Paladin/MediumExert1       "Sounds/Paladin/Exerts/Medium1.ogg"
+Paladin/MediumExert2       "Sounds/Paladin/Exerts/Medium2.ogg"
+Paladin/MediumExert3       "Sounds/Paladin/Exerts/Medium3.ogg"
+Paladin/LargeExert1        "Sounds/Paladin/Exerts/Large1.ogg"
+Paladin/LargeExert2        "Sounds/Paladin/Exerts/Large2.ogg"
+Paladin/LargeExert3        "Sounds/Paladin/Exerts/Large3.ogg"
+Paladin/SpellCast1         "Sounds/Paladin/Exerts/SpellCast1.ogg"
+Paladin/SpellCast2         "Sounds/Paladin/Exerts/SpellCast2.ogg"
+Paladin/SpellCastLarge1    "Sounds/Paladin/Exerts/SpellCastLarge1.ogg"
+Paladin/SpellCastLarge2    "Sounds/Paladin/Exerts/SpellCastLarge2.ogg"
+Paladin/SpellCastLarge3    "Sounds/Paladin/Exerts/SpellCastLarge3.ogg"
+$random Paladin/Taunt
+{
 	Paladin/Taunt1      Paladin/Taunt2      Paladin/Taunt3      Paladin/Taunt4      Paladin/Taunt5
 	Paladin/Taunt6      Paladin/Taunt7      Paladin/Taunt8      Paladin/Taunt9      Paladin/Taunt10
 	Paladin/Taunt11     Paladin/Taunt12     Paladin/Taunt13     Paladin/Taunt14     Paladin/Taunt15
 	Paladin/Taunt16     Paladin/Taunt17     Paladin/Taunt18     Paladin/Taunt19     Paladin/Taunt20
 	Paladin/Taunt21     Paladin/Taunt22     Paladin/Taunt23     Paladin/Taunt24     Paladin/Taunt25
-	}
-	Paladin/Taunt1    "Sounds/Paladin/Taunts/Taunt1.ogg"
-	Paladin/Taunt2    "Sounds/Paladin/Taunts/Taunt2.ogg"
-	Paladin/Taunt3    "Sounds/Paladin/Taunts/Taunt3.ogg"
-	Paladin/Taunt4    "Sounds/Paladin/Taunts/Taunt4.ogg"
-	Paladin/Taunt5    "Sounds/Paladin/Taunts/Taunt5.ogg"
-	Paladin/Taunt6    "Sounds/Paladin/Taunts/Taunt6.ogg"
-	Paladin/Taunt7    "Sounds/Paladin/Taunts/Taunt7.ogg"
-	Paladin/Taunt8    "Sounds/Paladin/Taunts/Taunt8.ogg"
-	Paladin/Taunt9    "Sounds/Paladin/Taunts/Taunt9.ogg"
-	Paladin/Taunt10    "Sounds/Paladin/Taunts/Taunt10.ogg"
-	Paladin/Taunt11    "Sounds/Paladin/Taunts/Taunt11.ogg"
-	Paladin/Taunt12    "Sounds/Paladin/Taunts/Taunt12.ogg"
-	Paladin/Taunt13    "Sounds/Paladin/Taunts/Taunt13.ogg"
-	Paladin/Taunt14    "Sounds/Paladin/Taunts/Taunt14.ogg"
-	Paladin/Taunt15    "Sounds/Paladin/Taunts/Taunt15.ogg"
-	Paladin/Taunt16    "Sounds/Paladin/Taunts/Taunt16.ogg"
-	Paladin/Taunt17    "Sounds/Paladin/Taunts/Taunt17.ogg"
-	Paladin/Taunt18    "Sounds/Paladin/Taunts/Taunt18.ogg"
-	Paladin/Taunt19    "Sounds/Paladin/Taunts/Taunt19.ogg"
-	Paladin/Taunt20    "Sounds/Paladin/Taunts/Taunt20.ogg"
-	Paladin/Taunt21    "Sounds/Paladin/Taunts/Taunt21.ogg"
-	Paladin/Taunt22    "Sounds/Paladin/Taunts/Taunt22.ogg"
-	Paladin/Taunt23    "Sounds/Paladin/Taunts/Taunt23.ogg"
-	Paladin/Taunt24    "Sounds/Paladin/Taunts/Taunt24.ogg"
-	Paladin/Taunt25    "Sounds/Paladin/Taunts/Taunt25.ogg"
-	//Sorcerer's Voice
-	$playeralias	Sorcerer	male	*death		    Sorcerer/Death
-	$playeralias	Sorcerer	male	*xdeath		    Sorcerer/XDeath
-	$playeralias	Sorcerer	male	*gibbed		    DSSLOP
-	$playersounddup	Sorcerer	male	*wimpydeath 	*death
-	$playersounddup	Sorcerer	male	*crazydeath	    *death
-	$playersounddup	Sorcerer	male	*burndeath	    *xdeath
-	$playeralias	Sorcerer	male	*pain100	    Sorcerer/Pain100
-	$playeralias	Sorcerer	male	*pain75		    Sorcerer/Pain75
-	$playeralias	Sorcerer	male	*pain50 	    Sorcerer/Pain50
-	$playeralias	Sorcerer	male	*pain25		    Sorcerer/Pain25
-	$playeralias	Sorcerer	male	*grunt		    Sorcerer/ShortExert
-	$playeralias	Sorcerer	male	*land		    Sorcerer/Land
-	$playeralias	Sorcerer	male	*jump		    Sorcerer/Jump
-	$playersound	Sorcerer	male	*fist		    dsnone
-	$playersounddup	Sorcerer	male	*usefail		*grunt
-	$playeralias	Sorcerer	male	*weaponlaugh	Sorcerer/Laugh
-	$playersounddup	Sorcerer	male	*evillaugh	    *weaponlaugh
-	$random Sorcerer/Pain100	    { Sorcerer/Pain100_1 Sorcerer/Pain100_2 Sorcerer/Pain100_3 Sorcerer/Pain100_4 Sorcerer/Pain100_5 Sorcerer/Pain100_6 Sorcerer/Pain100_7 }
-	$random Sorcerer/Pain75	        { Sorcerer/Pain75_1 Sorcerer/Pain75_2 }
-	$random Sorcerer/Pain50	        { Sorcerer/Pain50_1 Sorcerer/Pain50_2 Sorcerer/Pain50_3 }
-	$random Sorcerer/Pain25	        { Sorcerer/Pain25_1 Sorcerer/Pain25_2 Sorcerer/Pain25_3 }
-	$random Sorcerer/Death	        { Sorcerer/Death1 Sorcerer/Death2 Sorcerer/Death3 }
-	$random Sorcerer/Jump	        { Sorcerer/Jump1 Sorcerer/Jump2 }
-	$random Sorcerer/Land	        { Sorcerer/Land1 Sorcerer/Land2 }
-	$random Sorcerer/Pain	        { Sorcerer/Pain1 Sorcerer/Pain2 Sorcerer/Pain3 Sorcerer/Pain4 }
-	$random Sorcerer/ShortExert	    { Sorcerer/ShortExert1 Sorcerer/ShortExert2 Sorcerer/ShortExert3 Sorcerer/ShortExert4 }
-	$random Sorcerer/MediumExert	{ Sorcerer/MediumExert1 Sorcerer/MediumExert2 Sorcerer/MediumExert3 Sorcerer/MediumExert4 }
-	$random Sorcerer/LargeExert	    { Sorcerer/LargeExert1 Sorcerer/LargeExert2 Sorcerer/LargeExert3 Sorcerer/LargeExert4 Sorcerer/LargeExert5 }
-	$random Sorcerer/SpellCast	    { Sorcerer/SpellCast1 Sorcerer/SpellCast2 }
-	$random Sorcerer/SpellCastLarge	{ Sorcerer/SpellCastLarge1 Sorcerer/SpellCastLarge2 Sorcerer/SpellCastLarge3 }
-	Sorcerer/Pain100_1          "Sounds/Sorcerer/Pain100_1.ogg"
-	Sorcerer/Pain100_2          "Sounds/Sorcerer/Pain100_2.ogg"
-	Sorcerer/Pain100_3          "Sounds/Sorcerer/Pain100_3.ogg"
-	Sorcerer/Pain100_4          "Sounds/Sorcerer/Pain100_4.ogg"
-	Sorcerer/Pain100_5          "Sounds/Sorcerer/Pain100_5.ogg"
-	Sorcerer/Pain100_6          "Sounds/Sorcerer/Pain100_6.ogg"
-	Sorcerer/Pain100_7          "Sounds/Sorcerer/Pain100_7.ogg"
-	Sorcerer/Pain75_1           "Sounds/Sorcerer/Pain75_1.ogg"
-	Sorcerer/Pain75_2           "Sounds/Sorcerer/Pain75_2.ogg"
-	Sorcerer/Pain50_1           "Sounds/Sorcerer/Pain50_1.ogg"
-	Sorcerer/Pain50_2           "Sounds/Sorcerer/Pain50_2.ogg"
-	Sorcerer/Pain50_3           "Sounds/Sorcerer/Pain50_3.ogg"
-	Sorcerer/Pain25_1           "Sounds/Sorcerer/Pain25_1.ogg"
-	Sorcerer/Pain25_2           "Sounds/Sorcerer/Pain25_2.ogg"
-	Sorcerer/Pain25_3           "Sounds/Sorcerer/Pain25_3.ogg"
-	Sorcerer/Death1             "Sounds/Sorcerer/Death1.ogg"
-	Sorcerer/Death2             "Sounds/Sorcerer/Death2.ogg"
-	Sorcerer/Death3             "Sounds/Sorcerer/Death3.ogg"
-	Sorcerer/XDeath             "Sounds/Sorcerer/XDeath.ogg"
-	Sorcerer/Jump1              "Sounds/Sorcerer/Jump1.ogg"
-	Sorcerer/Jump2              "Sounds/Sorcerer/Jump2.ogg"
-	Sorcerer/Land1              "Sounds/Sorcerer/Land1.ogg"
-	Sorcerer/Land2              "Sounds/Sorcerer/Land2.ogg"
-	Sorcerer/Laugh1             "Sounds/Sorcerer/Taunts/Laugh1.ogg"
-	Sorcerer/Laugh2             "Sounds/Sorcerer/Taunts/Laugh2.ogg"
-	Sorcerer/Laugh3             "Sounds/Sorcerer/Taunts/Laugh3.ogg"
-	Sorcerer/Laugh4             "Sounds/Sorcerer/Taunts/Laugh4.ogg"
-	Sorcerer/ShortExert1        "Sounds/Sorcerer/Exerts/Short1.ogg"
-	Sorcerer/ShortExert2        "Sounds/Sorcerer/Exerts/Short2.ogg"
-	Sorcerer/ShortExert3        "Sounds/Sorcerer/Exerts/Short3.ogg"
-	Sorcerer/ShortExert4        "Sounds/Sorcerer/Exerts/Short4.ogg"
-	Sorcerer/MediumExert1       "Sounds/Sorcerer/Exerts/Medium1.ogg"
-	Sorcerer/MediumExert2       "Sounds/Sorcerer/Exerts/Medium2.ogg"
-	Sorcerer/MediumExert3       "Sounds/Sorcerer/Exerts/Medium3.ogg"
-	Sorcerer/MediumExert4       "Sounds/Sorcerer/Exerts/Medium4.ogg"
-	Sorcerer/LargeExert1        "Sounds/Sorcerer/Exerts/Large1.ogg"
-	Sorcerer/LargeExert2        "Sounds/Sorcerer/Exerts/Large2.ogg"
-	Sorcerer/LargeExert3        "Sounds/Sorcerer/Exerts/Large3.ogg"
-	Sorcerer/LargeExert4        "Sounds/Sorcerer/Exerts/Large4.ogg"
-	Sorcerer/LargeExert5        "Sounds/Sorcerer/Exerts/Large5.ogg"
-	Sorcerer/SpellCast1         "Sounds/Sorcerer/Exerts/SpellCast1.ogg"
-	Sorcerer/SpellCast2         "Sounds/Sorcerer/Exerts/SpellCast2.ogg"
-	Sorcerer/SpellCastLarge1    "Sounds/Sorcerer/Exerts/SpellCastLarge1.ogg"
-	Sorcerer/SpellCastLarge2    "Sounds/Sorcerer/Exerts/SpellCastLarge2.ogg"
-	Sorcerer/SpellCastLarge3    "Sounds/Sorcerer/Exerts/SpellCastLarge3.ogg"
-	$random Sorcerer/Taunt	
-	{ 
+}
+Paladin/Taunt1    "Sounds/Paladin/Taunts/Taunt1.ogg"
+Paladin/Taunt2    "Sounds/Paladin/Taunts/Taunt2.ogg"
+Paladin/Taunt3    "Sounds/Paladin/Taunts/Taunt3.ogg"
+Paladin/Taunt4    "Sounds/Paladin/Taunts/Taunt4.ogg"
+Paladin/Taunt5    "Sounds/Paladin/Taunts/Taunt5.ogg"
+Paladin/Taunt6    "Sounds/Paladin/Taunts/Taunt6.ogg"
+Paladin/Taunt7    "Sounds/Paladin/Taunts/Taunt7.ogg"
+Paladin/Taunt8    "Sounds/Paladin/Taunts/Taunt8.ogg"
+Paladin/Taunt9    "Sounds/Paladin/Taunts/Taunt9.ogg"
+Paladin/Taunt10    "Sounds/Paladin/Taunts/Taunt10.ogg"
+Paladin/Taunt11    "Sounds/Paladin/Taunts/Taunt11.ogg"
+Paladin/Taunt12    "Sounds/Paladin/Taunts/Taunt12.ogg"
+Paladin/Taunt13    "Sounds/Paladin/Taunts/Taunt13.ogg"
+Paladin/Taunt14    "Sounds/Paladin/Taunts/Taunt14.ogg"
+Paladin/Taunt15    "Sounds/Paladin/Taunts/Taunt15.ogg"
+Paladin/Taunt16    "Sounds/Paladin/Taunts/Taunt16.ogg"
+Paladin/Taunt17    "Sounds/Paladin/Taunts/Taunt17.ogg"
+Paladin/Taunt18    "Sounds/Paladin/Taunts/Taunt18.ogg"
+Paladin/Taunt19    "Sounds/Paladin/Taunts/Taunt19.ogg"
+Paladin/Taunt20    "Sounds/Paladin/Taunts/Taunt20.ogg"
+Paladin/Taunt21    "Sounds/Paladin/Taunts/Taunt21.ogg"
+Paladin/Taunt22    "Sounds/Paladin/Taunts/Taunt22.ogg"
+Paladin/Taunt23    "Sounds/Paladin/Taunts/Taunt23.ogg"
+Paladin/Taunt24    "Sounds/Paladin/Taunts/Taunt24.ogg"
+Paladin/Taunt25    "Sounds/Paladin/Taunts/Taunt25.ogg"
+//Sorcerer's Voice
+$playeralias	Sorcerer	male	*death		    Sorcerer/Death
+$playeralias	Sorcerer	male	*xdeath		    Sorcerer/XDeath
+$playeralias	Sorcerer	male	*gibbed		    DSSLOP
+$playersounddup	Sorcerer	male	*wimpydeath 	*death
+$playersounddup	Sorcerer	male	*crazydeath	    *death
+$playersounddup	Sorcerer	male	*burndeath	    *xdeath
+$playeralias	Sorcerer	male	*pain100	    Sorcerer/Pain100
+$playeralias	Sorcerer	male	*pain75		    Sorcerer/Pain75
+$playeralias	Sorcerer	male	*pain50 	    Sorcerer/Pain50
+$playeralias	Sorcerer	male	*pain25		    Sorcerer/Pain25
+$playeralias	Sorcerer	male	*grunt		    Sorcerer/ShortExert
+$playeralias	Sorcerer	male	*land		    Sorcerer/Land
+$playeralias	Sorcerer	male	*jump		    Sorcerer/Jump
+$playersound	Sorcerer	male	*fist		    dsnone
+$playersounddup	Sorcerer	male	*usefail		*grunt
+$playeralias	Sorcerer	male	*weaponlaugh	Sorcerer/Laugh
+$playersounddup	Sorcerer	male	*evillaugh	    *weaponlaugh
+$playeralias	Sorcerer	male	*taunt			Sorcerer/Taunt
+$random Sorcerer/Pain100	    { Sorcerer/Pain100_1 Sorcerer/Pain100_2 Sorcerer/Pain100_3 Sorcerer/Pain100_4 Sorcerer/Pain100_5 Sorcerer/Pain100_6 Sorcerer/Pain100_7 }
+$random Sorcerer/Pain75	        { Sorcerer/Pain75_1 Sorcerer/Pain75_2 }
+$random Sorcerer/Pain50	        { Sorcerer/Pain50_1 Sorcerer/Pain50_2 Sorcerer/Pain50_3 }
+$random Sorcerer/Pain25	        { Sorcerer/Pain25_1 Sorcerer/Pain25_2 Sorcerer/Pain25_3 }
+$random Sorcerer/Death	        { Sorcerer/Death1 Sorcerer/Death2 Sorcerer/Death3 }
+$random Sorcerer/Jump	        { Sorcerer/Jump1 Sorcerer/Jump2 }
+$random Sorcerer/Land	        { Sorcerer/Land1 Sorcerer/Land2 }
+$random Sorcerer/Pain	        { Sorcerer/Pain1 Sorcerer/Pain2 Sorcerer/Pain3 Sorcerer/Pain4 }
+$random Sorcerer/ShortExert	    { Sorcerer/ShortExert1 Sorcerer/ShortExert2 Sorcerer/ShortExert3 Sorcerer/ShortExert4 }
+$random Sorcerer/MediumExert	{ Sorcerer/MediumExert1 Sorcerer/MediumExert2 Sorcerer/MediumExert3 Sorcerer/MediumExert4 }
+$random Sorcerer/LargeExert	    { Sorcerer/LargeExert1 Sorcerer/LargeExert2 Sorcerer/LargeExert3 Sorcerer/LargeExert4 Sorcerer/LargeExert5 }
+$random Sorcerer/SpellCast	    { Sorcerer/SpellCast1 Sorcerer/SpellCast2 }
+$random Sorcerer/SpellCastLarge	{ Sorcerer/SpellCastLarge1 Sorcerer/SpellCastLarge2 Sorcerer/SpellCastLarge3 }
+Sorcerer/Pain100_1          "Sounds/Sorcerer/Pain100_1.ogg"
+Sorcerer/Pain100_2          "Sounds/Sorcerer/Pain100_2.ogg"
+Sorcerer/Pain100_3          "Sounds/Sorcerer/Pain100_3.ogg"
+Sorcerer/Pain100_4          "Sounds/Sorcerer/Pain100_4.ogg"
+Sorcerer/Pain100_5          "Sounds/Sorcerer/Pain100_5.ogg"
+Sorcerer/Pain100_6          "Sounds/Sorcerer/Pain100_6.ogg"
+Sorcerer/Pain100_7          "Sounds/Sorcerer/Pain100_7.ogg"
+Sorcerer/Pain75_1           "Sounds/Sorcerer/Pain75_1.ogg"
+Sorcerer/Pain75_2           "Sounds/Sorcerer/Pain75_2.ogg"
+Sorcerer/Pain50_1           "Sounds/Sorcerer/Pain50_1.ogg"
+Sorcerer/Pain50_2           "Sounds/Sorcerer/Pain50_2.ogg"
+Sorcerer/Pain50_3           "Sounds/Sorcerer/Pain50_3.ogg"
+Sorcerer/Pain25_1           "Sounds/Sorcerer/Pain25_1.ogg"
+Sorcerer/Pain25_2           "Sounds/Sorcerer/Pain25_2.ogg"
+Sorcerer/Pain25_3           "Sounds/Sorcerer/Pain25_3.ogg"
+Sorcerer/Death1             "Sounds/Sorcerer/Death1.ogg"
+Sorcerer/Death2             "Sounds/Sorcerer/Death2.ogg"
+Sorcerer/Death3             "Sounds/Sorcerer/Death3.ogg"
+Sorcerer/XDeath             "Sounds/Sorcerer/XDeath.ogg"
+Sorcerer/Jump1              "Sounds/Sorcerer/Jump1.ogg"
+Sorcerer/Jump2              "Sounds/Sorcerer/Jump2.ogg"
+Sorcerer/Land1              "Sounds/Sorcerer/Land1.ogg"
+Sorcerer/Land2              "Sounds/Sorcerer/Land2.ogg"
+Sorcerer/Laugh1             "Sounds/Sorcerer/Taunts/Laugh1.ogg"
+Sorcerer/Laugh2             "Sounds/Sorcerer/Taunts/Laugh2.ogg"
+Sorcerer/Laugh3             "Sounds/Sorcerer/Taunts/Laugh3.ogg"
+Sorcerer/Laugh4             "Sounds/Sorcerer/Taunts/Laugh4.ogg"
+Sorcerer/ShortExert1        "Sounds/Sorcerer/Exerts/Short1.ogg"
+Sorcerer/ShortExert2        "Sounds/Sorcerer/Exerts/Short2.ogg"
+Sorcerer/ShortExert3        "Sounds/Sorcerer/Exerts/Short3.ogg"
+Sorcerer/ShortExert4        "Sounds/Sorcerer/Exerts/Short4.ogg"
+Sorcerer/MediumExert1       "Sounds/Sorcerer/Exerts/Medium1.ogg"
+Sorcerer/MediumExert2       "Sounds/Sorcerer/Exerts/Medium2.ogg"
+Sorcerer/MediumExert3       "Sounds/Sorcerer/Exerts/Medium3.ogg"
+Sorcerer/MediumExert4       "Sounds/Sorcerer/Exerts/Medium4.ogg"
+Sorcerer/LargeExert1        "Sounds/Sorcerer/Exerts/Large1.ogg"
+Sorcerer/LargeExert2        "Sounds/Sorcerer/Exerts/Large2.ogg"
+Sorcerer/LargeExert3        "Sounds/Sorcerer/Exerts/Large3.ogg"
+Sorcerer/LargeExert4        "Sounds/Sorcerer/Exerts/Large4.ogg"
+Sorcerer/LargeExert5        "Sounds/Sorcerer/Exerts/Large5.ogg"
+Sorcerer/SpellCast1         "Sounds/Sorcerer/Exerts/SpellCast1.ogg"
+Sorcerer/SpellCast2         "Sounds/Sorcerer/Exerts/SpellCast2.ogg"
+Sorcerer/SpellCastLarge1    "Sounds/Sorcerer/Exerts/SpellCastLarge1.ogg"
+Sorcerer/SpellCastLarge2    "Sounds/Sorcerer/Exerts/SpellCastLarge2.ogg"
+Sorcerer/SpellCastLarge3    "Sounds/Sorcerer/Exerts/SpellCastLarge3.ogg"
+$random Sorcerer/Taunt
+{
 	Sorcerer/Taunt1      Sorcerer/Taunt2      Sorcerer/Taunt3      Sorcerer/Taunt4      Sorcerer/Taunt5
 	Sorcerer/Taunt6      Sorcerer/Taunt7      Sorcerer/Taunt8      Sorcerer/Taunt9      Sorcerer/Taunt10
 	Sorcerer/Taunt11     Sorcerer/Taunt12     Sorcerer/Taunt13     Sorcerer/Taunt14     Sorcerer/Taunt15
 	Sorcerer/Taunt16     Sorcerer/Taunt17     Sorcerer/Taunt18     Sorcerer/Taunt19     Sorcerer/Taunt20
 	Sorcerer/Taunt21     Sorcerer/Taunt22     Sorcerer/Taunt23     Sorcerer/Taunt24     Sorcerer/Taunt25
 	Sorcerer/Taunt26     Sorcerer/Taunt27
-	}
-	Sorcerer/Taunt1    "Sounds/Sorcerer/Taunts/Taunt1.ogg"
-	Sorcerer/Taunt2    "Sounds/Sorcerer/Taunts/Taunt2.ogg"
-	Sorcerer/Taunt3    "Sounds/Sorcerer/Taunts/Taunt3.ogg"
-	Sorcerer/Taunt4    "Sounds/Sorcerer/Taunts/Taunt4.ogg"
-	Sorcerer/Taunt5    "Sounds/Sorcerer/Taunts/Taunt5.ogg"
-	Sorcerer/Taunt6    "Sounds/Sorcerer/Taunts/Taunt6.ogg"
-	Sorcerer/Taunt7    "Sounds/Sorcerer/Taunts/Taunt7.ogg"
-	Sorcerer/Taunt8    "Sounds/Sorcerer/Taunts/Taunt8.ogg"
-	Sorcerer/Taunt9    "Sounds/Sorcerer/Taunts/Taunt9.ogg"
-	Sorcerer/Taunt10    "Sounds/Sorcerer/Taunts/Taunt10.ogg"
-	Sorcerer/Taunt11    "Sounds/Sorcerer/Taunts/Taunt11.ogg"
-	Sorcerer/Taunt12    "Sounds/Sorcerer/Taunts/Taunt12.ogg"
-	Sorcerer/Taunt13    "Sounds/Sorcerer/Taunts/Taunt13.ogg"
-	Sorcerer/Taunt14    "Sounds/Sorcerer/Taunts/Taunt14.ogg"
-	Sorcerer/Taunt15    "Sounds/Sorcerer/Taunts/Taunt15.ogg"
-	Sorcerer/Taunt16    "Sounds/Sorcerer/Taunts/Taunt16.ogg"
-	Sorcerer/Taunt17    "Sounds/Sorcerer/Taunts/Taunt17.ogg"
-	Sorcerer/Taunt18    "Sounds/Sorcerer/Taunts/Taunt18.ogg"
-	Sorcerer/Taunt19    "Sounds/Sorcerer/Taunts/Taunt19.ogg"
-	Sorcerer/Taunt20    "Sounds/Sorcerer/Taunts/Taunt20.ogg"
-	Sorcerer/Taunt21    "Sounds/Sorcerer/Taunts/Taunt21.ogg"
-	Sorcerer/Taunt22    "Sounds/Sorcerer/Taunts/Taunt22.ogg"
-	Sorcerer/Taunt23    "Sounds/Sorcerer/Taunts/Taunt23.ogg"
-	Sorcerer/Taunt24    "Sounds/Sorcerer/Taunts/Taunt24.ogg"
-	Sorcerer/Taunt25    "Sounds/Sorcerer/Taunts/Taunt25.ogg"
-	Sorcerer/Taunt26    "Sounds/Sorcerer/Taunts/Taunt26.ogg"
-	Sorcerer/Taunt27    "Sounds/Sorcerer/Taunts/Taunt27.ogg"
-	//Pyromancy
+}
+Sorcerer/Taunt1    "Sounds/Sorcerer/Taunts/Taunt1.ogg"
+Sorcerer/Taunt2    "Sounds/Sorcerer/Taunts/Taunt2.ogg"
+Sorcerer/Taunt3    "Sounds/Sorcerer/Taunts/Taunt3.ogg"
+Sorcerer/Taunt4    "Sounds/Sorcerer/Taunts/Taunt4.ogg"
+Sorcerer/Taunt5    "Sounds/Sorcerer/Taunts/Taunt5.ogg"
+Sorcerer/Taunt6    "Sounds/Sorcerer/Taunts/Taunt6.ogg"
+Sorcerer/Taunt7    "Sounds/Sorcerer/Taunts/Taunt7.ogg"
+Sorcerer/Taunt8    "Sounds/Sorcerer/Taunts/Taunt8.ogg"
+Sorcerer/Taunt9    "Sounds/Sorcerer/Taunts/Taunt9.ogg"
+Sorcerer/Taunt10    "Sounds/Sorcerer/Taunts/Taunt10.ogg"
+Sorcerer/Taunt11    "Sounds/Sorcerer/Taunts/Taunt11.ogg"
+Sorcerer/Taunt12    "Sounds/Sorcerer/Taunts/Taunt12.ogg"
+Sorcerer/Taunt13    "Sounds/Sorcerer/Taunts/Taunt13.ogg"
+Sorcerer/Taunt14    "Sounds/Sorcerer/Taunts/Taunt14.ogg"
+Sorcerer/Taunt15    "Sounds/Sorcerer/Taunts/Taunt15.ogg"
+Sorcerer/Taunt16    "Sounds/Sorcerer/Taunts/Taunt16.ogg"
+Sorcerer/Taunt17    "Sounds/Sorcerer/Taunts/Taunt17.ogg"
+Sorcerer/Taunt18    "Sounds/Sorcerer/Taunts/Taunt18.ogg"
+Sorcerer/Taunt19    "Sounds/Sorcerer/Taunts/Taunt19.ogg"
+Sorcerer/Taunt20    "Sounds/Sorcerer/Taunts/Taunt20.ogg"
+Sorcerer/Taunt21    "Sounds/Sorcerer/Taunts/Taunt21.ogg"
+Sorcerer/Taunt22    "Sounds/Sorcerer/Taunts/Taunt22.ogg"
+Sorcerer/Taunt23    "Sounds/Sorcerer/Taunts/Taunt23.ogg"
+Sorcerer/Taunt24    "Sounds/Sorcerer/Taunts/Taunt24.ogg"
+Sorcerer/Taunt25    "Sounds/Sorcerer/Taunts/Taunt25.ogg"
+Sorcerer/Taunt26    "Sounds/Sorcerer/Taunts/Taunt26.ogg"
+Sorcerer/Taunt27    "Sounds/Sorcerer/Taunts/Taunt27.ogg"
+//Pyromancy
 	$random Pyromancy/FireballCast	        { Pyromancy/FireballCast1 Pyromancy/FireballCast2 }
 	$random Pyromancy/FireballHit	        { Pyromancy/FireballHit1 Pyromancy/FireballHit2 }
 	Pyromancy/Draw              "Sounds/Spells/Pyromancy/Draw.ogg"
@@ -315,6 +396,21 @@
 	Runecraft/SwordCast2     "Sounds/Spells/Runecraft/SwordCast2.ogg"
 	Runecraft/SwordCast3     "Sounds/Spells/Runecraft/SwordCast3.ogg"
 	Runecraft/ShieldCast     "Sounds/Spells/Runecraft/ShieldCast.ogg"
+
+	//HERETIC
+	HLSTFFR1 HLSTFFR1
+	HLSTFHT1 HLSTFHT1
+	HLSTFHT2 HLSTFHT2
+	HLSTFHT3 HLSTFHT3
+	$random HLSTFHIT {HLSTFHT1 HLSTFHT2 HLSTFHT3}
+	$random DRGCLWFR {DRGCLWF1 DRGCLWF2}
+	DRGCLWF1 DRGCLWF1
+	DRGCLWF2 DRGCLWF2
+	$random PHNXRDFR {PHNXRDF1 PHNXRDF2}
+	PHNXRDF1 PHNXRDF1
+	PHNXRDF2 PHNXRDF2
+
+
 	//NEW MONSTERS
 	queen/sight quesit
 	queen/pain quepain
@@ -322,7 +418,7 @@
 	queen/active queact
 	//queen/scream bqegg1a
 	queen/fire qbfgfire
-	electricplasma/shoot		PZAPSEE	
+	electricplasma/shoot		PZAPSEE
 	electricplasma/hit		PZAPHIT
 	queen/hit		qbfghit
 	queen/melee		quebit
@@ -400,7 +496,7 @@
 	PINKSTE5	PINST5
 	$volume pinky/step 0.30
 	$limit pinky/step 12 256
-	//Heavy Machinegun M60 
+	//Heavy Machinegun M60
 	HMGFIRE HMGFIRE
 	DSD3SI1 DSD3SI1
 	MGCLAC MGCLAC
@@ -408,6 +504,22 @@
 	M60REL1 M60REL1
 	M60REL2 M60REL2
 	M60REL3 M60REL3
+
+	//Desert Eagle
+	DEAGFIRE DEAGFIRE
+	DEAGIN DEAGIN
+	DEAGOUT DEAGOUT
+	DEAGSLID DEAGSLID
+
+	//Distant Deagle
+	DISTDEAG DISTDEAG
+	$limit DISTDEAG 80
+	$rolloff  DISTDEAG 3000 6000
+
+	EARRING EARRING
+
+	$Volume EARRING 0.5
+
 	//Freezer
 	FRZIDLE FRZIDLE
 	//Freezenades
@@ -423,9 +535,10 @@
 	SRFR1 SRFR1
 	SRFR2 SRFR2
 	SRFR3 SRFR3
+	SLNTSHOT SLNTSHOT
 	$rolloff SRFR1 100 2200
 	SRBOLT SRBOLT
-	//Heavy Rifle 
+	//Heavy Rifle
 	Rifle/Fire	RIFLFIRE
 	Rifle/Open	RIFLOPEN
 	Rifle/Close	RIFLCLOS
@@ -460,15 +573,23 @@
 	weapons/quadshotgun/open 	QSGOPEN
 	weapons/quadshotgun/load 	QSGLOAD
 	weapons/quadshotgun/close 	QSGCLOSE
+
 	//PreciseMinigun
 	weapons/minigunfire DSMINIGN
+	weapons/minigunfire2 DSMINIGN2
 	$limit weapons/minigunfire 0
+	$limit weapons/minigunfire2 0
 	$limit weapons/chaingun/fire 0
 	chaingun/fire	CHGNSHOT
-	chaingun/spin CHAINSPI
-	//Weapons/Chaingun/Spin 	CHAINSPI
+
+	chaingun/spin   CHAINSPI
 	chaingun/stop	CHAINSTO
 	chaingun/start	CHAINSTA
+
+	chaingun/spin2 	MININSPI
+	chaingun/stop2	MININSTO
+	chaingun/start2	MININSTA
+
 	//SWORD
 	$random SLMETA { SLMETA1 SLMETA2 SLMETA3 }
 	SLMETA1 SLMETA1
@@ -497,9 +618,12 @@
 	AXSWING6 AXSWING6
 	AXSWING7 AXSWING7
 	AXSWING8 AXSWING8
+
+		$random PYROEXP {PYROEXP1 PYROEXP2 PYROEXP3}
+
 	PYROEXP1 PYROEXP1
-	PYROEXP2 PYROEXP2 
-	PYROEXP3 PYROEXP3  
+	PYROEXP2 PYROEXP2
+	PYROEXP3 PYROEXP3
 	PYROHIT1 PYROHIT1
 	PYROHIT2 PYROHIT2
 	PYROHIT3 PYROHIT3
@@ -519,7 +643,7 @@
 	$rolloff RUNEXP 1400 3200
 	RUNEXP2 RUNEXP2
 	$rolloff RUNEXP2 1400 2400
-	RUNESHLD RUNESHLD 
+	RUNESHLD RUNESHLD
 	$rolloff RUNESHLD 200 1500
 	RUNECAST RUNECAST
 	$rolloff RUNECAST 200 1000
@@ -528,7 +652,7 @@
 	//CROSSBOW
 	BOLTFLY1 BOLTFLY1
 	BOLTFLY2 BOLTFLY2
-	CROSSRELOAD CROSSRELOAD
+
 	CROSSRELEASE CROSSRELEASE
 	BOLTHIT BOLTHIT
 	//STORMCAST
@@ -547,11 +671,11 @@
 	$volume electrogun/bomb 4
 	$rolloff electrogun/explode 1400 3200
 	electrogun/pickup       PZAPPICK
-	electrogun/shoot		PZAPSEE	
+	electrogun/shoot		PZAPSEE
 	electrogun/fire 		PZAPFIRE
 	electrogun/loop         PZAPLOOP
 	electrogun/hit			PZAPHIT
-	electrogun/charge		PZAPCHRG	
+	electrogun/charge		PZAPCHRG
 	electrogun/cooloff      PZAPRMBL
 	electrogun/charge2		PZAPCHR2
 	electrogun/bomb         PZAPBOMB
@@ -576,10 +700,10 @@
 	LIGHTN2 "sounds/rebalance/lightning2.wav"
 	LIGHTN3 "sounds/rebalance/lightning3.wav"
 	$random LIGHTN {LIGHTN1 LIGHTN2 LIGHTN3}
-	TESLAH1 TESLAH1 
-	TESLAH2 TESLAH2 
-	TESLAH3 TESLAH3 
-	TESLAH4 TESLAH4 
+	TESLAH1 TESLAH1
+	TESLAH2 TESLAH2
+	TESLAH3 TESLAH3
+	TESLAH4 TESLAH4
 	LIGHTNG1 LIGHTNG1
 	LIGHTNG2 LIGHTNG2
 	LIGHTNG3 LIGHTNG3
@@ -613,7 +737,7 @@
 	TPortalAppear tp_app
 	//MISC MAGIC
 	PARAPSI PARAPSI
-	FLAMECS FLAMECS 
+	FLAMECS FLAMECS
 	FIRECS FIRECS
 	FIREBIG FIREBIG
 	IGNITE IGNITE
@@ -630,6 +754,9 @@
 	SIZZLE1 SIZZLE1
 	SIZZLE2 SIZZLE2
 	SIZZLE3 SIZZLE3
+
+	$random SINGE{SINGE1 SINGE2 SINGE3}
+
 	SINGE1 SINGE1
 	SINGE2 SINGE2
 	SINGE3 SINGE3
@@ -767,6 +894,7 @@
 	$limit MP40 30
 	$limit weapons/sg 10
 	insertshell        SHELL_IN
+	insertrev        REVLOAD
 	DSRLAUN DSRLAUN
 	DSF2OOF DSF2OOF
 	//PlayerSounds
@@ -853,25 +981,26 @@
 	weapons/reloadgrenade			GRELOAD
 	GRLLO1 GRLLO1
 	GRLLO2 GRLLO2
-	$rolloff weapons/firegrenade 3000 100 
+	PREL2 PREL2
+	$rolloff weapons/firegrenade 3000 100
 	$limit world/watersplash 4
 	$limit world/sludgegloop 2
 	$limit world/drip 2
 	$limit world/hotsiz 2
 	$limit world/lavasizzle 2
-	$volume ricochet/hit 0.7 
-	$volume world/watersplash 0.3 
-	$volume weapons/casing2 0.7 
-	$rolloff world/watersplash 300 300 
+	$volume ricochet/hit 0.7
+	$volume world/watersplash 0.3
+	$volume weapons/casing2 0.7
+	$rolloff world/watersplash 300 300
 	$volume weapons/sshoto	1.5
 	$volume weapons/sshotc	1.5
 	$volume weapons/sshotl  1.5
 	weapons/plasmarifle PLASMA
 	$limit weapons/plasmarifle 0
-	$volume weapons/plasmarifle 0.9 
+	$volume weapons/plasmarifle 0.9
 	Rocket/Launch DSRLAUN
 	RKTSML RKTSML
-	$rolloff world/RKTSML 1200 2000 
+	$rolloff world/RKTSML 1200 2000
 	SSHFIRE SSHFIRE
 	weapons/ssg/open	SSGOPEN
 	weapons/ssg/close	SSGCLOSE
@@ -921,20 +1050,20 @@
 	$limit world/blank2 1
 	$limit ricochet/hit 1
 	$limit world/ricochet 1
-	$rolloff world/ricochet1 200 700  
+	$rolloff world/ricochet1 200 700
 	$rolloff world/ricochet2 200 700
-	$rolloff world/ricochet3 200 700 
-	$rolloff world/ricochet4 200 700 
-	$rolloff world/ricochet5 200 700 
-	$rolloff world/ricochet6 200 700 
+	$rolloff world/ricochet3 200 700
+	$rolloff world/ricochet4 200 700
+	$rolloff world/ricochet5 200 700
+	$rolloff world/ricochet6 200 700
 	$rolloff world/ricochet7 200 700
 	$rolloff world/ricochet 200 700
 	BIGEXPL2 BIGEXPL2
 	//Brutal Doom's explosions sounds are actually 3 sounds playing at the same time so it can sound more realistic.
 	//First sound. Very sharp, like exploding next to you.
 	$random Explosion {Explode1 Explode2}
-	Explode1 Explode1 
-	Explode2 Explode2 
+	Explode1 Explode1
+	Explode2 Explode2
 	$limit Explosion 4
 	$rolloff  Explosion 900 1400
 	// This is the second sound, it's muffled and can be heard one city block away.
@@ -1040,6 +1169,7 @@
 	RELO1 RELO1
 	RELO2 RELO2
 	insertshell        SHELL_IN
+	M60CHAIN M60CHAIN
 	M249        M249
 	M249R1        M249R1
 	M249R2        M249R2
@@ -1063,12 +1193,12 @@
 	fstatk1 fstatk1
 	fstatk2 fstatk2
 	fstatk3 fstatk3
-	$random weapons/casing  { weapons/casing2 weapons/casing3 } 
+	$random weapons/casing  { weapons/casing2 weapons/casing3 }
 	$limit weapons/casing  5
 	weapons/casing2	dscasin1
 	weapons/casing2	dscasin2
 	weapons/casing3	dscasin3
-	$random 40mmCasing  { 40CAS1 40CAS2 40CAS3 } 
+	$random 40mmCasing  { 40CAS1 40CAS2 40CAS3 }
 	40CAS1 40CAS1
 	40CAS2 40CAS2
 	40CAS3 40CAS3
@@ -1158,7 +1288,7 @@
 	$volume weapons/smallmagdrop 0.5
 	$volume weapons/largemagdrop 0.5
 	//Impse
-	$random imp/melee { imp/melee1 imp/melee2 imp/melee3 } 
+	$random imp/melee { imp/melee1 imp/melee2 imp/melee3 }
 	imp/melee1	IMPCLAW1
 	imp/melee2	IMPCLAW2
 	imp/melee3	IMPCLAW3
@@ -1222,7 +1352,7 @@
 	zombiemarine/death5	zspdth5
 	zombiemarine/death6	zspdth6
 	zombiemarine/death7	zspdth7
-	$random zombiemarine/pain 
+	$random zombiemarine/pain
 	{ zombiemarine/pain1
 	zombiemarine/pain2
 	zombiemarine/pain3
@@ -1286,7 +1416,7 @@
 	CYBTAT CYBTAT
 	$rolloff CYBTAT 50 8000
 	//Marine Voices
-	$random MRNAT { MRNAT1 MRNAT2 MRNAT3 MRNAT4 MRNAT5 MRNAT6 NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING 
+	$random MRNAT { MRNAT1 MRNAT2 MRNAT3 MRNAT4 MRNAT5 MRNAT6 NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING
 	NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING
 	NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING NOTHING }
 	MRNAT1 MRNAT1
@@ -1475,13 +1605,13 @@
 	LQDRIP12 LQDRIP12
 	LQDRIP13 LQDRIP13
 	LQDRIP14 LQDRIP14
-	$random blooddrop  { LQDRIP1 LQDRIP2 LQDRIP3 } 
+	$random blooddrop  { LQDRIP1 LQDRIP2 LQDRIP3 }
 	$rolloff blooddrop 200 1000
 	$random blooddrop2  { LQDRIP4 LQDRIP5 LQDRIP6 LQDRIP7 }
 	$rolloff blooddrop2 200 1000
-	$random blooddrop3  { LQDRIP8 LQDRIP9 LQDRIP10 LQDRIP11 LQDRIP12 LQDRIP13 LQDRIP14 LQDRIP14 } 
+	$random blooddrop3  { LQDRIP8 LQDRIP9 LQDRIP10 LQDRIP11 LQDRIP12 LQDRIP13 LQDRIP14 LQDRIP14 }
 	$rolloff blooddrop3 200 1000
-	$random REVIDLE  { REVIDLE1 REVIDLE2 REVIDLE3 REVIDLE4 REVIDLE5 REVIDLE6 REVIDLE7 } 
+	$random REVIDLE  { REVIDLE1 REVIDLE2 REVIDLE3 REVIDLE4 REVIDLE5 REVIDLE6 REVIDLE7 }
 	REVIDLE1 REVIDLE1
 	REVIDLE2 REVIDLE2
 	REVIDLE3 REVIDLE3
@@ -1489,11 +1619,11 @@
 	REVIDLE5 REVIDLE5
 	REVIDLE6 REVIDLE6
 	REVIDLE7 REVIDLE7
-	$random REVOUCH { REVIDLE1 REVIDLE2 REVIDLE3 REVIDLE4 REVIDLE5 REVIDLE6 REVIDLE7 } 
+	$random REVOUCH { REVIDLE1 REVIDLE2 REVIDLE3 REVIDLE4 REVIDLE5 REVIDLE6 REVIDLE7 }
 	REVOUCH1 REVOUCH1
 	REVOUCH2 REVOUCH2
 	REVOUCH3 REVOUCH3
-	$random PINKIDL { PINKIDL1 PINKIDL2 PINKIDL3 PINKIDL4 } 
+	$random PINKIDL { PINKIDL1 PINKIDL2 PINKIDL3 PINKIDL4 }
 	PINKIDL1 PINKIDL1
 	PINKIDL2 PINKIDL2
 	PINKIDL3 PINKIDL3
@@ -1601,3 +1731,14 @@
 	BTHUD5 BTHUD5
 	BTHUD6 BTHUD6
 	BTHUD7 BTHUD7
+
+	$random MINPAIN { MINPAIN1 MINPAIN2 MINPAIN3 }
+	MINPAIN1 MINPAIN1
+	MINPAIN2 MINPAIN2
+	MINPAIN3 MINPAIN3
+
+	$random MINDTH { MINDTH1 MINDTH2 }
+	MINDTH1 MINDTH1
+	MINDTH2 MINDTH2
+
+	MINACT2 MINACT2

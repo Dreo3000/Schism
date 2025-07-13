@@ -1,0 +1,922 @@
+Actor Schism_AssassinClaws : Schism_Weapon {	
+	Game Hexen
+	Weapon.SelectionOrder 3400
+	Weapon.KickBack 20
+	+WEAPON.MELEEWEAPON
+	+WEAPON.NOAUTOAIM
+	+WEAPON.NOALERT
+	+INVENTORY.UNDROPPABLE
+	+WEAPON.CHEATNOTWEAPON
+	+BLOODSPLATTER
+	Inventory.ForbiddenTo Schism_Ranger, Schism_Warrior, Schism_Sorcerer, Schism_Corvus
+	Obituary "$OB_MPFWEAPFIST"
+	Tag "PussyCat Paws"
+	States{
+		Spawn:
+			WFAX A -1
+			Stop
+			
+		Select:
+			CLSR C 1 A_Raise
+			Wait
+			
+		Deselect:
+			"####" A 0 A_SetCrosshair(0)
+			DeselectLoop:
+			CLSR C 1 A_Lower
+			Wait
+	
+	
+		Ready:
+			ReadyLoop:
+			"CLSR" "C" 0
+			"####" "#" 1 A_WeaponReady
+			Loop
+
+		Fire: //chopleft
+			
+		
+		HeatLevelCritical1: //Transition state from Fire1Leap when there is no DashAmmo enough, voice and go to Fire1
+			TNT1 A 0 A_PlaySoundEx("Voice/HeatLevelCritical",3)
+		Fire1:
+			TNT1 A 0 A_JumpIfInventory("ClawSwingCount",1,"Fire2")
+// 			TNT1 A 0 ACS_NamedExecuteAlways("Schism_TeleportToTarget")
+			TNT1 A 0 A_FireBullets(0, 0, 1, 0, "Schism_ClawsTeleporter")
+			TNT1 A 0 A_GiveInventory("ClawSwingCount",1)
+			CLLP A 2 A_Playsound("Assassin/ShortAct",0)
+			TNT1 A 0 A_Saw("", "", 1, "PaladinMeleePuff", 0, 64, 0,16)
+			CLLP B 1 A_firecustommissile("ClawProjectile",0,0,0,0)
+			TNT1 A 0 A_JumpIfInventory("ClawImpactWall",1,"Fire_Hit")
+			TNT1 A 0 A_JumpIfInventory("ClawImpact",1,"Fire_Hit")
+
+			Fire_Miss: //also landing from ContinueLeap2
+			TNT1 A 0 A_TakeInventory("ClawImpact")
+			CLLP CDE 1
+			CLLP FG 1
+			CLLP GHH 1 A_Weaponready(WRF_NOBOB)
+			TNT1 A 0 A_JumpIfInventory("Kicking",1,"AirKick")
+			TNT1 AAAA 1 A_Weaponready(WRF_NOBOB)
+			TNT1 A 0 A_JumpIfInventory("Kicking",1,"AirKick")
+			TNT1 A 0 A_Refire
+			Goto ReadyLoop
+
+			Fire_Hit:
+			TNT1 A 0 A_TakeInventory("ClawImpact")
+			TNT1 A 0 A_TakeInventory("ClawImpactWall")
+			CLLP B 1 A_Playsound("R_PUNCH",0,.45)
+			CLLP CDD 1
+			CLLX ABC 1 A_Weaponready(WRF_NOBOB)
+			TNT1 A 0 A_JumpIfInventory("Kicking",1,"AirKick")
+			TNT1 AAAA 1 A_Weaponready(WRF_NOBOB)
+			TNT1 A 0 A_JumpIfInventory("Kicking",1,"AirKick")
+			TNT1 A 0 A_Refire
+			Goto ReadyLoop
+	
+		HeatLevelCritical2: //Transition state from Fire2Leap when there is no DashAmmo enough, voice and go to Fire2
+			TNT1 A 0 A_PlaySoundEx("Voice/HeatLevelCritical",3)
+		Fire2:
+			TNT1 A 0 //Landing tic for fuck sake, it's zandronum baby!
+			TNT1 A 0 A_FireBullets(0, 0, 1, 0, "Schism_ClawsTeleporter")
+// 			TNT1 A 0 ACS_NamedExecuteAlways("Schism_TeleportToTarget")
+			TNT1 A 0 A_TakeInventory("ClawSwingCount")
+			CLRP A 2 A_Playsound("Assassin/ShortAct",0)
+			TNT1 A 0 A_Saw("", "", 1, "PaladinMeleePuff", 0, 64, 0,16)
+			CLRP B 1 A_firecustommissile("ClawProjectile",0,0,0,0)
+			TNT1 A 0 A_JumpIfInventory("ClawImpactWall",1,"Fire_Hit2")
+			TNT1 A 0 A_JumpIfInventory("ClawImpact",1,"Fire_Hit2")
+
+			Fire_Miss2: //also landing from ContinueLeap2
+			TNT1 A 0 A_TakeInventory("ClawImpact")
+			CLRP CDE 1
+			CLRP FG 1
+			CLRP GHH 1 A_Weaponready(WRF_NOBOB)
+			TNT1 A 0 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")
+			TNT1 AAAA 1 A_Weaponready(WRF_NOBOB)
+			TNT1 A 0 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")
+			TNT1 A 0 A_Refire
+			Goto ReadyLoop
+
+			Fire_Hit2:
+			TNT1 A 0 A_TakeInventory("ClawImpact")
+			TNT1 A 0 A_TakeInventory("ClawImpactWall")
+			CLRP B 1 A_Playsound("R_PUNCH",0,.45)
+			CLRP CDD 1
+			CLRX ABC 1 A_Weaponready(WRF_NOBOB)
+			TNT1 A 0 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")
+			TNT1 AAA 1 A_Weaponready(WRF_NOBOB)
+			TNT1 A 0 A_JumpIfInventory("Kicking",1,"LeftFinishingKick")
+			TNT1 A 0 A_Refire
+			Goto ReadyLoop
+	}
+}
+
+
+
+Actor ClawSwingCount : TokenBase {}
+Actor ClawImpactCount : TokenBase2 {}
+Actor ClawImpact : TokenBase {}
+Actor ClawImpactWall : TokenBase {}
+
+Actor ClawProjectile : fastprojectile {
+	Radius 8
+	Height 16
+	PROJECTILE
+	speed 110
+	damage 18
+	//+NOEXTREMEDEATH
+	+THRUGHOST
+	-NODAMAGETHRUST
+	+DONTBLAST
+	+THRUSPECIES
+	+HITMASTER
+	+NOTIMEFREEZE
+	+FORCEPAIN
+	ProjectileKickBack 150
+	Damagetype Minigun//Shotgun
+	Renderstyle Translucent
+	States {
+		Spawn:
+			TNT1 A 1
+			Stop
+		Death:
+			TNT1 A 0 A_quake(3,4,0,600,"")
+			TNT1 A 0 A_GiveToTarget("ClawImpactWall",1)
+			TNT1 A 0 A_playsound("Claw/Hit",0)
+			TNT1 A 1
+			PPUF A 2 BRIGHT
+			PPUF B 2 BRIGHT
+			Stop
+		Xdeath:
+			//TNT1 A 0 A_givetotarget("FistHealthbonus",random(1,2))
+		Crash:
+			TNT1 A 0 A_quake(3,4,0,600,"")
+			TNT1 A 0 A_Playsound("Claw/Stab",0)
+			TNT1 A 0 A_GiveToTarget("HealthPlus",1)
+			TNT1 A 0 A_GiveToTarget("Rage",25) //MUCH FASTER rage filling because unlike paladin, assassin fires only one projectile per hit (except uppercut).
+			TNT1 A 0 A_GiveToTarget("ClawImpact",1)
+			TNT1 A 0 A_GiveToTarget("ClawImpactCount",1)
+			TNT1 A 1
+			PPUF D 2 BRIGHT
+			PPUF E 2 BRIGHT
+			Stop
+	}
+}
+
+Actor ClawProjectileLeap : ClawProjectile {
+   damage 25
+} 
+
+
+Actor AssassinKick : FastProjectile {
+	Radius 4
+	Height 8
+	DamageType Blast//Freeze //SSG
+	+MISSILE
+	+FORCEXYBILLBOARD
+	//+FORCERADIUSDMG
+	+BLOODSPLATTER
+	+FORCEPAIN
+	+FLOAT
+	RenderStyle Add
+	Alpha 0.9
+	Gravity 0.0
+    Damage (random(125,150))
+    Speed 55
+	SeeSound "none"
+	DeathSound "none"
+//	decal "SawVertical"
+	Scale 0.05
+	States
+	{
+	Spawn:
+		AXEG A 0
+		TNT1 A 1 BRIGHT
+		Stop
+			
+	
+	SpawnFloor:
+	AXEG A 0
+	AXEG A 0 Acs_namedexecutealways("BDCheckFloorType", 0, 0, 0, 0)//Check if is under a liquid
+	TNT1 A 2
+	AXEG A 0 A_ALertMonsters(400)
+	AXEG A 0 A_JumpIfInventory("IsOverWater", 1, "SpawnWater")
+	AXEG A 0 A_JumpIfInventory("IsOverNukage", 1, "SpawnNukage")
+	AXEG A 0 A_JumpIfInventory("IsOverSlime", 1, "SpawnSlime")
+	AXEG A 0 A_JumpIfInventory("IsOverBlood", 1, "SpawnBlood")
+	AXEG A 0 A_JumpIfInventory("IsOverLava", 1, "SpawnLava")
+	AXEG A 0 A_JumpIfInventory("IsOverGrass", 1, "SpawnDirt")
+	AXEG A 0 A_JumpIfInventory("IsOverSand", 1, "SpawnSand")
+	
+	TNT1 A 0 A_PlaySound("SLMETA", 1)
+	PUFF A 0 bright A_PlaySound("ricochet/hit")
+	AXEG A 0 A_SpawnItem ("YellowFlareSmall", 0)
+	AXEG A 0 A_SetScale(-0.6)
+    AXEG A 0 A_Jump (132, 15)
+    FX58 ABCD 1 BRIGHT 
+	AXEG A 0 A_CustomMissile("OldschoolRocketSmokeTrail2Bigger", 2, 0, random (0, 360), 2, random (0, 360))
+	FX58 EFGHIJ 1 bright
+    Stop
+    TNT1 AAAAA 0
+    FX57 ABCD 1 BRIGHT 
+	AXEG A 0 A_CustomMissile("OldschoolRocketSmokeTrail2Bigger", 2, 0, random (0, 360), 2, random (0, 360))
+	FX57 EFGHIJ 1 bright
+    stop
+	
+	SpawnWater:
+	AXEG A 0
+	TNT1 A 0 A_PlaySound("bigspl1", 1)
+	TNT1 AAAAA 0 A_CustomMissile ("WaterParticleXFAster", 8, 0, random (0, 360), 2, random (30, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("WaterParticleXSuperFast", 24, 0, random (0, 360), 2, random (30, 160))
+	AXEG A 0 A_SpawnItem("WaterSplashWaves")
+	AXEG A 0 A_SetScale(0.5, 0.5)
+	SPHW ABCDE 3
+	Stop
+	
+	SpawnSlime:
+	AXEG A 0
+	TNT1 A 0 A_PlaySound("bigspl1", 1)
+	TNT1 AAAAA 0 A_CustomMissile ("SLimeParticleXFAster", 8, 0, random (0, 360), 2, random (30, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("SlimeParticleXFAster", 24, 0, random (0, 360), 2, random (30, 160))
+	AXEG A 0 A_SpawnItem("SlimeSplashWaves")
+	AXEG A 0 A_SetScale(0.5, 0.5)
+	SPHB ABCDE 3
+	Stop
+	
+	
+	SpawnNukage:
+	AXEG A 0
+	TNT1 A 0 A_PlaySound("bigspl1", 1)
+	TNT1 AAAAA 0 A_CustomMissile ("nukageParticleXFAster", 8, 0, random (0, 360), 2, random (30, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("nukageParticleXFAster", 24, 0, random (0, 360), 2, random (30, 160))
+	AXEG A 0 A_SpawnItem("NukageSplashWaves")
+	AXEG A 0 A_SetScale(0.5, 0.5)
+	SPHG ABCDE 3
+	Stop
+	
+	SpawnBlood:
+	AXEG A 0
+	TNT1 A 0 A_PlaySound("bigspl1", 1)
+	TNT1 AAAAA 0 A_CustomMissile ("BloodParticleXFAster", 8, 0, random (0, 360), 2, random (30, 160))
+	TNT1 AAAAA 0 A_CustomMissile ("BloodParticleXFAster", 24, 0, random (0, 360), 2, random (30, 160))
+	AXEG A 0 A_SpawnItem("BloodSplashWaves")
+	AXEG A 0 A_SetScale(0.5, 0.5)
+	SPHR ABCDE 3
+	Stop
+	
+	SpawnLava:
+	AXEG A 0
+	AXEG A 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 12, 0, random (160, 210), 2, random (10, 90))
+	AXEG A 0 A_SpawnItemEx("TinyBurningPiece3", random (-5, 5), random (-5, 5))
+	TNT1 AAAAA 0 A_CustomMissile ("ExplosionParticleHeavy", 10, 0, random (0, 180), 2, random (10, 90))
+	AXEG A 0 A_SetScale(0.5, 0.5)
+	INFE ABCDEFGHIJKLMNOPQR 1 BRIGHT 
+	INFE ST 1 BRIGHT A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 32, 0, random (160, 210), 2, random (10, 90))
+	TNT1 AAA 4 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 14, 0, random (160, 210), 2, random (10, 90))
+	Stop
+	
+	
+	SpawnDirt:
+	AXEG A 0
+	AXEG A 0 A_CustomMissile ("BrownCloudSmallLong", 0, 0, random (0, 360), 2, random (10, 150))
+	TNT1 AA 0 A_CustomMissile ("DirtChunk3", 0, 0, random (0, 360), 2, random (30, 150))
+	TNT1 AA 0 A_CustomMissile ("DirtChunk4", 0, 0, random (0, 360), 2, random (30, 150))
+	AXEG A 0 A_CustomMissile ("MudDustSmall", 4, 0, random (0, 360), 2, random (30, 150))
+	AXEG A 0 A_SpawnItem("DirtRicochet")
+	Stop
+	
+	
+	SpawnSand:
+	AXEG A 0
+	AXEG A 0 A_CustomMissile ("SandCloudSmallLong", 0, 0, random (0, 360), 2, random (10, 90))
+	AXEG A 0 A_CustomMissile ("SandCloudSmall", 0, 0, random (0, 360), 2, random (10, 90))
+	AXEG A 0 A_CustomMissile ("SandDustSmall", 4, 0, random (0, 360), 2, random (30, 150))
+	Stop
+	
+	
+	
+	
+	XDeath:
+		TNT1 A 0
+		TNT1 A 0 A_giveToTarget("Rage", 25)
+	Death:
+		TNT1 A 0
+		TNT1 A 0 A_giveToTarget("AxeHit", 1)
+		TNT1 A 0 Radius_Quake (2, 6, 0, 5, 0)//(intensity, duration, damrad, tremrad, tid)
+		TNT1 A 0 A_CheckFloor("SpawnFloor")
+		TNT1 A 0 A_SpawnItem ("Sparks", 0)
+		TNT1 A 0 A_PlaySound("SLMETA", 1)
+	
+		TNT1 A 0 A_JumpIfInTargetInventory("Rage",100,"GotoFinisher")
+		AXEG A 0 A_JumpIfInTargetInventory("PowerStrength", 1, "Berserk")
+		//goto Explodez
+		Stop
+
+
+		GotoFinisher:
+		TNT1 A 0 A_TakeFromTarget("Rage",100)
+		TNT1 A 0 A_JumpIfInTargetInventory("QuickFireSpellSelected",1,"FireFinisher") //Same token as Sorcerer uses for quick spell
+		TNT1 A 0 A_JumpIfInTargetInventory("QuickLightningSpellSelected",1,"LightningFinisher") //Same token as Sorcerer uses for quick spell
+		TNT1 A 0 A_JumpIfInTargetInventory("QuickFrostSpellSelected",1,"IceFinisher") //Same token as Sorcerer uses for quick spell
+
+		IceFinisher:
+			TNT1 A 0
+			TNT1 A 1 A_GiveToTarget("ShortFreezeImmunity",1)
+			TNT1 A 0 A_SpawnItemEx ("AssassinIceExplosion",0,0,13,0,0,0,0,SXF_NOCHECKPOSITION,0)	
+			Stop
+		
+		LightningFinisher:
+			TNT1 A 0
+			TNT1 A 1 A_GiveToTarget("ShortLightningImmunity",1)
+			TNT1 A 0 A_SpawnItemEx ("StunBallExplosion",0,0,13,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+			
+		FireFinisher:
+			TNT1 A 0
+			TNT1 A 1 A_GiveToTarget("ShortFireImmunity",1)
+			EXPL A 0 Radius_Quake (3, 8, 0, 15, 0)//(intensity, duration, damrad, tremrad, tid)
+			TNT1 A 0 A_CustomMissile("ExplosionSplashSpawner")
+			TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 AAAAAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+			TNT1 AAAA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+			TNT1 AAAA 0 A_CustomMissile ("MediumExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+			TNT1 A 0 A_SpawnItemEx ("AssassinKickExplosion",0,0,13,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0
+			TNT1 A 2
+			TNT1 A 0 A_SpawnItemEx ("LiquidExplosionEffectSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_PlaySound("FAREXPL", 3)
+			TNT1 A 15
+			TNT1 A 0 A_PlaySound("distantexp", 5)
+			Stop
+			
+	Melee:
+			AXEG A 0
+			TNT1 A 0 A_GiveToTarget("Rage",25)
+			TNT1 A 0 A_giveToTarget("AxeHit", 1)
+			PUFF A 0 A_PlaySound("player/cyborg/fist", 3)
+			AXEG A 0 A_PlaySound("SLMETA", 1)
+			AXEG A 0 A_SpawnItemEx ("PLOFT2",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			AXEG A 0 Radius_Quake (2, 6, 0, 5, 0)//(intensity, duration, damrad, tremrad, tid)
+			AXEG A 0 A_JumpIfInTargetInventory("PowerStrength", 1, "Berserk")
+			TNT1 A 10
+			Stop
+	
+	
+	Crash:
+	    TNT1 A 1 Radius_Quake (2, 10, 0, 2, 0)
+		TNT1 A 1
+		TNT1 A 1 A_PlaySound("SLMETA", 1)
+		Stop
+	
+	
+	Berserk:
+		TNT1 A 1
+		TNT1 A 0 A_GiveToTarget("Rage",5)
+		
+		Explodez:
+	    EXPL A 0 Radius_Quake (6, 54, 0, 15, 0)
+		AXEG A 0 A_explode(70, 30, 0)
+		TNT1 A 0 A_PlaySound("skeleton/tracex")
+		TNT1 A 0 A_SpawnItem("WhiteShockwaveSmall")
+		//EXPL A 0 A_CustomMissile ("ExplosionSmoke", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		//TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+        TNT1 A 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+		//TNT1 A 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+		EXPL A 0
+        TNT1 A 0 A_CustomMissile ("ExtraSmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+		TNT1 A 0
+		Stop
+
+		TNT1 A 10
+		Stop
+	
+	}
+}
+
+
+
+
+
+//-------------------Shuriker Projectile--------------------------------------//
+Actor Shuriken
+{
+	Radius 4
+	Height 2
+	Speed 60
+	scale 0.3
+	Damage (13)
+	Projectile
+	DamageType Shotgun
+	+RANDOMIZE
+	+NOGRAVITY
+	+BLOODSPLATTER
+	+ACTIVATEIMPACT
+	+ACTIVATEPCROSS
+	+FORCEPAIN
+	States
+	{
+	Spawn: 
+		PSHR EFGH 1
+		Loop
+	Death:
+		PSHR A 1
+		PSHR A 1 A_playsound("STRCLNK")
+		PSHR A 0 A_SpawnItem("ShurikenOnMap")
+		Stop
+	XDeath:
+		PSHR A 1
+		Stop	
+	}
+}
+//----------------------------------------------------------------------------//
+
+//-------If Projectile Death(not hiting Actor), to spawn on map---------------//
+Actor ShurikenOnMap : CustomInventory
+{
+scale 0.2
+Radius 10
+Height 10
+Inventory.PickupSound "SWITEMUP"
++NOGRAVITY 
++INVENTORY.NOSCREENFLASH
+States
+{
+Spawn:
+	PSHR A -1
+	Stop
+Pickup:
+    NULL A 1
+	NULL A 0 A_GiveInventory("ShurikensAmmo")
+	Stop
+}
+}
+
+
+
+
+
+
+Actor ShadowClone
+{ MONSTER
+  health 10000
+  radius 40
+  height 64
+  Mass 0x7fffffff
+  speed 0
+  painchance 200
+  seesound "none"
+  painsound "none"
+  deathsound "none"
+  activesound "none"
+  +FLOORCLIP +NOBLOOD +NEVERRESPAWN +STANDSTILL +nogravity +ghost -solid +friendly
+  //RenderStyle Shaded
+  //StencilColor "20 20 20"
+  states{
+  Spawn:
+	MWAV I 1 A_look
+	Loop
+  See:
+	MWAV I 5 A_chase
+    loop
+  Missile:
+	MWAV IJKLM 2
+	TNT1 A 0 A_FaceTarget
+	TNT1 A 0 A_CustomMissile("Taunter", 0, -1, 0, 0)
+	TNT1 A 0 A_CustomMissile("Taunter", 0, -1, -9, 0)
+	TNT1 A 0 A_CustomMissile("Taunter", 0, -1, 9, 0)
+	MWAV N 20 A_fadeout(0.01)
+	MWAV MLKJI 2
+	Goto See
+  Pain:
+	MWAV I 1 A_fadeout(0.01)
+	Goto See
+  Death:
+	MWAV I 1 
+	Stop}}
+
+Actor ASSTrap
+{	Projectile
+	Radius 5
+	Height 5 
+	Speed 38 
+	Damage 0
+	Scale 0.65
+	DamageType "Explosive"
+	+DontSplash 
+	+SeekerMissile 
+	-nogravity 
+	+ForceRadiusDmg 
+	+FRIENDLY 
+	+LOOKALLAROUND
+	+DontFall
+	+USEBOUNCESTATE 
+	+BOUNCEONWALLS 
+	+BOUNCEONFLOORS 
+	+BOUNCEONCEILINGS
+	Gravity 0.7
+	States{
+	Spawn:
+		FX18 MN 1
+		Loop
+	
+	Bounce.Wall:
+		TNT1 A 0 A_changeFlag("nogravity",1)
+		FX18 M 1 A_stop
+		Goto AttachWall
+	Bounce.Floor:
+		FX18 M 1 A_stop
+		TNT1 A 0 A_changeFlag("FLOORCLIP",1)
+		TNT1 A 0 A_changeFlag ("DontFall",0)
+		TNT1 A 0 A_changeFlag("BOUNCEONFLOORS",0)
+		goto AttachFloor
+	Bounce.Ceiling:
+		TNT1 A 0 A_changeFlag("nogravity",1)
+		FX18 M 1 A_stop
+		Goto AttachCeiling
+
+	AttachWall:
+		FX18 M 1 A_LookEx(LOF_NOSOUNDCHECK,0,160,0,0,"JumpFromWall")
+		FX18 M 1
+		Loop
+	AttachFloor:
+		FX18 M 1 A_LookEx(LOF_NOSOUNDCHECK,0,160,0,0,"PopUp")
+		FX18 M 1
+		Loop
+	AttachCeiling:
+		FX18 M 1 A_LookEx(LOF_NOSOUNDCHECK,0,160,0,0,"DropDown")
+		FX18 M 1
+		Loop
+	
+	JumpFromWall:
+		//TNT1 A 0 A_changeFlag("nogravity",0)
+		FX18 M 1 A_FaceTarget
+		TNT1 A 0 A_ChangeVelocity(20,0,3,1)
+		FX18 MNMNMNMN 1 A_SeekerMissile(40,50, SMF_LOOK|SMF_PRECISE)
+		Goto Death
+	PopUp:
+		TNT1 A 0 A_changeFlag("FLOORCLIP",0)
+		FX18 M 1 A_FaceTarget
+		TNT1 A 0 ThrustThingZ (0,20,0,0)
+		FX18 MNMNMNMN 1 A_SeekerMissile(40,50, SMF_LOOK|SMF_PRECISE)
+		Goto Death
+	DropDown:
+		TNT1 A 0 A_changeFlag("nogravity",0)
+		FX18 M 1 A_FaceTarget
+		TNT1 A 0 ThrustThingZ (0,10,1,0)
+		FX18 MNMNMNMN 1 A_SeekerMissile(40,50, SMF_LOOK|SMF_PRECISE)
+		Goto Death
+
+	Death:
+		TNT1 A 0 Radius_Quake (2, 16, 0, 15, 0)
+		TNT1 A 0 A_PlaySound("FAREXPL", 0)
+		TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 1 A_SpawnItemEx ("RocketExplosion",0,0,8,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_Explode(100,160)
+		TNT1 A 0 A_SpawnItemEx ("ExplosionSplashSpawner", 0, 0, -20)
+        TNT1 AAAAAAAAAA 0 A_CustomMissile ("BDExplosionparticlesBig", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAAA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+		TNT1 AAAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	    TNT1 A 0 Radius_Quake (2, 24, 0, 15, 0)
+        TNT1 A 0 A_AlertMonsters
+		TNT1 A 1 A_PlaySound("FAREXPL", 3)
+		Stop
+		}
+}
+
+Actor AssTurretDeployer
+{+Missile
+Radius 9 Height 9 speed 20 damage 0
+States{
+	Spawn:
+		TNT1 A 1
+		Loop
+	Death:
+		TNT1 A 1 A_SpawnItemEx("FireWakeTurret",0,0,2,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		Stop}}
+
+Actor FireWakeTurret
+{ obituary "%o was Torched by assassin Turret."
+  health 100
+  radius 10 height 26
+  mass 10000
+  speed 0
+  ReactionTime 10
+  Species "marines"
+  MONSTER +FLOORCLIP +FRIENDLY +NOBLOOD +LOOKALLAROUND +NEVERRESPAWN +STANDSTILL +DONTHURTSPECIES
+  states{
+  Spawn:
+    ASTU A 1 A_Look
+    loop
+  See:
+    ASTU A 1 A_Chase
+    loop
+  Missile:
+	TNT1 A 0 A_JumpIfInventory("Clip2",10,"Death")
+	ASTU A 1 A_FaceTarget
+    ASTU A 2 bright A_CustomMissile("SentinelBall",24)
+	TNT1 A 0 A_SpawnItemEx("PlayerMuzzle1",12,0,22)
+	ASTU A 2 A_MonsterRefire(1,"CeaseShooting")
+	TNT1 A 0 A_GiveInventory("Clip2",1)
+    goto Missile
+  CeaseShooting:
+	ASTU A 1 A_clearTarget
+	Goto See
+  Death:
+    TNT1 A 1 A_PlaySound("Explosion")
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+    TNT1 AAA 0 A_CustomMissile ("ExplosionParticleHeavy", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAAA 0 A_CustomMissile ("ExplosionParticleVeryFast", 0, 0, random (0, 360), 2, random (0, 360))
+    TNT1 AAA 0 A_CustomMissile ("MediumExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+    Stop}}
+
+
+///MAGMANTIS///
+Actor Magmantis {
+	Health 100
+	Radius 15
+	Height 50
+	Scale 0.4
+	Mass 5000
+	Speed 0
+	BloodType "Fire"
+	DeathSound "magmantis/death"
+	ActiveSound "magmantis/active"
+	SeeSound "magmantis/active"
+	//Obituary "$OB_MAGMA"
+	MONSTER
+	DamageFActor "Fire", 0.0
+	DamageFActor "GreenFire", 0.0
+	DamageFActor "Burn", 0.0
+	+FLOORCLIP
+	+NOPAIN
+	+NOICEDEATH
+	+ALWAYSFAST
+	+FRIENDLY
+	+MISSILEMORE
+	+MISSILEEVENMORE
+	+DONTHURTSPECIES
+	+THRUSPECIES
+	+NOTARGET	
+	States {
+	Spawn:
+		TNT1 A 0
+		TNT1 A 0 A_ChangeFlag("INVULNERABLE", True)
+		TNT1 A 0 A_ChangeFlag ("SOLID", False)
+		TNT1 A 0 A_ChangeFlag("COUNTKILL", False)
+		SPLL ABCD 4 BRIGHT A_LookEx(LOF_NOSOUNDCHECK, 32, 0, 0, 30, "Transform")
+		TNT1 A 0 A_SpawnItemEX ("FireWallPartXS", 0, 0)
+		//TNT1 A 0 A_GiveInventory("LifeTimerToken100",10)
+//		Loop
+	Transform:
+		NULL A 0 A_PlaySound("magmantis/transform", CHAN_AUTO, 0.5)
+		MRAI A 2 BRIGHT //A_ChangeFlag("INVULNERABLE", False)
+		MRAI B 2 BRIGHT
+		MRAI C 2 BRIGHT
+		MRAI D 2 BRIGHT
+		MRAI E 2 BRIGHT
+		MRAI F 2 BRIGHT
+		MRAI G 2 BRIGHT
+		MRAI H 2 BRIGHT
+		MRAI I 2 BRIGHT
+		MRAI J 2 BRIGHT
+		MRAI K 2 BRIGHT //A_ChangeFlag ("SOLID", True)
+		TNT1 A 0 A_SpawnItemEX ("FireWallPartXS", 0, 0)
+		Goto See
+	TransformReturn:
+		NULL A 0 A_PlaySound("magmantis/transform", CHAN_AUTO, 0.5)
+		MRAI K 2 BRIGHT
+		MRAI J 2 BRIGHT
+		MRAI I 2 BRIGHT
+		MRAI H 2 BRIGHT
+		MRAI G 2 BRIGHT
+		MRAI F 2 BRIGHT
+		MRAI E 2 BRIGHT
+		MRAI D 2 BRIGHT
+		MRAI C 2 BRIGHT
+		MRAI B 2 BRIGHT
+		MRAI A 2 BRIGHT
+		SPLL A 4 BRIGHT A_ChangeFlag("INVULNERABLE", True)
+		SPLL B 4 BRIGHT A_ChangeFlag("SOLID", False)
+		SPLL C 4 BRIGHT
+		SPLL D 4 BRIGHT
+		SPLL A 4 BRIGHT
+		SPLL B 4 BRIGHT
+		SPLL C 4 BRIGHT
+		SPLL D 4 BRIGHT
+		Goto Transform
+	See:
+		TNT1 A 0 A_GiveInventory("LifeTimerToken100",1)
+		TNT1 A 0 A_JumpIfInventory("LifeTimerToken100",30,"Death")
+		//TNT1 A 0 A_ChangeFlag("INVULNERABLE", False)
+		//TNT1 A 0 A_ChangeFlag("COUNTKILL", True)
+		MAGM ABCD 6 BRIGHT A_Chase
+		TNT1 A 0 A_Jump(174,2)
+		TNT1 A 0 A_SpawnItemEX ("FireWallPartXS", 0, 0)
+		TNT1 A 0 
+		Loop
+	Missile:
+		TNT1 A 0 A_GiveInventory("LifeTimerToken100",1)
+		MAGM C 4 BRIGHT A_FaceTarget
+		MAGM D 3 BRIGHT A_CustomMissile ("FireHydraFireBall", 35, 0, 0)
+		MAGM C 4 BRIGHT A_FaceTarget
+		MAGM C 3 BRIGHT A_CustomMissile ("FireHydraFireBall", 35, 0, 0)
+		MAGM C 4 BRIGHT A_FaceTarget
+		MAGM D 3 BRIGHT A_CustomMissile ("FireHydraFireBall", 35, 0, 0)
+		TNT1 A 0 A_JumpIfInventory("LifeTimerToken100",30,"Death")
+		Goto See
+	Pain:
+		NULL A 0
+		NULL A 0 BRIGHT A_Pain
+		Goto See
+	Death:
+		MAGM I 4 BRIGHT
+		MAGM J 4 BRIGHT A_Scream
+		MAGM K 4 BRIGHT
+		MAGM L 4 BRIGHT A_NoBlocking
+		MAGM M 4 BRIGHT
+		MAGM N 4 BRIGHT
+		MAGM O 4 BRIGHT
+		MAGM P 4 BRIGHT
+		MAGM Q 4 BRIGHT
+		MAGM R 4 BRIGHT
+		Stop
+	Raise:
+		NULL A 0
+		NULL A 0
+		Goto See
+	}
+}
+
+
+Actor Schism_ClawsTeleporter {
+	+ALWAYSPUFF
+	+PUFFONACTORS
+	+PUFFGETSOWNER
+	+HITTRACER
+	+NOBLOCKMAP
+	+NOGRAVITY
+	States {
+		Spawn:
+		XDeath:
+			TNT1 A 1 NoDelay ACS_NamedExecuteAlways("Schism_TeleportToTargetPuff", 0, 0, 0, 0)
+			Stop
+			
+		Crash:
+			TNT1 A 1
+			Stop
+	}
+}
+
+Actor Schism_RogueGrenade : Schism_Weapon {
+	Weapon.AmmoType1 "Schism_HGAmmo"
+	Weapon.AmmoGive1 1
+	Weapon.AmmoUse1 1
+	Weapon.SlotNumber 0
+	Weapon.SelectionOrder 99999
+    +WEAPON.NOAUTOAIM
+    +WEAPON.NOALERT
+	+WEAPON.NOAUTOFIRE
+	+WEAPON.AMMO_OPTIONAL
+	//+INVENTORY.UNDROPPABLE
+	Inventory.PickupSound "AmmoAPIN"
+	Inventory.Pickupmessage "$SGOT_GRENADE"
+	Inventory.ForbiddenTo Schism_Warrior, Schism_Sorcerer, Schism_Ranger, Schism_Corvus, BaronPlayer, RevenantPlayer
+	Obituary "$OB_GRENADE"
+    AttackSound "None"
+    Scale 0.3
+	Tag "$SW_GRENADE"
+	States {
+		Spawn:
+			GRND H -1
+			Stop
+
+		Select:
+			TNT1 A 0 A_Raise
+			Wait
+
+		Deselect:
+			TNT1 A 0 A_Lower
+			Wait
+
+		Ready:
+			TNT1 A 0 A_JumpIfInventory("TossGrenade", 1, "AssassinGrenadeToss")
+			TNT1 A 1 A_WeaponReady
+			Loop
+
+		Fire:
+			AssassinGrenadeToss:
+			TNT1 A 0
+			TNT1 A 0 A_TakeInventory("TossGrenade", 1)
+			TNT1 A 0 A_JumpIfInventory("Schism_HGAmmo", 1, 1)
+			Goto Ready
+			TNT1 A 0 A_GiveInventory("FiredGrenade", 1)
+			TNT1 A 4 //wait a moment
+			ASTG ABC 1
+			TNT1 A 0 A_PLaySound ("GRNPIN")
+			ASTG DDEF 1 
+			TNT1 A 0 A_PLaySound ("GRNTOSS")
+			TNT1 A 0 A_TakeInventory("Schism_HGAmmo", 1)
+							
+			TNT1 A 0 A_FireCustomMissile("ASSTrap", 0, 1, 0, 2)
+			TNT1 A 0 A_TakeInventory("FiredGrenade", 1)
+			ASTS GHIJK 1
+			Goto Ready
+	}
+}
+
+Actor Schism_KunaiPuff {
+	+ALWAYSPUFF
+	+HITTRACER
+	+PUFFGETSOWNER
+	+NOBLOCKMAP
+	+NOGRAVITY
+	+FORCEPAIN
+	States {
+		Spawn:
+			TNT1 A 0 A_CustomRailgun(0, 0, "None", "000000", RGF_CENTERZ|RGF_SILENT, 1)
+			TNT1 A 15 A_Warp(AAPTR_TRACER, 25)
+			Stop
+	}
+}
+
+Actor Schism_Kunai : Schism_Weapon {
+	Weapon.SlotNumber 1
+	+WEAPON.NOAUTOAIM
+    +WEAPON.NOALERT
+	+WEAPON.NOAUTOFIRE
+	Inventory.ForbiddenTo Schism_Warrior, Schism_Sorcerer, Schism_Ranger, Schism_Corvus, BaronPlayer, RevenantPlayer
+	States {
+		Select:
+			TNT1 A 0 A_Raise
+			Wait
+			
+		Deselect:
+			TNT1 A 0 A_Lower
+			Wait
+			
+		Ready:
+			TNT1 A 1 A_WeaponReady
+			Loop
+			
+		Fire:
+			GOH1 AC 2
+			"####" "D" 4
+// 			"####" "#" 0 ACS_NamedExecuteAlways("Schism_BringTargetToPlayer", 0, 0, 0, 0)
+// 			"####" "#" 0 A_RailAttack(0, 0, 0, None, "000000", RGF_CENTERZ|RGF_NOPIERCING|RGF_SILENT, 0, "Schism_KunaiPuff", 0, 0, 2048, 40, 2.5)
+			"####" "#" 0 A_FireCustomMissile("Schism_HookProjectile")
+			"####" "E" 4
+			"####" "D" 4
+			Goto Ready
+	}
+}
+
+Actor Schism_RogueTrails : PowerSpeed {
+	Powerup.Duration 2147483647
+	Speed 1
+	Inventory.Icon ""
+}
+
+Actor Schism_HookProjectile {
+	Radius 4
+	Height 2
+	Projectile
+	Speed 50
+    Damage (3)
+	DamageType Melee
+	Scale 0.5
+// 	+THRUSPECIES
+// 	+MTHRUSPECIES
+// 	+SPECTRAL
+	+HITMASTER
+	+SKYEXPLODE
+	States {
+		Spawn:
+			"MISL" "A" 0
+			"####" "#" 8 
+			"####" "#" 0 A_Stop
+		Death:
+			"####" "#" 0 ACS_NamedExecuteAlways("Schism_BoomerangProjectile", 0, 0, 0, 0)
+			"####" "#" -1
+			Stop
+		
+		XDeath:
+			"MISL" "A" -1
+			Stop
+			
+		Crash:
+			Stop
+			
+	}
+}

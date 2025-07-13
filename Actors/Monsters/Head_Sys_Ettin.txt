@@ -1,0 +1,73 @@
+// Headshot targets for ettin ("e" stands for "Ettin", a and b are just letters to distinguish)
+
+actor HeadshotTarget2ea: HeadshotTarget2
+{
+DamageType ettinhead
+}
+
+actor HeadshotTarget4ea: HeadshotTarget4
+{
+DamageType ettinhead
+}
+
+actor HeadshotTarget6ea: HeadshotTarget6
+{
+DamageType ettinhead
+}
+
+actor HeadshotTarget8ea: HeadshotTarget8
+{
+DamageType ettinhead
+}
+
+actor HeadshotTarget10ea: HeadshotTarget10
+{
+DamageType ettinhead
+}
+
+actor HeadshotTarget20ea: HeadshotTarget20
+{
+DamageType ettinhead
+}
+
+actor HeadshotTarget30ea: HeadshotTarget30
+{
+DamageType ettinhead
+}
+
+// "Other head" Headshot targets for ettin
+
+actor HeadshotTarget2eb: HeadshotTarget2
+{
+DamageType ettinhead2
+}
+
+actor HeadshotTarget4eb: HeadshotTarget4
+{
+DamageType ettinhead2
+}
+
+actor HeadshotTarget6eb: HeadshotTarget6
+{
+DamageType ettinhead2
+}
+
+actor HeadshotTarget8eb: HeadshotTarget8
+{
+DamageType ettinhead2
+}
+
+actor HeadshotTarget10eb: HeadshotTarget10
+{
+DamageType ettinhead2
+}
+
+actor HeadshotTarget20eb: HeadshotTarget20
+{
+DamageType ettinhead2
+}
+
+actor HeadshotTarget30eb: HeadshotTarget30
+{
+DamageType ettinhead2
+}

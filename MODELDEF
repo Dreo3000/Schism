@@ -1,0 +1,1681 @@
+Model MudDust				// Name of actor in DECORATE
+{
+	Path "models/bloodspot"	// Path to model in PK3
+	Model 0 "bloodspot.md3"	// Model index, model file
+	Skin 0 "DIRT.png"		// Model index, texture (can be in any format supported by GZDoom)
+	Scale 40.0 40.0 1.0   	// Scale values
+	ZOffset 0.6
+	FrameIndex DIRP G 0 0 	// The sprite lump, sprite frame, model index, frame number
+}
+
+// Model ShieldSphere1
+// {
+// 	Path "Models"
+// 	Skin 0 "hexagonFF.png"
+// 	Model 0 "sphere.md3"
+// 	Scale 5 5 5
+// 	//DONTCULLBACKFACES
+// 	FrameIndex SHOK A 0 0
+// }
+
+////////////////////////////////////////////////////////////////////////////////
+//Gore
+////////////////////////////////////////////////////////////////////////////////
+
+//Red Gore/Blood
+Model Guts
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "guts1.png"
+	Scale 20.0 20.0 1.0
+	ZOffset 1.6
+	FrameIndex GUTS K 0 0
+}
+
+Model Guts
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "guts2.png"
+	Scale 20.0 20.0 1.0
+	ZOffset 1.4
+	FrameIndex GUTS L 0 0
+}
+
+Model Guts2
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "guts1.png"
+	Scale 20.0 20.0 1.0
+	ZOffset 1.6
+	FrameIndex GUTS K 0 0
+}
+
+Model Guts2
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "guts2.png"
+	Scale 20.0 20.0 1.0
+	ZOffset 1.4
+	FrameIndex GUTS L 0 0
+}
+
+Model GiantBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "SPLTBLD.png"
+	Scale 90.0 90.0 1.0
+	ZOffset 0.6
+	FrameIndex BPDL A 0 0
+}
+
+Model BigBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "SPLTBLD.png"
+	Scale 70.0 70.0 1.0
+	ZOffset 0.6
+	FrameIndex BPDL A 0 0
+}
+
+Model Brutal_BloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodspothd2.png"
+	Scale 50.0 50.0 0.1
+	FrameIndex BPDL A 0 0
+	ZOffset 1.3
+}
+
+Model Brutal_BloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodspothd.png"
+	Scale 50.0 50.0 0.1
+	FrameIndex BPDL B 0 0
+	ZOffset 1.4
+}
+
+Model Brutal_BloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodspothd3.png"
+	Scale 50.0 50.0 0.1
+	FrameIndex BPDL C 0 0
+	ZOffset 1.5
+}
+
+Model Brutal_BloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodspothd2.png"
+	Scale 50.0 50.0 0.1
+	FrameIndex BPDL D 0 0
+	ZOffset 1.6
+}
+
+Model MinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodspothd.png"
+	Scale 30.0 30.0 30.0
+	FrameIndex BPDL A 0 0
+	ZOffset 1.4
+}
+
+Model MinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 40.0 40.0 30.0
+	ZOffset 1.5
+	FrameIndex BPDL B 0 0
+}
+
+Model MinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 35.0 35.0 30.0
+	ZOffset 1.6
+	FrameIndex BPDL C 0 0
+}
+
+Model MinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 41.0 41.0 30.0
+	ZOffset 1.3
+	FrameIndex BPDL D 0 0
+}
+
+Model MinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 30.0 30.0 30.0
+	ZOffset 1.7
+	FrameIndex BPDL C 0 0
+}
+
+Model MinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 30.0 30.0 30.0
+	ZOffset 1.7
+	FrameIndex BPDL D 0 0
+}
+
+Model Waterbloodspot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "BLODWAT.png"
+	Scale 40.0 40.0 0.1
+	ZOffset 1.0
+	ROTATING
+	Rotation-Speed 1
+	
+	FrameIndex BPDL E 0 0
+}
+
+Model Brutal_FlyingBlood
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 40.0 40.0 50.0
+	ZOffset 1.6
+	FrameIndex BPDL B 0 0
+}
+
+Model Brutal_FlyingBlood
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool2.png"
+	Scale 46.0 46.0 46.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+Model CeilBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodceil.md3"
+	Skin 0 "bloodspothd.png"
+	Scale 40.0 40.0 -60.0
+	ZOffset -0.1
+	FrameIndex BPDL A 0 0
+}
+
+Model CeilBloodSpotLarge
+{
+	Path "models/bloodspot"
+	Model 0 "bloodceil.md3"
+	Skin 0 "bigbloodpool.png"
+	Scale 40.0 40.0 1.0
+	ZOffset -0.1
+	FrameIndex BPDL a 0 0
+}
+
+Model MediumBloodSpot2
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bigbloodpool.png"
+	Scale 80.0 80.0 80.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+Model MediumBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bigbloodpool.png"
+	Scale 80.0 80.0 80.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+Model SplatteredSmall
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bigbloodpool.png"
+	Scale 60.0 60.0 60.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+Model SplatteredLarge
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "SPLTBLD.png"
+	Scale 90.0 90.0 1.0
+	ZOffset 0.6
+	FrameIndex BPDL A 0 0
+}
+
+Model GrowingBloodPool
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool2.png"
+	Scale 20.0 20.0 1.0
+	ZOffset 0.65
+	FrameIndex TNT5 A 0 0
+}
+
+Model RedBloodFootPrintLeft
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "FTPL.png"
+	Scale 90.0 90.0 90.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+Model RedBloodFootPrintRight
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "FTPR.png"
+	Scale 90.0 90.0 90.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+//Green Gore/Blood
+Model GreenGiantBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "SPLTBLD.png"
+	Scale 90.0 90.0 1.0
+	ZOffset 0.6
+	FrameIndex BPDL A 0 0
+}
+
+Model GreenBigBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "SPLTBLD.png"
+	Scale 70.0 70.0 1.0
+	ZOffset 0.6
+	FrameIndex BPDL A 0 0
+}
+
+Model Green_BloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodspothd2.png"
+	Scale 50.0 50.0 0.1
+	FrameIndex BPDL A 0 0
+	ZOffset 1.3
+}
+
+Model Green_BloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodspothd.png"
+	Scale 50.0 50.0 0.1
+	FrameIndex BPDL B 0 0
+	ZOffset 1.4
+}
+
+Model Green_BloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodspothd3.png"
+	Scale 50.0 50.0 0.1
+	FrameIndex BPDL C 0 0
+	ZOffset 1.5
+}
+
+Model Green_BloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodspothd2.png"
+	Scale 50.0 50.0 0.1
+	FrameIndex BPDL D 0 0
+	ZOffset 1.6
+}
+
+Model GreenMinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodspothd.png"
+	Scale 30.0 30.0 30.0
+	FrameIndex BPDL A 0 0
+	ZOffset 1.4
+}
+
+Model GreenMinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 40.0 40.0 30.0
+	ZOffset 1.5
+	FrameIndex BPDL B 0 0
+}
+
+Model GreenMinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 35.0 35.0 30.0
+	ZOffset 1.6
+	FrameIndex BPDL C 0 0
+}
+
+Model GreenMinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 41.0 41.0 30.0
+	ZOffset 1.3
+	FrameIndex BPDL D 0 0
+}
+
+Model GreenMinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 30.0 30.0 30.0
+	ZOffset 1.7
+	FrameIndex BPDL C 0 0
+}
+
+Model GreenMinuscleBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 30.0 30.0 30.0
+	ZOffset 1.7
+	FrameIndex BPDL D 0 0
+}
+
+Model GreenWaterbloodspot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "BLODWAT.png"
+	Scale 40.0 40.0 0.1
+	ZOffset 1.0
+	ROTATING
+	Rotation-Speed 1
+   
+	FrameIndex BPDL E 0 0
+}
+
+Model Green_FlyingBlood
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool.png"
+	Scale 40.0 40.0 50.0
+	ZOffset 1.6
+	FrameIndex BPDL B 0 0
+}
+
+Model Green_FlyingBlood
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool2.png"
+	Scale 46.0 46.0 46.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+Model GreenCeilBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodceil.md3"
+	Skin 0 "bloodspothd.png"
+	Scale 40.0 40.0 -60.0
+	ZOffset -0.1
+	FrameIndex BPDL A 0 0
+}
+
+Model GreenCeilBloodSpotLarge
+{
+	Path "models/bloodspot"
+	Model 0 "bloodceil.md3"
+	Skin 0 "bigbloodpool.png"
+	Scale 40.0 40.0 1.0
+	ZOffset -0.1
+	FrameIndex BPDL a 0 0
+}
+
+Model GreenMediumBloodSpot2
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bigbloodpool.png"
+	Scale 80.0 80.0 80.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+Model GreenMediumBloodSpot
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bigbloodpool.png"
+	Scale 80.0 80.0 80.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+Model SplatteredGreenSmall
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bigbloodpool.png"
+	Scale 60.0 60.0 60.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+Model SplatteredGreenLarge
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "SPLTBLD.png"
+	Scale 90.0 90.0 1.0
+	ZOffset 0.6
+	FrameIndex BPDL A 0 0
+}
+
+Model GreenGrowingBloodPool
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "bloodpool2.png"
+	Scale 20.0 20.0 1.0
+	ZOffset 0.65
+	FrameIndex TNT5 A 0 0
+}
+
+Model GreenBloodFootPrintLeft
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "FTPL.png"
+	Scale 90.0 90.0 90.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+Model GreenBloodFootPrintRight
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "FTPR.png"
+	Scale 90.0 90.0 90.0
+	ZOffset 1.6
+	FrameIndex BPDL A 0 0
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//Tracers
+////////////////////////////////////////////////////////////////////////////////
+
+Model Tracer 
+{
+	Path "Models/Projectiles"
+	Model 0 "Tracer.md3"
+	Skin 0 "tracer1.tga"
+	Scale 4.5 4.5 1.5
+	PITCHFROMMOMENTUM
+	
+	FrameIndex TRAC A 0 0
+}
+
+Model DecorativeTracer
+{ 
+	Path "Models/Projectiles"
+	SKIN 0 "tracer1.tga"
+	MODEL 0 "Tracer.md3"
+	Scale 3.5 4.5 1.5
+	PITCHFROMMOMENTUM
+   
+	FrameIndex TRAC A 0 0
+}
+
+Model MonsterMinigunTracer 
+{ 
+	Path "Models/Projectiles"
+	SKIN 0 "tracer1.tga"
+	MODEL 0 "Tracer.md3"
+	Scale 4.5 4.5 1.5
+	PITCHFROMMOMENTUM
+   
+	FrameIndex TRAC A 0 0 
+}
+
+Model MonsterTracer
+{ 
+	Path "Models/Projectiles" 
+	SKIN 0 "tracer1.tga" 
+	MODEL 0 "Tracer.md3" 
+	Scale 4.5 4.5 1.5 
+	PITCHFROMMOMENTUM
+	
+	FrameIndex TRAC A 0 0
+}
+
+Model ShotgunguyTracer
+{ 
+	Path "Models/Projectiles"
+	SKIN 0 "tracer1.tga"
+	MODEL 0 "Tracer.md3"
+	Scale 4.5 4.5 1.5
+	PITCHFROMMOMENTUM
+	
+	FrameIndex TRAC A 0 0
+}
+
+Model ZombieManTracer
+{ 
+	Path "Models/Projectiles"
+	SKIN 0 "tracer1.tga"
+	MODEL 0 "Tracer.md3"
+	Scale 4.5 4.5 1.5
+	PITCHFROMMOMENTUM
+	
+	FrameIndex TRAC A 0 0
+}
+
+Model MarineTracer
+{ 
+	Path "Models/Projectiles"
+	SKIN 0 "tracer1.tga"
+	MODEL 0 "Tracer.md3" 
+	Scale 4.5 4.5 1.5
+	PITCHFROMMOMENTUM
+   
+	FrameIndex TRAC A 0 0 
+}
+
+Model MarineStrongTracer 
+{ 
+	Path "Models/Projectiles" 
+	SKIN 0 "tracer1.tga" 
+	MODEL 0 "Tracer.md3" 
+	Scale 1.5 1.5 1.5 
+	PITCHFROMMOMENTUM 
+   
+	FrameIndex TRAC A 0 0
+}
+
+Model MastermindTracer
+{ 
+	Path "Models/Projectiles"
+	SKIN 0 "tracer1.tga"
+	MODEL 0 "Tracer.md3"
+	Scale 4.5 4.5 1.5
+	PITCHFROMMOMENTUM
+   
+	FrameIndex TRAC A 0 0
+}
+
+Model HeavyMachinegunProjectile
+{ 
+	Path "Models/Projectiles"
+	SKIN 0 "tracer1.tga"
+	MODEL 0 "Tracer.md3"
+	Scale 4.5 4.5 1.5
+	PITCHFROMMOMENTUM
+   
+	FrameIndex MG74 A 0 0
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//Splashes
+////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////
+//Water Splashes
+////////////////////////////////////////////////////////////////////////////////
+
+Model WaterSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "splash0.png"
+	Skin 1 "splash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SPSH E 0 0	   FrameIndex SPSH E 1 999
+}
+
+Model WaterSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "splash0.png"
+	Skin 1 "splash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SPSH F 0 1	   FrameIndex SPSH F 1 0
+}
+
+Model WaterSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "splash0.png"
+	Skin 1 "splash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SPSH G 0 2	   FrameIndex SPSH G 1 1
+}
+
+Model WaterSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "splash0.png"
+	Skin 1 "splash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SPSH H 0 3	   FrameIndex SPSH H 1 2
+}
+
+Model WaterSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "splash0.png"
+	Skin 1 "splash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SPSH I 0 4	   FrameIndex SPSH I 1 3
+}
+
+Model WaterSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "splash0.png"
+	Skin 1 "splash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SPSH J 0 5	   FrameIndex SPSH J 1 4
+	FrameIndex SPSH K 0 999	   FrameIndex SPSH K 1 999
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//Blood Splashes
+//////////////////////////////////////////////////////////////////////////////// 
+
+Model BloodSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "bsplash0.png"
+	Skin 1 "bsplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex BSPH  E 0 0	   FrameIndex BSPH  E 1 999
+}
+
+Model BloodSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "bsplash0.png"
+	Skin 1 "bsplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex BSPH  F 0 1	   FrameIndex BSPH  F 1 0
+}
+
+Model BloodSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "bsplash0.png"
+	Skin 1 "bsplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex BSPH  G 0 2	   FrameIndex BSPH  G 1 1
+}
+
+Model BloodSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "bsplash0.png"
+	Skin 1 "bsplash0.png"
+	Scale 4.0 4.0 3.0
+
+	FrameIndex BSPH  H 0 3	   FrameIndex BSPH  H 1 2
+}
+
+Model BloodSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "bsplash0.png"
+	Skin 1 "bsplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex BSPH  I 0 4	   FrameIndex BSPH  I 1 3
+}
+
+Model BloodSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "bsplash0.png"
+	Skin 1 "bsplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex BSPH  J 0 5	   FrameIndex BSPH  J 1 4
+	FrameIndex BSPH  K 0 999	   FrameIndex BSPH  K 1 999
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//Nukage Splash
+////////////////////////////////////////////////////////////////////////////////
+
+Model nukageSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "ssplash0.png"
+	Skin 1 "ssplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SLDG  E 0 0	   FrameIndex SLDG  E 1 999
+}
+Model nukageSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "ssplash0.png"
+	Skin 1 "ssplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SLDG  F 0 1	   FrameIndex SLDG  F 1 0
+}
+
+Model nukageSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "ssplash0.png"
+	Skin 1 "ssplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SLDG  G 0 2	   FrameIndex SLDG  G 1 1
+}
+
+Model nukageSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "ssplash0.png"
+	Skin 1 "ssplash0.png"
+	Scale 4.0 4.0 3.0
+
+	FrameIndex SLDG  H 0 3	   FrameIndex SLDG  H 1 2
+}
+
+Model nukageSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "ssplash0.png"
+	Skin 1 "ssplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SLDG  I 0 4	   FrameIndex SLDG  I 1 3
+}
+
+Model nukageSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "ssplash0.png"
+	Skin 1 "ssplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SLDG  J 0 5	   FrameIndex SLDG  J 1 4
+	FrameIndex SLDG  K 0 999	   FrameIndex SLDG  K 1 999
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//Slime Splashes
+////////////////////////////////////////////////////////////////////////////////
+
+Model slimeSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "msplash0.png"
+	Skin 1 "msplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SLIM  E 0 0	   FrameIndex SLIM  E 1 999
+}
+
+Model slimeSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "msplash0.png"
+	Skin 1 "msplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SLIM  F 0 1	   FrameIndex SLIM  F 1 0
+}
+
+Model slimeSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "msplash0.png"
+	Skin 1 "msplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SLIM  G 0 2	   FrameIndex SLIM  G 1 1
+}
+
+Model slimeSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "msplash0.png"
+	Skin 1 "msplash0.png"
+	Scale 4.0 4.0 3.0
+	Scale 4.0 4.0 3.0
+	FrameIndex SLIM  H 0 3	   FrameIndex SLIM  H 1 2
+}
+
+Model slimeSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "msplash0.png"
+	Skin 1 "msplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SLIM  I 0 4	   FrameIndex SLIM  I 1 3
+}
+
+Model slimeSplashWaves
+{
+	Path "Models\Decoration\Splash"
+	Model 0 "Splash.md2"
+	Skin 0 "msplash0.png"
+	Skin 1 "msplash0.png"
+	Scale 4.0 4.0 3.0
+	FrameIndex SLIM  J 0 5	   FrameIndex SLIM  J 1 4
+	FrameIndex SLIM  K 0 999	   FrameIndex SLIM  K 1 999
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//Debug
+////////////////////////////////////////////////////////////////////////////////
+
+Model DetectFloorBullet
+{
+	Path "models/bulletdecals"
+	Model 0 "buldecground1"
+	Skin 0 "BULLETDECAL1.png"
+	Scale 5.0 5.0 5.0
+	ZOffset 0.1
+	FrameIndex XXX1 A 0 0
+}
+
+Model DetectCeilBullet
+{
+	Path "models/bulletdecals"
+	Model 0 "buldecceil1"
+	Skin 0 "BULLETDECAL1.png"
+	Scale 5.0 5.0 5.0
+	ZOffset 0.1
+	FrameIndex XXX1 A 0 0
+}
+
+Model DetectFloorCrater
+{
+	Path "models/bulletdecals"
+	Model 0 "buldecground1"
+	Skin 0 "SCORCH1.png"
+	Scale 10.0 10.0 10.0
+	ZOffset 0.1
+	FrameIndex XXX1 A 0 0
+}
+
+Model DetectFloorCraterNoSplashes
+{
+	Path "models/bulletdecals"
+	Model 0 "buldecground1"
+	Skin 0 "SCORCH1.png"
+	Scale 10.0 10.0 10.0
+	ZOffset 0.1
+	FrameIndex XXX1 A 0 0
+}
+
+
+Model DetectCeilCrater 
+{
+	Path "models/bulletdecals"
+	Model 0 "BULDECCEIL1"
+	Skin 0 "SCORCH1.png"
+	Scale 10.0 10.0 10.0
+	ZOffset -0.1
+	FrameIndex XXX1 A 0 0
+}
+
+Model DetectFloorCraterSmall
+{
+	Path "models/bulletdecals"
+	Model 0 "buldecground1"
+	Skin 0 "SCORCH1.png"
+	Scale 10.0 10.0 10.0
+	ZOffset 0.1
+	FrameIndex XXX1 A 0 0 
+}
+
+
+Model DetectCeilCraterSmall     
+{
+	Path "models/bulletdecals" 
+	Model 0 "BULDECCEIL1"
+	Skin 0 "SCORCH1.png"
+	Scale 10.0 10.0 10.0 
+	ZOffset -0.1
+	FrameIndex XXX1 A 0 0 
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//Tanks
+////////////////////////////////////////////////////////////////////////////////
+
+Model TankBaseNotReal
+{
+   Path "models/vehicles"
+   Model 0 "tankbase.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK1 B 0 0
+}
+
+Model TankBaseStationed
+{
+   Path "models/vehicles"
+   Model 0 "tankbase.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK1 D 0 0
+}
+
+Model TankBaseNotRealMoving1
+{
+   Path "models/vehicles"
+   Model 0 "tankbase.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK1 B 0 0
+}
+
+Model TankBaseNotRealMoving2
+{
+   Path "models/vehicles"
+   Model 0 "tankbase.md3"
+   Skin 0 "tankchasis2.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK1 D 0 0
+}
+
+Model TankBaseNotRealMoving3
+{
+   Path "models/vehicles"
+   Model 0 "tankbase.md3"
+   Skin 0 "tankchasis3.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK1 E 0 0
+}
+
+Model PlayerTank
+{
+   Path "models/vehicles"
+   Model 0 "tankturret1.md3"
+   Skin 0 "turret1.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 38.0
+   FrameIndex TNK1 T 0 0
+}
+
+Model PlayerArtilleryTank
+{
+   Path "models/vehicles"
+   Model 0 "tankturret2.md3"
+   Skin 0 "turret1.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 38.0
+   FrameIndex TN2M T 0 0
+}
+
+Model TankTurretNotReal8
+{
+   Path "models/vehicles"
+   Model 0 "tankturret1.md3"
+   Skin 0 "turret1.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 38.0
+   FrameIndex TNK1 T 0 0
+}
+
+Model TankTurretNotReal
+{
+   Path "models/vehicles"
+   Model 0 "tankturret1.md3"
+   Skin 0 "turret1.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 38.0
+   FrameIndex TNK1 T 0 0
+}
+
+Model TnkStep
+{
+   Path "models/bloodspot"
+   Model 0 "bloodspot.md3"
+   Skin 0 "tankthreads.png"
+   Scale 90.0 90.0 90.0
+   ZOffset 1.6
+   FrameIndex NULL A 0 0
+}
+
+Model ArtilleryTankTurretNotReal8
+{
+   Path "models/vehicles"
+   Model 0 "tankturret2.md3"
+   Skin 0 "turret1.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 38.0
+   FrameIndex TN2E T 0 0
+}
+
+Model ArtilleryTankTurretNotReal
+{
+   Path "models/vehicles"
+   Model 0 "tankturret2.md3"
+   Skin 0 "turret1.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 38.0
+   FrameIndex TNK1 T 0 0
+}
+
+Model ZombieMainBattleTankBody1
+{
+   Path "models/vehicles"
+   Model 0 "tankturret1.md3"
+   Skin 0 "turret1.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 38.0
+   FrameIndex TNKZ T 0 0
+}
+
+Model ZombieMainBattleTank
+{
+   Path "models/vehicles"
+   Model 0 "tankbase.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK1 B 0 0
+}
+
+Model ZombieMainBattleTank
+{
+   Path "models/vehicles"
+   Model 0 "tankbase.md3"
+   Skin 0 "tankchasis2.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK1 D 0 0
+}
+
+Model ZombieMainBattleTank
+{
+   Path "models/vehicles"
+   Model 0 "tankbase.md3"
+   Skin 0 "tankchasis3.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK1 E 0 0
+}
+
+//Missile Tank
+
+Model ZombieArtilleryTankBody1
+{
+   Path "models/vehicles"
+   Model 0 "tankturret2.md3"
+   Skin 0 "turret1.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 38.0
+   FrameIndex TNKZ T 0 0
+}
+
+Model ZombieArtilleryTank
+{
+   Path "models/vehicles"
+   Model 0 "tankbase.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK1 B 0 0
+}
+
+Model ZombieArtilleryTank
+{
+   Path "models/vehicles"
+   Model 0 "tankbase.md3"
+   Skin 0 "tankchasis2.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK1 D 0 0
+}
+
+Model ZombieArtilleryTank
+{
+   Path "models/vehicles"
+   Model 0 "tankbase.md3"
+   Skin 0 "tankchasis3.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK1 E 0 0
+}
+
+//Slightly up
+
+Model TankBaseStationed
+{
+   Path "models/vehicles"
+   Model 0 "tankbase2b.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK4 D 0 0
+}
+
+Model TankBaseNotRealMoving1
+{
+   Path "models/vehicles"
+   Model 0 "tankbase2b.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK4 B 0 0
+}
+
+Model TankBaseNotRealMoving2
+{
+   Path "models/vehicles"
+   Model 0 "tankbase2b.md3"
+   Skin 0 "tankchasis2.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK4 D 0 0
+}
+
+Model TankBaseNotRealMoving3
+{
+   Path "models/vehicles"
+   Model 0 "tankbase2b.md3"
+   Skin 0 "tankchasis3.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK4 E 0 0
+}
+
+//Heavily Up
+
+Model TankBaseStationed
+{
+   Path "models/vehicles"
+   Model 0 "tankbase2.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK2 D 0 0
+}
+
+Model TankBaseNotRealMoving1
+{
+   Path "models/vehicles"
+   Model 0 "tankbase2.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK2 B 0 0
+}
+
+Model TankBaseNotRealMoving2
+{
+   Path "models/vehicles"
+   Model 0 "tankbase2.md3"
+   Skin 0 "tankchasis2.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK2 D 0 0
+}
+
+Model TankBaseNotRealMoving3
+{
+   Path "models/vehicles"
+   Model 0 "tankbase2.md3"
+   Skin 0 "tankchasis3.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK2 E 0 0
+}
+
+// Slightly Down
+
+Model TankBaseStationed
+{
+   Path "models/vehicles"
+   Model 0 "tankbase3b.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK5 D 0 0
+}
+
+
+
+Model TankBaseNotRealMoving1
+{
+   Path "models/vehicles"
+   Model 0 "tankbase3b.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK5 B 0 0
+}
+
+Model TankBaseNotRealMoving2
+{
+   Path "models/vehicles"
+   Model 0 "tankbase3b.md3"
+   Skin 0 "tankchasis2.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK5 D 0 0
+}
+
+
+Model TankBaseNotRealMoving3
+{
+   Path "models/vehicles"
+   Model 0 "tankbase3b.md3"
+   Skin 0 "tankchasis3.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK5 E 0 0
+}
+
+// Heavily Down
+
+Model TankBaseStationed
+{
+   Path "models/vehicles"
+   Model 0 "tankbase3.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK3 D 0 0 
+}
+
+Model TankBaseNotRealMoving1
+{
+   Path "models/vehicles"
+   Model 0 "tankbase3.md3"
+   Skin 0 "tankchasis.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK3 B 0 0 
+}
+
+Model TankBaseNotRealMoving2
+{
+   Path "models/vehicles"
+   Model 0 "tankbase3.md3"
+   Skin 0 "tankchasis2.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK3 D 0 0
+}
+
+Model TankBaseNotRealMoving3
+{
+   Path "models/vehicles"
+   Model 0 "tankbase3.md3"
+   Skin 0 "tankchasis3.png"
+   Scale 1.0 1.0 1.0
+   ZOffset 0.1
+   FrameIndex TNK3 E 0 0
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//Decorations
+////////////////////////////////////////////////////////////////////////////////
+
+Model BDECDestroyedCar
+{
+	Path "models/decoration" 
+	Model 0 "junkcar.md3"
+	Skin 0 "junkcar.png"
+	Scale 1.3 1.3 1.3
+	ZOffset 0.1
+	FrameIndex ELEC C 0 0
+}
+
+Model BDECDestroyedCarRed
+{
+	Path "models/decoration"
+	Model 0 "junkcar.md3"
+	Skin 0 "junkcar.png"
+	Scale 1.3 1.3 1.3
+	ZOffset 0.1
+	FrameIndex ELEC C 0 0
+}
+
+Model BDECDestroyedCarBlue
+{
+	Path "models/decoration"
+	Model 0 "junkcar.md3"
+	Skin 0 "junkcar.png"
+	Scale 1.3 1.3 1.3
+	ZOffset 0.1
+	FrameIndex ELEC C 0 0
+}
+
+Model BDECDestroyedCarGray
+{
+	Path "models/decoration"
+	Model 0 "junkcar.md3"
+	Skin 0 "junkcar.png"
+	Scale 1.3 1.3 1.3
+	ZOffset 0.1
+	FrameIndex ELEC C 0 0
+}
+
+Model BDECBed1
+{
+	Path "models/decoration"
+	Model 0 "bed1.md3"
+	Skin 0 "bed2.png"
+	Scale 1.3 1.6 1.6
+	ZOffset 0.0
+	FrameIndex SPDE M 0 0
+}
+
+Model BDECBed2
+{
+	Path "models/decoration"
+	Model 0 "bed2.md3"
+	Skin 0 "bed1.png"
+	Scale 1.3 1.6 1.6
+	ZOffset 0.0
+	FrameIndex SPDE N 0 0 
+}
+
+Model BDECLargeBlood
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "DECBLOD.png"
+	Scale 50.0 50.0 10.0
+	ZOffset 0.1
+	FrameIndex XXX1 A 0 0
+}
+
+Model BDECSmallShaft1Red
+{
+	Path "models/decoration"
+	Model 0 "flatspriteceil.md3"
+	Skin 0 "redlamp.png"
+	Scale 54.0 54.0 1.0
+	ZOffset 0.9
+	//Offset 2 0 0.9
+	FrameIndex XXX1 A 0 0
+}
+
+Model BDECSmallShaft1Orange
+{
+	Path "models/decoration"
+	Model 0 "flatspriteceil.md3"
+	Skin 0 "orangelamp.png"
+	Scale 54.0 54.0 1.0
+	ZOffset 0.9
+	FrameIndex XXX1 A 0 0
+}
+
+Model BigShaftOrange1
+{
+	Path "models/decoration"
+	Model 0 "flatspriteceil.md3"
+	Skin 0 "largeorangelamp.png"
+	Scale 70.0 70.0 1.0
+	ZOffset 0.9
+	FrameIndex XXX1 A 0 0
+}
+
+Model DestroyedCeilLampBig
+{
+	Path "models/decoration"
+	Model 0 "flatspriteceil.md3"
+	Skin 0 "largebrokelamp.png"
+	Scale 70.0 70.0 1.0
+	ZOffset 0.9
+
+	FrameIndex XXX1 A 0 0
+}
+
+Model DestroyedCeilLamp
+{
+	Path "models/decoration"
+	Model 0 "flatspriteceil.md3"
+	Skin 0 "brokenlamp.png"
+	Scale 54.0 54.0 1.0
+	ZOffset 0.9
+
+	FrameIndex XXX1 A 0 0
+}
+
+Model BDecMap16SecretExit
+{
+	Path "models/decoration"
+	Model 0 "flatspriteceil.md3"
+	Skin 0 "HOLEXI3.png"
+	Scale 32.0 32.0 32.0
+	ZOffset 0.9
+
+	FrameIndex SPDF D 0 0
+}
+
+Model BDECExitHoleMap13
+{
+	Path "models/decoration"
+	Model 0 "flatspriteceil.md3"
+	Skin 0 "HOLEXI1.png"
+	Scale 44.0 44.0 44.0
+	ZOffset 0.9
+
+	FrameIndex SPDF E 0 0
+}
+
+Model BDECExitHoleMap13
+{
+	Path "models/decoration"
+	Model 0 "flatspriteceil.md3"
+	Skin 0 "HOLEXI2.png"
+	Scale 44.0 44.0 44.0
+	ZOffset 0.9
+
+	FrameIndex SPDF F 0 0
+}
+
+Model BDECWIndowFrame1
+{
+	Path "models/decoration"
+	Model 0 "glass.md2"
+	Skin 0 "window1.png"
+	Scale 44.0 44.0 44.0
+
+	FrameIndex XXX1 A 0 0
+}
+
+Model BDECWIndowGlass1
+{
+	Path "models/decoration"
+	Model 0 "glass.md2"
+	Skin 0 "window2.png"
+	Scale 44.0 44.0 44.0
+
+	FrameIndex BRGL A 0 0
+}
+
+Model BDECWIndowGlass1
+{
+	Path "models/decoration"
+	Model 0 "glass.md2"
+	Skin 0 "window3.png"
+	Scale 44.0 44.0 44.0
+
+	FrameIndex XXX1 B 0 0
+}
+
+Model BDECWIndowFrame2
+{
+	Path "models/decoration"
+	Model 0 "glass.md2"
+	Skin 0 "window1.png"
+	Scale 44.0 44.0 44.0
+
+	FrameIndex XXX1 A 0 0
+}
+
+Model BDECWIndowGlass2
+{
+	Path "models/decoration"
+	Model 0 "glass.md2"
+	Skin 0 "window2.png"
+	Scale 44.0 44.0 44.0
+
+	FrameIndex BRGL A 0 0
+}
+
+Model BDECWIndowGlass2
+{
+	Path "models/decoration"
+	Model 0 "glass.md2"
+	Skin 0 "window3.png"
+	Scale 44.0 44.0 44.0
+
+	FrameIndex XXX1 B 0 0
+}
+
+Model PlutoniaBridge
+{
+	Path "models/decoration"
+	Model 0 "flatsprite.md3"
+	Skin 0 "bridge1.png"
+	Scale 65.0 65.0 1.0
+	ZOffset 0.2
+	//Offset 2 0 0.9
+	FrameIndex SPDF V 0 0
+}
+
+Model BDECPentagram
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "PNTGB0.png"
+	Scale 200.0 200.0 1.0
+	ZOffset 0.7
+	FrameIndex PNTG B 0 0
+	FrameIndex PNTG C 0 0
+}
+
+Model BDECHellKeep   
+{
+	Path "models/decoration"
+	Model 0 "hellkeep.md3"
+	Skin 0 "hellkeep.png"
+	Scale 22.0 22.0 35.0
+	FrameIndex NULL A 0 0
+}
+
+////////////////////////////////////////////////////////////////////////////////
+//Misc/SFX
+////////////////////////////////////////////////////////////////////////////////
+
+Model SparkX 
+{ 
+	Path "Models/Projectiles"
+	SKIN 0 "tracer1.tga"
+	MODEL 0 "Tracer.md3"
+	Scale 2.0 2.0 2.0
+	PITCHFROMMOMENTUM
+   
+	FrameIndex SPKO A 0 0
+}
+
+Model BurningPentagram
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "PNTGA0.png"
+	Scale 100.0 100.0 1.0
+	ZOffset 0.8
+	FrameIndex PNTG A 0 0
+}
+
+Model PentagramOff
+{
+	Path "models/bloodspot"
+	Model 0 "bloodspot.md3"
+	Skin 0 "PNTGB0.png"
+	Scale 100.0 100.0 1.0
+	ZOffset 0.7
+	FrameIndex PNTG B 0 0 
+	FrameIndex PNTG C 0 0
+}
+
+Model BDECWhiteFlareLargeFLAT
+{
+	Path "models/bloodspot"
+	Model 0 "bloodceil.md3"
+	Skin 0 "LENTEX.png"
+	Scale 120.0 120.0 40.0
+	ZOffset -0.1
+	FrameIndex LENS A 0 0
+}

@@ -1,0 +1,57 @@
+// Headshot targets for Ice Guy ("Ice" blood) - ig here means "Ice Guy"
+
+actor HeadshotTarget2ig: HeadshotTarget2
+{
+Radius 18
+Height 30
+BloodType "Ice_Blood"
+}
+
+actor HeadshotTarget4ig: HeadshotTarget4
+{
+Radius 18
+Height 30
+BloodType "Ice_Blood"
+}
+
+actor HeadshotTarget8ig: HeadshotTarget8
+{
+Radius 18
+Height 30
+BloodType "Ice_Blood"
+}
+
+actor HeadshotTarget6ig: HeadshotTarget6
+{
+Radius 18
+Height 30
+BloodType "Ice_Blood"
+}
+
+actor HeadshotTarget10ig: HeadshotTarget10
+{
+Radius 18
+Height 30
+BloodType "Ice_Blood"
+}
+
+actor HeadshotTarget30ig: HeadshotTarget30
+{
+Radius 18
+Height 30
+BloodType "Ice_Blood"
+}
+
+actor HeadshotTarget100ig: HeadshotTarget100
+{
+Radius 18
+Height 30
+BloodType "Ice_Blood"
+}
+
+actor HeadshotTarget200ig: HeadshotTarget200
+{
+Radius 18
+Height 30
+BloodType "Ice_Blood"
+}

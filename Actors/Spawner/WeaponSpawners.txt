@@ -1,0 +1,217 @@
+Actor Schism_BaseWeaponSpawner : CustomInventory
+{
+	+DONTGIB
+	+DONTBLAST
+	+THRUACTORS
+	-COUNTITEM
+	+NOTONAUTOMAP
+	+NOKILLSCRIPTS
+	+SERVERSIDEONLY
+	+INVENTORY.QUIET
+	-INVENTORY.INVBAR
+	Inventory.Amount 1
+	Inventory.MaxAmount 0
+	Inventory.InterHubAmount 0
+	Inventory.PickupMessage ""
+	Inventory.PickupSound "none"
+	var int user_tid;
+}
+
+// Runes - Mage 1, Marine 3, Paladin 3, Corvus - unlimited
+// Slot 2 - 3 weapons
+// Slot 3 - 2 weapons
+// Slot 4 - 2 weapons
+// Slot 5 - 2 weapons
+// Slot 6 - 2 weapons
+// Slot 7 - 2 weapons
+
+// Slot 1 Givers
+
+Actor Schism_BaseWeaponGiver : CustomInventory
+{
+	+DONTGIB
+	+DONTBLAST
+	+FLOORCLIP
+// 	+DONTTHRUST
+// 	+WEAPONSPAWN
+	-COUNTITEM
+	Inventory.Amount 1
+	Inventory.MaxAmount 0
+	Radius 20
+	Height 24
+	Mass 1
+// 	Inventory.RestrictedTo BaronPlayer, RevenantPlayer
+}
+
+//Spawners
+
+Actor Schism_ShotgunSpawner : Schism_BaseWeaponSpawner Replaces Shotgun
+{
+	States
+	{
+		Spawn:
+			TNT1 A 1
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, args[4], 0, 0)
+			TNT1 A 1
+			Wait
+
+		Spawn1: //Shotgun
+			TNT1 A 0 A_SpawnItemEx("Schism_ShotgunGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			Stop
+
+		Spawn2: //Cryo-Shotgun
+			TNT1 A 0 A_SpawnItemEx("Schism_CryoShotgunGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			Stop
+
+	}
+}
+
+Actor Schism_SSGSpawner : Schism_BaseWeaponSpawner Replaces SuperShotgun
+{
+    States
+    {
+		Spawn:
+			TNT1 A 1
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, 0, 0, 0)
+			TNT1 A 1
+			Wait
+
+		Spawn1:
+			TNT1 A 0 A_SpawnItemEx("Schism_SSGGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			Stop
+
+		Spawn2:
+			TNT1 A 0 A_SpawnItemEx("Schism_QuadShotgunGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			Stop
+
+		Spawn3:
+			TNT1 A 0 A_SpawnItemEx("Schism_AssaultShotgunGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			Stop
+	}
+}
+
+Actor Schism_ChaingunSpawner : Schism_BaseWeaponSpawner Replaces Chaingun
+{
+    States
+    {
+		Spawn:
+			TNT1 A 1
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, 0, 0, 0)
+			TNT1 A 1
+			Wait
+
+		Minigun:
+			TNT1 A 0 A_SpawnItemEx("Schism_MinigunGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			Stop
+
+		Rifle:
+			TNT1 A 0 A_SpawnItemEx("Schism_RifleGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			Stop
+
+		HeavyRifle:
+			TNT1 A 0 A_SpawnItemEx("Schism_HeavyRifleGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			Stop
+
+		Machinegun:
+			TNT1 A 0 A_SpawnItemEx("Schism_MachineGunGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			Stop
+	}
+}
+
+Actor Schism_RocketLauncherSpawner : Schism_BaseWeaponSpawner Replaces RocketLauncher
+{
+    States
+    {
+		Spawn:
+			TNT1 A 1
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, 0, 0, 0)
+			TNT1 A 1
+			Wait
+
+		RocketLauncher:
+			TNT1 A 0 A_SpawnItemEx("Schism_RocketLauncherGiver",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+
+		GrenadeLauncher:
+			TNT1 A 0 A_SpawnItemEx("Schism_GrenadeLauncherGiver",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+
+		AML:
+			TNT1 A 0 A_SpawnItemEx("Schism_AMLGiver",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+
+		SniperRifle:
+			TNT1 A 0 A_SpawnItemEx("Schism_ChthonGiver",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+
+		BoltRifle:
+			TNT1 A 0 A_SpawnItemEx("Schism_BoltRifleGiver",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+
+		Crossbow:
+			TNT1 A 0 A_SpawnItemEx("DV_Crossbow",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+	}
+}
+
+
+Actor Schism_PlasmaRifleSpawner : Schism_BaseWeaponSpawner Replaces PlasmaRifle
+{
+    States
+    {
+		Spawn:
+			TNT1 A 1
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, 0, 0, 0)
+			TNT1 A 1
+			Wait
+
+		PlasmaRifle:
+			TNT1 A 0 A_SpawnItemEx("Schism_PlasmaRifleGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION,0)
+			Stop
+
+		Railgun:
+			TNT1 A 0 A_SpawnItemEx("Schism_RailgunGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION,0)
+			Stop
+
+		Freezer:
+			TNT1 A 0 A_SpawnItemEx("Schism_FreezerGiver", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION,0)
+			Stop
+
+	}
+}
+
+Actor Schism_BFGSpawner : Schism_BaseWeaponSpawner Replaces BFG9000
+{
+    States
+    {
+		Spawn:
+			TNT1 A 1
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_Spawner", 0, 0, 0, 0)
+			TNT1 A 1
+			Wait
+
+		BFG9K:
+			TNT1 A 0 A_SpawnItemEx ("Schism_BFG9kGiver",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+
+		BFG10K:
+			TNT1 A 0 A_SpawnItemEx ("Schism_BFG10KGiver",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+
+		Tesla:
+			TNT1 A 0 A_SpawnItemEx ("Schism_TeslaGiver",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+
+		Unmaker:
+			TNT1 A 0 A_SpawnItemEx ("Schism_UnmakerGiver",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+
+		Flamethrower:
+			TNT1 A 0 A_SpawnItemEx ("Flamethrower2",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			Stop
+
+		MG42:
+			TNT1 A 0 A_SpawnItemEx("HitlersBuzzsaw", 0, 0, 0, 0, 0, 0, 0, SXF_TRANSFERPOINTERS)
+			Stop
+	}
+}

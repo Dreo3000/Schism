@@ -1,0 +1,344 @@
+#library "ACS"
+#include "zcommon.acs"
+
+/////////////////////////////////////////////////////////////////////////
+
+function int SetInventory(str item, int count)
+{
+    int n = count - CheckInventory(item);
+
+    if (n > 0)
+        GiveInventory(item, n);
+    else if (n < 0)
+        TakeInventory(item, -n);
+
+    return n;
+}
+
+script "MovementKeyInterception" enter //o noes LegenDoom's synthfire code how did this get in here
+{
+    if (CheckInventory("Health") > 0)
+    {
+        int buttons = GetPlayerInput(PlayerNumber(), INPUT_BUTTONS);
+
+        if (buttons & BT_MOVELEFT)
+            SetInventory("IsMovingLeft", 1);
+        else
+            SetInventory("IsMovingLeft", 0);
+
+        if (buttons & BT_MOVERIGHT)
+            SetInventory("IsMovingRight", 1);
+        else
+            SetInventory("IsMovingRight", 0);
+
+        if (buttons & BT_FORWARD)
+            SetInventory("IsMovingForwards", 1);
+        else
+            SetInventory("IsMovingForwards", 0);
+
+        if (buttons & BT_BACK)
+            SetInventory("IsMovingBackwards", 1);
+        else
+            SetInventory("IsMovingBackwards", 0);
+
+		if (buttons & BT_SPEED)
+            SetInventory("IsRunning", 1);
+        else
+            SetInventory("IsRunning", 0);
+
+		if (buttons & BT_JUMP)
+           SetInventory("IsJumping", 1);
+        else
+            SetInventory("IsJumping", 0);
+
+    }
+    else // Player is ded, take all the things
+    {
+        SetInventory("IsMovingLeft", 0);
+        SetInventory("IsMovingRight", 0);
+        SetInventory("IsMovingForwards", 0);
+        SetInventory("IsMovingBackwards", 0);
+		SetInventory("IsRunning", 0);
+		SetInventory("IsJumping", 0);
+    }
+
+    Delay(1);
+    restart;
+}
+
+/////////////////////////////////////////////
+
+/*
+script "LevelKillCheck" ENTER
+{
+    int mtotal = GetLevelInfo (LEVELINFO_TOTAL_MONSTERS),
+        mkilled = GetLevelInfo (LEVELINFO_KILLED_MONSTERS);
+
+	Delay(60);
+
+	if (mkilled == mtotal)
+    {
+		Delay(60);
+		GiveInventory("Reward_Level_Clear",1);
+        PrintBold (s:"ALL MONSTERS KILLED");
+		Terminate;
+    }
+    else
+    Delay(30);
+	Restart;
+}
+*/
+
+/////////////////////////////////////////////
+
+script "LevelSecretsCheck" (void) {
+    int stotal = GetLevelInfo (LEVELINFO_TOTAL_SECRETS),
+        sfound = GetLevelInfo (LEVELINFO_FOUND_SECRETS);
+
+    if (sfound == stotal)
+    {
+		Delay(60);
+		GiveInventory("Reward_All_Secrets",1);
+        PrintBold (s:"ALL SECRETS DISCOVERED");
+		Terminate;
+    }
+    else
+    Delay(30);
+	Restart;
+}
+
+////////////////////////////////////////////////
+
+// Function to normalize the angle within the range [-16384, 16383]
+// Shit is using INTEGER values instead DEGREES so it's to be kept in mind
+// 90 degree = 16384
+// 180 degree = 32768
+// 270 degree = 49152
+// 360 degree = 65536
+
+Function int NormalizeAngle(int angle)
+{
+    while (angle > 16383) angle -= 32768;
+    while (angle <= -16384) angle += 32768;
+    return angle;
+}
+
+// Function to normalize the pitch within the range [-8192, 8191]
+Function int NormalizePitch(int pitch)
+{
+    while (pitch > 8191) pitch -= 16384;
+    while (pitch <= -8192) pitch += 16384;
+    return pitch;
+}
+
+Function int i2f (int num){return num << 16;}
+Function int f2i (int num){return num >> 16;}
+
+// Custom absolute value function
+function int abs (int x)
+{
+    if (x < 0)
+        return -x;
+
+    return x;
+}
+
+Function int GetAspectRatio(void)
+{
+    int noWideScreen = GetCVAR("vid_nowidescreen");
+    int tft = GetCVAR("vid_tft");
+    If (noWideScreen) {
+        If (tft && GetScreenHeight() * 5 / 4 == GetScreenWidth()){return 54;}
+        return 43;
+    }
+    If (Abs(GetScreenHeight() * 16 / 9 - GetScreenWidth()) < 10){return 169;}
+    If (Abs(GetScreenHeight() * 17 / 10 - GetScreenWidth()) < 10){return 1710;}
+	If (GetScreenWidth() == 1280 && GetScreenHeight() == 800){return 43;}
+    If (Abs(GetScreenHeight() * 16 / 10 - GetScreenWidth()) < 60) {
+        If ((GetScreenWidth() == 320 && GetScreenHeight() == 200) || (GetScreenWidth() == 640 && GetScreenHeight() == 400)){return 43;}
+        return 1610;
+    }
+    If (tft && GetScreenHeight() * 5 / 4 == GetScreenWidth()){return 54;}
+    return 43;
+}
+
+
+script "MouseLookInterception" ENTER
+{
+    int x = 0.5; // half - center of the screen due to how DrawHudMessage works
+    int y = 0.5;
+    // DrawDynamicFullscreenImage-related variables. Basically fancy DrawHudMessage.
+    int hudHeight = 428;
+    int hudWidth = 200;
+    int hudDynamic = 1;
+	int dotX = x / 100;
+	int dotY = y / 100;
+
+	//Whole idea of script - we create virtual point based on INPUT_YAW and INPUT_PITCH which shows in center of screen
+	//Then we make virtual circle around point - as limit values after crossin which specific attack triggers by specific DECORATE inventory token
+	//Point have it's inertion - it moves the faster and farer the faster player swings his camera what is shown by INPUT_YAW and INPUT_PITCH
+	//Slow camera movement won't trigger attacks because of manually calibrated treshold
+	//dotX and dotY are variables triggering giving inventory token
+	//After testing we know that with actual values, treshold is more or less following:
+	//defautl dotX and dotY values are 327
+	// DotX > 410: Rapidly turning left
+	// DotX < 250: Rapidly turning right
+	// DotY < 280: Rapidly looking down
+	// DotY > 370: Rapidly looking up
+	// Values within that range are for casually mouselooking here and there
+	// Credits to
+	//	- SchrodingCat for Cat's Visor HUD using GetPlayerInput(INPUT_YAW and INPUT_PITCH) as base for swaying helmet visor
+	// 	- Lord Lothar for concept of that melee system
+	//  - Dreo for code and invaluable consultation
+	//
+	// LL, 15 February 2024 Anno Domini
+
+
+    while(1) {
+        // Track mouse movement
+        int Angle = FixedMul(GetPlayerInput(-1, INPUT_YAW), 2.0); //player is more actively looking sideways so we use less value to multiply
+        int Pitch = FixedMul(GetPlayerInput(-1, INPUT_PITCH), 4.0); //player is less actively looking up and down so we use bigger value
+
+        // Ensure x and y stay within valid range, also getting virtual point back to center
+        if (x > 0.515) x = 0.515;
+        if (x < 0.485) x = 0.485;
+        if (y > 0.515) y = 0.515;
+        if (y < 0.485) y = 0.485;
+
+        x += +Angle;
+        y += +Pitch;
+
+		//=======[DEBUG AND TESTING]==========//
+        // Draw the red dot for debug, to indicate proper values of x and y triggering attacks
+        // DrawDynamicFullscreenImage("REDDOT2", hudWidth, hudHeight, x, y, 1029, hudDynamic);
+
+        // Set DotX and DotY values for testing to see them in SBARINFO
+        // SetInventory("DotX", x / 100); //divided by 100 to set int values to 3 digit limit
+        // SetInventory("DotY", y / 100);
+
+		dotX = x / 100;
+		dotY = y / 100;
+
+        // Give tokens based on DotX and DotY values
+        if (dotX < 250) {
+            // DotX < 250: Turning right
+            SetInventory("IsTurningRight", 1);
+            SetInventory("IsTurningLeft", 0);
+        } else if (dotX > 410) {
+            // DotX > 410: Turning left
+            SetInventory("IsTurningLeft", 1);
+            SetInventory("IsTurningRight", 0);
+        } else {
+            // Not turning left or right
+            SetInventory("IsTurningLeft", 0);
+            SetInventory("IsTurningRight", 0);
+        }
+
+        if (dotY < 280) {
+            // DotY < 280: Looking down
+            SetInventory("IsLookingDown", 1);
+            SetInventory("IsLookingUp", 0);
+        } else if (dotY > 370) {
+            // DotY > 370: Looking up
+            SetInventory("IsLookingUp", 1);
+            SetInventory("IsLookingDown", 0);
+        } else {
+            // Not looking up or down
+            SetInventory("IsLookingUp", 0);
+            SetInventory("IsLookingDown", 0);
+        }
+
+        // Delay between checks
+        Delay(1);
+    }
+}
+
+Function void DrawDynamicFullscreenImage (str Image, int imageWidth, int imageHeight, int x, int y, int id, bool allowDynHud) {
+	int hudWidth = imageWidth;
+	int hudHeight = imageHeight;
+	int cvarInfo = GetCvar("schism_allowdynamichud");
+	Switch(GetAspectRatio()){
+		Case 169: 	hudWidth = imageWidth / 4 * 3; Break;
+		Case 1610:	hudWidth = imageWidth / 16 * 10 * 4 / 3; Break;
+		Case 54:	hudHeight = imageHeight	/ 4 * 3 * 5 / 4; Break;
+	}
+	SetHudSize(hudWidth, hudHeight, 0);
+	SetFont(Image);
+	If(allowDynHud)
+		Switch(cvarInfo) {
+			Case 0: HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_NOTWITHFULLMAP | HUDMSG_LAYER_UNDERHUD, id, CR_UNTRANSLATED, i2f(hudWidth / 2), i2f(hudHeight / 2), 0.01, 1.0); Break;
+			Case 1: HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_NOTWITHFULLMAP | HUDMSG_LAYER_UNDERHUD, id, CR_UNTRANSLATED, FixedMul(i2f(hudWidth), x)>>16<<16, FixedMul(i2f(hudHeight), y)>>16<<16, 0.01, 1.0); Break;
+		}
+	Else HudMessage(s:"A"; HUDMSG_PLAIN | HUDMSG_NOTWITHFULLMAP | HUDMSG_LAYER_UNDERHUD, id, CR_UNTRANSLATED, i2f(hudWidth / 2), i2f(hudHeight / 2), 0.01, 1.0);
+}
+/*
+
+script "MouseLookInterception" ENTER
+{
+    int PrevTurningLeft, PrevTurningRight, PrevLookingUp, PrevLookingDown;
+    int x, y;
+
+    // Initialize previous states
+    PrevTurningLeft = 0;
+    PrevTurningRight = 0;
+    PrevLookingUp = 0;
+    PrevLookingDown = 0;
+
+    while (1)
+    {
+        // Track mouse movement
+        int Angle = FixedMul(GetPlayerInput(-1, INPUT_YAW), 0.000030517578125); // Scale to [-1.0, 1.0]
+        int Pitch = FixedMul(GetPlayerInput(-1, INPUT_PITCH), 0.000030517578125); // Scale to [-1.0, 1.0]
+
+        // Update horizontal movement tokens
+        if (Angle > 0.1 && !PrevTurningLeft)
+        {
+            SetInventory("IsTurningLeft", 1);
+            SetInventory("IsTurningRight", 0);
+            PrevTurningLeft = 1;
+            PrevTurningRight = 0;
+        }
+        else if (Angle < -0.1 && !PrevTurningRight)
+        {
+            SetInventory("IsTurningRight", 1);
+            SetInventory("IsTurningLeft", 0);
+            PrevTurningRight = 1;
+            PrevTurningLeft = 0;
+        }
+        else if (abs(Angle) < 0.1)
+        {
+            SetInventory("IsTurningRight", 0);
+            SetInventory("IsTurningLeft", 0);
+            PrevTurningRight = 0;
+            PrevTurningLeft = 0;
+        }
+
+        // Update vertical movement tokens
+        if (Pitch > 0.1 && !PrevLookingUp)
+        {
+            SetInventory("IsLookingUp", 1);
+            SetInventory("IsLookingDown", 0);
+            PrevLookingUp = 1;
+            PrevLookingDown = 0;
+        }
+        else if (Pitch < -0.1 && !PrevLookingDown)
+        {
+            SetInventory("IsLookingDown", 1);
+            SetInventory("IsLookingUp", 0);
+            PrevLookingDown = 1;
+            PrevLookingUp = 0;
+        }
+        else if (abs(Pitch) < 0.1)
+        {
+            SetInventory("IsLookingUp", 0);
+            SetInventory("IsLookingDown", 0);
+            PrevLookingUp = 0;
+            PrevLookingDown = 0;
+        }
+
+        // Delay between checks
+        Delay(1);
+    }
+}
+
+*/

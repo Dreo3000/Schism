@@ -1,0 +1,1206 @@
+Actor Schism_Geomancy : Schism_Weapon {
+// 	Weapon.SlotNumber 3
+	+WEAPON.NOAUTOFIRE
+	+WEAPON.NOAUTOAIM
+	+WEAPON.NOALERT
+	+WEAPON.CHEATNOTWEAPON
+	+Inventory.UNDROPPABLE
+	Inventory.PickupMessage "$Schism_GeomancyPickup"
+	Inventory.ForbiddenTo Schism_Ranger, Schism_Warrior, Schism_Corvus
+	Tag "Geomancy"
+	States {
+		Spawn:
+			MFCR AABBCCBB 2 BRIGHT //A_SpawnItem("RedFlareSmall",0,30)
+			Loop
+
+		Select:
+			PYRO A 0 A_Raise
+			Loop
+
+		Deselect:
+			PYRO A 0 A_Lower
+			Loop
+
+		DetectAttack:
+			"TNT1" "A" 1 A_JumpIfInventory("IsLookingUp", 1, "CastFromFloor")
+			"####" "#" 1 A_JumpIfInventory("IsLookingDown", 1, "GiveCeilingWall")
+			"####" "#" 1
+			Loop
+
+		Ready:
+			"GMLS" "A" 0 A_GunFlash("DetectAttack")
+			ReadyLoop:
+			"GMLS" "A" 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+			"####" "#" 0 A_JumpIfInventory("Taunting", 1, "Taunt")
+			"####" "#" 0 A_JumpIfInventory("Quickspell", 1, "Quickspell")
+			"####" "#" 0 A_JumpIfInventory("Unloading", 1, "Unload")
+			"####" "#" 0 A_JumpIfInventory("Reloading", 1, "Reload")
+			"####" "#" 1 A_WeaponReady(WRF_ALLOWRELOAD) //GMLS - GeoMancy Lava Stand
+			Loop
+
+		//I intend here different sprites for stances
+		LavaStand:
+			"GMLS" "A" 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+			"####" "#" 0 A_JumpIfInventory("Taunting", 1, "Taunt")
+			"####" "#" 0 A_JumpIfInventory("Quickspell", 1, "Quickspell")
+			"####" "#" 0 A_JumpIfInventory("Unloading", 1, "Unload")
+			"####" "#" 0 A_JumpIfInventory("Reloading", 1, "Reload")
+			Loop
+
+		CrystallineStand:
+			"GMLS" "A" 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+			"####" "#" 0 A_JumpIfInventory("Taunting", 1, "Taunt")
+			"####" "#" 0 A_JumpIfInventory("Quickspell", 1, "Quickspell")
+			"####" "#" 0 A_JumpIfInventory("Unloading", 1, "Unload")
+			"####" "#" 0 A_JumpIfInventory("Reloading", 1, "Reload")
+			"####" "#" 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			Loop
+
+		Reload:
+			TNT1 A 0 A_TakeInventory("Reloading", 1)
+			TNT1 A 0 A_GiveInventory("Schism_GeomancyStyle", 1)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			GMBA ABCDDDDDDDDDDDCBA 2
+			"####" "#" 0 A_JumpIfInventory("Schism_GeomancyStyle", 1, "LavaStand")
+			Goto ReadyLoop
+
+		TurnIntoGold:
+			GMMT ABC 4
+			TNT1 A 0 A_GiveInventory("Schism_GeomancyTurnIntoGoldToken", 1)
+			GMMT D 6
+			Goto Discharge
+
+		Fire:
+// 			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyGoldToken", 1, "TurnIntoGold")
+// 			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyStyle", 1, "LavaBoulder")
+			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyThrowBoulders", 1, "ThrowBoulder")
+			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyCastFloorWall", 1, "CastBigEarthWall")
+			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyCastCeilingWall", 1, "CastCeilingRumble")
+			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyCastBoulders", 1, "Attack2")
+			Goto ReadyLoop
+
+		CastFromFloor:
+			"####" "#" 1 A_JumpIfInventory("IsMovingForwards", 1, "CastFloorWall")
+			"####" "#" 1 A_JumpIfInventory("IsMovingBackwards", 1, "CastBoulderWall")
+			Goto DetectAttack
+
+		CastFloorWall:
+			"####" "#" 1 A_GiveInventory("Schism_GeomancyCastFloorWall", 1)
+			Goto DetectAttack
+
+		CastBoulderWall:
+			"####" "#" 1 A_GiveInventory("Schism_GeomancyCastBoulders", 1)
+			Goto DetectAttack
+
+		GiveCeilingWall:
+			"####" "#" 1 A_GiveInventory("Schism_GeomancyCastCeilingWall", 1)
+			Goto DetectAttack
+
+		LavaBoulder:
+			"GMLB" "ABCDEFG" 2
+			"####" "HH" 3 A_Quake(5, 5, 0, 1, NONE)
+			"####" "IIJJ" 2 A_Quake(7, 5, 0, 1, NONE)
+			"####" "K" 3
+			"####" "LMNOPQRSTU" 3
+			Goto ReadyLoop
+
+
+		CastCeilingRumble:
+			"####" "#" 0 A_TakeInventory("Schism_GeomancyCastCeilingWall", 1)
+			GMA5 ABCDEFG 3
+			TNT1 A 0 A_CustomMissile("Schism_GeomancyWeakRumble", 0, 0, 0, 0)
+			Goto ReadyLoop
+
+//////////////////////////////////////////////////
+// 		Creating a Wall/Spike
+//////////////////////////////////////////////////
+		CastBigEarthWall:
+			"####" "#" 0 A_TakeInventory("Schism_GeomancyCastFloorWall", 1)
+			"####" "#" 0 A_GiveInventory("Schism_GeomancySlowDown")
+			GMAT ABCD 4
+			GMAT D 1 A_ReFire("Hold0")
+			Goto ReadyLoop
+
+		Hold0:
+			TNT1 A 0 A_GiveInventory("Schism_GeomancyCastLvl", 1)
+			TNT1 A 0 A_GiveInventory("Schism_CastEarthWall", 1)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			GMAT E 7 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			GMAT E 1 A_ReFire("Hold1")
+			Goto Discharge
+
+		Hold1:
+			TNT1 A 0 A_GiveInventory("Schism_GeomancyCastLvl", 1)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			GMAT F 9 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			GMAT F 1 A_ReFire("Hold2")
+			Goto Discharge
+
+		Hold2:
+			TNT1 A 0 A_GiveInventory("Schism_GeomancyCastLvl", 1)
+			GMAT G 15 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			GMAT G 1 A_ReFire("Hold3")
+			Goto Discharge
+
+		Hold3:
+			TNT1 A 0 A_GiveInventory("Schism_GeomancyCastLvl", 1)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			GMAT H 25 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			GMAT H 1 A_ReFire("Hold4")
+			Goto Discharge
+
+		Hold4:
+			TNT1 A 0 A_GiveInventory("Schism_GeomancyCastLvl", 1)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			GMAT I 25 A_FireCustomMissile("ShakeYourAssQuad", 0, 0, 0, 0)
+			"####" "#" 0 A_TakeInventory("Schism_GeomancyCastFloorWall", 1)
+// 			TNT1 A 0 A_JumpIfInventory("FiredSecondary", 1, "MoveWall")
+			Goto Discharge
+
+		MoveWall:
+			GMAT JKLMMMM 3 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			Goto Discharge
+
+////////////////////////////////////////////////////////////////////////////////
+//		Creating Wall out of boulders
+////////////////////////////////////////////////////////////////////////////////
+
+		Attack2:
+			"####" "#" 0 A_TakeInventory("Schism_GeomancyCastBoulders", 1)
+			"####" "#" 0 A_GiveInventory("Schism_GeomancySlowDown", 1)
+			"GMA2" "ABCD" 1 A_WeaponReady(WRF_NOFIRE | WRF_DISABLESWITCH)
+			"####" "#" 0 A_Quake(2, 3, 0, 1, NONE)
+			"####" "E" 5 A_WeaponReady(WRF_NOFIRE | WRF_DISABLESWITCH)
+			"####" "#" 0 A_Quake(2, 3, 0, 1, NONE)
+			"####" "F" 5 A_WeaponReady(WRF_NOFIRE | WRF_DISABLESWITCH)
+			"####" "#" 0 A_Quake(2, 3, 0, 1, NONE)
+			"####" "G" 5 A_WeaponReady(WRF_NOFIRE | WRF_DISABLESWITCH)
+			"####" "#" 0 A_Quake(2, 3, 0, 1, NONE)
+			"####" "H" 5 A_WeaponReady(WRF_NOFIRE | WRF_DISABLESWITCH)
+			"####" "#" 0 A_ReFire("Attack2H")
+			Goto ReadyLoop
+
+		Attack2H:
+			"####" "#" 0 A_Quake(7, 5, 0, 1, NONE)
+			"GMA2" "I" 9
+			"####" "#" 1 A_ReFire("Attack2H1")
+			Goto ReadyLoop
+
+		Attack2H1:
+			"GMA2" "#" 0 A_Quake(10, 5, 0, 1, NONE)
+			"####" "J" 7
+			"####" "#" 0 A_Quake(10, 5, 0, 1, NONE)
+			"####" "K" 15
+			"####" "#" 0 A_ReFire("Attack2H2")
+			Goto ReadyLoop
+
+		Attack2H2:
+			"####" "#" 0 A_Quake(15, 5, 0, 1, NONE)
+			"####" "#" 0 A_GiveInventory("Schism_CreateBoulderWall", 1)
+			"####" "#" 0 A_Quake(10, 5, 0, 1, NONE)
+			"####" "L" 5
+			"####" "M" 25
+			Goto ReadyLoop
+
+		ThrowBoulder:
+			"####" "#" 0 A_GiveInventory("Schism_GeomancyCastLvl", 1)
+			"####" "#" 0 A_JumpIfInventory("PSeq1", 1, "ThrowBoulder2")
+			"GMA3" "ABCDEFGHIJ" 1
+			"####" "#" 0 A_GiveInventory("PSeq1", 1)
+			"####" "K" 3 A_Quake(7, 5, 0, 1, NONE)
+			"####" "LMNO" 1
+			"####" "#" 0 A_ReFire("ThrowBoulder")
+			Goto ReadyLoop
+
+		ThrowBoulder2: //Left Hand
+			"GMA4" "ABCDEFGHIJ" 1
+			"####" "K" 3 A_Quake(7, 5, 0, 1, NONE)
+			"####" "LMNO" 2
+			"####" "#" 0 A_TakeInventory("PSeq1", 1)
+			"####" "#" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 6, 2)
+			"####" "#" 0 A_ReFire("Fire")
+			Goto ReadyLoop
+			"####" "#" 0 A_TakeInventory("Schism_GeomancyThrowBoulders", 1)
+			"####" "#" 0 A_TakeInventory("Schism_GeomancyCastLvl", 6)
+			"####" "#" 0 A_ReFire("Fire")
+			Goto ReadyLoop
+
+////////////////////////////////////////////////////////////////////////////////
+//		Creating Boulder
+////////////////////////////////////////////////////////////////////////////////
+
+		QuickBoulder:
+			GMBB A 5 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			GMBB B 5 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			GMBB C 3 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			GMBB DEF 3
+// 			TNT1 A 0 A_Recoil(3)
+			TNT1 A 0 A_FireCustomMissile("Schism_Boulder", 0, 0, -5, -5, 0)
+// 			TNT1 A 0 A_FireCustomMissile("ParaPsiStrike", 0, 0, 0, 9)
+			GMBB G 5 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			GMBB H 3
+			Goto ReadyLoop
+
+////////////////////////////////////////////////////////
+//
+////////////////////////////////////////////////////////
+
+		RipOutBoulder:
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			TNT1 A 5
+			Goto BoulderReady
+
+		BoulderReady:
+			GMBA I 1 A_WeaponReady
+			Loop
+
+////////////////////////////////////////////////////////
+//		Alt Fire
+////////////////////////////////////////////////////////
+
+		AltFire:
+			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyStyle", 1, "LavaStrike")
+			GMSC ABC 3
+			AltHold0:
+			GMSC D 2 A_FireCustomMissile("Schism_SandWind", -2, 0, 5, 15)
+			TNT1 A 0 A_ReFire("AltHold0")
+			GMSC CBA 3
+			Goto ReadyLoop
+
+		LavaStrike:
+			"GMLS" "ABCDEFGH" 3
+			"####" "III" 3 A_Quake(9, 5, 0, 1, NONE)
+			"####" "J" 3
+			Goto ReadyLoop
+
+
+////////////////////////////////////////////////////////
+//		Discharge
+////////////////////////////////////////////////////////
+
+		Discharge:
+			TNT1 A 0 A_TakeInventory("FiredPrimary", 1)
+			TNT1 A 0 A_TakeInventory("Schism_GeomancyCastLvl", 5)
+			TNT1 A 0 A_TakeInventory("Schism_GeomancyGoldToken", 1)
+			TNT1 A 0 A_TakeInventory("Schism_GeomancyTurnIntoGoldToken", 1)
+			Goto ReadyLoop
+
+////////////////////////////////////////////////////////
+//		Custom States
+////////////////////////////////////////////////////////
+
+		Unload:
+			TNT1 A 0 A_TakeInventory("Unloading",1)
+			/////
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			TNT1 A 0 A_Log("Earth selected as Quick Spell!")
+			TNT1 A 0 A_TakeInventory("QuickFireSpellSelected",1)
+			TNT1 A 0 A_TakeInventory("QuickFrostSpellSelected",1)
+			TNT1 A 0 A_TakeInventory("QuickLightningSpellSelected",1)
+			TNT1 A 0 A_GiveInventory("Schism_GeomancyQuickSpell", 1)
+			Goto ReadyLoop
+
+		Taunt:
+			TNT1 A 0 A_TakeInventory("Taunting", 1)
+			BlinkageHold:
+			TNT1 A 0 A_ChangeFlag("SPECTRAL", 1)
+			TNT1 A 0 A_ChangeFlag("THRUACTORS", 1)
+			MLNG ABCD 2 BRIGHT
+			TNT1 A 0 A_SpawnItemEx("BlinkTargetMissile", 36*Cos(pitch), 0, 30-36*Sin(pitch), 100*Cos(pitch), 0, -100*Sin(pitch))
+			BlinkageHold2:
+			MLNG E 1
+			TNT1 A 0 A_ChangeVelocity(100*Cos(pitch), 0, -100*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			MLNG FG 2 BRIGHT A_ZoomFactor(0.70, ZOOM_INSTANT)
+			MLNG HI 2 BRIGHT A_ZoomFactor(1.00)
+			MLNG H 0 A_ChangeVelocity(0, 0, 0, CVF_REPLACE)
+			TNT1 A 0 A_ChangeFlag("THRUACTORS", 0)
+			TNT1 A 0 A_ChangeFlag("SPECTRAL", 0)
+			Goto ReadyLoop
+
+		Quickspell:
+			TNT1 A 0 A_TakeInventory("Quickspell", 1)
+			TNT1 A 0 A_JumpIfInventory("IsSorcerer", 1, 3)
+			TNT1 A 0 A_Print("You are not a mage !")
+			TNT1 A 0 A_Jump(256, "ReadyLoop")
+			TNT1 A 0 A_JumpIfInventory("QuickFireSpellSelected",1,"QuickFireSpell")
+			TNT1 A 0 A_JumpIfInventory("QuickLightningSpellSelected",1,"QuickLightningSpell")
+			TNT1 A 0 A_JumpIfInventory("QuickFrostSpellSelected",1,"QuickFrostSpell")
+			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyQuickSpell", 1, "QuickBoulder")
+			Goto QuickFireSpell
+
+		QuickFireSpell:
+			TNT1 A 0 A_JumpIfInventory("BrutalBlueMana", 100, 2)
+			TNT1 A 0 A_Print("$Schism_QuickSpellMSGF")
+			Goto ReadyLoop
+			TNT1 A 0 A_GunFlash("SpellFlash")
+			FOSP AB 1
+			TNT1 A 0 A_AlertMonsters
+			TNT1 A 0 A_PlaySound("IGNITE")
+			FOSP CCDD 1
+			FOSP EEFFGG 1 BRIGHT
+			FOSP GGHH 1 BRIGHT
+			TNT1 A 0 A_GiveInventory("Schism_CastFireBall", 1)
+			TNT1 A 0 A_SetPitch(Pitch - 6.0)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			FOSP IJ 1 BRIGHT A_SetPitch(Pitch + 2)
+			FOSP KCBBAA 1 A_SetPitch(Pitch + 0.5)
+			Goto ReadyLoop
+
+		QuickLightningSpell:
+			TNT1 A 0 A_JumpIfInventory("BrutalGreenMana", 100, 2)
+			TNT1 A 0 A_Print("$Schism_QuickSpellMSGT")
+			Goto ReadyLoop
+			TNT1 A 0 A_GunFlash("SpellFlash")
+			LGQS AB 1
+			TNT1 A 0 A_AlertMonsters
+			TNT1 A 0 A_PlaySound("TPortalZap", CHAN_WEAPON, 2)
+			LGQS CCDD 1
+			LGQS EFGHIJ 1 BRIGHT
+			LGQS KL 1 BRIGHT A_FireCustomMissile("ShakeYourAssQuad", 0, 0, 0, 0)
+			TNT1 A 0 A_GiveInventory("Schism_CastLightning", 1)
+			TNT1 A 0 A_SetPitch(Pitch - 6.0)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			LGQS MNO 1 BRIGHT A_SetPitch(Pitch + 2)
+			LGQS PQR 1 BRIGHT A_SetPitch(Pitch + 0.5)
+			LGQS FEDCBA 1
+			Goto ReadyLoop
+
+		QuickFrostSpell:
+			TNT1 A 0 A_JumpIfInventory("BrutalGreenMana", 100, 2)
+			TNT1 A 0 A_Print("$Schism_QuickSpellMSGI")
+			Goto ReadyLoop
+			TNT1 A 0 A_GunFlash("SpellFlash")
+			TNT1 A 0 A_GiveInventory("HasFreezerWeapon",1)
+			IS1F AABB 1
+			IS1F CCDD 1
+			IS1F KLF 1
+			IS1F MNO 1 BRIGHT
+			IS1F A 0 A_GiveInventory("HasFreezerWeapon",1)
+			IS1F G 1 BRIGHT A_FireCustomMissile("BlueFlareSpawn",0,0,0,0)
+			IS1F A 0 A_PlaySound("ICESHA", 1)
+			IS1F H 1 BRIGHT A_GiveInventory("Schism_CastFrostSpell", 1)
+			IS1F I 1 BRIGHT A_FireCustomMissile("BlueFlareSpawn",0,0,0,0)
+			IS1F J 1 BRIGHT A_FireCustomMissile("BlueFlareSpawn",0,0,0,0)
+			TNT1 A 0 A_Recoil(3)
+			IS1F K 1 BRIGHT A_FireCustomMissile("BlueFlareSpawn",0,0,0,0)
+			TNT1 A 0 A_TakeInventory("HasFreezerWeapon",1)
+			IS1F DCBAA 1
+			Goto ReadyLoop
+
+		DoKick: //14 tic
+// 			TNT1 A 0 A_GunFlash("KickFlash")
+			TNT1 A 0 A_TakeInventory("Kicking", 1)
+			TNT1 A 0 A_ZoomFactor(1.0)
+// 			TNT1 A 0 A_JumpIf (momZ > 0, "KickInAir")
+// 			TNT1 A 0 A_JumpIf (momZ < 0, "KickInAir")
+// 			TNT1 A 0 A_JumpIf((Abs(VelY) < 1) && (Abs(VelX) < 1), 2)
+// 			TNT1 A 0 A_JumpIfInventory("IsCrouching", 1, "SlideAttack")
+			TNT1 A 0 A_PlaySound("KICK")
+			TNT1 A 0 SetPlayerProperty(0, 1, 0)
+			K2CK A 0
+			"####" BCD 1
+			"####" A 0 A_FireCustomMissile("Schism_GeomancyKick", 0, 0, 0, 0)
+			"####" H 3
+			"####" IGF 1
+			"####" "#" 0 SetPlayerProperty(0, 0, 0)
+			"####" EDCBA 1 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			TNT1 A 0 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			Goto ReadyLoop
+
+		LeftFinishingKick: // 11 tics
+			TNT1 A 0 A_GunFlash("LeftKickFlash")
+			K2K3 A 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" A 0 A_Recoil(-10)
+			"####" ABC 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0 A_SetPitch(pitch-9)
+			"####" A 0 A_SetAngle(angle-9)
+			"####" D 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" F 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" G 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+2)
+			"####" H 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+2)
+			"####" I 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+1)
+			"####" J 1 A_FireCustomMissile("KickAttack", 0, 0, 0, 0)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+1)
+			"####" K 1 A_JumpIfInventory("FiredPrimary", 1, "Hold21")
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary", 1, "Hold21")
+			Goto ReadyLoop
+
+	}
+}
+
+Actor Schism_GeomancyCastFloorWall : TokenBase {}
+Actor Schism_GeomancyCastCeilingWall : TokenBase {}
+Actor Schism_GeomancyCancelWalls : TokenBase {}
+Actor Schism_GeomancyCastBoulders : TokenBase {}
+
+Actor Schism_EarthElements {Species "EarthElements"}
+
+Actor Schism_GeomancySlowDown : PowerSpeed {
+	Speed 0.25
+	Powerup.Duration 30
+}
+
+Actor Schism_CastEarthWall : CustomInventory
+{
+	+INVENTORY.QUIET
+	+INVENTORY.ALWAYSPICKUP
+	+INVENTORY.UNDROPPABLE
+	+INVENTORY.UNTOSSABLE
+	-INVENTORY.INVBAR
+	States
+	{
+		Pickup:
+			TNT1 A 0 A_SpawnItemEx("Schism_EarthSpike", 70, -30, 0)
+			TNT1 A 0 A_SpawnItemEx("Schism_EarthSpike", 70, 0, 0)
+			TNT1 A 0 A_SpawnItemEx("Schism_EarthSpike", 70, 30, 0)
+			Stop
+	}
+}
+
+Actor Schism_CreateBoulderWall : CustomInventory {
+	+INVENTORY.QUIET
+	+INVENTORY.ALWAYSPICKUP
+	+INVENTORY.UNDROPPABLE
+	+INVENTORY.UNTOSSABLE
+	-INVENTORY.INVBAR
+	States {
+		Pickup:
+			TNT1 A 0 A_GiveInventory("Schism_GeomancyThrowBoulders", 1)
+			TNT1 A 0 A_SpawnItemEx("Schism_WarpingBoulder", 50, 0, 43)
+			TNT1 A 0 A_SpawnItemEx("Schism_WarpingBoulder1", 50, 35, 43)
+			TNT1 A 0 A_SpawnItemEx("Schism_WarpingBoulder2", 50, -35, 43)
+			TNT1 A 0 A_SpawnItemEx("Schism_WarpingBoulder3", 50, 60, 43)
+			TNT1 A 0 A_SpawnItemEx("Schism_WarpingBoulder4", 50, -60, 43)
+			TNT1 A 0 A_SpawnItemEx("Schism_WarpingBoulder5", 50, 80, 43)
+			Stop
+	}
+}
+
+Actor Schism_GeomancyKick : KickAttack
+{
+	States
+	{
+		Spawn:
+			TNT1 A 1
+			Stop
+
+
+		XDeath:
+			TNT1 A 0 A_AlertMonsters(200)
+			PUFF A 0 A_PlaySound("player/cyborg/fist", 3)
+			TNT1 A 0 A_SpawnItemEx ("PLOFT2",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			EXPL AAAAAA 0 A_CustomMissile ("MeleeSmoke", 0, 0, random (0, 360), 2, random (0, 360))
+			TNT1 A 0 A_GiveToTarget("KickHasHit", 1)
+			TNT1 A 0 Radius_Quake (2, 6, 0, 5, 0)//(intensity, duration, damrad, tremrad, tid)
+			TNT1 A 10
+			Stop
+
+		Death:
+			TNT1 A 0 A_AlertMonsters(200)
+			TNT1 A 0 A_CheckFloor("DeathOnGround")
+			PUFF A 0 A_PlaySound("player/cyborg/fist", 3)
+			TNT1 A 0 A_SpawnItemEx ("PLOFT2",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_CustomMissile("Schism_GeomancyWeakRumble", 0, 0, 0, 0)
+			EXPL AAAAAA 0 A_CustomMissile ("MeleeSmoke", 0, 0, random (0, 360), 2, random (0, 360))
+			TNT1 A 0 A_GiveToTarget("KickHasHit", 1)
+			TNT1 A 0 Radius_Quake (2, 6, 0, 5, 0)//(intensity, duration, damrad, tremrad, tid)
+			TNT1 A 10
+			Stop
+
+		DeathOnGround:
+			TNT1 A 0
+			PUFF A 0 A_PlaySound("player/cyborg/fist", 3)
+			TNT1 A 0 A_SpawnItemEx("Schism_SmallEarthSpike", 120, 0, 0)
+			TNT1 A 0 A_SpawnItemEx ("PLOFT2",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			EXPL AAAAAA 0 A_CustomMissile ("MeleeSmoke", 0, 0, random (0, 360), 2, random (0, 360))
+			TNT1 A 0 Radius_Quake (2, 6, 0, 5, 0)//(intensity, duration, damrad, tremrad, tid)
+			TNT1 A 0 A_Explode(10, 40, 0)
+			TNT1 A 10
+			Stop
+	}
+}
+
+Actor Schism_GeomancyKick2 : Schism_GeomancyKick
+{
+	States
+	{
+		Spawn:
+			TNT1 A 2
+			Stop
+
+		Death:
+		XDeath:
+		Crash:
+			TNT1 A 0
+			Stop
+
+	}
+}
+
+Actor Schism_GeomancyWeakRumble
+{
+	Projectile
+	Height 3
+	Radius 3
+	Speed 32
+	Damage 0
+	DamageType None
+	+NOEXTREMEDEATH
+// 	+CEILINGHUGGER
+	var int user_timer;
+	States
+	{
+		Spawn:
+			TNT1 A 0 NODELAY A_SetUserVar("user_timer", 0)
+			SpawnLoop:
+			TNT1 A 2
+			Stop
+
+		Death:
+		XDeath:
+		Crash:
+			TNT1 A 0
+			TNT1 AAA 0 A_SpawnitemEx("Schism_Stalactite", Random(-50, 50), Random(-50, 50), ceilingz, 0, 0, 0)
+			TNT1 AAAAAAAA 0 A_SpawnItemEx("Schism_SmallStalactite", Random(-80, 80), Random(-80, 80), ceilingz, 0, 0, 0)
+			TNT1 AAAAAA 0 A_SpawnItemEx("Schism_SmallStalactite", Random(-150, 150), Random(-150, 150), ceilingz, 0, 0, 0)
+			TNT1 AAAAAAAA 0 A_SpawnItemEx("Schism_SmallStalactite", Random(-200, 200), Random(-200, 200), ceilingz, 0, 0, 0)
+			Looping:
+			TNT1 A 0 A_JumpIf(user_timer == 6, "Exit")
+			TNT1 A 4
+			TNT1 A 0 Radius_Quake(2, 6, 0, 15, 0)//(intensity, duration, damrad, tremrad, tid)
+			TNT1 A 0 A_SpawnItemEx("Schism_Boulder", Random(-80, 80), Random(-80, 80), ceilingz - 72)
+			TNT1 A 5
+			TNT1 A 0 Radius_Quake(2, 6, 0, 15, 0)//(intensity, duration, damrad, tremrad, tid)
+			TNT1 A 0 A_SpawnItemEx("Schism_Boulder", Random(-150, 150), Random(-150, 150), ceilingz - 72)
+			TNT1 A 6
+			TNT1 A 0 Radius_Quake(2, 6, 0, 15, 0)//(intensity, duration, damrad, tremrad, tid)
+			TNT1 A 0 A_SpawnItemEx("Schism_Boulder", Random(-200, 200), Random(-200, 200), ceilingz - 72)
+			TNT1 A 15
+			TNT1 A 0 A_SetUserVar("user_timer", user_timer+1)
+			Loop
+
+		Exit:
+			TNT1 A 0
+			Stop
+	}
+}
+
+Actor Schism_GeomancyRumble
+{
+	Projectile
+	Height 3
+	Radius 3
+	Speed 32
+	Damage 0
+	DamageType None
+	+NOEXTREMEDEATH
+	var int user_timer;
+	States
+	{
+		Spawn:
+			TNT1 A 0 NODELAY A_SetUserVar("user_timer", 0)
+			SpawnLoop:
+			TNT1 A 2
+			Stop
+
+		Death:
+			TNT1 A 0
+			TNT1 AAAAAAA 0 A_SpawnitemEx("Schism_Stalactite", Random(-50, 50), Random(-50, 50), ceilingz, 0, 0, 0)
+			TNT1 AAAAAAA 0 A_SpawnitemEx("Schism_Stalactite", Random(-80, 80), Random(-80, 80), ceilingz, 0, 0, 0)
+			TNT1 AAAAAAA 0 A_SpawnItemEx("Schism_SmallStalactite", Random(-150, 150), Random(-150, 150), ceilingz, 0, 0, 0)
+			TNT1 AAAAAAA 0 A_SpawnItemEx("Schism_SmallStalactite", Random(-200, 200), Random(-200, 200), ceilingz, 0, 0, 0)
+			Looping:
+			TNT1 A 0
+			Loop
+
+		Exit:
+			TNT1 A 0 A_NoBlocking
+			Stop
+	}
+}
+
+Actor Schism_Boulder : Schism_EarthElements
+{
+	Projectile
+	Height 10
+	Radius 10
+	Speed 45
+	Gravity 1.2
+	Scale 0.45
+	Damage (120)
+	DamageType "Blast"
+// 	BounceType "Hexen"
+	BounceFactor 0.8
+	WallBounceFactor 0.4
+	BounceCount 2
+
+	+EXPLODEONWATER
+	+SKYEXPLODE
+	+BOUNCEONFLOORS
+	+BOUNCEONWALLS
+	+BOUNCEONCEILINGS
+
+	+FORCEPAIN
+	+DONTBLAST
+	+DONTREFLECT
+	+DONTHURTSPECIES
+	+THRUGHOST
+	-NOGRAVITY
+	-WINDTHRUST
+	States
+	{
+		Spawn:
+			STN4 ABCD 2
+			Loop
+
+
+		Death:
+		Crash:
+			TNT1 A 0 A_ChangeFlag("MISSILE", 0)
+			TNT1 A 0 A_ChangeFlag("NOBLOCKMAP", 0)
+			TNT1 A 0 A_ChangeFlag("ACTIVATEIMPACT", 0)
+			TNT1 A 0 A_ChangeFlag("ACTIVATEPCROSS", 0)
+			TNT1 A 0 A_ChangeFlag("SOLID", 1)
+			TNT1 A 0 A_ChangeFlag("SHOOTABLE", 1)
+			TNT1 A 0 A_ChangeFlag("PUSHABLE", 1)
+			TNT1 A 0 A_ChangeFlag("NOBLOOD", 1)
+// 			TNT1 A 0 A_SetScale(0.3, 0.3)
+			STN4 D -1
+			Stop
+
+	}
+}
+
+// Reminder
+// COPYPITCH and BOB are for gzdoom
+
+Actor Schism_WarpingBoulder {
+	Health 500
+	Height 16
+	Radius 10
+	Gravity 0
+	Scale 0.45
+	+FLOATBOB
+	-NOCLIP
+	+SHOOTABLE
+	+NOBLOOD
+	+SLIDESONWALLS
+	+NOTARGETSWITCH
+	var int user_x;
+	var int user_y;
+	var int user_z;
+	var int user_step;
+	States {
+		Spawn:
+			TNT1 A 0 NODELAY A_SetUserVar("user_x", 50)
+			TNT1 A 0 A_SetUserVar("user_y", 0)
+			TNT1 A 0 A_SetUserVar("user_z", 43)
+			SpawnLoop:
+			"STN4" "A" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 1, "Attack", AAPTR_TARGET)
+			STN4 ABCD 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+
+			SpawnLoop2:
+			"STN4" "ABCD" 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+
+		Attack:
+			"####" "#" 0 A_CustomMissile("Schism_Boulder", 0, 0, 0, CMF_AIMDIRECTION | CMF_TRACKOWNER | CMF_ABSOLUTEPITCH, -CallACS("Schism_GetPTRPitch", AAPTR_TARGET))
+			Stop
+
+		MoveToPlayer:
+			"####" "#" 0 A_JumpIf(user_y > 0, 2)
+			"####" "#" 0 A_SetUserVar("user_step", 5)
+			Goto Moving
+			"####" "#" 0 A_SetUserVar("user_step", -5)
+			Moving:
+			"####" "#" 0 A_JumpIf(user_y == 0, "SpawnLoop2")
+			"####" "#" 0 A_SetUserVar("user_y", user_y + user_step)
+			"STN4" "A" 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			"####" "#" 0 A_SetUserVar("user_y", user_y + user_step)
+			"####" "B" 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			"####" "#" 0 A_JumpIf(user_y == 0, "SpawnLoop2")
+			"####" "#" 0 A_SetUserVar("user_y", user_y + user_step)
+			"####" "C" 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			"####" "#" 0 A_SetUserVar("user_y", user_y + user_step)
+			"####" "D" 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+	}
+}
+
+Actor Schism_WarpingBoulder1 :  Schism_WarpingBoulder{
+	States {
+		Spawn:
+			TNT1 A 0 NODELAY A_SetUserVar("user_x", 50)
+			TNT1 A 0 A_SetUserVar("user_y", 30)
+			TNT1 A 0 A_SetUserVar("user_z", 43)
+			SpawnLoop:
+			"STN4" "A" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 1, "MoveToPlayer", AAPTR_TARGET)
+			STN4 ABCD 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+
+			SpawnLoop2:
+			"STN4" "A" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 2, "Attack", AAPTR_TARGET)
+			"STN4" "ABCD" 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+	}
+}
+
+Actor Schism_WarpingBoulder2 :  Schism_WarpingBoulder{
+	States {
+		Spawn:
+			TNT1 A 0 NODELAY A_SetUserVar("user_x", 50)
+			TNT1 A 0 A_SetUserVar("user_y", -30)
+			TNT1 A 0 A_SetUserVar("user_z", 43)
+			SpawnLoop:
+			"STN4" "A" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 2, "MoveToPlayer", AAPTR_TARGET)
+			STN4 ABCD 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+
+			SpawnLoop2:
+			"STN4" "A" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 3, "Attack", AAPTR_TARGET)
+			"STN4" "ABCD" 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+	}
+}
+
+Actor Schism_WarpingBoulder3 :  Schism_WarpingBoulder{
+	States {
+		Spawn:
+			TNT1 A 0 NODELAY A_SetUserVar("user_x", 50)
+			TNT1 A 0 A_SetUserVar("user_y", 60)
+			TNT1 A 0 A_SetUserVar("user_z", 43)
+			SpawnLoop:
+			"STN4" "A" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 3, "MoveToPlayer", AAPTR_TARGET)
+			STN4 ABCD 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+
+			SpawnLoop2:
+			"STN4" "A" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 4, "Attack", AAPTR_TARGET)
+			"STN4" "ABCD" 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+	}
+}
+
+Actor Schism_WarpingBoulder4 :  Schism_WarpingBoulder{
+	States {
+		Spawn:
+			TNT1 A 0 NODELAY A_SetUserVar("user_x", 50)
+			TNT1 A 0 A_SetUserVar("user_y", -60)
+			TNT1 A 0 A_SetUserVar("user_z", 43)
+			SpawnLoop:
+			"STN4" "A" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 4, "MoveToPlayer", AAPTR_TARGET)
+			STN4 ABCD 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+
+			SpawnLoop2:
+			"STN4" "A" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 5, "Attack", AAPTR_TARGET)
+			"STN4" "ABCD" 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+	}
+}
+
+Actor Schism_WarpingBoulder5 :  Schism_WarpingBoulder{
+	States {
+		Spawn:
+			TNT1 A 0 NODELAY A_SetUserVar("user_x", 50)
+			TNT1 A 0 A_SetUserVar("user_y", 80)
+			TNT1 A 0 A_SetUserVar("user_z", 43)
+			SpawnLoop:
+			"STN4" "A" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 5, "MoveToPlayer", AAPTR_TARGET)
+			STN4 ABCD 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+
+			SpawnLoop2:
+			"STN4" "A" 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 6, "Attack", AAPTR_TARGET)
+			"STN4" "ABCD" 2 A_Warp(AAPTR_TARGET, user_x, user_y, user_z, 0, WARPF_INTERPOLATE | WARPF_NOCHECKPOSITION)
+			Loop
+	}
+}
+
+Actor Schism_Spike : Schism_EarthElements
+{
+	+FLOORHUGGER
+// 	+STEPMISSILE
+	+SOLID
+	+SHOOTABLE
+	+DONTHURTSPECIES
+// 	+THRUACTORS
+	+NOBLOOD
+	+NOTARGET
+	+NORADIUSDMG
+	+NOTAUTOAIMED
+	+NODAMAGETHRUST
+	+NOEXTREMEDEATH
+	+PIERCEARMOR
+	Mass 2147483647
+
+
+}
+
+Actor Schism_EarthSpike : Schism_Spike
+{
+	Health 2000
+	Radius 25
+	Height 137
+
+	Damage 200
+
+	DamageFactor 0.3
+	//Gore Damage Factors
+	DamageFactor "Blood", 0.0
+	DamageFactor "BlueBlood", 0.0
+	DamageFactor "GreenBlood", 0.0
+	DamageFactor "GibRemoving", 0.0
+	//System Dmg factors
+	DamageFactor "KillMe", 0.0
+	DamageFactor "KillMeBot", 0.0
+	DamageFactor "Avoid", 0.0
+	DamageFactor "TeleportRemover", 0.0
+	DamageFactor "CancelTeleportFog", 0.0
+	DamageFactor "Water", 0.0
+	DamageFactor "BHFTOnBarrel", 0.0
+	DamageFactor "SpawnMarine", 0.0
+	DamageFactor "MinorHead", 0.0
+	DamageFactor "Decaptate", 0.0
+	DamageFactor "MonsterKnocked", 0.0
+	DamageFactor "CauseSplash", 0.0
+	DamageFactor "CauseObjectsToSplashSlime", 0.0
+	DamageFactor "CauseObjectsToSplashNukage", 0.0
+	DamageFactor "CauseObjectsToSplashBlood", 0.0
+	DamageFactor "CauseObjectsToSplashLava", 0.0
+	DamageFactor "CauseWaterSplash", 0.0
+	DamageFactor "HelperMarineFatallity", 0.0
+	DamageFactor "HangingHook", 0.0
+	DamageFactor "Glass", 0.0
+	DamageFactor "Head", 0.0
+	//Game caused dmg factors
+	//Melee
+	DamageFactor "Use", 0.0
+	DamageFactor "Taunt", 0.0
+	DamageFactor "Trample", 0.0
+	DamageFactor "Stealth", 0.0
+	DamageFactor "Headkick", 0.0
+	DamageFactor "Kick", 0.0
+	DamageFactor "Melee", 0.0
+	DamageFactor "LowKick", 0.0
+	DamageFactor "Fatality", 0.0
+	DamageFactor "PussyGrab", 0.0
+	DamageFactor "SuperPunch", 0.0
+	DamageFactor "ExtremePunches", 0.0
+	DamageFactor "Cut", 0.0
+	DamageFactor "Saw", 0.0
+	DamageFactor "Leg", 0.0
+	DamageFactor "Fall", 0.0
+	DamageFactor "Slide", 0.0
+	//Bullets
+	DamageFactor "Bullet", 0.2
+	DamageFactor "FriendBullet", 0.2
+	DamageFactor "MonsterBullet", 0.2
+	DamageFactor "MonsterShotgunBullet", 0.2
+	DamageFactor "MonsterMinigun", 0.2
+	DamageFactor "Shotgun", 0.2
+	DamageFactor "SSG", 0.2
+
+
+
+
+	DamageFactor "Fire", 0.2
+	DamageFactor "ExplosiveImpact", 0.3
+	DamageFactor "Plasma", 0.4
+	DamageFactor "Desintegrate", 0.3
+	DamageFactor "Ice", 0.0
+	DamageFactor "Freeze", 0.0
+	DamageFactor "Lightning", 0.1
+
+
+
+
+
+	DamageFactor "Crossbow", 0.0
+
+
+
+
+	PainChance 256
+	+FORCERADIUSDMG
+	States
+	{
+
+		Spawn:
+			TNT1 A 0 NODELAY A_RearrangePointers(AAPTR_NULL, AAPTR_DEFAULT, AAPTR_TARGET)
+			RSPK DCBA 3 A_Explode(200, 25, XF_NOTMISSILE)
+			SpawnLoop:
+			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 1, "SpawnSmall", AAPTR_TRACER)
+
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary", 1, "SpawnLoop", AAPTR_TRACER)
+			Goto GoDown
+
+		SpawnSmall:
+			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 2, "SpawnMinor", AAPTR_TRACER)
+			RSPK A 1 A_Explode(200, 25, XF_NOTMISSILE)
+
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary", 1, "SpawnSmall", AAPTR_TRACER)
+			Goto GoDown
+
+		SpawnMinor:
+			AXEG A 0 A_CustomMissile ("BrownCloudSmallLong", 0, 0, random (0, 360), 2, random (10, 150))
+			TNT1 AA 0 A_CustomMissile ("DirtChunk3", 0, 0, random (0, 360), 2, random (30, 150))
+			TNT1 AA 0 A_CustomMissile ("DirtChunk4", 0, 0, random (0, 360), 2, random (30, 150))
+			AXEG A 0 A_CustomMissile ("MudDustSmall", 4, 0, random (0, 360), 2, random (30, 150))
+			AXEG A 0 A_SpawnItem("DirtRicochet")
+			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 4, "SpawnMedium", AAPTR_TRACER)
+			EASP C 1
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary", 1, "SpawnMinor", AAPTR_TRACER)
+			Goto GoDown
+
+		SpawnMedium:
+			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyCastLvl", 5, "SpawnComplete", AAPTR_TRACER)
+			EASP B 1
+			TNT1 A 0 A_JumpIfInventory("FiredPrimary", 1, "SpawnMedium", AAPTR_TRACER)
+			Goto GoDown
+
+		SpawnComplete:
+			EASP A -1
+			Stop
+
+		GoDown:
+			EASP BC 5
+			RSPK ABCD 2
+			Stop
+	}
+}
+
+Actor Schism_SmallEarthSpike : Schism_EarthSpike
+{
+
+	States
+	{
+		Spawn:
+			RSPK DCBA 3 A_Explode(200, 25, XF_NOTMISSILE)
+			RSPK A -1
+			Stop
+	}
+}
+
+Actor Schism_Stalactite : Schism_EarthSpike
+{
+	Health 2000
+	Radius 19
+	Height 72
+	Speed 0
+	-FLOORHUGGER
+	+CEILINGHUGGER
+	+NOGRAVITY
+	+THRUSPECIES
+	+MISSILE
+	States
+	{
+		Spawn:
+			TNT1 A 0 NODELAY A_JumpIf(abs(ceilingz - floorz) == 72, "DoNotSpawn")
+			SpawnLoop:
+			TNT1 A 0 A_Explode(200, 25, XF_NOTMISSILE)
+			STLC B -1
+			Stop
+
+		DoNotSpawn:
+			TNT1 A 0 A_NoBlocking
+			Stop
+	}
+}
+
+Actor Schism_SmallStalactite : Schism_Stalactite
+{
+	Height 39
+	Radius 11
+	States
+	{
+		Spawn:
+			TNT1 A 0 NODELAY A_JumpIf(abs(ceilingz - floorz) == 39, "DoNotSpawn")
+			TNT1 AAA 0 A_SpawnItemEx("Schism_SandDust", Random(-18, 18), Random(-18, 18), Z + Random(-5, -3), Random(-3, 3), Random(-3, 3))
+			SpawnLoop:
+			TNT1 A 0 A_Explode(100, 25, XF_NOTMISSILE)
+			STLC C -1
+			Stop
+
+	}
+}
+
+Actor Schism_SandDust
+{
+	+NOBLOCKMAP
+	+NOGRAVITY
+	-FLOAT
+	Mass 10
+	Alpha 0.40
+	RenderStyle Add
+	Translation "0:255=%[0.00,0.00,0.00]:[1.53,1.40,1.01]"
+	States
+	{
+		Spawn:
+			WPXS Z 70
+			TNT1 A 0 A_ChangeFlag("NOGRAVITY", 0)
+			WPXS YXWVUTSRQPONMLKJIHGFEDCBA 1
+			Stop
+	}
+}
+
+Actor Schism_SandWind
+{
+	+BLOODLESSIMPACT
+	//+FORCERADIUSDMG
+	+DONTBLAST
+	+FOILINVUL
+	+NODAMAGETHRUST
+	+DOOMBOUNCE
+	+PAINLESS
+	-MISSILE
+	+DONTHURTSPECIES
+	+THRUSPECIES
+	+MTHRUSPECIES
+	+DONTSPLASH
+	+HITTRACER
+	BounceType Grenade
+	damagetype "Earth"
+	damage 0
+	gravity 0.005
+	Alpha 0.40
+	Height 16
+	Projectile
+	Radius 1
+	RenderStyle Shaded
+	StencilColor "C2 B2 80"
+	Scale 2.5
+	Speed 20
+
+	SeeSound "none"
+	DeathSound "none"
+	AttackSound "none"
+
+	States
+	{
+		Spawn:
+			WPXS ABCDEFGHIJKLMNOPQRSTUVWXYZ 1
+			Stop
+
+		XDeath:
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CheckMissileForWarping") == 0, "Death")
+			TNT1 A 0 A_JumpIfInventory("Schism_SandWarperLimit", 1, "Death", AAPTR_TRACER)
+			TNT1 A 0 A_GiveInventory("Schism_GeomancyGoldToken", 1, AAPTR_TARGET)
+			TNT1 A 0 A_GiveInventory("Schism_SandWarperLimit", 1, AAPTR_TRACER)
+			Follow:
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CheckMissileForWarping") == 0, "Death")
+			TNT1 A 0 A_JumpIfInventory("Schism_GeomancyTurnIntoGoldToken", 1, "SummonSpike", AAPTR_TARGET)
+			WPXS M 0 A_Warp(AAPTR_TRACER, 0, 0, ACS_NamedExecuteWithResult("Schism_GetTracersHeight") * 0, 0, WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE)
+			TNT1 A 1
+			Loop
+
+		Death:
+		Exit:
+			TNT1 A 0 A_SpawnItemEx("Schism_SandDerbis")
+			Stop
+
+		SummonSpike:
+			TNT1 A 0
+			TNT1 A 1 A_GiveInventory("Schism_ClearSandLimit", 1, AAPTR_TRACER)
+			TNT1 A 0 A_Explode(120)
+			Stop
+	}
+}
+
+Actor Schism_SandDerbis : Schism_EarthElements {
+// 	Alpha 0.5
+	Scale 0.3
+	States {
+		Spawn:
+			LIMF GDCA 3
+			LIMF A 300
+			LIMF BCDEFGGGG 2 A_FadeOut(0.3)
+			Stop
+	}
+}
+
+
+Actor Schism_SoulCrystal : Schism_EarthElements {
+	Height 56
+	Radius 24
+	+SOLID
+	States {
+		Spawn:
+			CRYS B 1 Light("BARONBALL_X1")
+			Loop
+	}
+}
+
+// I can make a link between sprite and armor actor. So it would take less calculation power
+// So first armor need to check if player close or player looks at this actor, so then sprite will spawm
+// Same will be done with a sprite itself. Link would be done thru pointers. Armor should know about sprite as well as sprite about actor
+
+
+Actor Schism_FakeCustomGreenArmorSprite {
+// 	Scale 1.3
+	+NOINTERACTION
+	+NOBLOCKMAP
+	+CLIENTSIDEONLY
+	+ALLOWCLIENTSPAWN
+	States {
+		Spawn:
+			TNT1 A 10 NODELAY ACS_NamedExecuteAlways("Schism_SpecSprite", 0, 0, 0, 0)
+		Schism_Ranger:
+			TNT1 A 0 A_SetScale(1.3, 1.3)
+			ARM1 A 1 BRIGHT
+			Stop
+
+		Schism_Warrior:
+			PARM A 1 BRIGHT
+			Stop
+
+		Schism_Corvus:
+			AR_2 A 1 BRIGHT
+			Stop
+
+		Sorcerer:
+			MARM A 1 BRIGHT
+			Stop
+	}
+}
+
+// That not very smart decision to such thing. But for now that the only
+// solution I can see or I can think of.
+// -Dreo
+
+Actor Schism_CustomGreenArmor : BasicArmorPickup {
+	Radius 20
+	Height 16
+	Armor.SavePercent 50.1
+	Armor.SaveAmount 100
+	DamageFactor "Fire", 0.66
+	DamageFactor "Burn", 0.77
+	DamageFactor "Rip", 0.3
+	DamageFactor "Bullet", 0.85
+	DamageFactor "MonsterBullet", 0.85
+	Inventory.Icon "ARM1A0"
+    Inventory.PickupSound "ARMOR"
+	Inventory.Pickupmessage "$SGOT_LIGHTARMOR"
+	States {
+		Spawn:
+			"####" "#" 1 A_SpawnItem("Schism_FakeCustomGreenArmorSprite")
+			Loop
+	}
+}

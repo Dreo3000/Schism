@@ -1,0 +1,1656 @@
+//=============================================================================================
+//
+// Heretic Knight (Some code from Bitter Heretic and Some from Revenant from Schism)
+// modified by LordADHD
+//=============================================================================================
+
+ACTOR HKnight Replaces Knight
+{
+	SpawnID 6
+	Game Heretic
+	GibHealth 45
+	Health 300
+	radius 24
+	height 78
+	scale 1.0
+	Monster
+	MeleeThreshold 120
+	Mass 300
+	Speed 12
+	+FLOORCLIP
+    damagefactor "Crush", 10.0
+    damagefactor "Plasma", 0.5
+	damagefactor "SSG", 1.0
+	damagefactor "GibRemoving", 0.0
+	damagefactor "Avoid", 0.0 damagefactor "HangingHook", 0
+	PainChance 100
+	PainChance "Kick", 255
+	PainChance "Freeze", 255
+    BloodType "RevenantBloodz", "RevenantBloodz", "RevenantBloodz"
+	SeeSound "skeleton/sight"
+	PainSound "REVOUCH"
+	DeathSound "skeleton/death"
+	ActiveSound "REVIDLE"
+	MeleeSound "skeleton/melee"
+	HitObituary "$OB_UNDEADHIT"
+	damagefactor "TeleportRemover", 0.0
+	DamageFactor "CauseSplash", 0.0 DamageFactor "CauseObjectsToSplashSlime", 0.0 DamageFactor "CauseObjectsToSplashNukage", 0.0
+	DamageFactor "CauseObjectsToSplashBlood", 0.0 DamageFactor "CauseObjectsToSplashLava", 0.0
+	Obituary "$OB_UNDEAD"
+	DropItem "DemonStrengthRune" 5
+	damagefactor "Blood", 0.0 damagefactor "BlueBlood", 0.0 damagefactor "GreenBlood", 0.0
+	MaxStepHeight 24
+	+DONTHURTSPECIES
+	Painchance "Head", 255
+	//Painchance "RevenantHitStomach", 255
+	//Painchance "RevenantHitLeg", 255
+	
+	damagefactor "Lightning", 1.0
+	damagefactor "Fire", 0.3
+	
+	MaxDropOffHeight 32
+	DeathHeight 0
+	BurnHeight 0
+	Tag "Knight"
+	Species "HKnights"
+	MeleeRange 100
+	States
+	{
+		
+	Idle:
+	LookingForPlayer:
+	    TNT1 A 0 A_GiveInventory("SKImp", 1)
+	    TNT1 A 0 A_SpawnItem ("HeadshotTarget10", 32, 70, 0)
+		KNGT B 10 A_Look
+        TNT1 A 0 A_SpawnItem ("HeadshotTarget10", 32, 70, 0)
+		KNGT B 10 A_Look
+		TNT1 A 0 A_SpawnItem ("HeadshotTarget10", 32, 70, 0)
+		KNGT B 10 A_Look
+		TNT1 A 0 A_SetAngle(angle - 40)
+		TNT1 A 0 A_SpawnItem ("HeadshotTarget10", 32, 70, 0)
+		KNGT B 10 A_Look
+        TNT1 A 0 A_SpawnItem ("HeadshotTarget10", 32, 70, 0)
+		KNGT B 10 A_Look
+		TNT1 A 0 A_SpawnItem ("HeadshotTarget10", 32, 70, 0)
+		KNGT B 10 A_Look
+		TNT1 A 0 A_SetAngle(angle + 40)
+        TNT1 A 0 A_SpawnItem ("HeadshotTarget10", 32, 70, 0)
+		KNGT B 10 A_Look
+		TNT1 A 0 A_SpawnItem ("HeadshotTarget10", 32, 70, 0)
+		KNGT B 10 A_Look
+        TNT1 A 0 A_SpawnItem ("HeadshotTarget10", 32, 70, 0)
+		KNGT B 10 A_Look
+		
+		KNGT A 0 A_Wander
+		KNGT AA 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		
+		KNGT B 0 A_Wander
+		KNGT BB 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		
+		KNGT C 0 A_Wander
+		KNGT CC 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		
+		KNGT D 0 A_Wander
+		KNGT DD 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		
+		
+		TNT1 A 0 A_jump(128, "LookingForPlayer")
+		
+		
+		KNGT E 0 A_Wander
+		KNGT EE 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		
+		KNGT F 0 A_Wander
+		KNGT FF 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		
+		KNGT G 0 A_Wander
+		KNGT GG 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		
+		KNGT H 0 A_Wander
+		KNGT HH 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		
+		
+		TNT1 A 0 A_jump(128, "LookingForPlayer")
+		
+		
+		KNGT I 0 A_Wander
+		KNGT II 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		
+		KNGT J 0 A_Wander
+		KNGT JJ 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		
+		KNGT K 0 A_Wander
+		KNGT KK 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		
+		KNGT L 0 A_Wander
+		KNGT LL 2 A_Look
+		TNT1 A 0 A_Recoil(-2)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 32, 70, 0)
+		Goto LookingForPlayer
+		
+		
+		
+	ForgetTarget:
+		TNT1 A 0 A_ClearTarget
+		TNT1 A 0 A_TakeInventory("EnemyMemory", 25)
+		TNT1 A 0 A_GiveInventory("LookingForPlayer", 1)
+		Goto LookingForPlayer
+	
+    Spawn:
+		KNGT B 0
+	Spawn2:
+		TNT1 A 0
+		KNGT B 10 A_Look
+		TNT1 A 0 A_CheckSight("Spawn2")
+		Loop
+
+	See:
+		TNT1 A 0 A_CheckSight("SeeNeverSee")
+		
+	SeeContinue:
+		TNT1 A 0 A_CheckSight("SeeNoSee")
+		TNT1 A 0 A_TakeInventory("EnemyMemory", 10)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT AA 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT BB 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT CC 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT DD 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT EE 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT FF 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT GG 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT HH 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT II 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT JJ 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT KK 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT LL 2 A_Chase
+		
+		TNT1 A 0 A_JumpIfInTargetInventory("IsInvisible", 1, "ForgetTarget")
+		
+		Loop
+		
+	SeeNoSee:
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT AA 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT BB 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT CC 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT DD 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT EE 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT FF 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT GG 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT HH 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT II 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT JJ 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT KK 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT LL 2 A_Chase
+				
+		TNT1 A 0 A_GiveInventory("EnemyMemory", 1)
+		TNT1 A 0 A_JumpIfInventory("EnemyMemory", 10, "ForgetTarget")
+		Goto See
+	
+	SeeNeverSee:
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT AA 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT BB 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT CC 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT DD 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT EE 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT FF 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT GG 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT HH 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT II 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT JJ 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT KK 2 A_Chase
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 32, 70, 0)
+		KNGT LL 2 A_Chase
+		
+		Loop
+
+	Melee:
+		TNT1 A 0 A_SpawnItem("HeadshotTarget10", 0, 70, 0)
+		KNIG E 5 A_FaceTarget
+		TNT1 A 0 ThrustThingZ(0,20,0,1)
+		KNIG E 5
+		TNT1 A 0 A_Recoil(-3)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 0, 70, 0)
+		KNIG F 5 A_PlaySound("skeleton/swing", 1)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 0, 70, 0)
+		KNIG G 5 A_FaceTarget
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 0, 70, 0)
+		TNT1 A 0 A_CustomMissile("HKnightAttack",10,0,0,2)
+		TNT1 A 0 A_CustomMissile("HKnightAttack",50,0,0,2)
+		KNIG F 6
+		TNT1 A 0 A_SpawnItem("HeadshotTarget10", 0, 70, 0)
+		KNIG E 5 A_FaceTarget
+		TNT1 A 0 ThrustThingZ(0,20,0,1)
+		KNIG E 5
+		TNT1 A 0 A_Recoil(-3)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 0, 70, 0)
+		KNIG F 5 A_PlaySound("skeleton/swing", 1)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 0, 70, 0)
+		KNIG G 5 A_FaceTarget
+		TNT1 A 0 A_SpawnItem("HeadshotTarget6", 0, 70, 0)
+		TNT1 A 0 A_CustomMissile("HKnightAttack",10,0,0,2)
+		TNT1 A 0 A_CustomMissile("HKnightAttack",50,0,0,2)
+		KNIG F 6
+		Goto SeeContinue	
+
+	Missile:
+		TNT1 A 0 A_Jump (64, "SpecialAttack")
+		TNT1 A 0 A_SpawnItem("HeadshotTarget10", 18, 70, 0)
+		KNIG E 10 A_FaceTarget
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8", 18, 70, 0)
+		KNIG F 8 A_FaceTarget 
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8", 18, 70, 0)
+		//Jump States to determine Axe Type
+		TNT1 A 0 A_CheckFlag("SHADOW", 4) //checks if this HKnight is a 'Shadow' Knight (Ghost)
+		TNT1 A 0 A_Jump(80, 3) //this is basically 32% chance of jump (double the normal chance of a Red Axe)
+		KNIG G 8 BRIGHT A_CustomMissile("KnightGreenAxe",40,0,0,0) //Normal Axe
+		TNT1 A 0 A_Jump(256, 2)
+		KNIG G 8 BRIGHT A_CustomMissile("KnightRedAxe",40,0,0,0) //Deadlier Axe
+		//////////////////////////////////
+		TNT1 A 0 A_SpawnItem("HeadshotTarget10", 18, 70, 0)
+		KNIG E 10 A_FaceTarget
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8", 18, 70, 0)
+		KNIG F 8 A_FaceTarget 
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8", 18, 70, 0)
+		//Jump States to determine Axe Type (2nd Attack)
+		TNT1 A 0 A_CheckFlag("SHADOW", 4) //checks if this HKnight is a 'Shadow' Knight (Ghost)
+		TNT1 A 0 A_Jump(120, 3) //this is basically 48% chance of jump (triple the normal chance of a Red Axe)
+		KNIG G 8 BRIGHT A_CustomMissile("KnightGreenAxe",40,0,0,0) //Normal Axe
+		TNT1 A 0 A_Jump(256, 2)
+		KNIG G 8 BRIGHT A_CustomMissile("KnightRedAxe",40,0,0,0) //Deadlier Axe
+		//////////////////////////////////
+		Goto SeeContinue
+
+	SpecialAttack:
+		TNT1 A 0 A_SpawnItem("HeadshotTarget10", 0, 70, 0)
+		TNT1 A 0 A_PlaySound("skeleton/sight")
+		KNIR AB 2
+		TNT1 A 0 A_SpawnItem("HeadshotTarget20", 0, 65, 0)
+		KNIR CDCECDCE 2 A_FaceTarget
+		TNT1 A 0 A_SpawnItem("HeadshotTarget20", 0, 70, 0)
+		KNIR BA 2 A_FaceTarget
+		
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget20", 18, 70, 0)
+		KNIG EF 8 A_FaceTarget 
+		//Jump States to determine Axe Type
+		TNT1 A 0 A_CheckFlag("SHADOW", 3) //checks if this HKnight is a 'Shadow' Knight (Ghost)
+		TNT1 A 0 A_CustomMissile("KnightGreenAxe",40,0,random(-5,5),0) //Normal Axe
+		TNT1 A 0 A_Jump(256, 2)
+		TNT1 A 0 A_CustomMissile("KnightRedAxe",40,0,random(-5,5),0) //Deadlier Axe
+		//////////////////////////////////
+		TNT1 A 0 A_PlaySOund("weapons/gswing", 1)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8", 18, 70, 0)
+		KNIG G 6 BRIGHT A_FaceTarget
+		TNT1 A 0 A_SpawnItem("HeadshotTarget10", 18, 70, 0)
+		KNIG F 10
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget20", 18, 70, 0)
+		KNIG EF 8 A_FaceTarget 
+		//Jump States to determine Axe Type
+		TNT1 A 0 A_CheckFlag("SHADOW", 3) //checks if this HKnight is a 'Shadow' Knight (Ghost)
+		TNT1 A 0 A_CustomMissile("KnightGreenAxe",40,0,random(-8,8),0) //Normal Axe
+		TNT1 A 0 A_Jump(256, 2)
+		TNT1 A 0 A_CustomMissile("KnightRedAxe",40,0,random(-8,8),0) //Deadlier Axe
+		//////////////////////////////////
+		TNT1 A 0 A_PlaySOund("weapons/gswing", 1)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8", 18, 70, 0)
+		KNIG G 6 BRIGHT A_FaceTarget
+		TNT1 A 0 A_SpawnItem("HeadshotTarget10", 18, 70, 0)
+		KNIG F 10
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget20", 18, 70, 0)
+		KNIG EF 8 A_FaceTarget
+		//Jump States to determine Axe Type
+		TNT1 A 0 A_CheckFlag("SHADOW", 3) //checks if this HKnight is a 'Shadow' Knight (Ghost)
+		TNT1 A 0 A_CustomMissile("KnightGreenAxe",40,0,random(-10,10),0) //Normal Axe
+		TNT1 A 0 A_Jump(256, 2)
+		TNT1 A 0 A_CustomMissile("KnightRedAxe",40,0,random(-10,10),0) //Deadlier Axe
+		//////////////////////////////////
+		TNT1 A 0 A_PlaySOund("weapons/gswing", 1)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8", 18, 70, 0)
+		KNIG G 6 BRIGHT A_FaceTarget
+		TNT1 A 0 A_SpawnItem("HeadshotTarget10", -18, 70, 0)
+		KNIG F 10
+		
+		TNT1 A 0 A_SpawnItem("HeadshotTarget20", 18, 70, 0)
+		KNIG EF 8 A_FaceTarget
+		//Jump States to determine Axe Type
+		TNT1 A 0 A_CheckFlag("SHADOW", 3) //checks if this HKnight is a 'Shadow' Knight (Ghost)
+		TNT1 A 0 A_CustomMissile("KnightGreenAxe",40,0,random(-12,12),0) //Normal Axe
+		TNT1 A 0 A_Jump(256, 2)
+		TNT1 A 0 A_CustomMissile("KnightRedAxe",40,0,random(-12,12),0) //Deadlier Axe
+		//////////////////////////////////
+		TNT1 A 0 A_PlaySOund("weapons/gswing", 1)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8", 18, 70, 0)
+		KNIG G 6 BRIGHT A_FaceTarget
+		TNT1 A 0 A_SpawnItem("HeadshotTarget10", 18, 70, 0)
+		KNIG F 10
+		Goto SeeContinue
+	Pain:
+		TNT1 A 0 A_SpawnItemEx("HeadshotTarget10", -25, 0, 65)
+		KNIG H 5
+		KNIG H 5 A_Pain
+		Goto SeeContinue
+		
+	Pain.Freeze:
+		TNT1 A 0
+		TNT1 A 0 A_JumpIfInventory("IsSlowed", 1, "Pain")
+		TNT1 A 0 ACS_NamedExecute("SlowingFreeze",0)
+		TNT1 A 0 A_GiveInventory("IsSlowed", 1)
+		Goto Pain
+		
+	Pain.Head:
+		TNT1 A 0 A_SpawnItemEx("HeadshotTarget4", -25, 0, 65)
+		KNIG H 2
+		KNIG H 2 A_Pain
+		Goto SeeContinue
+	
+	Pain.SHotgun:
+	Pain.SSG:
+	Pain.Cut:
+	Pain.Kick:
+        TNT1 A 0 A_FaceTarget
+        TNT1 A 0 A_Recoil(6)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget10", 0, 65, 0)
+		KNIG H 6 A_Pain  
+		TNT1 A 0 A_SpawnItem("HeadshotTarget10", 0, 65, 0)
+		KNIG H 6
+		Goto SeeContinue
+	
+	Pain.Lightning:
+		TNT1 A 0
+		TNT1 A 0 A_SpawnItemEx ("StunElectrocute", random (-4, 4), random (-4, 4),  random (16, 32), 0, 0)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 0, 65, 0)
+		KNIG H 3 A_Pain
+		TNT1 A 0 A_SpawnItem("HeadshotTarget20", 0, 65, 0)
+		KNIG HHHHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4", 0, 65, 0)
+		KNIG H 3 A_Pain
+		TNT1 A 0 A_SpawnItem("HeadshotTarget20", 0, 65, 0)
+		KNIG HHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		KNIG H 3 A_Pain
+		Goto See
+	
+	Pain.Stun:
+		TNT1 A 0
+		TNT1 A 0 A_SpawnItemEx ("StunElectrocute", random (-4, 4), random (-4, 4),  random (16, 32), 0, 0)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget2", 0, 65, 0)
+		KNIG H 1 A_Pain
+		TNT1 A 0 A_SpawnItem("HeadshotTarget30", 0, 65, 0)
+		KNIG HHHHHHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget2", 0, 65, 0)
+		KNIG H 1 A_Pain
+		TNT1 A 0 A_SpawnItem("HeadshotTarget30", 0, 65, 0)
+		KNIG HHHHHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget2", 0, 65, 0)
+		KNIG H 1 A_Pain
+		TNT1 A 0 A_SpawnItem("HeadshotTarget30", 0, 65, 0)
+		KNIG HHHHHHHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget2", 0, 65, 0)
+		KNIG H 1 A_Pain
+		TNT1 A 0 A_SpawnItem("HeadshotTarget30", 0, 65, 0)
+		KNIG HHHHHHHHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget2", 0, 65, 0)
+		KNIG H 1 A_Pain
+		TNT1 A 0 A_SpawnItem("HeadshotTarget30", 0, 65, 0)
+		KNIG HHHHHHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		TNT1 A 0 A_SpawnItem("HeadshotTarget2", 0, 65, 0)
+		KNIG H 1 A_Pain
+		Goto SpecialAttack 
+
+	Death.Dagger:
+	TNT1 A 0 A_GiveToTarget("RuneAmmo",3) //piece of cake... 
+	Death:
+	    TNT1 A 0
+		KNIG I 6
+		KNIG J 6 A_Scream
+		KNIG K 6
+		KNIG L 6 A_NoBlocking
+		KNIG MN 6 A_CustomMissile ("GreenFlameTrails", 30, 0, random (0, 360), 2, random (0, 160))
+        TNT1 A 0 A_SpawnItem ("DeadHKnight", 1)
+        Stop
+    
+    Death.Minorhead:
+    Death.Head:
+		TNT1 A 0
+		TNT1 A 0 A_CheckFlag("SHADOW", "Death")
+		TNT1 A 0 A_JumpIfInTargetInventory("HasFreezerWeapon", 1, "Death.Freeze")
+		TNT1 A 0 A_JumpIfInTargetInventory("HasPlasmaWeapon", 1, "Death.Plasma")
+		TNT1 A 0 A_CustomMissile ("HKnightHelm", 72, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAAA 0 A_CustomMissile ("GreenFlameTrails", 72, 0, random (0, 360), 2, random (0, 160))
+        TNT1 AAAA 0 A_CustomMissile ("SmallLSPart1", 70, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAA 0 A_CustomMissile ("SmallLSPart3", 70, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAA 0 A_CustomMissile ("LSpart1", 72, 0, random (0, 360), 2, random (0, 160))
+        TNT1 A 0 A_CustomMissile ("LSpart3", 72, 0, random (0, 360), 2, random (0, 160))
+        TNT1 AA 0 A_CustomMissile ("LSpart2", 72, 0, random (0, 360), 2, random (0, 160))
+		KNIH H 8
+        KNIH H 8 A_NoBlocking
+		TNT1 A 0 A_XScream
+		TNT1 A 0 A_Jump(64, "JustHeadDeath")
+        TNT1 A 0 A_SpawnItem ("HKnightNoHead")
+        Stop	
+	
+	JustHeadDeath:
+		TNT1 A 0
+		KNIG I 6
+		KNIG J 6
+		KNIG K 6
+		KNIG L 6
+		KNIG MN 6 A_CustomMissile ("GreenFlameTrails", 30, 0, random (0, 360), 2, random (0, 360))
+        TNT1 A 0 A_SpawnItem ("DeadHKnightNH", 1)
+        Stop
+	
+    Death.Shotgun:
+	TNT1 A 0
+	TNT1 A 0 A_JumpIfInTargetInventory("DaggerSelected", 1, "Death.Dagger") //Dunno if we even need these here?? o_O
+	TNT1 A 0 A_CheckFlag("SHADOW", "Death")
+	TNT1 A 0 A_Jump(100, "SpecialDeath")
+	TNT1 A 0 A_JumpIfCloser(200, "Death.SSG")
+	Goto Death
+	
+
+	Death.ExplosiveImpact:
+	TNT1 A 0
+	TNT1 A 0 A_CheckFlag("SHADOW", "XDeath")
+	TNT1 A 0 A_JumpIfHealthLower(-40, "XDeath")
+	Goto SpecialDeath
+	
+	Death.Minigun:
+	Death.Cut:
+	TNT1 A 0
+	TNT1 A 0 A_CheckFlag("SHADOW", "Death")
+	TNT1 A 0 A_JumpIfInTargetInventory("DaggerSelected", 1, "Death.Dagger")
+	TNT1 A 0 A_Jump(64, "Death.SSG")
+	Death.Saw:
+	TNT1 A 0
+	TNT1 A 0 A_CheckFlag("SHADOW", "Death")
+    SpecialDeath:
+	    TNT1 AAA 0 A_CustomMissile ("GreenFlameTrails", 30, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAA 0 A_CustomMissile ("RevenantDust", 30, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAA 0 A_CustomMissile ("RevenantDust2", 30, 0, random (0, 360), 2, random (0, 360))
+        TNT1 AAA 0 A_CustomMissile ("GreenFlameTrails", 37, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("BigLSPart1", 37, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("BigLSPart2", 37, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AAAAAAA 0 A_CustomMissile ("RevenantPiece", 37, 0, random (0, 360), 2, random (30, 150))
+	    TNT1 A 0 A_Jump(64, "Death.Rare")
+		Goto Death.Rare
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_Scream
+		KNIP B 4 A_SpawnItemEx("HKnightLegL",  0,-10,10,   2,0,1)								
+		KNIP C 4 A_SpawnItemEx("HKnightLegR",  0,10,10,   0,2,1)
+		KNIP DQ 4
+	    TNT1 A 0 A_SpawnItem("HknightU", 0, 40)
+        Stop
+		
+	Death.SSG:
+	Death.ExtremePunches:
+		KNIG H 1
+		TNT1 A 0 A_Scream
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_PlaySound("misc/xdeath4")
+		TNT1 AAA 0 A_CustomMissile ("SmallGreenFlameTrails", 60, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AA 0 A_CustomMissile ("GreenFlameTrails", 60, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AA 0 A_CustomMissile ("SmallGreenFlameTrailsBig", 60, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_SpawnItem("GreenFlare", 0, 50)
+		TNT1 AAA 0 A_CustomMissile ("RevenantDust", 30, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAA 0 A_CustomMissile ("RevenantDust2", 30, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AA 0 A_CustomMissile ("BigLSPart1", 37, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("BigLSPart2", 37, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AAAAAAA 0 A_CustomMissile ("RevenantPiece", 37, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_SpawnItem ("RipHKnight", 1)
+	    TNT1 A 0
+		TNT1 A -1
+        Stop	
+	
+	Death.Lightning:
+    Death.SuperPlasma:
+    Death.Plasma: Death.Plasma2:
+        TNT1 A 0
+        TNT1 A 0 A_Scream
+        TNT1 A 0 A_NoBlocking
+        TNT1 AAA 0 A_CustomMissile ("SmallGreenFlameTrails", 50, 0, random (0, 360), 2, random (0, 160))
+	    TNT1 A 0 A_CustomMissile ("XDeathBurnedSkull", 32, 0, random (0, 360), 2, random (0, 160))
+		EXPL AAAA 0 A_CustomMissile ("ExplosionSmoke", 32, 0, random (0, 360), 2, random (0, 360))
+		KNIF ABCDEFG 5 BRIGHT A_SpawnItem("BlueFlare3",0,30)
+        KNIF GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG 10 A_CustomMissile ("SmallSmoke", 1, 0, random (0, 360), 2, random (0, 160))
+        KNIF G -1
+        Stop
+	
+/*
+	 Death.Fire:
+		SKEL LM 4
+		SKEL N 4 A_Scream
+		SKEL O 4 A_NoBlocking
+		SKEL P 1
+		TNT1 A 0 A_Playsound("props/redfire")
+		CARB NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN 2 A_CustomMissile ("FlameTrails", 25, 0, random (0, 360), 2, random (70, 130))
+        CARB NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN 10 A_CustomMissile ("PlasmaSmoke", 25, 0, random (0, 360), 2, random (70, 130))
+        CARB N -1
+        Stop
+*/
+
+	XDeath:
+		KNIE ABC 2
+		TNT1 AAAAA 0 A_CustomMissile ("RevenantDust", 60, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAAAA 0 A_CustomMissile ("RevenantDust2", 60, 0, random (0, 360), 2, random (0, 360))
+        TNT1 A 0 A_CustomMissile ("HKnightHelm", 52, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAA 0 A_CustomMissile ("XDeath1", 67, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("HKnightArm", 57, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightArmor", 32, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("HKnightLegL", 20, 10, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("HKnightLegR", 20, -10, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderL",32,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderR",32,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightCuirass",32,0, random (0, 359), 2, random (0, 160))
+		TNT1 AA 0 A_CustomMissile ("MetalShard1", 50, 0, random (0, 360), 2, random (30, 160))
+		TNT1 AA 0 A_CustomMissile ("MetalShard2", 50, 0, random (0, 360), 2, random (30, 160))
+		TNT1 AA 0 A_CustomMissile ("MetalShard3", 50, 0, random (0, 360), 2, random (30, 160))
+		TNT1 A 0 A_PlaySound("misc/xdeath4")
+		TNT1 AAAA 0 A_CustomMissile ("SmallGreenFlameTrails", 60, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAA 0 A_CustomMissile ("GreenFlameTrails", 60, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAAA 0 A_CustomMissile ("RevenantBonesFast", 57, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AAAAA 0 A_CustomMissile ("RevenantPiece", 57, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightPelvis", 20, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_Scream
+		TNT1 A 0
+		TNT1 A -1
+        Stop
+		
+	ExplodeInHalf:
+			TNT1 A 0 A_ChangeFlag("COUNTKILL", 0)
+	Death.Rare:
+	        TNT1 A 0 A_NoBlocking
+		    TNT1 A 0 A_Scream
+			KNIP B 4 A_SpawnItemEx("HKnightLegL",  0,-10,10,   2,0,1)								
+			KNIP C 4 A_SpawnItemEx("HKnightLegR",  0,10,10,   0,2,1)
+			KNIP DQ 4
+			TNT1 A 0 A_SpawnItemEx("HKnightU", 0, 0, 40, 0, 0, 0, 0, SXF_NOCHECKPOSITION )
+			Stop
+	Raise:
+    KNIG O 5
+    KNIG NMLKJI 5
+    Goto See
+		
+    Pain.KillMe:
+    Pain.Taunt:
+        TNT1 A 0
+		TNT1 A 0 HealThing(1)
+        Goto Missile
+    Death.KillMe:
+    Death.Taunt:
+	    TNT1 A 0 A_ChangeFlag("SOLID", 0)
+        TNT1 A 0 A_SpawnItem("HKnight")
+        Stop
+	
+	Death.Ice:
+	Death.Freeze:
+	Death.Frost:
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+		TNT1 A 0 A_ChangeFlag("SOLID", 0)
+		TNT1 A 0 A_SpawnItemEx("FrozenHKnight", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION | SXF_TRANSFERAMBUSHFLAG | SXF_TRANSFERPOINTERS, 0, tid)
+		Stop
+	
+	Death.Massacre:
+	Goto Death
+	}
+}
+
+///////////////////
+//Shadow HKnights//
+///////////////////
+
+ACTOR HKnightGhost : Hknight replaces KnightGhost
+{
+	SpawnID 129
+	+SHADOW
+	+GHOST
+	Renderstyle Translucent
+	Alpha 0.4
+}
+
+///////////////////////
+//Hknight Melee Actor//
+///////////////////////
+
+ACTOR HKnightAttack: BaronBall
+{
+	Radius 24
+	Height 16
+	DamageType Cut
+	Projectile 
+	+RANDOMIZE
+	+FORCEXYBILLBOARD
+    +THRUGHOST
+	RenderStyle Add
+	Alpha 0.6
+    Damage (random(2,2))
+    Speed 105
+	//HitObituary "$OB_IMPHIT"
+	SeeSound "none"
+	DeathSound "none"
+	Decal "none"
+	States
+	{
+	Spawn:
+		TNT1 A 2 BRIGHT
+        TNT1 A 2 //A_PlaySound("weapons/gswing")
+		Goto Death
+	Death:
+		TNT1 A 0 BRIGHT
+		Stop
+	}
+}
+
+//////////////////////////
+//HKnight Missile Actors//
+//////////////////////////
+
+ACTOR KnightGreenAxe: BaronBall
+{
+	Radius 10
+	Height 16
+	Speed 20
+	FastSpeed 30
+	DamageType GreenFire
+	Projectile 
+	+RANDOMIZE
+	+FORCEXYBILLBOARD
+    +THRUGHOST
+    Damage (random(30,30))
+	RenderStyle Add
+	Alpha 0.95
+	Scale 1
+	//SeeSound "baron/attack"
+	DeathSound "hknight/hit"
+	Decal "Scorch"
+	
+	States
+	{
+	Spawn:
+	    TNT1 A 0
+		TNT1 A 0 ACS_NamedExecuteAlways("BDCheckJanitor", 0, 0, 0, 0)//Check Effects
+	
+	Spawn1:
+	    TNT1 A 0 A_PlaySound("hknight/axewhoosh")
+		SPAX ABC 1 BRIGHT A_SpawnItem("PoweredCrossbowBoltTrail")
+	    TNT1 A 0 A_SpawnItemEx("EtherealFlare1", 0, 0, 0, 0, 0, 0, 0, 128)//A_SpawnItemEx("SmallGreenFlameTrails", 0, 0, 0, 0, 0, 0, 0, 128)
+		TNT1 A 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 2, 0, random (160, 210), 2, random (-30, 30))
+		Loop
+		
+	SpawnCheap:
+	    SPAX ABC 1 BRIGHT //A_SpawnItemEx("SmallGreenFlameTrails", 0, 0, 0, 0, 0, 0, 0, 128)
+		Loop	
+		
+	Death:
+		TNT1 A 0 A_SpawnItemEx("PlasmaParticleSpawner", 0, 0, 0, 0, 0, 0, 0, 128)
+	    TNT1 A 0 A_SpawnItemEx ("DetectFloorCraterSmall",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	    TNT1 A 0 A_SpawnItemEx ("DetectCeilCraterSmall",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 AA 0 A_SpawnItem("GreenFlare",0,0)
+		TNT1 A 0 A_SetScale(0.7)
+		TNT1 A 0 A_FadeOut(0.2)
+		SPAX DEF 2 BRIGHT
+		Stop
+	XDeath:
+		//TNT1 AAA 0 A_SpawnItemEx("PlasmaParticle", 0, 0, 14, (0.1)*Random(10, 40), 0, (0.1)*Random(-40, 40), Random(0, 360), 128)
+        TNT1 A 0 A_JumpIfCloser(220, "StopInAir")
+		TNT1 A 0 A_SpawnItemEx("PlasmaParticleSpawner", 0, 0, 0, 0, 0, 0, 0, 128)
+		TNT1 AA 0 A_SpawnItem("GreenFlare",0,0)
+	    TNT1 A 0 A_SetScale(0.7)
+		TNT1 A 0 A_FadeOut(0.2)
+		SPAX DEF 2 BRIGHT
+		Stop
+	
+	StopInAir:
+		SPAX DEF 1 BRIGHT
+		Stop
+	}
+}
+
+ACTOR KnightRedAxe: BaronBall
+{
+	Radius 10
+	Height 16
+	Speed 20
+	FastSpeed 30
+	DamageType GreenFire
+	Projectile 
+	+RANDOMIZE
+	+FORCEXYBILLBOARD
+    +THRUGHOST
+    Damage (random(25,50))
+	RenderStyle Add
+	Alpha 0.95
+	Scale 0.25
+	SeeSound "baron/attack"
+	DeathSound "baron/shotx"
+	Decal "Scorch"
+	
+	States
+	{
+	Spawn:
+	    TNT1 A 0
+		TNT1 A 0 ACS_NamedExecuteAlways("BDCheckJanitor", 0, 0, 0, 0)//Check Effects
+	
+	Spawn1:
+		RAXE AB 1 BRIGHT A_SpawnItemEx("Brutal_FlyingBloodTrail", 0, 0, 0, 0, 0, 0, 0, 128)
+		TNT1 A 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 2, 0, random (160, 210), 2, random (-30, 30))
+		Loop
+		
+	SpawnCheap:
+	    RAXE AB 1 BRIGHT A_SpawnItemEx("Brutal_FlyingBloodTrail", 0, 0, 0, 0, 0, 0, 0, 128)
+		Loop	
+		
+	Death:
+	    TNT1 A 0 A_SpawnItemEx ("DetectFloorCraterSmall",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	    TNT1 A 0 A_SpawnItemEx ("DetectCeilCraterSmall",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 AA 0 A_SpawnItem("Brutal_Blood",0,0)
+		TNT1 A 0 A_SetScale(0.7)
+		TNT1 A 0 A_FadeOut(0.2)
+		RAXE CDE 2 BRIGHT
+		Stop
+	XDeath:
+		//TNT1 AAA 0 A_SpawnItemEx("PlasmaParticle", 0, 0, 14, (0.1)*Random(10, 40), 0, (0.1)*Random(-40, 40), Random(0, 360), 128)
+        TNT1 A 0 A_JumpIfCloser(220, "StopInAir")
+		TNT1 AA 0 A_SpawnItem("Brutal_Blood",0,0)
+	    TNT1 A 0 A_SetScale(0.7)
+		TNT1 A 0 A_FadeOut(0.2)
+		RAXE CDE 2 BRIGHT
+		Stop
+	
+	StopInAir:
+		RAXE CDE 1 BRIGHT
+		Stop
+	}
+}
+
+///////////////////////
+//Dead HKnight Actors//
+///////////////////////
+
+Actor DeadHKnight: CurbstompedMarine
+{
+    Radius 4
+    Height 18
+    Scale 1.0
+    +SHOOTABLE
+    +NOTELEPORT
+    +MOVEWITHSECTOR
+    +CORPSE
+	+FLOORCLIP
+	-SOLID
+	+NORADIUSDMG
+	damagefactor "Crusher", 50.0
+    Mass 1000
+    Health 200
+    damagefactor "Blood", 0.0
+    damagefactor "Trample", 0.0
+	damagefactor "Saw", 0.3
+	bloodtype "RevenantBlood", "RevenantBloodSaw", "RevenantBloodSaw"
+	
+	States
+    {
+    Spawn:
+	    TNT1 A 0
+	    KNIG O -1
+        Stop
+	
+	
+		Death.Minigun: Death.Cut: Death: Death.Saw: Death.Shotgun: Death.SSG: Death.Blast:
+  	    TNT1 A 0 A_NoBlocking
+	    TNT1 A 0 A_CustomMissile ("HKnightHelm", 7, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAA 0 A_CustomMissile ("RevenantBones", 5, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AAA 0 A_CustomMissile ("RevenantPiece", 5, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightPelvis", 5, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("HKnightArm", 7, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightLegL", 7, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightLegR", 7, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderL",7,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderR",7,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightCuirass",7,0, random (0, 359), 2, random (0, 160))
+		Stop
+
+    Death.flames:
+    Death.burn:
+    Death.Plasma: Death.Plasma2:
+        TNT1 A 0
+        TNT1 A 0 A_Scream
+        TNT1 A 0 A_NoBlocking
+        TNT1 AAA 0 A_CustomMissile ("SmallGreenFlameTrails", 8, 0, random (0, 360), 2, random (0, 160))
+	    TNT1 A 0 A_CustomMissile ("HKnightHelm", 7, 0, random (0, 360), 2, random (0, 160))
+		EXPL AAAAAA 0 A_CustomMissile ("ExplosionSmoke", 7, 0, random (0, 360), 2, random (0, 360))
+        KNIF GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG 10 A_CustomMissile ("SmallSmoke", 1, 0, random (0, 360), 2, random (0, 160))
+        KNIF G -1
+        Stop
+		
+	Death.Cut:
+	Death.Saw:
+	TNT1 A 0
+		TNT1 AAA 0 A_CustomMissile ("SmallGreenFlameTrails", 7, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AAA 0 A_CustomMissile ("RevenantBones", 7, 0, random (0, 360), 2, random (30, 150))
+	    TNT1 A 0 A_CustomMissile ("HKnightHelm", 7, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AA 0 A_CustomMissile ("HKnightArm", 7, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightPelvis", 7, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderL",7,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderR",7,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightCuirass",7,0, random (0, 359), 2, random (0, 160))
+	Stop
+	}}
+
+Actor DeadHKnightNH: DeadHKnight
+{
+	
+States
+    {
+	
+		Death.Minigun: Death.Cut: Death: Death.Saw: Death.Shotgun: Death.SSG: Death.Blast:
+  	    TNT1 A 0 A_NoBlocking
+		TNT1 AAAA 0 A_CustomMissile ("RevenantBones", 5, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AAA 0 A_CustomMissile ("RevenantPiece", 5, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightPelvis", 5, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("HKnightArm", 7, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightLegL", 7, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightLegR", 7, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderL",7,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderR",7,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightCuirass",7,0, random (0, 359), 2, random (0, 160))
+		Stop
+
+    Death.flames:
+    Death.burn:
+    Death.Plasma: Death.Plasma2:
+        TNT1 A 0
+        TNT1 A 0 A_Scream
+        TNT1 A 0 A_NoBlocking
+        TNT1 AAA 0 A_CustomMissile ("SmallGreenFlameTrails", 8, 0, random (0, 360), 2, random (0, 160))
+		EXPL AAAAAA 0 A_CustomMissile ("ExplosionSmoke", 7, 0, random (0, 360), 2, random (0, 360))
+        KNIF GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG 10 A_CustomMissile ("SmallSmoke", 1, 0, random (0, 360), 2, random (0, 160))
+        KNIF G -1
+        Stop
+		
+	Death.Cut:
+	Death.Saw:
+	TNT1 A 0
+		TNT1 AAA 0 A_CustomMissile ("SmallGreenFlameTrails", 7, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AAA 0 A_CustomMissile ("RevenantBones", 7, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("HKnightArm", 7, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightPelvis", 7, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderL",7,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderR",7,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightCuirass",7,0, random (0, 359), 2, random (0, 160))
+	Stop
+	}
+}
+
+//////////////////////////////////
+//Somewhat Living HKnight Actors//
+//////////////////////////////////
+
+ACTOR HKnightU
+{
+	GibHealth 45
+	Health 100
+	Monster
+	MeleeThreshold 196
+	+FLOORCLIP
+	+MISSILEMORE
+	Speed 6
+    damagefactor "Crush", 10.0
+    damagefactor "Plasma", 0.5
+	damagefactor "MinorHead", 1.2
+	damagefactor "Avoid", 0.0
+	damagefactor "Head", 1.2
+	PainChance "Kick", 255
+    BloodType "RevenantBlood"
+	SeeSound "skeleton/sight"
+	PainSound "skeleton/pain"
+	DeathSound "skeleton/death"
+	ActiveSound "skeleton/active"
+	MeleeSound "skeleton/melee"
+	HitObituary "$OB_UNDEADHIT"
+	Obituary "$OB_UNDEAD"
+damagefactor "Blood", 0.0 damagefactor "BlueBlood", 0.0 damagefactor "GreenBlood", 0.0
+	MaxStepHeight 24
+	+DONTHURTSPECIES
+	+NOPAIN
+	+LOOKALLAROUND
+	+NOTARGET
+	MaxDropOffHeight 32
+	Radius 20
+	Height 40
+	States
+	{
+	Spawn:
+		TNT1 A 0 A_ChangeFlag("NOPAIN", 0)
+		KNIP E 6 A_Look
+		Loop
+
+	See:
+	    KNIP FPO 15 A_Chase ("Melee","Missile",CHF_DONTMOVE)
+		KNIP N 11
+		Loop
+
+	Melee:
+        KNIP OG 10 A_FaceTarget
+		KNIP H 10 A_CustomMissile("HKnightAttack",20,0,0,0)
+		Goto See
+		
+	Missile:	
+		KNIP OG 10 A_FaceTarget
+		KNIP H 10 A_CustomMissile("KnightGreenAxe",20,0,0,0)
+		Goto See
+
+
+    Death:
+  	    TNT1 AAA 0 A_CustomMissile ("RevenantDust", 5, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAA 0 A_CustomMissile ("RevenantDust2", 5, 0, random (0, 360), 2, random (0, 360))
+        TNT1 A 0 A_CustomMissile ("HKnightHelm", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AA 0 A_CustomMissile ("SmallGreenFlameTrails", 5, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("RevenantBones", 5, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("HKnightArm", 5, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderL",5,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderR",5,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightCuirass",5,0, random (0, 359), 2, random (0, 160))		
+		TNT1 AAA 0 A_CustomMissile ("RevenantBones", 5, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AAA 0 A_CustomMissile ("RevenantPiece", 5, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_Scream
+		TNT1 A 10
+		Stop
+
+
+    Pain.KillMe:
+    Pain.Taunt:
+        TNT1 A 0
+        Goto Missile
+    Death.KillMe:
+    Death.Taunt:
+	    TNT1 A 0 A_ChangeFlag("SOLID", 0)
+        TNT1 A 0 A_SpawnItem("HKnightU")
+        Stop
+	}
+}
+
+ACTOR HKnightNoHead
+{
+	GibHealth 45
+	Health 100
+	Monster
+	MeleeThreshold 196
+	+FLOORCLIP
+	+MISSILEMORE
+	+MISSILEEVENMORE
+	Speed 10
+    damagefactor "Crush", 10.0
+    damagefactor "Plasma", 0.5
+	damagefactor "MinorHead", 1.2
+	damagefactor "Avoid", 0.0
+	PainChance "Kick", 255
+    BloodType "RevenantBlood"
+	SeeSound "skeleton/sight"
+	PainSound "skeleton/pain"
+	DeathSound "skeleton/death"
+	ActiveSound "skeleton/active"
+	MeleeSound "skeleton/melee"
+	HitObituary "$OB_UNDEADHIT"
+	Obituary "$OB_UNDEAD"
+damagefactor "Blood", 0.0 damagefactor "BlueBlood", 0.0 damagefactor "GreenBlood", 0.0
+	MaxStepHeight 24
+	+DONTHURTSPECIES
+	//+LOOKALLAROUND
+	+NOTARGET
+	MaxDropOffHeight 32
+	Radius 20
+	Height 40
+	States
+	{
+	Spawn:
+		TNT1 A 0 A_ChangeFlag("NOPAIN", 0)
+		KNGH A 6 A_Look
+		Loop
+
+	See:
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED", 1)
+	    KNGH AB 5 A_Chase
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED", 0)
+		KNGH CD 5 A_Chase
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED", 1)
+	    KNGH EF 5 A_Chase
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED", 0)
+		KNGH GH 5 A_Chase
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED", 1)
+	    KNGH IJ 5 A_Chase
+		TNT1 A 0 A_ChangeFlag("FRIGHTENED", 0)
+		KNGH KL 5 A_Chase
+		Loop
+		
+/*
+	Melee:
+        KNIH EF 10 //A_FaceTarget
+		KNIH G 10 A_CustomMissile("HKnightAttack",20,0,0,0)
+		Goto See
+*/
+	
+	Missile:	
+		KNIH EF 10 //A_FaceTarget
+		KNIH G 10 A_CustomMissile("KnightGreenAxe",20,0,random(0,360),0)
+		Goto See
+	Pain:
+		KNIH H 5
+		KNIH H 5 A_Pain
+		Goto See
+	
+	Pain.Lightning:
+	Pain.Stun:
+		TNT1 A 0
+		TNT1 A 0 A_SpawnItemEx ("StunElectrocute", random (-4, 4), random (-4, 4),  random (16, 32), 0, 0)
+		KNIH H 1 A_Pain
+		KNIH HHHHHHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		KNIH H 1 A_Pain
+		KNIH HHHHHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		KNIH H 1 A_Pain
+		KNIH HHHHHHHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		KNIH H 1 A_Pain
+		KNIH HHHHHHHHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		KNIH H 1 A_Pain
+		KNIH HHHHHHHH 3 A_SpawnItemEx ("StunElectrocute", random (-12, 12), random (-12, 12),  random (16, 52), 0, 0)
+		KNIH H 1 A_Pain
+		Goto See
+	
+	Death:
+	    TNT1 A 0
+		KNIG I 6
+		KNIG J 6 A_Scream
+		KNIG K 6
+		KNIG L 6 A_NoBlocking
+		KNIG MN 6 A_CustomMissile ("GreenFlameTrails", 30, 0, random (0, 360), 2, random (0, 160))
+        TNT1 A 0 A_SpawnItem ("DeadHKnightNH", 1)
+        Stop
+	
+    XDeath:
+		KNIE UVW 2
+  	    TNT1 AAA 0 A_CustomMissile ("RevenantDust", random(30,50), 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAA 0 A_CustomMissile ("RevenantDust2", random(30,50), 0, random (0, 360), 2, random (0, 360))
+		TNT1 AA 0 A_CustomMissile ("SmallGreenFlameTrails", 40, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("RevenantBones", 40, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AA 0 A_CustomMissile ("HKnightArm", 40, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightLegL", 20, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile ("HKnightLegR", 20, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderL",45,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderR",45,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightCuirass",45,0, random (0, 359), 2, random (0, 160))		
+		TNT1 AAA 0 A_CustomMissile ("RevenantBones", 35, 0, random (0, 360), 2, random (30, 150))
+		TNT1 AAA 0 A_CustomMissile ("RevenantPiece", 35, 0, random (0, 360), 2, random (30, 150))
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_Scream
+		TNT1 A 0
+		TNT1 A -1
+		Stop
+
+
+    Pain.KillMe:
+    Pain.Taunt:
+        TNT1 A 0
+        Goto Missile
+    Death.KillMe:
+    Death.Taunt:
+	    TNT1 A 0 A_ChangeFlag("SOLID", 0)
+        TNT1 A 0 A_SpawnItem("HKnightNoHead")
+        Stop
+	}
+}
+
+////////////////
+//HKnight Gibs//
+////////////////
+
+ACTOR RipHKnight
+{
+	Radius 1
+	Height 1
+	Scale 0.8
+	Speed 0
+	Mass 1
+	Decal BloodSuper
+	BounceFactor 0.5
+	+DOOMBOUNCE
+	+MISSILE
+	+NOBLOCKMAP
+	+NOTELEPORT
+	+MOVEWITHSECTOR
+	+NOGRAVITY
+	+NOCLIP
+	+DONTSPLASH
+	States
+	{
+		Spawn:
+			TNT1 AAA 0 A_CustomMissile ("GreenFlameTrails", 40, 0, random (0, 360), 2, random (0, 160))
+			TNT1 A 0 A_CustomMissile ("XDeathHalfHKnight", 32, 0, random (0, 360), 2, random (0, 160))
+		Death:
+			TNT1 A 0
+			Stop
+	}
+}
+ACTOR XDeathHalfHKnight
+{
+	Radius 8
+	Height 8
+	Scale 1.0
+	Speed 6
+	Mass 4
+	//Decal BrutalBloodSplat
+	BounceFactor 0.4
+	//+DOOMBOUNCE
+	+MISSILE
+	+MOVEWITHSECTOR
+	+CLIENTSIDEONLY
+	+NOBLOCKMAP
+	+NOTELEPORT
+	States
+	{
+		Spawn:
+			TNT1 A 0 A_SpawnItem("SmallGreenFlameTrails",0,0,0,1)
+			KRIP ABAC 2
+			Loop
+		Death:
+			TNT1 A 0 A_SpawnItem("GreenFlare",0,0,0,1)
+			KRIP DEFG 8 A_CustomMissile ("GreenFlameTrails", 10, 0, random (0, 360), 2, random (0, 160))
+			TNT1 A 0 A_SpawnItem("Gib_HalfHKnight",0,0,0,1)
+			TNT1 A 0
+			Stop
+	}
+}
+Actor Gib_HalfHKnight: BigGibBase
+{
+	States
+	{
+		Spawn:
+			KRIP G 1900
+			Loop
+			
+		Death:
+		TNT1 A 0 A_CustomMissile("HKnightHelm",5,0, random (0, 359), 2, random (0, 160))
+		TNT1 AA 0 A_CustomMissile("HKnightArm",5,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderL",5,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightSHoulderR",5,0, random (0, 359), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile("HKnightCuirass",5,0, random (0, 359), 2, random (0, 160))
+  	    TNT1 AAA 0 A_CustomMissile ("SmallGreenFlameTrails", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AA 0 A_CustomMissile ("GreenFlameTrails", 0, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("GreenFlameTrailsBig", 10, 0, random (0, 360), 2, random (50, 90))
+		Stop
+    Death.plasma:
+	Death.Burn:
+	Death.Fire:
+	Death.Flames:
+		TNT1 A 0
+        TNT1 A 0
+        TNT1 A 0 A_NoBlocking
+        TNT1 AAA 0 A_CustomMissile ("SmallGreenFlameTrails", 50, 0, random (0, 360), 2, random (0, 160))
+	    TNT1 A 0 A_CustomMissile ("HKnightHelm", 32, 0, random (0, 360), 2, random (0, 160))
+		EXPL AAAAAA 0 A_CustomMissile ("ExplosionSmoke", 32, 0, random (0, 360), 2, random (0, 360))
+		KNIF GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG 10 A_CustomMissile ("SmallSmoke", 1, 0, random (0, 360), 2, random (0, 160))
+        KNIF G -1
+        Stop
+	
+	Death.Crush:
+	Death.Stomp:
+	Death.SuperPunch:
+	Death.ExtremePunches:
+  	     TNT1 AAA 0 A_CustomMissile ("GreenFlameTrails", 5, 0, random (0, 360), 2, random (0, 30))
+		 TNT1 AAAA 0 A_CustomMissile ("SmallGreenFlameTrails", 5, 0, random (0, 360), 2, random (0, 30))
+		 TNT1 AAAAAAA 0 A_CustomMissile ("SmallGreenFlameTrails", 5, 0, random (0, 360), 2, random (10, 30))
+		 TNT1 A 0 A_PlaySOund("misc/xdeath5", 1)
+		 TNT1 A 0 A_PlaySOund("misc/xdeath3", 3)
+		 TNT1 A 0 A_PlaySOund("misc/xdeath2", 2)
+		 TNT1 A 0
+		 TNT1 A -1
+		 Stop
+	Death.TeleportRemover:
+	    TNT1 A 0
+		TNT1 A 0 A_ChangeFlag("NOCLIP", 1)
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+		TNT1 A 0 A_ChangeFlag("NOBLOCKMAP", 1)
+		TNT1 A 0 A_NoBlocking
+		Stop	 
+	Death.GibRemoving:
+		TNT1 A 0
+		TNT1 A 0 A_ChangeFlag("NOCLIP", 1)
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+		TNT1 A 0 A_ChangeFlag("NOBLOCKMAP", 1)
+		TNT1 A 0 A_NoBlocking
+		Stop
+	
+	Death.Desintegrate:
+		 TNT1 A 0
+         TNT1 A 0 A_CustomMissile ("SmallGreenFlameTrails", 7, 0, random (0, 360), 2, random (30, 60))
+		 TNT1 A 0 A_CustomMissile ("GreenFlameTrails", 7, 0, random (0, 360), 2, random (30, 60))
+		 Stop
+	}
+}
+
+
+ACTOR HKnightLegL
+{
+	Radius 4
+	Height 4
+	+NOBLOCKMAP
+	+DROPOFF
+	GRAVITY 0.5
+	+CANNOTPUSH
+	+SKYEXPLODE
+	+NOBLOCKMONST
+	//+HEXENBOUNCE
+	+FLOORCLIP
+			  
+	States
+	{
+		Spawn:
+		KNIL A 11
+		KNIL B 8 A_CheckFloor("Hit")
+		Goto Spawn+1
+		Hit:
+		KNIL CDE 27
+		KNIL F -1
+		stop
+	 }
+}
+
+ACTOR HKnightLegR : HKnightLegL
+{
+	
+	States
+	{
+		Spawn:
+		KNIL G 11
+		KNIL H 8 A_CheckFloor("Hit")
+		Goto Spawn+1
+		Hit:
+		KNIL IJK 27
+		KNIL L -1
+		stop
+	 }
+}
+
+ACTOR HKnightArm : HKnightLegL
+{
+	States
+	{
+		Spawn:
+		KNIE D 18
+		KNIE EFGH 7 A_CheckFloor("Hit")
+		Goto Spawn +1
+		Hit:
+		KNIE IJK 31
+		KNIE L -1
+		Stop
+	}
+}		
+
+ACTOR HKnightPelvis : HKnightLegL
+{
+	States
+	{
+		Spawn:
+		KNIE M 8
+		KNIE N  8 A_CheckFloor("Hit")
+		Goto Spawn
+		Hit:
+		KNIE NOP 31
+		KNIE Q -1
+		stop
+	}
+}		
+
+ACTOR HKnightHelm
+{
+    Radius 8
+    Height 8
+    Scale 1.1
+	Speed 8
+	Mass 1
+    gravity 0.5
+	//Decal BrutalBloodSplat
+	BounceFactor 0.2
+	wallbouncefactor 0.2
+	BounceCount 3
+	+DOOMBOUNCE
+    +MOVEWITHSECTOR
+    +CLIENTSIDEONLY
+    +NOBLOCKMAP
+    +NOTELEPORT
+    +MISSILE
+	+EXPLODEONWATER
+	+SKYEXPLODE
+	-DONTSPLASH
+    seesound "bloood"
+    deathsound "bloood"
+    States
+    {
+    Spawn:
+        TNT1 A 0 A_SpawnItem ("GreenFlare", 0, 1)
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Death")
+		HEKN BCDFG 5 A_CustomMissile ("SmallGreenFlameTrails", 0, 0, random (0, 360), 2, random (0, 360))
+		Loop
+	Death:
+	    HEKN H 1
+        HEKN H 0 A_SpawnItem("Gib_HKnightHelm")
+        Stop
+    }
+}
+
+Actor Gib_HKnightHelm: LimbBase
+{
+	Scale 1.0
+    Speed 6
+	Gravity 0.4
+	BounceFactor 0.4
+	
+	States
+	{
+		Spawn:
+		TNT1 A 0
+		TNT1 A 0 A_QueueCorpse
+		HEKN H 1 A_SpawnItem ("GreenFlare", 0, 1)
+		HEKN H -1
+		Stop
+    Death.plasma: Death.Burn: Death.Flames:	   
+		TNT1 A 0 A_SpawnItemEx("TinyBurningPiece2", random (-15, 15), random (-15, 15))
+		TNT1 A 0 A_SpawnItemEx("TinyBurningPiece3", random (-15, 15), random (-15, 15))
+		TNT1 A 0 A_CustomMissile ("XDeathBurnedHKnightHelm", 2, 0, random (0, 360), 2, 270)     
+		Stop
+    Death:
+		TNT1 AAAA 0 A_CustomMissile ("SmallGreenFlameTrails", 0, 0, random (0, 360), 2, random (0, 360))
+		//TNT1 A 0 A_CustomMissile ("Brains7", 50, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("GibHKnightHelmHornL", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("GibHKnightHelmHornR", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("GibHKnightHelmBase", 5, 0, random (0, 360), 2, random (0, 160))
+		Stop
+	Death.Kick:
+	Death.Melee:
+	Death.SuperPunch:
+	    HEKN H 1 A_FaceTarget
+		TNT1 A 0 A_CustomMissile ("HKnightHelm", 5, 0, random (170, 190), 2, random (20, 40))
+		Stop
+	Pain:
+	TNT1 A 0
+	TNT1 A 0 ThrustThingZ(0,20,0,1)
+	HEKN BCDFG 3
+	Goto Spawn
+	
+	Death.ExplosiveImpact:
+	TNT1 A 0
+	TNT1 A 0 A_ChangeFlag("NOBLOCKMAP", 0)
+	TNT1 A 0 ThrustThingZ(0,30,0,1)
+	HEKN H 6
+	HEKN BCDFG 6 A_CheckFloor("Landz")
+	Goto Landz
+	Landz:
+	CLKH H 0 A_SpawnItem("Gib_HKnightHelm")
+	Stop
+	}
+}
+
+actor GibHKnightHelmHornL: TinyGib
+{
+    Scale 0.9
+    States
+    {
+	Spawn:
+		HEKN Z 1
+		TNT1 A 0 A_QueueCorpse
+		HEKN Z -1
+		Stop
+    Death:
+		HEKN Z 1
+		TNT1 A 0 A_QueueCorpse
+		HEKN Z -1
+		Stop
+}}
+
+actor GibHKnightHelmHornR: TinyGib
+{
+    Scale 0.9
+    States
+    {
+	Spawn:
+		HEKN Y 1
+		TNT1 A 0 A_QueueCorpse
+		HEKN Y -1
+		Stop
+    Death:
+		HEKN Y 1
+		TNT1 A 0 A_QueueCorpse
+		HEKN Y -1
+		Stop
+}}
+
+actor GibHKnightHelmBase: TinyGib
+{
+    Scale 0.9
+    States
+    {
+	Spawn:
+		HEKN X 1
+		TNT1 A 0 A_QueueCorpse
+		HEKN X -1
+		Stop
+    Death:
+		HEKN X 1
+		TNT1 A 0 A_QueueCorpse
+		HEKN X -1
+		Stop
+}}
+
+actor XDeathBurnedHKnightHelm: TinyGib
+{
+    Scale 0.9
+    States
+    {
+	Spawn:
+		HEKN W 1
+		TNT1 A 0 A_QueueCorpse
+		HEKN W -1
+		Stop
+    Death:
+		HEKN W 1
+		TNT1 A 0 A_QueueCorpse
+		HEKN W -1
+		Stop
+}}
+
+ACTOR HKnightSHoulderL : HKnightLegL
+{
+	States
+	{
+	Spawn:
+	KNIE R -1
+	stop
+	}
+}
+
+ACTOR HKnightSHoulderR : HKnightLegL
+{
+	States
+	{
+	Spawn:
+	KNIE S -1
+	stop
+	}
+}		
+
+ACTOR HKnightCuirass : HKnightLegL
+{
+	States
+	{
+	Spawn:
+	KNIE T -1
+	stop
+	}
+}
+
+/////////////////////////
+//Frozen HKnight Actors//
+/////////////////////////
+
+ACTOR FrozenHKnight : FrozenZombieman 
+{
+	States
+	{
+	Spawn:
+        TNT1 A 0 NoDelay A_PlaySound("Cryomancy/EnemyFreeze", 1)
+		FRDK A 400
+		FRDK A 2
+		TNT1 A 0 A_PlaySound("ICEBRK1")
+		FRDK A 50
+		FRDK B 2
+		FRDK A 50
+		FRDK B 2
+		FRDK A 50
+		FRDK B 2
+		FRDK A 25
+		FRDK B 2
+		FRDK A 25
+		FRDK B 2
+		FRDK A 10
+		FRDK B 2
+		FRDK A 10
+		FRDK B 2
+		FRDK A 10
+		FRDK BABABA 2
+		Goto Death.Burn
+		Death.Fire:
+		Death.Flames:
+		Death.Burn:
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+	    TNT1 A 0 A_ChangeFlag("SOLID", 0)
+	    TNT1 A 0 A_ChangeFlag("COUNTKILL", 0)
+		TNT1 A 0 A_PlaySound("Cryomancy/EnemyUnfreeze", 1)
+		TNT1 AAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk1", 48, 0, random (0, 360), 2, random (0, 160))
+	    TNT1 AAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk2", 48, 0, random (0, 360), 2, random (0, 160))
+	    TNT1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk3", 48, 0, random (0, 360), 2, random (40, 120))
+	    TNT1 A 0 A_NoBlocking
+	    TNT1 A 0 A_spawnItem("HKnightDamaged")
+	    Stop
+	Death:	
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_PlaySound("Cryomancy/EnemyShatter", 1)
+		TNT1 AAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk1", 48, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk2", 48, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("XIceChunk3", 48, 0, random (0, 360), 2, random (40, 120))
+		TNT1 AAA 0 A_CustomMissile ("GreenFlameTrails", 48, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AA 0 A_CustomMissile ("GreenFlameTrailsBig", 48, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAAAA 0 A_CustomMissile ("SmallGreenFlameTrails", 48, 0, random (0, 360), 2, random (0, 160))
+		FRDK C 300
+		FRDK CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC 1 A_FadeOut(0.01)
+		Stop
+	Death.Freeze:
+	Death.Ice:
+	Death.Frost:
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+		TNT1 A 0 A_ChangeFlag("SOLID", 0)
+		TNT1 A 0 A_ChangeFlag("COUNTKILL", 0)
+		TNT1 A 0 A_SpawnItem("FrozenHKnight")
+		Stop
+	}
+}
+
+ACTOR HKnightDamaged : HKnight
+{
+	Health 50
+	Speed 2
+	States
+	{
+	Death.Head:
+	    TNT1 A 0 A_JumpIfInTargetInventory("HasFreezerWeapon", 1, "Death.Freeze")
+		Goto Super::Death.Head
+	}
+}

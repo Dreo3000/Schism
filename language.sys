@@ -1,0 +1,160 @@
+[enu default]
+// BulletPuffs
+Schism_Pistol = "WeakPuff";
+Schism_SMG = "WeakPuff";
+Schism_DualSMG = "WeakPuff";
+Schism_Deagle = "MachinegunBulletPuff";
+
+Schism_AssaultShotgun = "shotpuff";
+Schism_Shotgun = "ShotgunPuff";
+Schism_SSG = "ShotgunPuff";
+Schism_QuadShotgun = "ShotgunPuff";
+
+Schism_Rifle = "HitPuff";
+Schism_HeavyRifle = "HeavyRifleBulletPuff";
+Schism_Minigun = "HitPuff";
+Minigun = "HitPuff";
+Schism_Machinegun = "MachinegunBulletPuff";
+// Registred Speeds of missiles
+
+Schism_Rocket2Speed = 50;
+Schism_FlamethrowerMissileProperSpeed = 40;
+
+//HUD Images
+Schism_InfImage = "INFIAA";
+Schism_Clip1Image = "PINAXA";
+Schism_Clip2Image = "PBCLIP";
+Schism_Clip3Image = "PINADA";
+Schism_ShellImage = "PINAEA";
+Schism_RocketImage = "PINAGA";
+Schism_CellImage = "PINAF";
+
+
+// DeathMessages
+// Marine
+Schism_RangerDeathMsg1 = "Stand aside when opening a door and ALWAYS take cover";
+Schism_RangerDeathMsg2 = "Keep all your weapons cocked, locked, and ready to rock";
+Schism_RangerDeathMsg3 = "Switch weapons instead of reloading to save time";
+Schism_RangerDeathMsg4 = "ALWAYS check corners for unexpected enemies";
+Schism_RangerDeathMsg5 = "Check corners from a distance to avoid imp ambushes";
+Schism_RangerDeathMsg6 = "Crouching and slide kicks evade fireballs";
+Schism_RangerDeathMsg7 = "All heavy firearms deal extra damage at point-blank";
+Schism_RangerDeathMsg8 = "SMG is extremely effective against weak targets";
+Schism_RangerDeathMsg9 = "If you discover enemies around a corner, toss a grenade";
+Schism_RangerDeathMsg10 = "You can cycle scope magnification while aiming";
+Schism_RangerDeathMsg11 = "Suppressed Chton Sniper Rifle won't alert enemies";
+Schism_RangerDeathMsg12 = "Use living enemies as shields from ranged attacks";
+Schism_RangerDeathMsg13 = "Quad Shotgun is best in single-fire mode";
+Schism_RangerDeathMsg14 = "Bolt action rifle may be extremely powerful";
+Schism_RangerDeathMsg15 = "BFG alters fire modes of some other weapons";
+Schism_RangerDeathMsg16 = "When you windup minigun it shows extreme firerate";
+Schism_RangerDeathMsg17 = "Railgun could pierce through walls";
+Schism_RangerDeathMsg18 = "Tesla gun more effective in close combat";
+Schism_RangerDeathMsg19 = "BFG alters fire modes of some other weapons";
+Schism_RangerDeathMsg20 = "BFG alters fire modes of some other weapons";
+Schism_RangerDeathMsg21 = "BFG alters fire modes of some other weapons";
+Schism_RangerDeathMsg22 = "BFG alters fire modes of some other weapons";
+
+
+// Sorcerer
+Schism_SorcererDeathMsg1 = "Elemental magic is extremely volatile in cramped spaces";
+Schism_SorcererDeathMsg2 = "Demons are vulnerable to electricity; humans to fire";
+Schism_SorcererDeathMsg3 = "Your magics hurt friend and foe alike";
+Schism_SorcererDeathMsg4 = "Try to combine elemental states for enhanced effects";
+Schism_SorcererDeathMsg5 = "Use Quick Spell to wield two elements at once";
+Schism_SorcererDeathMsg6 = "Runecraft rituals craft powerups, summon familiars, and cast epic spells";
+Schism_SorcererDeathMsg7 = "Blink lets you phase through enemies";
+Schism_SorcererDeathMsg8 = "Astral Shift bestows brief invulnerability";
+Schism_SorcererDeathMsg9 = "Blink and Astral Shift can be combined for hypersonic speed";
+Schism_SorcererDeathMsg10 = "Shock frozen enemies to gain health bonuses";
+Schism_SorcererDeathMsg11 = "Slay greater demons with the Dagger to yield Runes";
+Schism_SorcererDeathMsg12 = "Frozen enemies are critically weakened when they thaw";
+Schism_SorcererDeathMsg13 = "Some summoned familiars have great hidden power";
+Schism_SorcererDeathMsg14 = "The Arcane Tome lets you raise deflective barriers";
+Schism_SorcererDeathMsg15 = "Raise elemental walls to trap enemies";
+Schism_SorcererDeathMsg16 = "With perfect aim, ice walls can impale and immobilize enemies";
+Schism_SorcererDeathMsg17 = "Basic spells can be precast during Astral Shift";
+Schism_SorcererDeathMsg18 = "Ice walls block projectiles and have a useful backward boost on cast";
+
+//Paladin
+Schism_WarriorDeathMsg1 = "To enter a combat stance, hold attack or press reload";
+Schism_WarriorDeathMsg2 = "Stances allow you to prime stronger attacks";
+Schism_WarriorDeathMsg3 = "Use jump or crouch to modify your melee attacks";
+Schism_WarriorDeathMsg4 = "Combine primary fire and alt fire for each melee weapon";
+Schism_WarriorDeathMsg5 = "Experiment and invent your own fencing style";
+Schism_WarriorDeathMsg6 = "Each melee weapon has own magic powers";
+Schism_WarriorDeathMsg7 = "Shield protects from direct damage, not splash";
+Schism_WarriorDeathMsg8 = "Perform fatalities to gain health bonuses";
+Schism_WarriorDeathMsg9 = "You can perform faster combos with stances";
+Schism_WarriorDeathMsg10 = "Gauntlets can be charged for a powerful flying punch";
+Schism_WarriorDeathMsg11 = "Arrancadora can blast enemies around a corner";
+Schism_WarriorDeathMsg12 = "Quietus' magic projects powerful cuts with long reach";
+Schism_WarriorDeathMsg13 = "Timon's axe rebounds off walls when thrown";
+Schism_WarriorDeathMsg14 = "Vorpal's magic projects wider cuts a short distance";
+Schism_WarriorDeathMsg15 = "Mutilate enemies or corpses to gain Rage";
+Schism_WarriorDeathMsg16 = "Rage slowly converts to Zeal";
+Schism_WarriorDeathMsg17 = "Rage does not drain while attacking or holding a stance";
+Schism_WarriorDeathMsg18 = "Zeal is used for magic attacks with weapons";
+Schism_WarriorDeathMsg19 = "You can block most attacks with gauntlets or shield";
+Schism_WarriorDeathMsg20 = "Zeal reserves can be filled up to 200%";
+Schism_WarriorDeathMsg21 = "Breaking items around generates rage";
+Schism_WarriorDeathMsg22 = "Attacks from Quietus easily stunlocks greater foes";
+
+Schism_CorvusDeathMSG1 = "Staff could be effective melee weapon";
+Schism_CorvusDeathMSG2 = "Use gauntlets of necromancer to drain health of your enemies";
+Schism_CorvusDeathMSG3 = "Phoenix rod special attack brings lake of fire";
+Schism_CorvusDeathMSG4 = "You can aim with Hellscourge";
+Schism_CorvusDeathMSG5 = "";
+Schism_CorvusDeathMSG6 = "";
+Schism_CorvusDeathMSG7 = "";
+Schism_CorvusDeathMSG8 = "";
+Schism_CorvusDeathMSG9 = "";
+Schism_CorvusDeathMSG10 = "";
+Schism_CorvusDeathMSG11 = "";
+Schism_CorvusDeathMSG12 = "";
+Schism_CorvusDeathMSG13 = "";
+Schism_CorvusDeathMSG14 = "";
+Schism_CorvusDeathMSG15 = "";
+Schism_CorvusDeathMSG16 = "";
+Schism_CorvusDeathMSG17 = "";
+Schism_CorvusDeathMSG18 = "";
+
+Schism_GeomancyPickup = "Now earth bends at your will!";
+Schism_SorcererMessage = "You are not a mage !";
+Schism_QuickSpellMSGF = "Not enough charge.";
+Schism_QuickSpellMSGT = "Not enough charge.";
+Schism_QuickSpellMSGI = "Not enough charge.";
+// SM - Schism Monster
+SM_CYBIMP = "Cyber Augmented Imp mk1";
+
+
+SM_DUKEOFHELL = "Duke of Hell";
+OB_DUKE = "Mortal %o does not defy rules to the Duke of Hell!";
+OB_DUKEHIT = "%o was crushed by hand of the Duke of Hell!";
+
+
+SM_PYROMANCY = "Pyromancy";
+
+
+SW_PISTOL = "Pistol";
+SW_RIFLE = "Assault Rifle";
+SW_MINIGUN = "Minigun";
+SW_RAILGUN = "Railgun";
+SW_GRENADE = "Hand Grenades";
+SGOT_PISTOL = "You got the pistol! (Slot 2)";
+SGOT_PYROMANCY = "You got the Arcane Power of Firecasting! (Slot 2)";
+SGOT_MINIGUN = "You got the Minigun! (Slot 4)";
+SGOT_RAILGUN = "You got the Railgun! (Slot 6)";
+SGOT_GRENADE = "You got a Frag Grenade! (Slot 9)";
+SGOT_HGAMMO = "Picked up a Grenade.";
+SGOT_RUBYAMULET = "Picked up a Ruby Amulet.";
+OB_PISTOL = "%o was shot down by %k's pistol.";
+OB_RIFLE = "%o was shot down by %k's assault rifle.";
+OB_RAILGUN = "";
+OB_GRENADE = "%o was shreded by %k's grenade.";
+OB_HGRENADE = "%o ate %k grenade.";
+
+
+SGOT_LIGHTARMOR = "You picked up a Light Armor.";
+SGOT_HEAVYARMOR = "Picked up the Heavy Combat Armor.";
+

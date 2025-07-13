@@ -1,0 +1,480 @@
+//=============================================================================================
+//
+// Zedek (Some code based on Belphegor from Schism)
+// modified by LordADHD
+//=============================================================================================
+
+ACTOR Zedek : CentaurWarlord //: BaronofHell
+{
+	//$category "BD Monsters"
+    //Scale 1.2
+	//Game Hexen
+	//Monster
+    //GibHealth 25
+	//PainChance 50
+	//damagefactor "Avoid", 0.0
+	//damagefactor "Head", 2.0
+	//damagefactor "GibRemoving", 0.0
+	//damagefactor "MINORHead", 1.0
+	//DamageFactor "CauseSplash", 0.0 DamageFactor "CauseObjectsToSplashSlime", 0.0 DamageFactor "CauseObjectsToSplashNukage", 0.0
+	//DamageFactor "CauseObjectsToSplashBlood", 0.0 DamageFactor "CauseObjectsToSplashLava", 0.0
+	//damagefactor "TeleportRemover", 0.0
+    Health 4000 //placeholder number
+	Mass 1000
+	//damagefactor "Blood", 0.0 damagefactor "BlueBlood", 0.0 damagefactor "GreenBlood", 0.0
+	//damagefactor "Explosive", 1.7
+	Obituary "%o was Razor slashed by Zedek!" //placeholder
+	HitObituary "%o was slammed to death by Zedek." //placeholder
+	//BloodType "Brutal_Blood", "SawBlood", "SawBlood"
+	//MaxStepHeight 24
+	//MaxDropOffHeight 32
+	//+FLOORCLIP
+	//+DONTHURTSPECIES
+	//seesound "Baron/Sight"
+	//painsound "Baron/Pain"
+	//deathsound "Baron/Death"
+	//activesound "Baron/Active"
+	//DeathHeight 4
+	//BurnHeight 0
+    Speed 10
+	FastSpeed 14
+	Species "Centaur Warlords"
+	//Height 88
+	//Radius 32
+	Tag "Zedek"
+	
+	States
+	{
+	Spawn:
+
+		//CENW A 0 A_JumpIfInventory("Curbstomp_Marine", 1, "CurbstompMarine")
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		CEW2 B 10 A_Look
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		CEW2 B 10 A_Look
+		Loop
+	See:
+		TNT1 A 0
+		CEW2 AAAA 2 A_Chase
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		CEW2 BBBB 2 A_Chase("","")
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		CEW2 CCCC 2 A_Chase
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		CEW2 BBBB 2 A_Chase
+		Loop
+		
+	See2: //Need Sprites for this
+		CEW2 AAA 1 A_Chase("","")
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		TNT1 A 0 A_SpawnItem("CWarlordRamDamage",65)
+		CEW2 BBB 1 A_Chase("","")
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		TNT1 A 0 A_SpawnItem("CWarlordRamDamage",65)
+		CEW2 CCC 1 A_Chase
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		TNT1 A 0 A_SpawnItem("CWarlordRamDamage",65)
+		CEW2 AAA 1 A_Chase("","")
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		TNT1 A 0 A_SpawnItem("CWarlordRamDamage",65)
+		CEW2 BBB 1 A_Chase("","")
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		TNT1 A 0 A_SpawnItem("CWarlordRamDamage",65)
+		CEW2 CCC 1 A_Chase
+		TNT1 A 0 A_Jump(128, "See")
+		Loop	
+		
+	Pain.Taunt: //Need Sprites for this
+		TNT1 A 0
+		TNT1 A 0 A_CHangeFlag("FASTER", 1)
+		TNT1 A 0 A_CHangeFlag("NOPAIN", 1)
+		TNT1 A 0 A_GiveInventory("Token1", 1)
+		B0S3 IJKL 3
+		TNT1 A 0 A_PlaySound("baron/see")
+		B0S3 MNONMNOMN 3
+		B0S3 LKJ 3
+		Goto See2
+	RAGE: //Need Sprites for this
+		TNT1 A 0
+		B0S3 IJKL 3
+		TNT1 A 0 A_PlaySound("baron/see")
+		B0S3 MNONMNOMN 3
+		B0S3 LKJ 3
+		Goto See2
+	
+	Melee:
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+        CEW2 E 8
+        TNT1 A 0 A_PlaySound("weapons/gswing")
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		CEW2 F 8 A_FaceTarget
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		TNT1 AAAAA 0 A_CustomMissile("CWarlordAttack",10,0,0,0)
+		CEW2 G 8 A_FaceTarget
+		//TNT1 A 0 A_JumpIfInventory("Curbstomp_Marine", 1, "CurbstompMarine")
+		Goto See
+	Missile:
+		TNT1 A 0
+		TNT1 A 0 A_Jump(192, 2)
+		TNT1 A 0 A_JumpIfInventory("Token1", 1, "RAGE")
+		TNT1 AAA 0 
+		Goto ZedekRazorShot
+	ZedekRazorShot:
+		TNT1 A 0
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+        CEW2 H 8
+        TNT1 A 0 A_PlaySound("weapons/gswing")
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		CEW2 I 8 A_FaceTarget
+		TNT1 A 0 A_SpawnItem("HeadshotTarget8c", 0, 92,0)
+		TNT1 A 0 A_CustomMissile("ZedekRazor",32,0,0,0)
+		CEW2 J 4 A_FaceTarget
+		CEW2 KLM 4
+		//TNT1 A 0 A_JumpIfInventory("Curbstomp_Marine", 1, "CurbstompMarine")
+		Goto See
+	
+	Pain:
+		//TNT1 A 0 A_JumpIfInventory("Curbstomp_Marine", 1, "CurbstompMarine")
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4c", 0, 92,0)
+		TNT1 A 0 A_JumpIfHealthLower(2000, "Pain.Taunt")
+		CEW2 D 3
+		TNT1 A 0 A_SpawnItem("HeadshotTarget4b", 0, 92,0)
+		CEW2 D 3 A_Pain
+		TNT1 A 0 A_Jump(32, "Pain.Taunt")
+		Goto See
+		
+	Pain.Freeze:
+		TNT1 A 0
+		TNT1 A 0 A_JumpIfInventory("IsSlowed", 1, "Pain")
+		TNT1 A 0 ACS_NamedExecute("SlowingFreeze",0)
+		TNT1 A 0 A_GiveInventory("IsSlowed", 1)
+		Goto Pain  
+		
+    Death.SSG:
+		TNT1 A 0 A_Jump(192, "Death")
+	XDeath:
+	Death.Railgun:
+		 TNT1 AAAAAA 0 A_CustomMissile ("XDeath2", 55, 0, random (0, 360), 2, random (20, 90))
+		 TNT1 AAAAAA 0 A_CustomMissile ("XDeath3", 55, 0, random (0, 360), 2, random (20, 90))
+		 //TNT1 AA 0 A_CustomMissile ("XDeath2", 55, 0, random (0, 360), 2, random (20, 90))
+		 //TNT1 AA 0 A_CustomMissile ("XDeath3", 55, 0, random (0, 360), 2, random (20, 90))
+		 //TNT1 AA 0 A_CustomMissile ("XDeath4", 55, 0, random (0, 360), 2, random (20, 90))
+		 //TNT1 AA 0 A_CustomMissile ("XDeath5", 55, 0, random (0, 360), 2, random (20, 90))
+		//TNT1 AA 0 A_CustomMissile ("XDeath6", 55, 0, random (0, 360), 2, random (20, 90))
+		 TNT1 AA 0 A_SpawnItem("MuchBlood2", 0, 55)
+		 TNT1 AAAA 0 A_CustomMissile ("Guts2", 52, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("ZedekSword", 52, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("ZedekSheath", 40, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeathCWarlordHead", 52, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeathCWarlordTorso", 52, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 AA 0 A_CustomMissile ("XDeathCWarlordArm", 52, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 AA 0 A_CustomMissile ("XDeathCWarlordLeg", 52, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeathOrgan1", 55, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeathOrgan2", 55, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A  0 A_Scream
+		TNT1 A  0
+		TNT1 A  0 A_NoBlocking
+		//BO3G ABCD 8
+		//TNT1 A 0 A_SpawnItem ("GrowingBloodPool")
+		//TNT1 A 0 A_SpawnItem ("DeadBelphegorXDeath")
+		TNT1 A -1
+	    Stop
+	Death.Dagger:
+		TNT1 A 0 A_GiveToTarget("RuneAmmo",1) //piece of cake...
+	Death:
+		TNT1 A 0
+		TNT1 A 0 A_Jump(96, "Death.Arm")
+		TNT1 A 0 A_Jump(96, "LoseWeaponDeath")
+	    CEW2 N 8 A_Scream
+		CEW2 O 8
+		CEW2 P 8 A_NoBlocking
+		CEW2 QRS 8
+		TNT1 A 0 A_SpawnItem("DeadZedek")
+		TNT1 A -1
+	    Stop
+	LoseWeaponDeath:
+		TNT1 A 0
+		TNT1 A 0 A_CustomMissile ("ZedekSword", 55, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("ZedekSheath", 45, 0, random (0, 360), 2, random (0, 160))
+	    CENW I 8 A_Scream
+		CENW J 8
+		CENW K 8 A_NoBlocking
+		CENW LMN 8
+		TNT1 A 0 A_SpawnItem("DeadCWarlord")
+		TNT1 A -1
+	    Stop
+	Death.Arm:
+		TNT1 A 0 A_CustomMissile ("ZedekSword", 55, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("ZedekSheath", 45, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathCWarlordHand", 55, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("muchblood2", 55, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_Fall
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_SpawnItem("DyingCWarlord")
+		TNT1 A -1
+		Stop
+
+	Death.head:
+		//TNT1 A 0 A_JumpIfInTargetInventory("HasFreezerWeapon", 1, "Death.Freeze")
+		TNT1 AAAAAA 0 A_CustomMissile ("Xdeath1", 82, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAA 0 A_CustomMissile ("Brains1", 82, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AA 0 A_CustomMissile ("Brains2", 82, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAA 0 A_CustomMissile ("Brains3", 82, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAA 0 A_CustomMissile ("Brains6", 82, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("ZedekSword", 55, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("ZedekSheath", 45, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_NoBlocking
+		CENY OPQRST 8
+		CENY T -1
+	    Stop
+/*
+	Death.ice:
+	Death.Freeze:
+	Death.Frost:
+		TNT1 A 0
+		TNT1 A 0
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+		TNT1 A 0 A_ChangeFlag("SOLID", 0)
+		TNT1 A 0 A_SpawnItemEx("FrozenBelphegor", 0, 0, 0, 0, 0, 0, 0, SXF_TRANSFERPOINTERS | SXF_TRANSFERAMBUSHFLAG | SXF_NOCHECKPOSITION, 0, tid)
+		Stop
+*/
+    Crush:
+		TNT1 A 0
+		TNT1 AAAA 0 A_SpawnItemEx ("BodyRemovalThing",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 1 A_XScream
+		Stop
+		
+	
+    Pain.Killme:
+		TNT1 A 0
+		TNT1 A 0 HealThing(1)
+		Goto Missile
+		
+    Death.Eat:
+        TNT1 A 0 A_GiveToTarget("EatMe",1)
+		 Goto Death+3
+        Stop	
+/*
+   CurbstompMarine:
+        TNT1 A 0 A_SetInvulnerable
+        BS3F AB 10
+	    BS3F CDEF 2
+	    EXPL A 0 Radius_Quake (2, 24, 0, 15, 0)
+		BS3F GF 4
+		BS3F HHIII 2
+		BS3F J 15
+		BS3F K 6
+		EXPL A 0 Radius_Quake (2, 24, 0, 15, 0)
+		TNT1 AAAAA 0 bright A_CustomMissile ("SuperGoreSpawner", 5, 0, random (0, 360), 2, random (30, 180))
+		TNT1 AAA 0 A_CustomMissile ("XDeath2", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AA 0 A_CustomMissile ("XDeath3", 5, 0, random (0, 360), 2, random (0, 160))
+        TNT1 A 0 A_CustomMissile ("MuchBlood2", 50, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAA 0 A_CustomMissile ("XDeath1", 1, 0, random (0, 360), 2, random (0, 160))
+        TNT1 AAAAA 0 A_CustomMissile ("PlayerFlyingBlood", 50, 0, random (0, 360), 2, random (0, 160))
+		BS3F L 15
+		BS3F NM 4
+		BS3F N 1
+	    TNT1 AAAA 0 bright A_CustomMissile ("SuperGoreSpawner", 5, 0, random (0, 360), 2, random (30, 180))
+		EXPL A 0 Radius_Quake (2, 24, 0, 15, 0)
+		TNT1 AAAA 0 A_CustomMissile ("BloodMistBig", 10, 0, random (0, 360), 2, random (30, 90))
+		TNT1 AAA 0 A_CustomMissile ("Blood", 10, 0, random (0, 360), 2, random (30, 90))
+		TNT1 AAA 0 A_CustomMissile ("XDeath1", 10, 0, random (0, 360), 2, random (30, 90))
+		BS3F NOPPP 3
+   
+		BS3F NM 4
+		BS3F N 1
+	    TNT1 AAAA 0 bright A_CustomMissile ("SuperGoreSpawner", 5, 0, random (0, 360), 2, random (30, 180))
+		EXPL A 0 Radius_Quake (2, 24, 0, 15, 0)
+		TNT1 AAAA 0 A_CustomMissile ("BloodMistBig", 10, 0, random (0, 360), 2, random (30, 90))
+		TNT1 AAA 0 A_CustomMissile ("Blood", 10, 0, random (0, 360), 2, random (30, 90))
+		TNT1 AAA 0 A_CustomMissile ("XDeath1", 10, 0, random (0, 360), 2, random (30, 90))
+		BS3F NOPPP 3
+   
+		BS3F NM 4
+		BS3F N 1
+	    TNT1 AAAA 0 bright A_CustomMissile ("SuperGoreSpawner", 5, 0, random (0, 360), 2, random (30, 180))
+		EXPL A 0 Radius_Quake (2, 24, 0, 15, 0)
+		TNT1 AAAA 0 A_CustomMissile ("BloodMistBig", 10, 0, random (0, 360), 2, random (30, 90))
+		TNT1 AAA 0 A_CustomMissile ("Blood", 10, 0, random (0, 360), 2, random (30, 90))
+		TNT1 AAA 0 A_CustomMissile ("XDeath1", 10, 0, random (0, 360), 2, random (30, 90))
+		BS3F NOPPP 3
+   
+		BS3F NM 4
+		BS3F N 1
+	    TNT1 AAAA 0 bright A_CustomMissile ("SuperGoreSpawner", 5, 0, random (0, 360), 2, random (30, 180))
+		EXPL A 0 Radius_Quake (2, 24, 0, 15, 0)
+		TNT1 AAAA 0 A_CustomMissile ("BloodMistBig", 10, 0, random (0, 360), 2, random (30, 90))
+		TNT1 AAA 0 A_CustomMissile ("Blood", 10, 0, random (0, 360), 2, random (30, 90))
+		TNT1 AAA 0 A_CustomMissile ("XDeath1", 10, 0, random (0, 360), 2, random (30, 90))
+		BS3F NOPPP 3
+   
+		BS3F NM 4
+		BS3F N 1
+	    TNT1 AAAA 0 bright A_CustomMissile ("SuperGoreSpawner", 5, 0, random (0, 360), 2, random (30, 180))
+		EXPL A 0 Radius_Quake (2, 24, 0, 15, 0)
+		TNT1 AAAA 0 A_CustomMissile ("BloodMistBig", 10, 0, random (0, 360), 2, random (30, 90))
+		TNT1 AAA 0 A_CustomMissile ("Blood", 10, 0, random (0, 360), 2, random (30, 90))
+		TNT1 AAA 0 A_CustomMissile ("XDeath1", 10, 0, random (0, 360), 2, random (30, 90))
+		BS3F NOPPP 3
+   
+		TNT1 A 0 A_TakeInventory("Curbstomp_Marine")
+        TNT1 A 0 A_UnSetInvulnerable
+	Goto See
+*/
+	}
+} 
+
+/*
+Actor ZedekDamaged : Zedek
+{
+	Health 400
+}
+*/
+
+////////////////
+//Zedek Attack//
+////////////////
+
+Actor ZedekRazor : QuietusRazorHor
+{
+	Damage (random(15,25))
+	-RIPPER
+}
+
+////////////////////
+//Dead Zedek Actor//
+////////////////////
+
+Actor DeadZedek: CurbstompedMarine
+{
+    Radius 12
+    Height 36
+    Scale 1.2
+    Mass 8000
+    Health 600
+	States
+    {
+    Spawn:
+		CEW2 S 1
+		CEW2 S -1
+        Stop
+    Death:
+		 TNT1 AAAAAA 0 A_CustomMissile ("XDeath2", 15, 0, random (0, 360), 2, random (20, 90))
+		 TNT1 AAAAAA 0 A_CustomMissile ("XDeath3", 15, 0, random (0, 360), 2, random (20, 90))
+		 //TNT1 AA 0 A_CustomMissile ("XDeath2", 55, 0, random (0, 360), 2, random (20, 90))
+		 //TNT1 AA 0 A_CustomMissile ("XDeath3", 55, 0, random (0, 360), 2, random (20, 90))
+		 //TNT1 AA 0 A_CustomMissile ("XDeath4", 55, 0, random (0, 360), 2, random (20, 90))
+		 //TNT1 AA 0 A_CustomMissile ("XDeath5", 55, 0, random (0, 360), 2, random (20, 90))
+		//TNT1 AA 0 A_CustomMissile ("XDeath6", 55, 0, random (0, 360), 2, random (20, 90))
+		 TNT1 AA 0 A_SpawnItem("MuchBlood2", 0, 15)
+		 TNT1 AAAA 0 A_CustomMissile ("Guts2", 15, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("ZedekSword", 15, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("ZedekSheath", 15, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeathCWarlordHead", 15, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeathCWarlordTorso", 15, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 AA 0 A_CustomMissile ("XDeathCWarlordArm", 15, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 AA 0 A_CustomMissile ("XDeathCWarlordLeg", 15, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeathOrgan1", 15, 0, random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeathOrgan2", 15, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A  0 A_Scream
+		TNT1 A  0
+		TNT1 A  0 A_NoBlocking
+		//BO3G ABCD 8
+		//TNT1 A 0 A_SpawnItem ("GrowingBloodPool")
+		//TNT1 A 0 A_SpawnItem ("DeadBelphegorXDeath")
+		TNT1 A -1
+	    Stop
+/*
+    Death.Plasma: Death.Plasma2:
+    Death.Flames:
+    Death.Burn:
+        TNT1 A 0
+        TNT1 A 0 A_Scream
+        TNT1 A 0 A_NoBlocking
+		EXPL AAAAA 0 A_CustomMissile ("ExplosionSmoke", 32, 0, random (0, 360), 2, random (0, 360))
+        BOSB ABCDE 9 A_CustomMissile ("PlasmaSmoke", 24, 0, random (0, 180), 2, random (0, 180))
+        BOSB EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE 8 A_CustomMissile ("PlasmaSmoke", 16, 0, random (0, 180), 2, random (0, 180))
+        BOSB E -1
+        Stop
+*/	
+	Death.CrushedBodies:
+		 TNT1 A 0 A_SetAngle(0)
+		 TNT1 A 0 bright A_CustomMissile ("SuperGoreSpawner", 1, -40, random (0, 360), 2, random (25, 45))
+		 TNT1 A 0 bright A_CustomMissile ("SuperGoreSpawner", 1, 40, random (0, 360), 2, random (25, 45))
+		 TNT1 A 0 A_CustomMissile ("XDeath1", 1, random (-30, 30), random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeath2", 1, random (-30, 30), random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeath3", 1, random (-30, 30), random (0, 360), 2, random (0, 160))
+		 TNT1 AA 0 A_CustomMissile ("BloodMistBig", 1, -40, random (0, 360), 2, random (30, 90))
+		 TNT1 AA 0 A_CustomMissile ("BloodMistBig", 1, 40, random (0, 360), 2, random (30, 90))
+		 TNT1 A 0 A_SetAngle(90)
+		 TNT1 A 0 bright A_CustomMissile ("SuperGoreSpawner", 1, -40, random (0, 360), 2, random (25, 45))
+		 TNT1 A 0 bright A_CustomMissile ("SuperGoreSpawner", 1, 40, random (0, 360), 2, random (25, 45))
+		 TNT1 A 0 A_CustomMissile ("XDeath1n", 1, random (-30, 30), random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeath2", 1, random (-30, 30), random (0, 360), 2, random (0, 160))
+		 TNT1 A 0 A_CustomMissile ("XDeath3", 1, random (-30, 30), random (0, 360), 2, random (0, 160))
+		 TNT1 AA 0 A_CustomMissile ("BloodMistBig", 1, -40, random (0, 360), 2, random (30, 90))
+		 TNT1 AA 0 A_CustomMissile ("BloodMistBig", 1, 40, random (0, 360), 2, random (30, 90))
+		 TNT1 A 0 A_NoBlocking
+		 GIBS Y 1
+		 GIBS Y -1
+		Stop
+		
+		}}
+		
+//////////////
+//Zedek Gibs//
+//////////////
+
+ACTOR ZedekSword: XDeath1
+{
+    Speed 12
+	Gravity 0.4
+	SeeSound "misc/xdeath5"
+    DeathSound "misc/xdeath5"
+    Scale 1.1
+    States
+    {
+    Spawn:
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Splash")
+        CEWX ABCD 2
+        Loop
+    Death:
+		TNT1 A 0
+		TNT1 A 0 A_QueueCorpse
+	    TNT1 A 0 A_CheckFloor("SpawnFloor")
+        CEWX B 9009
+		TNT1 A 2
+        Stop
+	SpawnFloor:
+	    CEWX B 9009
+		TNT1 A 2
+		Stop
+    }
+}
+
+ACTOR ZedekSheath: XDeath1
+{
+    Speed 12
+	Gravity 0.4
+	SeeSound "misc/xdeath5"
+    DeathSound "misc/xdeath5"
+    Scale 1.1
+    States
+    {
+    Spawn:
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Splash")
+        CEWX EFGH 2
+        Loop
+    Death:
+		TNT1 A 0
+		TNT1 A 0 A_QueueCorpse
+	    TNT1 A 0 A_CheckFloor("SpawnFloor")
+        CEWX E 9009
+		TNT1 A 2
+        Stop
+	SpawnFloor:
+	    CEWX E 9009
+		TNT1 A 2
+		Stop
+    }
+}

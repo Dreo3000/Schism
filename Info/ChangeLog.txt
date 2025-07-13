@@ -1,0 +1,26 @@
+SCHISM
+Authors: Lord Lothar, SchrödingCat, 4Page
+Graphic: Typical Sonic Fan, Green Eyesman, Dox778, IKDFA, Farhan
+Code: Dreo, Zodomaniak, Dinosaur Nerd, BLOODWOLF
+Resources: Neoworm, D3athStalker, Lagi, Realm 667, Project Brutality, Jekyll Grim Payne (Agent Ash).
+
+
+Changelog:
+1. Voicepacks for Paladin and Sorcerer and MAJOR sound rework by amazing @D3athStalker !!
+
+2. Reworked melee for gauntlets, added rage levels with visuals. Added block on altfire + primary fire
+
+3. Reworked frostmancy by our legendary @SchrödingCat with new animations for hands and new effects
+
+4. Fixed monster spawners by our code mastermind @Dreo [ping for question] !!
+
+5. Added new monster - Afrit Lords, they replace barons as Avatar minions, where Afrits replaces knights of hell
+
+6. Fixed Diabolist and Archvile
+
+7. Obtaining runes with dagger now works with both attacks. Also some fixes of runecraft - I deleted that scimitars for now as OP, and now you have magic barrier insted them - fire in shield mode for on-hold free cast + altfire to place on ground for 1 rune.
+
+8. New spell for frostmancy - Blizzard (weapon special key)
+
+9. Magic orbs flying around player (WIP) - use reload during charge with pyromancy or stormcasting. Unfortunatelly now this effect is PERMANENT, so use it only for preview!
+

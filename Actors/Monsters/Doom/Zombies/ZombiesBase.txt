@@ -1,0 +1,71 @@
+Actor Schism_ZombieBase {
+	Monster
+	+FLOORCLIP
+	+SLIDESONWALLS
+	+MISSILEMORE
+// 	+DOHARMSPECIES
+	PainChance 200
+	PainChance "Head", 256
+	PainChance "Kick", 256
+	PainChance "LowKick", 256
+	Painchance "Slide", 256
+	PainChance "Melee", 256
+	PainChance "Stealth", 256
+	PainChance "Fatality", 256
+	PainChance "HelperMarineFatality", 256
+	PainChance "Taunt", 256
+	PainChance "Minor", 256
+	PainChance "Freeze", 256
+	PainChance "MonsterKnocked", 256
+	PainChance "ExplosiveImpact", 256
+	PainChance "Stun", 256
+	PainChance "Trample", 256
+	PainChance "HangingHook", 0
+	PainChance "Avoid", 0
+
+	DamageFactor "Head", 2
+	DamageFactor "Crush", 5.0
+	DamageFactor "Fatality", 5.0
+	DamageFactor "GibRemoving", 0.0
+	DamageFactor "KillMeBot", 0.0
+	DamageFactor "EnvAcidShower", 10.0
+	DamageFactor "DontCallTheBaron", 0.0
+	DamageFactor "HelperMarineFatallity", 3.0
+	DamageFactor "Avoid", 1.0
+	DamageFactor "FallInLava", 500.0
+	DamageFactor "SSG", 500.0
+	DamageFactor "PussyGrab", 50.0
+	DamageFactor "TeleportRemover", 0.0
+    DamageFactor "Blood", 0.0
+	DamageFactor "BlueBlood", 0.0
+	DamageFactor "GreenBlood", 0.0
+	DamageFactor "Taunt", 0.0
+	DamageFactor "LowKick", 1.0
+	DamageFactor "Melee", 1.35
+	DamageFactor "Shotgun", 2.0
+	DamageFactor "Lightning", 0.2
+	DamageFactor "CauseSplash", 0.0
+	DamageFactor "CauseObjectsToSplashSlime", 0.0
+	DamageFactor "CauseObjectsToSplashNukage", 0.0
+	DamageFactor "CauseObjectsToSplashBlood", 0.0
+	DamageFactor "CauseObjectsToSplashLava", 0.0
+
+	Species "Zombie"
+
+	var int user_mag;
+	var int user_hardcore;
+}
+
+Actor Schism_SergeantBase : Schism_ZombieBase {
+	PainChance "Avoid", 50
+	DamageFactor "Avoid", 0.0
+	DamageFactor "Shotgun", 1
+}
+
+Actor Schism_CommandoBase : Schism_ZombieBase {
+	DamageFactor "Avoid", 0.0
+	DamageFactor "explosiveimpact", 2.0
+	DamageFactor "saw", 1.2
+	DamageFactor "ExtremePunches", 2.0
+	DamageFactor "SSG", 50.0
+}

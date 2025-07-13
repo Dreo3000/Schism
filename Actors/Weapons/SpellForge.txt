@@ -1,0 +1,967 @@
+//////////////////////////////////////////////////////////////////////////////////////////////
+//																							//
+//					SPELL FORGE - SPELL WORKSHOP FOR WANDS AND STAFFS						//
+//																							//
+//					Basic set of projectiles 												//
+//																							//
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+This system of customization of spells for wands will utilize several basic spells,
+each of them having alterations for one of 7 available elemental powers. 
+Player would be able to put in specific wand spell he wants, add to it elemental power 
+enchantment, and eventually additional modificators. 
+
+Spells will use ammo from Heretic.
+
+Available spells (with short describtions)
+
+1. Magic Arrow 
+regular fast projectile attack, akin heretic crossbow side arrows
+no trail, simple hit effect
+
+2. Magic Spear
+heavy fast projectile attack, similar to heretic crossbow central bolt 
+trail, fancy hit effect
+
+3. Magic Ball
+imp ball / lightning ball - all colours and options, no trail
+
+4. Magic Sphere
+caco ball / mancubus ball - no trail, fancy hit effect 
+
+5. Magic Projectile (fast, but not hitscan)
+magic bullet / tracer, schism dragonclaw projectile - no trail, simple hit effect
+
+6. Lightning / Rail
+well, it's... rail? depending on element it would be straight or curved
+
+7. Skull projectile
+volcabuses ballsa, trail, fancy hit effect
+
+8. Phoenix projectile
+phoenix rod projectile, trail, fancy 2 stage hit effect (direct damage PLUS second damage after delay)
+
+9. Magic star
+basically plasmagun / hellstaff ball, no trail, simple hit effect
+
+10. Big magic star
+bloodscourge smart ball, no trail, fancy hit effect
+
+11. Magic blade (?)
+kinda quietus razors 
+
+12. Magic stream (?)
+kinda phoenix staff tome of power attack - "magic whip"
+*/
+
+
+
+Actor Schism_SF_MagicArrow : FastProjectile
+{
+	Speed 70
+	Damage (Random(10, 15))
+	DamageType Ethereal
+	SeeSound ""
+	Radius 2
+	Height 2
+	Projectile
+	RenderStyle Add
+	DeathSound "EtherealCrossbow/PrimaryHit"
+	Obituary "$OB_MPCROSSBOW"
+	-NOBLOCKMAP
+	+WINDTHRUST
+	+HITTRACER
+	+THRUGHOST
+	MissileType "SF_MagicArrowTrail"
+	MissileHeight 8
+	Decal "CrossbowScorch"
+	States
+	{
+		Spawn:
+			FX03 A 1 Bright
+			Loop
+
+		XDeath:
+			TNT1 A 0
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_SidheAmmoSpawner", 0, 0, 0, 0)
+			Goto Death
+
+		Death:
+			FX03 CDE 2 Bright
+			Stop
+	}
+}
+
+
+Actor Schism_SF_MagicArrowRune : Schism_SF_MagicArrow
+{
+	Speed 70
+	Damage (Random(10, 15))
+	DamageType Blast
+	SeeSound ""
+	DeathSound "EtherealCrossbow/PrimaryHit"
+	Obituary "$OB_MPCROSSBOW"
+	MissileType "SF_MagicArrowTrailRed"
+	
+	States
+	{
+		Spawn:
+			FXA8 A 1 Bright
+			Loop
+
+		XDeath:
+			TNT1 A 0
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_SidheAmmoSpawner", 0, 0, 0, 0)
+			Goto Death
+
+		Death:
+			FXA8 CDE 2 Bright
+			Stop
+	}
+}
+
+
+Actor Schism_SF_MagicArrowBlue : Schism_SF_MagicArrow
+{
+	Speed 70
+	Damage (Random(10, 15))
+	DamageType Plasm
+	SeeSound ""
+	DeathSound "EtherealCrossbow/PrimaryHit"
+	Obituary "$OB_MPCROSSBOW"
+	MissileType "SF_MagicArrowTrailBlue"
+	
+	States
+	{
+		Spawn:
+			FXA3 A 1 Bright
+			Loop
+
+		XDeath:
+			TNT1 A 0
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_SidheAmmoSpawner", 0, 0, 0, 0)
+			Goto Death
+
+		Death:
+			FXA3 CDE 2 Bright
+			Stop
+	}
+}
+
+
+Actor Schism_SF_MagicArrowFire : Schism_SF_MagicArrow
+{
+	Speed 70
+	Damage (Random(10, 15))
+	DamageType Fire
+	SeeSound ""
+	DeathSound "EtherealCrossbow/PrimaryHit"
+	Obituary "$OB_MPCROSSBOW"
+	MissileType "SF_MagicArrowTrailYellow"
+	
+	States
+	{
+		Spawn:
+			FXA3 A 1 Bright
+			Loop
+
+		XDeath:
+			TNT1 A 0
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_SidheAmmoSpawner", 0, 0, 0, 0)
+		    EXPL A 0 A_CustomMissile ("FireBallExplosionFlames", 1, 0, random (0, 360), 2, random (0, 360))
+			Goto Death
+
+		Death:
+			FXA3 CDE 2 Bright
+			Stop
+	}
+}
+
+ACTOR SF_MagicArrowTrail
+{
+	Scale 0.026
+	Gravity 0.02
+	Radius 0
+	Height 0
+	Damage 0
+	Renderstyle Add
+	Alpha 0.95
+	+DOOMBOUNCE
+	+MISSILE
+	+CLIENTSIDEONLY
+	+NOTELEPORT
+	+NOBLOCKMAP
+	+CORPSE
+	+BLOODLESSIMPACT
+	+FORCEXYBILLBOARD
+	+NODAMAGETHRUST
+	+MOVEWITHSECTOR
+	+NOBLOCKMONST
+	-SOLID
+	+THRUACTORS
+	+DONTSPLASH
+	-NOGRAVITY
+	+DONTBLAST
+	Speed 0
+    States
+    {
+     Spawn:
+	    TNT1 A 0 NoDelay A_Jump(192,"Stopped")
+	    TNT1 A 0 A_ChangeVelocity(frandom(-0.4,0.4),frandom(-0.4,0.4),frandom(-0.4,0.4), CVF_REPLACE)
+		SPKG AAAAAAAA 1 Bright A_SetScale(scalex*0.94)
+	Stopped:
+		TNT1 A 0
+		Stop
+    }
+}
+
+Actor SF_MagicArrowTrailBlue : SF_MagicArrowTrail
+{
+    States
+    {
+     Spawn:
+	    TNT1 A 0 NoDelay A_Jump(192,"Stopped")
+	    TNT1 A 0 A_ChangeVelocity(frandom(-0.4,0.4),frandom(-0.4,0.4),frandom(-0.4,0.4), CVF_REPLACE)
+		SPKB AAAAAAAA 1 Bright A_SetScale(scalex*0.94)
+	Stopped:
+		TNT1 A 0
+		Stop
+    }
+}
+
+Actor SF_MagicArrowTrailRed : SF_MagicArrowTrail
+{
+    States
+    {
+     Spawn:
+	    TNT1 A 0 NoDelay A_Jump(192,"Stopped")
+	    TNT1 A 0 A_ChangeVelocity(frandom(-0.4,0.4),frandom(-0.4,0.4),frandom(-0.4,0.4), CVF_REPLACE)
+		SPKR AAAAAAAA 1 Bright A_SetScale(scalex*0.94)
+	Stopped:
+		TNT1 A 0
+		Stop
+    }
+}
+
+Actor SF_MagicArrowTrailYellow : SF_MagicArrowTrail
+{
+    States
+    {
+     Spawn:
+	    TNT1 A 0 NoDelay A_Jump(192,"Stopped")
+	    TNT1 A 0 A_ChangeVelocity(frandom(-0.4,0.4),frandom(-0.4,0.4),frandom(-0.4,0.4), CVF_REPLACE)
+		SPKY AAAAAAAA 1 Bright A_SetScale(scalex*0.94)
+	Stopped:
+		TNT1 A 0
+		Stop
+    }
+}
+
+Actor Schism_SF_MagicSpear : FastProjectile
+{
+	Radius 10
+	Height 16
+	Speed 70
+	FastSpeed 70
+	DamageType Ethereal
+	Projectile
+	+RANDOMIZE
+	+FORCEXYBILLBOARD
+	+HITTRACER
+    +THRUGHOST
+    Damage (random(200,250))
+	RenderStyle Add
+	Alpha 0.95
+	Scale 1
+	//SeeSound "baron/attack"
+	DeathSound "EtherealCrossbow/PrimaryHit"
+	Decal "Scorch"
+
+	States
+	{
+	Spawn:
+	    TNT1 A 0
+		TNT1 A 0 ACS_NamedExecuteAlways("BDCheckJanitor", 0, 0, 0, 0)//Check Effects
+
+	Spawn1:
+		FX03 B 1 BRIGHT A_SpawnItemEx("SF_MagicSpearTrail", 0, 0, 0, 0, 0, 0, 0, 128)
+		TNT1 A 0 A_SpawnItem("SF_MagicSpearTrail")
+		//TNT1 A 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 2, 0, random (160, 210), 2, random (-30, 30))
+		Loop
+
+	SpawnCheap:
+	    FX03 C 1 BRIGHT
+		Loop
+
+	Death:
+	   	TNT1 A 0 Radius_Quake (2, 8, 0, 12, 0)
+		TNT1 A 0 A_Explode(80,96,0)
+		TNT1 A 0 A_PlaySound("DSBAREXP",1)
+		TNT1 A 0 A_SpawnItemEx("PlasmaParticleSpawner", 0, 0, 0, 0, 0, 0, 0, 128)
+	    TNT1 A 0 A_SpawnItemEx ("DetectFloorCraterSmall",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	    TNT1 A 0 A_SpawnItemEx ("DetectCeilCraterSmall",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 AA 0 A_SpawnItem("GreenFlare",0,0)
+		TNT1 A 0 A_FadeOut(0.2)
+		FRPG ABCDEFGH 2 BRIGHT
+		Stop
+
+	XDeath:
+		//TNT1 AAA 0 A_SpawnItemEx("PlasmaParticle", 0, 0, 14, (0.1)*Random(10, 40), 0, (0.1)*Random(-40, 40), Random(0, 360), 128)
+		TNT1 A 0 ACS_NamedExecuteAlways("Schism_SidheAmmoSpawner", 0, 0, 0, 0)
+        TNT1 A 0 A_JumpIfCloser(220, "StopInAir")
+	   	TNT1 A 0 Radius_Quake (2, 12, 0, 12, 0)
+		TNT1 A 0 A_Explode(80,96,0)
+		TNT1 A 0 A_PlaySound("DSBAREXP",1)
+		TNT1 A 0 A_SpawnItemEx("PlasmaParticleSpawner", 0, 0, 0, 0, 0, 0, 0, 128)
+		TNT1 AA 0 A_SpawnItem("GreenFlare",0,0)
+		TNT1 A 0 A_FadeOut(0.2)
+		FRPG ABCDEFGH 2 BRIGHT
+		Stop
+
+	StopInAir:
+		FRPG ABCDEF 1 BRIGHT
+		Stop
+	}
+}
+
+
+ACTOR SF_MagicSpearTrail
+{
+	Scale 0.3
+	Radius 0
+	Height 0
+	Damage 0
+	Renderstyle Add
+	Alpha 0.95
+	+DOOMBOUNCE
+	+MISSILE
+	+CLIENTSIDEONLY
+	+NOTELEPORT
+	+NOBLOCKMAP
+	+CORPSE
+	+BLOODLESSIMPACT
+	+FORCEXYBILLBOARD
+	+NODAMAGETHRUST
+	+MOVEWITHSECTOR
+	+NOBLOCKMONST
+	-SOLID
+	+THRUACTORS
+	+DONTSPLASH
+	+NOGRAVITY
+	+DONTBLAST
+	Speed 0
+	Obituary "$OB_MPCROSSBOW"
+    States
+    {
+     Spawn:
+	    TNT1 A 0 NoDelay A_Jump(192,"Stopped")
+	    TNT1 A 0 A_ChangeVelocity(frandom(-0.6,0.6),frandom(-0.6,0.6),frandom(-0.6,0.6), CVF_REPLACE)
+		SPKG AAAAAAAA 1 Bright A_SetScale(scalex*0.8)
+		Stop
+	Stopped:
+		TNT1 A 0
+		Stop
+    }
+}
+
+ACTOR Schism_SF_MagicBall 
+{
+	Game Doom
+	DamageType Burn
+	Radius 4
+	Height 10
+	Speed 16
+	FastSpeed 24
+	Damage (random(20,20))
+	PROJECTILE
+    +THRUGHOST
+	+FORCEXYBILLBOARD
+	RenderStyle Add
+	Alpha 1
+	SeeSound "imp/attack"
+	DeathSound "imp/shotx"
+	Decal "Scorch"
+	Species "Imps"
+	+DONTHURTSPECIES
+	Scale 0.3
+	States
+	{
+	StopInAir:
+		TNT1 A 0
+		EXPL A 0 A_CustomMissile ("FireBallExplosionFlames", 1, 0, random (0, 360), 2, random (0, 360))
+		Stop
+		
+	Spawn:
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "SpawnUnderwater")
+		TNT1 A 0 ACS_NamedExecuteAlways("BDCheckJanitor", 0, 0, 0, 0)//Check Effects
+		BLHD Ab 1 BRIGHT
+		TNT1 A 0 A_JumpIfInventory("lowgraphicsmode", 1, "SpawnCheap")
+	
+	Spawn1:
+		TNT1 A 0 
+		BLHD A 1 BRIGHT A_SpawnItem ("CoolAndNewFlameTrails", 0, random( -2, 2))
+		TNT1 A 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 2, 0, random (160, 210), 2, random (-30, 30))
+		Loop
+		
+	SpawnCheap:
+		BLHD AB 1 BRIGHT// A_SpawnItem ("CoolAndNewFlameTrails")
+		Loop
+		
+	SpawnUnderwater:
+		FR7X A 1 BRIGHT A_SpawnItem("FireballFlare",0,0)
+		TNT1 A 0 A_CustomMissile ("BUBULZ", 0, 0, random (0, 360), 2, random (0, 180))
+		FR7X B 1 BRIGHT A_SpawnItem("FireballFlare",0,0)
+		TNT1 A 0 A_CustomMissile ("BUBULZ", 0, 0, random (0, 360), 2, random (0, 180))
+		Goto Spawn1	
+		
+	Death:
+		TNT1 A 0
+		TNT1 A 0 A_SpawnItemEx ("SmallUnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	    EXPL A 0 A_CustomMissile ("FireBallExplosionFlames", 1, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_SpawnItemEx("TinyBurningPiece3", random (-5, 5), random (-5, 5))
+		TNT1 A 0 A_SpawnItemEx ("DetectFloorCraterSmall",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	    TNT1 A 0 A_SpawnItemEx ("DetectCeilCraterSmall",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_CustomMissile ("BDExplosionparticlesSmall", 10, 0, random (0, 180), 2, random (40, 90))
+		TNT1 A 0 A_CustomMissile ("PlasmaSmoke", 1, 0, random (0, 360), 2, random (0, 160))
+		Stop
+	XDeath:
+	    TNT1 A 0
+		//TNT1 A 0 A_JumpIfInventory("lowgraphicsmode", 1, "DeathCheap")
+		TNT1 A 0 A_SpawnItemEx ("SmallUnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_CustomMissile ("BDExplosionparticlesSmall", 10, 0, random (0, 180), 2, random (40, 90))
+	    EXPL A 0 A_CustomMissile ("FireBallExplosionFlames", 1, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_SpawnItemEx("TinyBurningPiece3", random (-15, 15), random (-15, 15))
+		TNT1 A 0 A_CustomMissile ("PlasmaSmoke", 1, 0, random (0, 360), 2, random (0, 160))
+		//FRFX CDEFGHIJKLMNOP 1 BRIGHT A_SpawnItem("RedFlare",0,0)
+		Stop
+	}
+}
+
+
+ACTOR Schism_SF_MagicSphere
+{
+	Game Doom
+	SpawnID 153
+	Radius 6
+	Height 8
+	Speed 30
+	Damage 60
+	//Projectile 
+    Scale 0.3
+	+MISSILE
+	+FORCEXYBILLBOARD
+	+THRUGHOST
+	//+EXTREMEDEATH
+	gravity 0.3
+	RenderStyle Translucent
+    DamageType Fire
+	Alpha 1
+	Decal "Scorch"
+	SeeSound "BREATHOF"
+	DeathSound "fatso/shotx"
+	States
+	{
+	Spawn:
+	    TNT1 A 0
+		//TNT1 A 0 ACS_ExecuteAlways(798, 0, 0, 0, 0)//Check Effects
+	
+	Spawn1:
+		TNT1 A 0 A_JumpIfInventory("lowgraphicsmode", 1, "SpawnCheap")
+		TNT1 A 0 A_SpawnItem ("FireballExplosionFlamesSmall")
+		MANF A 1 BRIGHT A_SpawnItem("RedFlare22")
+		
+		TNT1 A 0 A_SpawnItem ("FireballExplosionFlamesSmall")
+		MANF B 1 BRIGHT A_SpawnItem("RedFlare22")
+		TNT1 A 0 A_CustomMissile ("RocketSmokeTrail52", 2, 0, random (70, 110), 2, random (0, 360))
+		
+		TNT1 A 0 A_SpawnItem ("FireballExplosionFlamesSmall")
+		MANF A 1 BRIGHT A_SpawnItem("RedFlare22")
+		
+		TNT1 A 0 A_CustomMissile ("FireballExplosionFlamesSmall", 0, 0, random (0, 360), 2, random (00, 360))
+		MANF B 1 BRIGHT A_SpawnItem("RedFlare22")
+		TNT1 A 0 A_CustomMissile ("RocketSmokeTrail52", 2, 0, random (70, 110), 2, random (0, 360))
+		Loop
+		
+	SpawnCheap:
+		TNT1 A 0 A_SpawnItem ("FireballExplosionFlamesSmall")
+		MANF AB 1 BRIGHT A_SpawnItem("RedFlare22")
+		Loop	
+
+	Melee:
+	Crush:
+	XDeath:
+	Death:
+	TNT1 A 0 A_Explode(100, 200)
+    TNT1 A 0 A_Playsound("Pyromancy/FireballHit")
+	TNT1 A 0 A_ChangeFlag("NOGRAVITY", 0)
+	TNT1 AAAA 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	EXPL A 0 A_SpawnItem("ExplosionParticleSpawner")
+	TNT1 AA 0 A_CustomMissile ("PyromancyLargeSparksFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	EXPL AAA 0 A_CustomMissile ("FlyingBurningFuelMagic", 12, 0, random (0, 360), 2, random (40, 160))
+	TNT1 A 2 A_CustomMissile ("PyromancyInfernoExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 A_Explode(20, 150)
+	TNT1 A 2 A_CustomMissile ("PyromancyLargeExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 A_Explode(20, 150)
+	TNT1 A 2 A_CustomMissile ("PyromancyLargeExplosionFlames2", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 A_Explode(20, 150)
+	EXPL AAA 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 12, 0, random (0, 360), 2, random (40, 160))
+	TNT1 AA 2 A_CustomMissile ("PyromancyExplosion2Flames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 A_Explode(20, 150)
+	TNT1 A 2 A_CustomMissile ("PyromancyInfernoExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 A_Explode(20, 150)
+	EXPL AAA 0 A_CustomMissile ("OldschoolRocketSmokeTrailDarker", 12, 0, random (0, 360), 2, random (40, 160))
+	TNT1 AAAA 2 A_CustomMissile ("PyromancyExplosion2Flames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AAAA 2 A_Explode(20, 150)
+	Stop
+
+	}
+}
+
+
+ACTOR Schism_SF_MagicTracer : FastProjectile
+{
+	Radius 2
+	Height 2
+	Speed 125
+	Damage 8
+	Decal "PlasmaScorchLower"
+	Projectile
+	+RANDOMIZE
+	+FORCEXYBILLBOARD
+	+BLOODSPLATTER
+	+HITTRACER
+	Renderstyle Add
+	Alpha 0.95
+	Scale 0.7
+	DeathSound "GWANDHIT"
+	MissileType "SF_MagicTracerTrailSpawner"
+	MissileHeight 8
+	DamageType "HitPuff"
+	States
+	{
+	Spawn:
+	 FXDC AB 1 Bright
+	 Loop
+	Death:
+	 TNT1 A 0
+	 TNT1 AAAAAAA 0 A_SpawnItemEx("SF_MagicTracerParticle1",0,0,0,frandom(-6,6),frandom(-6,6),frandom(-6,6),0,SXF_NOCHECKPOSITION)
+	 TNT1 A 0 A_SetScale(1,1)
+	 TNT1 A 0 A_SpawnItemEx("LightningSparksTrail",0,0,0,frandom(-0.4,0.4),frandom(-0.4,0.4),frandom(-0.4,0.4),0,SXF_NOCHECKPOSITION)
+	 FDC7 ABCDE 1 BRIGHT
+	 //TNT1 A 2 Light("BLASTERSHOT2")
+	 //TNT1 A 2 Light("BLASTERSHOT3")
+	 //TNT1 A 2 Light("BLASTERSHOT4")
+	 //TNT1 A 2 Light("BLASTERSHOT5")
+	 Stop
+
+	XDeath:
+	 TNT1 A 0
+	 TNT1 A 0 ACS_NamedExecuteAlways("Schism_SidheAmmoSpawner", 0, 0, 0, 0)
+	 TNT1 AAAAAAAAAAAAAAAAAAAAA 0 A_SpawnItemEx("SF_MagicTracerParticle2",0,0,0,frandom(-6,6),frandom(-6,6),frandom(-6,6),0,SXF_NOCHECKPOSITION)
+	 TNT1 A 0 A_SetScale(1,1)
+	 FDC7 FGHIJKL 1 BRIGHT
+	 //TNT1 A 2 Light("BLASTERSHOT2")
+	 //TNT1 A 2 Light("BLASTERSHOT3")
+	 //TNT1 A 2 Light("BLASTERSHOT4")
+	 //TNT1 A 2 Light("BLASTERSHOT5")
+	 Stop
+	}
+}
+
+ACTOR SF_MagicTracerTrailSpawner
+{
+	Radius 0
+	Height 0
+	+NOINTERACTION
+    States
+    {
+     Spawn:
+	    TNT1 A 0 NoDelay A_Jump(192,"Stopped")
+		TNT1 A 0 A_SpawnItemEx("SF_MagicTracerParticle",0,0,0,frandom(-0.4,0.4),frandom(-0.4,0.4),frandom(-0.4,0.4),0,SXF_NOCHECKPOSITION)
+	 Stopped:
+		TNT1 A 0
+		Stop
+    }
+}
+
+ACTOR SF_MagicTracerParticle
+{
+	Scale 0.032
+	Gravity 0.02
+	Radius 0
+	Height 0
+	Damage 0
+	Renderstyle Add
+	Alpha 0.95
+	+DOOMBOUNCE
+	+MISSILE
+	+CLIENTSIDEONLY
+	+NOTELEPORT
+	+NOBLOCKMAP
+	+CORPSE
+	+BLOODLESSIMPACT
+	+FORCEXYBILLBOARD
+	+NODAMAGETHRUST
+	+MOVEWITHSECTOR
+	+NOBLOCKMONST
+	-SOLID
+	+THRUACTORS
+	+DONTSPLASH
+	-NOGRAVITY
+	+DONTBLAST
+	Speed 0
+    States
+    {
+     Spawn:
+		SPKB AAAAAAAA 1 Bright A_SetScale(scalex*0.94)
+		Stop
+    }
+}
+
+ACTOR SF_MagicTracerParticle1 : SF_MagicTracerParticle
+{
+	Scale 0.07
+    States
+    {
+     Spawn:
+		SPKB AAAAAAAAA 1 Bright A_SetScale(scalex*0.86)
+		Stop
+    }
+}
+
+ACTOR SF_MagicTracerParticle2 : SF_MagicTracerParticle
+{
+	Scale 0.1
+    States
+    {
+     Spawn:
+		SPKB AAAAAAAAA 1 Bright A_SetScale(scalex*0.86)
+		Stop
+    }
+}
+
+ACTOR SF_MagicBigTracer : FastProjectile
+{
+	Radius 2
+	Height 2
+	Speed 100
+	Damage 5
+	Decal "PlasmaScorchLower"
+	Projectile
+	+RANDOMIZE
+	+FORCEXYBILLBOARD
+	+BLOODSPLATTER
+	+HITTRACER
+	//+RIPPER
+	Renderstyle Add
+	Alpha 0.98
+	Scale 1.5
+	DeathSound "GWANDHIT"
+	MissileType "BlasterParticleTrailSpawner"
+	MissileHeight 8
+	DamageType "Plasma"
+	States
+	{
+	Spawn:
+	 FX18 AB 1 NoDelay Bright
+	 Loop
+	XDeath:
+		TNT1 A 0
+		TNT1 A 0 ACS_NamedExecuteAlways("Schism_SidheAmmoSpawner", 0, 0, 0, 0)
+		Goto Death
+	Death:
+	 TNT1 A 0
+ 	 TNT1 AAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile("SF_MagicBigTracerShrapnel",1,0,random(0,359),CMF_AIMDIRECTION|CMF_TRACKOWNER,random(0,359))
+	 TNT1 AAAAAAAAAAAAAAAAAAAAA 0 A_SpawnItemEx("SF_MagicTracerParticle2",0,0,0,frandom(-6,6),frandom(-6,6),frandom(-6,6),0,SXF_NOCHECKPOSITION)
+	 FX18 CDEFGH 1 BRIGHT
+ 	 TNT1 A 0 A_SpawnItemEx("LightningSparksTrailLarge",0,0,0,frandom(-0.4,0.4),frandom(-0.4,0.4),frandom(-0.4,0.4),0,SXF_NOCHECKPOSITION)
+	 //TNT1 A 2 Light("BLASTERSHOT2")
+	 //TNT1 A 2 Light("BLASTERSHOT3")
+	 //TNT1 A 2 Light("BLASTERSHOT4")
+	 //TNT1 A 2 Light("BLASTERSHOT5")
+	 Stop
+	}
+}
+
+
+ACTOR SF_MagicBigTracerShrapnel //: FastProjectile
+{
+	Radius 2
+	Height 2
+	Speed 50
+	Damage 15
+	Projectile
+	+RANDOMIZE
+	+FORCEXYBILLBOARD
+	+BLOODSPLATTER
+	//+RIPPER
+	+DOOMBOUNCE
+	BounceType "Doom"
+	BounceCount 3
+	Renderstyle Add
+	Alpha 0.9
+	Scale 0.4
+	DamageType Minigun
+	States
+	{
+	Spawn:
+	 LDOT ABCDE 1 Bright
+	 Loop
+	Death:
+	 TNT1 A 0
+	 TNT1 AAAAAA 0 A_SpawnItemEx("SF_MagicTracerParticle1",0,0,0,frandom(-6,6),frandom(-6,6),frandom(-6,6),0,SXF_NOCHECKPOSITION)
+	 TNT1 A 0 A_SetScale(1,1)
+	 TNT1 A 0 A_SpawnItemEx("LightningSparksTrail",0,0,0,frandom(-0.4,0.4),frandom(-0.4,0.4),frandom(-0.4,0.4),0,SXF_NOCHECKPOSITION)
+	 FDC7 ABCDE 1 BRIGHT
+	 //TNT1 A 2 Light("BLASTERSHOT2")
+	 //TNT1 A 2 Light("BLASTERSHOT3")
+	 //TNT1 A 2 Light("BLASTERSHOT4")
+	 //TNT1 A 2 Light("BLASTERSHOT5")
+	 Stop
+
+	XDeath:
+	 TNT1 A 0
+	 TNT1 AAAAAAAAAAAAAAAAAAA 0 A_SpawnItemEx("SF_MagicTracerParticle2",0,0,0,frandom(-6,6),frandom(-6,6),frandom(-6,6),0,SXF_NOCHECKPOSITION)
+	 TNT1 A 0 A_SetScale(1,1)
+	 FDC7 FGHIJKL 1 BRIGHT
+	  //TNT1 A 2 Light("BLASTERSHOT2")
+	 //TNT1 A 2 Light("BLASTERSHOT3")
+	 //TNT1 A 2 Light("BLASTERSHOT4")
+	 //TNT1 A 2 Light("BLASTERSHOT5")
+	 Stop
+	}
+}
+
+
+ACTOR Schism_SF_MagicSkull
+{
+	Game Doom
+	Radius 6
+	Height 6
+	Speed 27
+    Fastspeed 32
+	Damage (random(100,100))
+	Projectile
+    Scale 0.85
+	+FORCEXYBILLBOARD
+	+THRUGHOST
+	RenderStyle Translucent
+    DamageType ExplosiveImpact
+	ExplosionRadius 150
+	ExplosionDamage 8
+	Alpha 1
+	Decal "Scorch"
+	SeeSound "Volcabus/Cannon"
+	DeathSound "Monster/hadsit"
+	States
+	{
+	Spawn:
+	    TNT1 A 0
+		TNT1 A 0 ACS_NamedExecuteAlways("BDCheckJanitor", 0, 0, 0, 0)//Check Effects
+
+	Spawn1:
+		TNT1 A 0 A_JumpIfInventory("lowgraphicsmode", 1, "SpawnCheap")
+		S4BA A 1 BRIGHT A_SpawnItem("RedFlare22")
+		S4BA A 1 BRIGHT A_SpawnItem("RedFlare22")
+		S4BA B 1 BRIGHT A_SpawnItem("RedFlare22")
+		S4BA B 1 BRIGHT A_SpawnItem("RedFlare22")
+		Loop
+
+	SpawnCheap:
+		S4BA AB 2 BRIGHT A_SpawnItem("RedFlare22")
+		Loop
+
+	Death:
+	TNT1 A 0 A_ChangeFlag("NOGRAVITY", 0)
+	TNT1 A 0 A_Explode(14, 55, 0)
+	Goto ExplosionEffect
+
+	ExplosionEffect:
+	TNT1 A 0
+	TNT1 AAAA 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 BRIGHT A_SpawnItem("RedFlare22")
+	TNT1 A 0 A_SpawnItem("WhiteShockwaveSmall")
+		EXPL A 0 A_CustomMissile ("ExplosionSmoke", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+        TNT1 AAA 0 A_CustomMissile ("BDExplosionparticlesSmall", 10, 0, random (0, 180), 2, random (40, 90))
+		EXPL A 0
+        TNT1 AAAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	Stop
+
+	}
+}
+
+
+ACTOR Schism_SF_MagicPhoenix: FastProjectile
+{
+	Game Doom
+	Radius 6
+	Height 2
+	Speed 60
+	Damage (random(70, 100))
+	+RANDOMIZE
+	+MISSILE
+	-NOGRAVITY
+	+BLOODSPLATTER
+    +EXTREMEDEATH
+	+HITTRACER
+	//+NOEXTREMEDEATH
+	Gravity 0.1
+	RenderStyle Add
+	damagetype "Fire"
+	Alpha 1.0
+	Decal "Scorch"
+	Scale 1
+	DeathSound "skeleton/tracex"
+	Obituary "$OB_MPPLASMARIFLE"
+	States
+	{
+	Spawn:
+		PHOX A 1 Bright A_SpawnItem ("CoolAndNewFlameTrailsLong2", 0, random( -2, 2))
+		Loop
+
+	XDeath:
+		TNT1 A 0
+		TNT1 A 0 ACS_NamedExecuteAlways("Schism_SidheAmmoSpawner", 0, 0, 0, 0)
+		Goto Death
+
+	Death:
+		TNT1 A 0
+		TNT1 A 0 A_SetScale(1.1)
+
+		FX08 DD 2 BRIGHT
+		TNT1 A 0 A_SpawnItemEx("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_Explode(120, 150,0)
+		TNT1 A 0 A_Explode(64, 220, 0)
+
+		TNT1 AAAAAAAAAAAAAAAAA 0 A_CustomMissile("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+		FX08 EFFGHI 2 BRIGHT //A_SpawnItemEx("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+
+		TNT1 A 0 A_CustomMissile ("PyromancySparksFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_CustomMissile ("PyromancySparksFlames2", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		EXPL A 0 A_SpawnItem("ExplosionParticleSpawner")
+
+		TNT1 A 0 A_SpawnItemEx("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_PlaySound("DSBAREXP", 1)
+		TNT1 A 0 Radius_Quake(4, 15, 0, 12, 0)
+
+// 		TNT1 A 1 A_SpawnItemEx("BlackSunExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+
+ 		TNT1 A 1 A_SpawnItemEx ("RocketExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+
+		TNT1 A 0 A_SpawnItem("WhiteShockwaveSmall")
+		EXPL A 0 A_CustomMissile ("ExplosionSmoke", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+        TNT1 A 0 A_CustomMissile ("HeavyRifleHitFlame", 0, 0, random (0, 360), 2, random (0, 360))
+
+
+
+	TNT1 AA 0 A_CustomMissile ("PyromancyLargeSparksFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	FX08 J 2 BRIGHT
+	TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_Explode(20, 150)
+	FX08 K 2 BRIGHT A_CustomMissile ("PyromancyLargeExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_Explode(20, 150)
+	FX08 L 2 BRIGHT A_CustomMissile ("PyromancyLargeExplosionFlames2", 0, 0, random (0, 360), 2, random (0, 360))
+
+		//TNT1 AA 0 A_CustomMissile ("HighExplosiveFlames",random (10, 20), 0, random (0, 360), 2, random (10, 90))
+		FX08 M 2 BRIGHT A_SpawnItemEx("RedFlareMediumSpawn",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 AAAAAAAA 0 A_CustomMissile ("MediumExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0
+		Stop
+	}
+}
+
+
+ACTOR Schism_SF_MagicStar
+{
+	Radius 6
+	Height 6
+	Speed 60
+	Damage (random(30,60))
+	Projectile
+	+WINDTHRUST
+	+HITTRACER
+	-NOBLOCKMAP
+	RenderStyle Add
+	DeathSound "HLSTFHIT"
+	Obituary "$OB_MPSKULLROD"
+	Scale 0.6
+	DamageType "SSG"
+	Decal "BrutalHellStaffScorch"
+	States
+	{
+		Spawn:
+			FX00 AABBCCDDEEFF 1 Bright A_SpawnItemEx("HellStaffFlare",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+			Loop
+
+		XDeath:
+			TNT1 A 0
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_SidheAmmoSpawner", 0, 0, 0, 0)
+			Goto Death
+
+		Death:
+			TNT1 A 0 A_SetScale(1.0)
+			TNT1 AAAAAAAAA 0 A_CustomMissile("ExplosionParticle1",0,0,random(1,360),2,random(1,360))
+			//TNT1 AAA 0 A_CustomMissile("PlasmaSmoke",0,0,random(1,360),2,random(1,360))
+			FX00 HJ 1 Bright A_SpawnItemEx("RedFlareMedium",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+			FX00 KL 1 Bright A_SpawnItemEx("RedFlare",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+			FX00 M 1 Bright A_SpawnItemEx("RedFlareBig",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+			FIRH FGHIJKLMNOP 1 Bright A_SpawnItemEx("HRedFlareBig",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+			Stop
+	}
+}
+
+ACTOR Schism_SF_MagicBigStar : FastProjectile
+{
+	Game Doom
+	SpawnID 53
+	Radius 10
+	Height 4
+	Speed 40
+	Damage (random(120,140))
+	RenderStyle Add
+	PROJECTILE
+	+THRUGHOST
+	-NOGRAVITY
+    +EXTREMEDEATH
+	Scale 1
+    damagetype "Explosive"
+	DeathSound "skeleton/tracex"
+	// DeathSound "HLSTFHIT"
+	States
+	{
+	Spawn:
+		FX00 AABBCCDDEEFF 1 BRIGHT A_SpawnItem("RedFlareSmall",0,0)
+		TNT1 A 0 A_SpawnItem("BrawlExhaust",0,4)
+		Loop
+
+	Death:
+	    TNT1 A 0 Radius_Quake (2, 54, 0, 15, 0)
+		TNT1 A 0 A_SpawnItem("WhiteShockwave")
+		TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 Bright A_Explode(50,80,0)
+		TNT1 A 0 A_SpawnItemEx ("ExplosionFlareSpawner",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+        TNT1 A 0 A_SpawnItemEx("ExplosionParticleSpawner", 0, 0, 0, 0, 0, 0, 0, 128)
+		TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+        TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_ChangeFlag("SHOOTABLE", 0)
+	//TNT1 AAA 0 A_CustomMissile("PlasmaSmoke",0,0,random(1,360),2,random(1,360))
+		FX00 HJ 1 Bright A_SpawnItemEx("RedFlareMedium",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+		FX00 KL 1 Bright A_SpawnItemEx("RedFlare",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+		FX00 M 1 Bright A_SpawnItemEx("RedFlareBig",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+		FIRH FGHIJKLMNOP 1 Bright A_SpawnItemEx("HRedFlareBig",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+		Stop
+	}
+}
+

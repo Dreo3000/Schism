@@ -1,0 +1,517 @@
+ACTOR BrutalFireMace : Schism_Weapon replaces Mace
+{
+	Weapon.AmmoUse1 0
+	Weapon.AmmoGive1 50
+// 	Weapon.YAdjust 15
+	Weapon.AmmoType1 "BrutalMaceAmmo"
+	Weapon.SisterWeapon "BrutalFireMacePowered"
+	//Inventory.RestrictedTo Schism_Corvus
+	Inventory.ForbiddenTo Schism_Sorcerer, Schism_Ranger
+	VisibleToPlayerClass Schism_Corvus, Schism_Ranger, Schism_Warrior, Schism_Sorcerer //wtf... - LL
+	+WEAPON.NOAUTOAIM
+	+INVENTORY.UNDROPPABLE
+	//Inventory.PickupMessage "$TXT_WPNSKULLROD"
+	//Tag "$TAG_SKULLROD"
+	Speed 4
+	States
+	{
+		Spawn:
+			WMCE A 1 A_SpawnItemEx("RedFlareSmall",0,0,40)
+			Goto Spawn
+
+		Deselect:
+			MACE A 0 A_Lower
+			MACE A 1 A_Lower
+			Loop
+
+		Select:
+			MACE A 0 A_Raise
+			MACE A 1 A_Raise
+			Loop
+
+		Ready:
+			MACE A 0 A_WeaponReady
+			"####" F 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+			"####" F 0 A_JumpIfInventory("Reloading", 1, "DeployStomper")
+			MACE A 1 A_WeaponReady
+			Loop
+
+		Fire:
+			MACE BCDE 2
+		Hold:
+			TNT1 A 0 A_JumpIfInventory("BrutalMaceAmmo",1,1)
+			Goto Ready
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAss",0,0)
+			TNT1 A 0 A_FireCustomMissile("GunFireSmoke", 0, 0, 0, 0, 0, 0)
+			TNT1 A 0 A_recoil(4)
+			TNT1 A 0 A_TakeInventory("BrutalMaceAmmo",1)
+			MACE F 1 A_FireCustomMissile("BrutalFireMaceBall1",0,0,0,-3)
+			MACE C 1 A_SetPitch(-0.2 + pitch)
+			MACE D 1 A_SetPitch(0.1 + pitch)
+			MACE E 1 A_SetPitch(0.1 + pitch)
+			TNT1 A 0 A_Refire("Hold")
+			Goto Ready
+
+		AltFire:
+			MACE BCDE 2
+		AltHold:
+			TNT1 A 0 A_JumpIfInventory("BrutalMaceAmmo",1,1)
+			Goto Ready
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAss",0,0)
+			TNT1 A 0 A_FireCustomMissile("GunFireSmoke", 0, 0, 0, 0, 0, 0)
+			TNT1 A 0 A_recoil(4)
+			TNT1 A 0 A_TakeInventory("BrutalMaceAmmo",1)
+			MACE F 1 A_FireCustomMissile("BrutalFireMaceBall2",0,0,0,-3)
+			MACE C 1 A_SetPitch(-0.2 + pitch)
+			MACE D 1 A_SetPitch(0.1 + pitch)
+			MACE E 1 A_SetPitch(0.1 + pitch)
+			TNT1 A 0 A_Refire("AltHold")
+			Goto Ready
+
+		/*
+		//AltFire
+			TNT1 A 0 A_JumpIfInventory("BrutalMaceAmmo",10,1)
+			Goto Ready
+			MACE BCD 2
+			MACE E 2 A_Refire("ALtHold")
+			TNT1 A 0 A_TakeInventory("BrutalMaceAmmo",10)
+			MACE F 2 A_FireCustomMissile("FireMaceLobBall",0,0,0,-3)
+			Goto Ready
+		AltHold:
+			TNT1 A 0 A_recoil(8)
+			TNT1 A 0 A_GiveInventory("FireMaceRemote",1)
+			TNT1 A 0 A_TakeInventory("BrutalMaceAmmo",10)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAss",0,0)
+			TNT1 A 0 A_FireCustomMissile("GunFireSmoke", 0, 0, 0, 0, 0, 0)
+			MACE F 6 A_FireCustomMissile("FireMaceRemoteBall",0,0,0,-3)
+		KeepHolding:
+			MACE CDEF 2
+			TNT1 A 0 A_Refire("KeepHolding")
+			MACE F 12 A_TakeInventory("FireMaceRemote",1)
+			MACE CD 8 A_ClearRefire
+			MACE EB 4
+			Goto Ready */
+
+	DeployStomper:
+			TNT1 A 0 A_TakeInventory("Reloading",1)
+			TNT1 A 0 A_JumpIfInventory("BrutalMaceAmmo",50,1)
+			Goto Ready
+			MACE BCDEF 2
+			MACE CDEFCDEFCDEFCDE 1
+			TNT1 A 0 A_TakeInventory("BrutalMaceAmmo",50)
+			MACE F 10 A_FireCustomMissile("FireMaceStomper",0,0,0,2)
+			Goto Ready
+
+		ClearInv:
+			"####" "#" 0 A_TakeInventory("StartDualWield", 1)
+			"####" "#" 0 A_TakeInventory("Taunting", 1)
+			"####" "#" 0 A_TakeInventory("Reloading", 1)
+			"####" "#" 0 A_TakeInventory("Salute1", 1)
+			"####" "#" 0 A_TakeInventory("Salute2", 2)
+			"####" "#" 0 A_TakeInventory("Unloading", 1)
+			Goto Ready
+}}
+
+ACTOR BrutalFireMacePowered : BrutalFireMace
+{
++WEAPON.POWERED_UP
+Weapon.AmmoGive 0
+Weapon.SisterWeapon "BrutalFireMace"
+States
+{
+		Fire:
+			MACE BCDE 2
+		Hold:
+			TNT1 A 0 A_JumpIfInventory("BrutalMaceAmmo",5,1)
+			Goto Ready
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAss",0,0)
+			TNT1 A 0 A_FireCustomMissile("GunFireSmoke", 0, 0, 0, 0, 0, 0)
+			TNT1 A 0 A_recoil(4)
+			TNT1 A 0 A_TakeInventory("BrutalMaceAmmo",5)
+			TNT1 A 0 A_FireCustomMissile("FireMacePowerBalls",Random(-2,2),0,-6,-3)
+			TNT1 A 0 A_FireCustomMissile("FireMacePowerBalls",Random(-2,2),0,6,-3)
+			MACE F 1 A_FireCustomMissile("FireMacePowerBalls",Random(-2,2),0,0,-1)
+			MACE C 1 A_SetPitch(-0.2 + pitch)
+			MACE D 1 A_SetPitch(0.1 + pitch)
+			MACE E 1 A_SetPitch(0.1 + pitch)
+			TNT1 A 0 A_Refire("Hold")
+			Goto Ready
+
+		AltFire:
+			TNT1 A 0 A_JumpIfInventory("BrutalMaceAmmo",10,1)
+			Goto Ready
+			MACE BCDEF 2
+			MACE CDEFCDEFCDEFCDEFCDEF 1
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAssDouble",0,0)
+			TNT1 A 0 A_TakeInventory("BrutalMaceAmmo",10)
+			TNT1 A 0 A_recoil(12)
+			TNT1 AAAAAAAAAAAAAAA 0 A_FireCustomMissile("DrunkenMaceBalls",random(-10,10),0,0,-3)
+			MACE F 6 A_SetPitch(-0.6 + pitch)
+			MACE CCCDDD 1 A_SetPitch(0.1 + pitch)
+			MACE EB 4
+			Goto Ready
+}}
+
+
+ACTOR BrutalFireMaceBall1
+{
+  Radius 5
+  Height 5
+  Speed 32
+  Damage (random(40,50))
+  Projectile
+  Gravity 0.5
+  -NOGRAVITY
+  +THRUGHOST
+  +HITTRACER
+  //+CANBOUNCEWATER
+  Decal "WallCrack"
+  BounceType "Doom"
+  Obituary "$OB_MPMACE"
+  Scale 0.6
+  DamageType "blast"
+
+  States
+  {
+  Spawn:
+    FX02 C 1 //A_SpawnItemEx("HRedFlareMedium",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION)
+    Loop
+XDeath:
+	TNT1 A 0
+	TNT1 A 0 ACS_NamedExecuteAlways("Schism_SidheAmmoSpawner", 0, 0, 0, 0)
+	TNT1 A 0 A_PlaySound("METALHIT", 7)
+	FX02 FGG 1 Bright
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_Explode(40,60,0)
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	FX02 HIJ 2 Bright
+	Stop
+Death:
+	TNT1 A 0 A_PlaySound("METALHIT", 7)
+	TNT1 A 0 A_changeflag("nogravity",1)
+	FX02 FGG 1 Bright
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_Explode(40,60,0)
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	FX02 HIJ 2 Bright
+	stop
+  }
+}
+
+ACTOR BrutalFireMaceBall2 : BrutalFireMaceBall1
+{
+BounceType None
+	-BOUNCEONWALLS
+	-BOUNCEONFLOORS
+	-BOUNCEONCEILINGS
+	-USEBOUNCESTATE
+	-BOUNCEONACTORS
+}
+
+
+ACTOR FireMaceCannonBalls
+{
+Radius 6
+Height 6
+Speed 58
+Damage (random(40,40))
+PROJECTILE
++THRUGHOST -NOGRAVITY +DONTHURTSPECIES
+Gravity 1
+Scale 0.8
+Species "marines"
+damagetype "blast"
+States
+{
+Spawn:
+	FX02 C 1 BRIGHT A_CustomMissile("CannonBallPunch",0,0,0,CMF_AIMDIRECTION|CMF_TRACKOWNER)
+	"####" A 0 A_SpawnItem("GunFireSmoke")
+	FX02 C 1 BRIGHT A_CustomMissile("CannonBallPunch",0,0,0,CMF_AIMDIRECTION|CMF_TRACKOWNER)
+	"####" A 0 A_SpawnItem("GunFireSmoke")
+	FX02 D 1 BRIGHT A_CustomMissile("CannonBallPunch",0,0,0,CMF_AIMDIRECTION|CMF_TRACKOWNER)
+	"####" A 0 A_SpawnItem("GunFireSmoke")
+	FX02 D 1 BRIGHT A_CustomMissile("CannonBallPunch",0,0,0,CMF_AIMDIRECTION|CMF_TRACKOWNER)
+	"####" A 0 A_SpawnItem("GunFireSmoke")
+	Loop
+XDeath:
+	TNT1 A 0 A_PlaySound("METALHIT", 7)
+	FX02 FGG 1 Bright
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_Explode(40,80,0)
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	FX02 HIJ 2 Bright
+	Stop
+Death:
+	TNT1 A 0 A_PlaySound("METALHIT", 7)
+	TNT1 A 0 A_changeflag("nogravity",1)
+	FX02 C 10
+	FX02 FGG 1 Bright
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_Explode(40,80,0)
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	FX02 HIJ 2 Bright
+	Stop}}
+
+ACTOR CannonBallPunch: MeleeStrike1
+{Damage (random(20,20))
+DamageType "Extremepunches"
+Speed 40
+states
+{Death:
+TNT1 A 0 A_Quake(1,15,0,15)
+EXPL A 0 A_CustomMissile ("MeleeSmoke", 0, 0, random (0, 360), 2, random (0, 360))
+TNT1 A 10
+Stop}}
+
+ACTOR DrunkenMaceBalls : FastProjectile
+{
+Radius 3
+Height 3
+Speed 80
+Damage (random(15,15))
+PROJECTILE
++THRUGHOST
+damagetype "Blast"
+MissileType "GunFireSmoke"
+States
+{
+Spawn:
+	FX02 AABB 1 BRIGHT A_ChangeVelocity(1,frandom(-6,6),frandom(-3,3),1)
+	Loop
+XDeath:
+	TNT1 A 0 A_PlaySound("METALHIT", 7)
+	FX02 FG 1 Bright
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_Explode(40,100,0)
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	FX02 HIJ 1 Bright
+	Stop
+Death:
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_Explode(40,80,0)
+	TNT1 A 0 A_stop
+	TNT1 A 0 A_PlaySound("METALHIT", 7)
+	FX02 A 10
+	FX02 AAAAAAAAAAAAAAAAAAAA 1 A_fadeout(0.08)
+	Stop}}
+
+ACTOR FireMacePowerBalls
+{
+Radius 6
+Height 6
+Speed 58
+Gravity 0.8
+Damage (random(40,40))
+PROJECTILE
++THRUGHOST -NOGRAVITY +DONTHURTSPECIES
+Species "marines"
+damagetype "Explosive"
+States
+{
+Spawn:
+	FX02 AABB 1 BRIGHT A_SpawnItem("RedFlareSmall")
+	Loop
+Death:
+	TNT1 A 0 A_PlaySound("METALHIT", 7)
+	FX02 FGG 1 Bright
+	TNT1 A 0 A_SpawnItemEx ("UnderwaterExplosion",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectFloorCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_SpawnItemEx ("DetectCeilCrater",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+	TNT1 A 0 A_Explode(60,80,0)
+	TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+	TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+	TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+	FX02 HIJ 2 Bright
+	Stop
+}}
+
+ACTOR FireMaceLobBall
+{
+	projectile
+	+DONTSPLASH
+	+FRIENDLY
+	-NOGRAVITY
+    Speed 24
+	Radius 10
+	Height 10
+    Gravity 0.75
+	Damage (Random(10,10))
+	DamageType "Blast"
+	BounceSound "METALHIT"
+    Decal "Crack"
+    States
+    {
+	Spawn:
+		FX02 E 1 BRIGHT
+		Loop
+	Death:
+		TNT1 A 0 A_SpawnItemEx ("WhiteShockWave",0,0,0)
+		TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+		TNT1 AAAAAAAAAA 0 A_CustomMissile ("ExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_SpawnItemEx ("RocketExplosion",0,0,13,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 Radius_Quake(3,8,0,15,0)
+		TNT1 A 0 A_PlaySound("Explosion", 1)
+		TNT1 A 1 A_Explode(100,120,0)
+		Stop}}
+
+ACTOR FireMaceRemoteBall
+{
+	projectile
+	+BOUNCEONWALLS
+	+BOUNCEONFLOORS
+	+BOUNCEONCEILINGS
+	+USEBOUNCESTATE
+	+BOUNCEONACTORS
+	+DONTSPLASH
+	+FRIENDLY
+	-NOGRAVITY
+    Speed 18
+	Radius 10
+	Height 10
+    Gravity 0.75
+	Damage 10
+	DamageType "Blast"
+	bouncetype "hexen"
+	BounceSound "METALHIT"
+	bouncefactor 1
+	bouncecount 40
+    Decal "Crack"
+    States
+    {
+	Spawn:
+		FX02 EEEEE 1 BRIGHT
+	Fly:
+		FX02 E 1 BRIGHT A_SpawnItem("GunFireSmoke")
+		TNT1 A 0 A_Jumpifintargetinventory("FireMaceRemote",1,"FLY")
+		Goto Death
+	Bounce.Actor:
+		TNT1 A 0 Radius_Quake (3,8,0,15,0)
+		TNT1 A 0 A_SpawnItemEx ("RocketExplosion",0,0,13,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 90))
+		FX02 A 1 BRIGHT
+		goto spawn
+	Bounce.Floor:
+		TNT1 A 0 Radius_Quake (3,8,0,15,0)
+		TNT1 A 0 A_FaceTarget
+		TNT1 A 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 90))
+		FX02 A 1 BRIGHT
+		goto spawn
+	Bounce.Wall:
+	Bounce.Ceiling:
+		TNT1 A 0 Radius_Quake (3,8,0,15,0)
+		TNT1 A 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+		FX02 A 1 BRIGHT
+		goto spawn
+	Death:
+		TNT1 A 0 A_SpawnItemEx ("WhiteShockWave",0,0,0)
+		TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+		TNT1 AAAAAAAAAA 0 A_CustomMissile ("ExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AAAAAAAAAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 Radius_Quake(3,8,0,15,0)
+		TNT1 A 0 A_PlaySound("Explosion", 1)
+		TNT1 A 0 A_SpawnItemEx ("RocketExplosion",0,0,13,0,0,0,0,SXF_NOCHECKPOSITION,0)
+		TNT1 A 1 A_Explode(200,180,0)
+		Stop}}
+
+ACTOR FireMaceStomper
+{
+	projectile
+	+BOUNCEONWALLS +BOUNCEONFLOORS +BOUNCEONCEILINGS +BOUNCEONACTORS +USEBOUNCESTATE
+	+DONTSPLASH	+FRIENDLY -NOBLOCKMAP -NOGRAVITY +SHOOTABLE +NOBLOOD +LOOKALLAROUND
+    Speed 16
+	Radius 20
+	Height 16
+    Gravity 0.75
+	Mass 300
+	Damage 1
+	DamageType "crush"
+	bouncetype "hexen"
+	BounceSound "METALHIT"
+	bouncefactor 1
+	bouncecount 22
+    Decal "Crack"
+	PainChance 255
+	MaxTargetRange 200
+	PainChance "Melee", 255
+	PainChance "Kick", 255
+    States
+    {
+	Spawn:
+		FX02 EEEEE 1 BRIGHT A_spawnitem("RedFlareSmall")
+	Decalarate:
+		FX02 E 1 Bright A_stop
+	Boing:
+		TNT1 A 0 A_JumpIf(velx > 1,"spawn")
+		TNT1 A 0 A_JumpIf(vely > 1,"spawn")
+		FX02 E 1 BRIGHT A_spawnitem("YellowFlareSmall")
+		Loop
+	Pain: //.Kick: Pain.Melee: Pain.ExtremePunches: Pain.LowKick:
+	    TNT1 A 0 A_Changeflag("FRIENDLY", 0)
+		TNT1 A 0 A_PlaySound("weapons/barrelpain", 1)
+		TNT1 A 0 A_Chase("","")
+        FX02 E 1 Bright A_FaceTarget
+		//TNT1 A 0 A_ChangeVelocity (-16,0,0,1)
+		TNT1 A 0 ThrustThing(angle*256/360+128,28,0,0)
+		TNT1 A 0 A_Changeflag("FRIENDLY", 1)
+        Goto Spawn
+	Bounce.Floor:
+		TNT1 A 0 A_Explode(80,100,0)
+		TNT1 A 0 Radius_Quake (3,8,0,15,0)
+		TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+		TNT1 A 0 A_SpawnItem("WhiteShockwave")
+		TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 ThrustThingZ (0,36,0,0)
+		FX02 A 1 BRIGHT
+		goto Boing
+	Bounce.Wall:
+	Bounce.Ceiling:
+	Bounce.Actor:
+		TNT1 A 0 A_Explode(80,100,0)
+		TNT1 A 0 Radius_Quake (3,8,0,15,0)
+		TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+		TNT1 A 0 A_SpawnItem("WhiteShockwave")
+		TNT1 AAA 0 A_CustomMissile ("SmallExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		FX02 A 1 BRIGHT
+		goto Boing
+	Death:
+		TNT1 A 0 A_SpawnItemEx ("WhiteShockWave",0,0,0)
+		TNT1 AAA 0 A_CustomMissile ("BDExplosionparticles", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 AA 0 A_CustomMissile ("BDExplosionparticles2", 0, 0, random (0, 360), 2, random (0, 90))
+		TNT1 AAAAAAAAAA 0 A_CustomMissile ("ExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 Radius_Quake(3,8,0,15,0)
+		TNT1 A 1 A_Explode(60,220,0)
+		TNT1 AAA 0 A_CustomMissile ("ExplosionFlamesBig", 0, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 Radius_Quake(3,8,0,15,0)
+		TNT1 A 0 A_PlaySound("Explosion", 1)
+		TNT1 A 1 A_Explode(120,120,0)
+		Stop}}
+
+Actor FireMaceRemote : Inventory
+{inventory.maxamount 1}

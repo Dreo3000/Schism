@@ -1,0 +1,161 @@
+Actor Schism_Weapon : Weapon {
+	Weapon.BobRangeX 0.4
+	Weapon.BobRangeY 0.6
+	Weapon.BobSpeed 2.9
+	Weapon.BobStyle InverseSmooth
+	VisibleToPlayerClass  Schism_Ranger, Schism_Sorcerer, Schism_Warrior, Schism_Corvus, Schism_Rogue
+	var int user_mag;
+	var int user_ncont;
+// 	Activation /*THINGSPEC_NoDeathSpecial|*/THINGSPEC_TriggerTargets
+// 	+BUMPSPECIAL
+}
+
+Actor Schism_MarineWeapon : Schism_Weapon {
+	+THRUGHOST
+	Inventory.ForbiddenTo Schism_Warrior, Schism_Sorcerer, Schism_Corvus, Schism_Rogue
+}
+
+Actor Schism_HighEnergyWeapon : Schism_MarineWeapon { -THRUGHOST }
+
+Actor Schism_MageBlinkWeapon : Schism_Weapon {
+	Inventory.ForbiddenTo Schism_Warrior, Schism_Ranger, Schism_Corvus, Schism_Rogue
+	States {
+		Select:
+			TNT1 A 0 A_Raise
+			Wait
+
+		Deselect:
+			TNT1 A 0 A_Lower
+			Wait
+			
+		Ready:
+			TNT1 A 0 A_JumpIfInventory("Taunting", 1, "BlinkTeleport")
+			TNT1 A 1 A_WeaponReady
+			Loop
+			
+		Fire:
+		BlinkTeleport: //17 tic
+			TNT1 A 0 A_TakeInventory("Taunting",1)
+			BlinkageHold:
+			TNT1 A 8
+			TNT1 A 0 A_ChangeFlag("SPECTRAL", 1)
+			TNT1 A 0 A_ChangeFlag("THRUACTORS", 1)
+			MLNG ABCD 2 BRIGHT
+			TNT1 A 0 A_SpawnItemEx("BlinkTargetMissile", 36*Cos(pitch), 0, 30-36*Sin(pitch), 100*Cos(pitch), 0, -100*Sin(pitch))
+			BlinkageHold2:
+			MLNG E 1
+			TNT1 A 0 A_ChangeVelocity(100*Cos(pitch), 0, -100*Sin(pitch),CVF_REPLACE|CVF_RELATIVE)
+			MLNG FG 2 BRIGHT A_ZoomFactor(0.70, ZOOM_INSTANT)
+			MLNG HI 2 BRIGHT A_ZoomFactor(1.00)
+			MLNG H 0 A_ChangeVelocity(0, 0, 0, CVF_REPLACE)
+			TNT1 A 0 A_ChangeFlag("THRUACTORS", 0)
+			TNT1 A 0 A_ChangeFlag("SPECTRAL", 0)
+			Goto Ready
+	}
+}
+
+
+//Test feature, do not use as base weapon!!!
+//Weapon Slot 1 Selector
+Actor Schism_WS1S : Weapon {
+// 	+INVENTORY.UNCLEARABLE
+	+INVENTORY.UNDROPPABLE
+	VisibleToPlayerClass  Schism_Ranger, Schism_Sorcerer, Schism_Warrior, Schism_Corvus
+	States
+	{
+		Select:
+			TNT1 A 0 A_Raise
+			Wait
+
+		Deselect:
+			TNT1 A 0 A_Lower
+			Wait
+
+		Ready:
+			TNT1 A 0 ACS_NamedExecuteAlways("Schism_WeaponSlotSelector", 0, 1)
+			TNT1 A 1 A_WeaponReady(WRF_NOFIRE|WRF_NOBOB)
+			Loop
+
+		Fire:
+			Goto Ready
+	}
+}
+
+Actor ActorGrabbed : TokenBase {}
+
+Actor Schism_ActorGrabber {
+	Radius 4
+	Height 2
+	Projectile
+	Speed 100
+    Damage (0)
+	DamageType None
+	Scale 0.5
+// 	+THRUSPECIES
+// 	+MTHRUSPECIES
+// 	+SPECTRAL
+	+HITMASTER
+	+SKYEXPLODE
+	States {
+		Spawn:
+// 			"MISL" "A" 0
+			"####" "#" 8 
+			Loop
+			
+		Death:
+			"TNT1" "A" -1
+			Stop
+		
+		Crash:
+		XDeath:
+			"TNT1" "A" 0 
+			"####" "#" 2 ACS_NamedExecuteAlways("Schism_PickActor", 0, 0, 0, 0)
+			Stop		
+	}
+}
+
+Actor Schism_ToolGun : Schism_Weapon {
+	-ALWAYSPUFF
+	-PUFFONACTORS
+	+WEAPON.NOAUTOFIRE
+	Weapon.SlotNumber 2
+	States {
+		Spawn:
+			"LZPS" "A" -1
+			Stop
+			
+		Select:
+			"####" "#" 0 A_Raise
+			Wait
+			
+		Deselect:
+			"####" "#" 0 A_GunFlash("LightDone", GFF_NOEXTCHANGE)
+			"LZPG" "ABCDE" 1
+			DeselectLoop:
+			"####" "#" 0 A_Lower
+			Loop
+			
+		Ready:
+			"LZPG" "ECDBA" 1 A_WeaponReady(WRF_NOFIRE|WRF_NOBOB)
+			"####" "#" 0 A_GunFlash("LaserHelper")
+			ReadyLoop:
+			"LZPG" "A" 0
+			"####" "#" 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			Loop
+			
+		LaserHelper:
+			"TNT1" "A" 1 //A_RailAttack(0, 0, 0, None, "FF0000", RGF_CENTERZ|RGF_NOPIERCING|RGF_SILENT|RGF_FULLBRIGHT, 0, "", 0, 0, 8192, 1, 1, 0, None, 5)
+			Loop
+			
+		Fire:
+			"####" "#" 1 A_FireCustomMissile("Schism_ActorGrabber") //ACS_NamedExecuteAlways("Schism_GrabBeam", 0, 0, 0, 0)
+			Goto ReadyLoop
+			
+		Reload:
+			"####" "#" 0 A_GunFlash("LightDone", GFF_NOEXTCHANGE)
+			"LZPW" "A" 0
+			"####" "ABCDD" 3
+			"####" "#" 0 A_GunFlash("LaserHelper")
+			Goto ReadyLoop
+	}
+}

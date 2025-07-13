@@ -1,0 +1,111 @@
+ACTOR Archmagegloves : Weapon
+{
+  +BLOODSPLATTER
+  Weapon.SelectionOrder 2300
+  -WEAPON.WIMPY_WEAPON
+  +WEAPON.MELEEWEAPON
+  Weapon.Ammouse2 1
+  Weapon.Ammotype2 "Crystal"
+  Weapon.Kickback 0
+  Weapon.YAdjust 15
+  Weapon.UpSound "weapons/gauntletsactivate"
+  Weapon.SisterWeapon ""
+  Inventory.PickupMessage "$TXT_WPNGAUNTLETS"
+  //INventory.Icon "WGNTA0"
+  Tag "$TAG_GAUNTLETS"
+  Obituary "$OB_MPGAUNTLETS"
+
+  //action native A_GauntletAttack(int power);
+
+  States
+  {
+  Spawn:
+    WGNT A -1
+    Stop
+  Ready:
+	GAUN G 0 A_ATTACHLIGHTdef("XXX", "SPELLFIRE")
+    GAUN GH 1 A_WeaponReady
+    Loop
+  Deselect:
+	TNT1 A 0 A_Removelight("XXX")
+    GAUN A 1 A_Lower
+    Loop
+  Select:
+    GAUN B 1 A_Raise
+    Loop
+  
+    Fire:
+
+ 
+	right:
+		TNT1 A 0 A_Jump(128, "Left")
+		TNT1 A 0 A_Jump(128, "Rhook")
+		TNT1 A 0 A_Jump(128, "lhook")
+		GPRS a 1 
+		GPRS bc 1 
+		TNT1 A 0 A_Playsound("WHOP")
+		GPRS d 1 A_CustomPunch(5, false,0,"bulletpuff",95) //A_Custompunch(punchdmg, 1, CPF_NORANDOMPUFFZ, "bulletpuff", 80)
+		GPRS DC 1
+		GPRS BA 1
+		TNT1 A 0 //A_giveinventory("right",1)
+		Goto Ready
+	left:
+		TNT1 A 0  //A_JumpIfInventory("Speedup", 1, "Kraterleft")
+		GPlS a 1 
+		GPlS bc 1 
+		TNT1 A 0 A_Playsound("WHOP")
+		GPlS d 1 A_CustomPunch(5, false,0,"bulletpuff",95) //A_Custompunch(random(30, 40), 1, CPF_NORANDOMPUFFZ, "bulletpuff", 80)
+		GPlS DC 1
+		GPlS BA 1
+		TNT1 A 0 
+		Goto Ready
+	rhook:
+		TNT1 A 0 
+		//GPRh a 1 
+		GPRh abC 1 
+		GPRh C 1 
+		TNT1 A 0 A_StartSound("WHOP")
+		GPRh d 1 A_CustomPunch(5, false,0,"bulletpuff",95) //A_Custompunch(random(30, 40), 1, CPF_NORANDOMPUFFZ, "bulletpuff", 80)
+		GPRh DC 1
+		GPRh BA 1
+		TNT1 A 0 
+		Goto Ready
+	lhook:
+		TNT1 A 0  
+		//GPlh a 1 
+		GPlh abc 1 
+		GPlh C 1 
+		TNT1 A 0 A_StartSound("WHOP")
+		GPlh d 1 A_CustomPunch(5, false,0,"bulletpuff",95) //A_Custompunch(random(30, 40), 1, CPF_NORANDOMPUFFZ, "bulletpuff", 80)
+		GPlh DC 2
+		GPlh BA 1
+		TNT1 A 0 
+		Goto Ready
+  
+  
+  Altfire:
+    GAUN J 2 A_PlayWeaponSound("weapons/gauntletsuse")
+    GAUN K 2
+  AltHold:
+    GAUN A 0 
+	GAUN L 0 A_ATTACHLIGHT("gaunlight",4, "red", 128, 256)	
+    GAUN LMN 2 Bright {A_CustomPunch(2,0,0,"Gauntletpuff2",150,2,150) ; A_AttachLightDef('13', 'SPELLTHUNDER');}
+	TNT1 aAA 0 A_firebullets(0,0,0,0,Gauntletpuff2,FBF_USEAMMO,150)
+    GAUN C 4 A_ReFire
+    GAUN B 4 A_Removelight("gaunlight")
+    Goto Ready
+ 
+ 
+ 
+ 
+ /*Altfire:
+  GAUN L 0 A_ATTACHLIGHT("gaunlight", 4, "Green", 128, 256)
+	GAUN D 2 //A_BFGSOUND
+    GAUN DEFDEFDEF 2
+   // TNT1 A 0 A_PlaySound("GWANDFIR")
+    GAUN F 1 Bright A_FireCustomMissile("MinotaurFX2")
+    GAUN C 4 A_ReFire
+    GAUN B 4 A_Removelight("gaunlight")
+    Goto Ready*/
+  }
+}

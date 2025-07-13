@@ -1,0 +1,414 @@
+ACTOR HellOctopus
+{
+  Health 500
+  Radius 20
+  Height 56
+  Mass 100
+  Speed 12
+  scale 0.7
+  PainChance 200
+  MeleeRange 200
+  MeleeThreshold 250
+  Monster
+  +FLOORCLIP
+  SeeSound "beho/sight"
+  PainSound "imp/pain"
+  DeathSound "beho/death"
+  ActiveSound "imp/active"
+  HitObituary "%o was electrocuted by a Hell Octopus."
+  Obituary "%o was abominated by a Hell Octopus."
+  BloodType "Green_Blood", "GreenSawBlood", "GreenSawBlood"
+  BloodColor "DarkGreen"
+  States
+  {
+  Spawn:
+    OCTF AB 10 A_Look
+    Loop
+  See:
+    OCTF AAABBBCCCDDD 1 A_Chase
+    Loop
+  Melee:
+    OCTF E 0 a_facetarget
+    OCTF E 2
+	TNTT AAA 0 A_CustomMissile ("ElectroBlastTrailX2", 0, 0, random (0, 360), 2, random (0, 360))
+	OCTF I 2 BRIGHT 
+    OCTF F 0 a_facetarget
+	TNTT AAAA 0 A_CustomMissile ("ElectroBlastTrailX2", 0, 0, random (0, 360), 2, random (0, 360))
+	OCTF F 2 BRIGHT 
+	OCTF J 2 BRIGHT 
+    OCTF G 0 a_facetarget
+    OCTF G 2 BRIGHT
+	TNTT AAAAA 0 A_CustomMissile ("ElectroBlastTrailX3", 0, 0, random (0, 360), 2, random (0, 360))
+	OCTF K 2 BRIGHT 
+    OCTF H 0 a_facetarget
+    OCTF H 2 BRIGHT
+	OCTF L 2 BRIGHT
+	TNTT AAAAAAAAAA 0 A_CustomMissile ("ElectroBlastTrailX3", 0, 0, random (0, 360), 2, random (0, 360))
+	OCTF H 2 BRIGHT A_CustomMissile ("LichLightningMissile1", 32, 0, 0)
+    Goto see      
+//  Missile:
+//    OCTF M 1 A_VileTarget("HellOctopusFire")
+//    OCTF MNOP 4 A_FaceTarget
+//    OCTF Q 4 A_VileAttack("vile/stop",5,25,70,0.5)
+//    OCTF PONM 4 A_FaceTarget     
+//    Goto See
+	
+	
+	See:
+		OCTF AAA 2 A_Chase
+		OCTF A 0 A_Jump(64,1,11,28)
+		Loop
+		OCTF BBCC 2 A_Chase
+		OCTF CCC 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF B 2 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF BB 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		Loop
+		OCTF BBCCDD 2 A_Chase
+		OCTF DDDD 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF C 2 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF CCC 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF B 2 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF BB 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		Loop
+		OCTF BBCCDDEE 2 A_Chase
+		OCTF EEEE 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF D 2 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF DDDD 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF C 2 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF CCC 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF B 2 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF BB 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		Loop
+	Missile:
+		OCTF M 2
+		OCTF A 0 A_Jump(96,"Melee")
+		OCTF A 0 A_Jump(96,"Missile2","Missile3")
+		OCTF MNOP 3
+		OCTF C 0 A_Spawnitem("OctopusBramble3", 64, 1, 1)
+		OCTF C 0 A_Spawnitem("OctopusBramble4", 64, 1, 1)
+		OCTF C 0 A_Spawnitem("OctopusBramble2", 64, 1, 1)
+		OCTF Q 4 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF BB 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF PONM 2
+		TNT1 A 0 A_FaceTarget
+		Goto See
+	Missile2:
+		OCTF M 2
+		OCTF MNOP 3
+		OCTF C 0 A_Spawnitem("OctopusBramble2", 64, 1, 1)
+		OCTF C 0 A_Spawnitem("OctopusBramble3", 64, 1, 1)
+		OCTF C 0 A_Spawnitem("OctopusBramble1", 64, 1, 1)
+		OCTF DDDD 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF Q 3 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF CCC 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF Q 3 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF BB 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF PONM 2
+		TNT1 A 0 A_FaceTarget
+		Goto See
+	Missile3:
+		OCTF MNOP 4
+		OCTF C 0 A_Spawnitem("OctopusBramble3", 64, 1, 1)
+		OCTF C 0 A_Spawnitem("OctopusBramble2", 64, 1, 1)
+		OCTF C 0 A_Spawnitem("OctopusBramble1", 64, 1, 1)
+		OCTF C 0 A_Spawnitem("OctopusBramble1", 56, 1, 1)
+		OCTF EEEE 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF Q 3 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF DDDD 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF Q 3 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF CCC 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF Q 3 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF BBB 0 A_SpawnItemEx("Spore", 0, 0, 56, 2, 0, 2, Random(0, 360), 128)
+		OCTF PONM 2
+		TNT1 A 0 A_FaceTarget
+		Goto See
+
+    
+  Pain:
+    OCTF B 2
+    OCTF B 2 A_Pain
+    Goto See
+  Death:
+    OCTF R 0 a_jump(128,"SecondDeath")
+    OCTF R 4 A_Scream
+	TNT1 A 0 A_KillChildren
+    OCTF STU 4
+    OCTF V 4 A_NoBlocking
+    OCTF WXY 4
+    OCTF Z -1
+    Stop 
+   SecondDeath:
+    OCTD A 4 A_XScream
+	TNT1 A 0 A_KillChildren
+    OCTD BCD 4
+    OCTD E 4 A_NoBlocking
+    OCTD FGHIJ 4
+    OCTD K -1
+    Stop  
+    
+  }
+}
+ACTOR HellOctopusFire
+{
+  +NOBLOCKMAP
+  +NOGRAVITY
+  RenderStyle Add
+  Alpha 1
+  Scale 0.25
+  States
+  {
+  Spawn:
+    TNT1 A 0 a_setangle(random(1,359))
+    OCTF E 2 Bright A_StartFire
+    TNT1 A 0 a_setangle(random(1,359))
+    OCTF FGH 2 Bright A_Fire
+    TNT1 A 0 a_setangle(random(1,359))
+    OCTF E 2 Bright A_FireCrackle
+    TNT1 A 0 a_setangle(random(1,359))
+    OCTF FGHEFGHEFGHEF 2 Bright A_Fire
+    TNT1 A 0 a_setangle(random(1,359))
+    OCTF K 2 Bright A_FireCrackle
+    TNT1 A 0 a_setangle(random(1,359))
+    OCTF LIJKLIJKLIJ 2 Bright A_Fire
+    Stop
+  }
+}
+
+ACTOR OctopusBramble
+{
+   height 64
+   radius 20
+   speed 12
+   Health 50
+   Mass 5000
+   meleedamage 3
+   meleerange 52
+  BloodType "Green_Blood", "GreenSawBlood", "GreenSawBlood"
+  BloodColor "DarkGreen"
+   Painchance 128
+   MONSTER
+   -SHOOTABLE
+   -SOLID
+   -COUNTKILL
+   +NOTARGETSWITCH
+   +NOICEDEATH
+   +FLOORCLIP
+   +LOOKALLAROUND
+   States
+   {
+   Spawn:
+      TNT1 A 0
+	  TNT1 A 0 A_Jump(200,1,2,3,4,5,6)
+	  TNT1 AAAAAAAA 2
+      TNT1 A 0 A_UnsetShootable
+      TNT1 A 0 A_UnsetSolid
+      OCTX RST 4 A_Look
+      Loop
+   See:
+      OCTX RS 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt1", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX TR 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt2", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX ST 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt3", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX RS 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt1", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX TR 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt3", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX ST 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt2", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX RS 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt2", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX TR 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt1", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX ST 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt2", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX RS 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt3", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX TR 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt1", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX ST 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt3", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX RS 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt2", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX TR 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt3", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX ST 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt2", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX RS 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt1", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX TR 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt3", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX ST 3 A_Chase
+      OCTX R 0 A_SpawnItemEx("Drt2", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      Goto Melee
+   Melee:
+      TNT1 A 0 A_SetShootable
+      TNT1 A 0 A_SetSolid
+      OCTX RQ 4
+      OCTX R 0 A_SpawnItemEx("Drt1", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX R 0 A_SpawnItemEx("Drt2", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX R 0 A_SpawnItemEx("Drt3", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX R 0 A_SpawnItemEx("Drt2", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX R 0 A_SpawnItemEx("Drt1", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX R 0 A_SpawnItemEx("Drt3", 0, 0, 0, 5, 0, 3, Random(0, 360), 128)
+      OCTX P 4 A_MeleeAttack
+      OCTX ONML 4
+      OCTX ABC 4
+      OCTX D 0 A_FaceTarget
+      OCTX D 3 A_MeleeAttack
+      OCTX A 0 A_Jump(64,6)
+      OCTX EF 5
+      OCTX G 0 A_FaceTarget
+      OCTX G 3 A_MeleeAttack
+      OCTX G 0 A_CPosRefire
+      Goto Melee +17
+      OCTX JKL 4 
+      OCTX H 3 A_MeleeAttack
+      OCTX H 0 A_CPosRefire
+      Goto Melee +17
+   Pain:
+      OCTX LMNOPQR 3
+      TNT1 A 0 A_UnSetSolid
+      TNT1 A 0 A_UnSetShootable
+      Goto See +30
+   Death:
+      OCTX U 5
+      OCTX V 5 A_Scream
+      OCTX W 5 A_Fall
+      OCTX XRR 5
+      OCTX RRRRRRRRR 2 A_FadeOut (0.1)
+      stop
+   }
+}
+
+ACTOR OctopusBramble2: OctopusBramble
+{
+Scale 0.9
+}
+
+ACTOR OctopusBramble3: OctopusBramble
+{
+Scale 0.8
+}
+
+ACTOR OctopusBramble4: OctopusBramble
+{
+Scale 0.6
+}
+
+
+
+ACTOR OctopusBrambleCeil : OctopusBramble
+{
+-FLOORCLIP
++SPAWNCEILING
++NOGRAVITY
++DONTFALL
+YScale -1
+}
+
+
+actor Spore
+{
+    PROJECTILE
+    -NOGRAVITY
+    -NOBLOCKMAP
+    -NOTELEPORT
+    +RANDOMIZE
+    renderstyle translucent
+    alpha 0.5
+    Radius 2
+    Damage 0
+    //SeeSound "hellrose/dirt"
+    Speed 3
+    States
+    {
+    Spawn:
+        OCTS S 0 A_SetGravity (0.5)
+        OCTS S 0 ThrustThingZ (0, 20, 0, 1)
+        goto Death
+    Death:
+        OCTS SSS 3
+        OCTS SSSSSS 3 A_FadeOut (0.3)
+        Stop
+    }
+}
+
+actor Drt1
+{
+    PROJECTILE
+    -NOGRAVITY
+    -NOBLOCKMAP
+    -NOTELEPORT
+    +RANDOMIZE
+    Radius 2
+    Damage 0
+    //SeeSound "hellrose/dirt"
+    Speed 5
+    States
+    {
+    Spawn:
+        DIRT A 0 A_SetGravity (0.5)
+        DIRT A 0 ThrustThingZ (0, 15, 0, 1)
+        goto See 
+    See:
+        DIRT ABC 5
+        loop
+    Death:
+        DIRT JKL 3
+        Stop
+    }
+}
+
+actor Drt2
+{
+    PROJECTILE
+    -NOGRAVITY
+    -NOBLOCKMAP
+    -NOTELEPORT
+    +RANDOMIZE
+    Radius 2
+    Damage 0
+    //SeeSound "hellrose/dirt"
+    Speed 5
+    States
+    {
+    Spawn:
+        DIRT A 0 A_SetGravity (0.5)
+        DIRT A 0 ThrustThingZ (0, 15, 0, 1)
+        goto See 
+    See:
+        DIRT DEF 5
+        loop
+    Death:
+        DIRT JKL 3
+        Stop
+    }
+}
+
+actor Drt3
+{
+    PROJECTILE
+    -NOGRAVITY
+    -NOBLOCKMAP
+    -NOTELEPORT
+    +RANDOMIZE
+    Radius 2
+    Damage 0
+    //SeeSound "hellrose/dirt"
+    Speed 5
+    States
+    {
+    Spawn:
+        DIRT A 0 A_SetGravity (0.5)
+        DIRT A 0 ThrustThingZ (0, 15, 0, 1)
+        goto See 
+    See:
+        DIRT GHI 5
+        loop
+    Death:
+        DIRT JKL 3
+        Stop
+    }
+}

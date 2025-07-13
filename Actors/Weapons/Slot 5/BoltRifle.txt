@@ -1,0 +1,583 @@
+// --------------------------------------------------------------------------
+//
+//	Bolt Action Marksman's Rifle "Silver Hand"
+//
+// --------------------------------------------------------------------------
+Actor Schism_BoltRifleGiver : Schism_BaseWeaponGiver{
+	scale 0.8
+	radius 24
+	height 24
+	Inventory.PickupSound "M40RIF3"
+	Inventory.PickupMessage "You got the ''Silver Hand'' Marksman's Rifle! (Slot 5)"
+	Inventory.ForbiddenTo Schism_Warrior, Schism_Sorcerer, Schism_Corvus, BaronPlayer, RevenantPlayer
+	Mass 1
+    States {
+		Spawn:
+			SILV A -1
+			Stop
+
+		Pickup:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIfInventory("Schism_BoltRifle", 1, "GiveAmmo")
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CounInvG", 5) >= 2, "DontGive")
+			TNT1 A 0 A_GiveInventory("Schism_BoltRifle", 1)
+			Goto GiveAmmo
+
+		GiveAmmo:
+			TNT1 A 0 A_GiveInventory("Clip3", 10)
+			Stop
+
+		DontGive:
+			SILV A 30
+			Fail
+    }
+}
+
+
+Actor Schism_BoltRifleEmptyGiver : Schism_BaseWeaponGiver {
+	scale 0.8
+	Inventory.PickupSound "M40RIF3"
+	Inventory.PickupMessage "You got the ''Silver Hand'' Marksman's Rifle! (Slot 5)"
+	Inventory.ForbiddenTo Schism_Warrior, Schism_Sorcerer, Schism_Corvus, BaronPlayer, RevenantPlayer
+    States {
+		Spawn:
+			SILV A -1
+			Stop
+
+		Pickup:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIfInventory("Schism_BoltRifle", 1, "DontGive")
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CounInvG", 5) >= 2, "DontGive")
+			TNT1 A 0 A_GiveInventory("Schism_BoltRifle", 1)
+		    Stop
+
+		DontGive:
+			SILV A 30
+			Fail
+    }
+}
+
+Actor Schism_BoltRifle : Schism_Weapon {
+	Weapon.AmmoUse1 1
+	Weapon.AmmoUse2 0
+	Weapon.AmmoGive1 0
+	Weapon.AmmoGive2 0
+	Weapon.AmmoType1 "Schism_BoltRifleMag"
+	Weapon.AmmoType2 "Clip3"
+	Weapon.SelectionOrder 9500
+	Weapon.Kickback 200
+	+WEAPON.NOAUTOAIM
+    +WEAPON.NOALERT
+	+WEAPON.NOAUTOFIRE
+	+WEAPON.AMMO_OPTIONAL
+	+INVENTORY.RESTRICTABSOLUTELY
+// 	+THRUGHOST
+    Inventory.PickupSound "M40RIF3"
+	Inventory.PickupMessage "You got the ''Silver Hand'' Marksman's Rifle! (Slot 5)"
+	Obituary "%o was layed down by %k's Silver Hand."
+	Tag "''Silver Hand'' Marksman's Rifle"
+    Scale 0.8
+	Inventory.ForbiddenTo Schism_Sorcerer, Schism_Warrior, Schism_Corvus
+	States
+	{
+		Spawn:
+			TNT1 A 2
+			TNT1 A 1 A_SpawnItem("Schism_BoltRifleEmptyGiver", 50)
+			Stop
+
+		Select:
+			TNT1 A 0 A_Raise
+			Wait
+
+		Deselect:
+			TNT1 A 0 A_GunFlash("LightDone", GFF_NOEXTCHANGE)
+			TNT1 A 0 A_ZoomFactor(1.0,ZOOM_INSTANT)
+			TNT1 A 0 A_SetCrosshair(0)
+			TNT1 A 0 A_PlaySound("weapons/changing")
+			TNT1 A 0 A_Takeinventory("ADSmode",1)
+			TNT1 A 0 A_JumpIfInventory("Zoomed", 1, 2)
+// 			TNT1 A 0 A_Jump(256, 7)
+			BLRF A 1
+			TNT1 A 0 A_TakeInventory("Zoomed", 1)
+			BLRF A 1
+			DeselectLoop:
+			TNT1 A 0 A_Lower
+			Wait
+
+		Ready:
+			TNT1 A 0 A_PlaySound("revolver/draw")
+			BLRS ABCD 1 A_WeaponReady(WRF_NOFIRE)
+			ReadyLoop:
+			"####" "#" 0 A_JumpIfInventory("GoFatality", 1, "Steady")
+			"####" "#" 0 A_GunFlash("LightDone", GFF_NOEXTCHANGE)
+			"####" "#" 0 A_SetCrosshair(0)
+			"####" "#" 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+			"####" "#" 0 A_JumpIfInventory("Reloading", 1, "Reload")
+			BLRF A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			Loop
+
+		ReadyInZoom:
+			TNT1 A 0 A_JumpIfInventory("Kicking", 1,"ZoomOut")
+			TNT1 A 0 A_JumpIfInventory("Reloading", 1, "Reload")
+			BLRZ E 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			Loop
+
+		Fire:
+			TNT1 A 0 A_JumpIfNoAmmo("Reload")
+			TNT1 A 0
+			TNT1 A 0 A_GunFlash("Flash")
+			TNT1 A 0 A_AlertMonsters
+			TNT1 A 0 A_TakeInventory("Schism_BoltRifleMag", 1)
+			TNT1 A 0 A_PlaySound("M40Rifle/Fire")
+			TNT1 A 0 A_JumpIfInventory("Zoomed", 1, "FireInZoom")
+
+			TNT1 A 0 A_FireBullets(0, 0, 1, 40, "shotpuff", FBF_NORANDOM, 150) //PointBlanc Extra Damage
+			BLRF F 1 BRIGHT A_FireBullets (0.5, 0.5, -1, random(210,250), "HeavyRifleBulletPuff", FBF_NORANDOM) // (0.5, 0.5, -1, random(120,210), "ShotgunPuff", FBF_NORANDOM)
+			TNT1 A 0 A_FireCustomMissile("DecorativeTracer", frandom(-0.5,0.5), 0, 0, -12, 0, frandom(-0.5,0.5))
+
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			TNT1 A 0 A_SpawnItemEx("PlayerMuzzle1",30,5,30)
+			TNT1 A 0 A_SetPitch(Pitch-1)
+			BLRF A 0
+			BLRF F 1 BRIGHT
+			BLRF BBCCDD 1
+			TNT1 A 0 A_JumpIfInventory("Schism_BoltRifleMag", 1, 1)
+			Goto SkipBolting
+			BLRR BC 1
+			BLRR DEF 2
+			TNT1 A 0 A_PlaySound("M40Rifle/Bolt1", 3)
+			BLRR GHI 2
+			TNT1 A 0 A_FireCustomMissile("HeavyRifleCaseSpawn",5,0,6,-10)
+			TNT1 A 0 A_PlaySound("M40Rifle/Bolt2", 3)
+			BLRR JKLMNO 2
+			SkipBolting:
+			TNT1 A 0 A_Takeinventory("SniperAttackState",10)
+			TNT1 A 0 A_StopSound(1)
+			TNT1 A 0 A_Takeinventory("WeapSpecial",1)
+			TNT1 A 0 A_Takeinventory("TossGrenade",1)
+			Goto ReadyLoop
+
+		Flash:
+			TNT1 A 1 A_Light2
+			TNT1 A 1 A_Light1
+			Goto LightDone
+
+		FireInZoom:
+			TNT1 A 0 A_FireBullets(0, 0, 1, 40, "shotpuff", FBF_NORANDOM, 150) //PointBlanc Extra Damage
+			BLRZ F 1 BRIGHT A_FireBullets (0, 0, -1, random(210,250), "HeavyRifleBulletPuff", FBF_NORANDOM) //(0, 0, -1, random(120,210), "ShotgunPuff", FBF_NORANDOM)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAss", 0, 0, 0, 0)
+			TNT1 A 0 A_SpawnItemEx("PlayerMuzzle1",30,0,45)
+			TNT1 A 0 A_FireCustomMissile("DecorativeTracer", 0, 0, 0, -12, 0, 0)
+			BLRZ GH 2
+			TNT1 A 0 A_SetPitch(Pitch-1)
+
+			TNT1 A 0 A_ZoomFactor(1.0)
+			BLRZ DCBA 1
+
+			TNT1 A 0 A_JumpIfInventory("Schism_BoltRifleMag",1,1)
+			Goto SkipBoltingZoom
+			BLRR BC 1
+			BLRR DEF 2
+			TNT1 A 0 A_PlaySound("M40Rifle/Bolt1", 5)
+			BLRR GHI 2
+			TNT1 A 0 A_FireCustomMissile("HeavyRifleCaseSpawn",5,0,6,-10)
+			TNT1 A 0 A_PlaySound("M40Rifle/Bolt2", 5)
+			BLRR JKLMNO 2
+			SkipBoltingZoom:
+
+			TNT1 A 0 A_StopSound(1)
+
+			TNT1 A 0 A_ZoomFactor(1.5)
+			BLRZ ABCD 1
+
+			Goto ReadyInZoom
+
+		AltFire:
+		Zoom:
+			TNT1 A 0 A_JumpIfInventory("Zoomed", 1, "ZoomOut")
+			TNT1 A 0 A_Giveinventory("Zoomed", 1)
+			TNT1 A 0 A_Giveinventory("GoSpecial", 1)
+			TNT1 A 0 A_SetCrosshair(41)
+			TNT1 A 0 A_ZoomFactor(1.5)
+			TNT1 A 0 A_Giveinventory("ADSmode", 1)
+			BLRZ ABCD 1
+			Goto ReadyInZoom
+
+		ZoomOut:
+			BLRZ DCBA 1
+			TNT1 A 0 A_TakeInventory("Zoomed",1)
+			TNT1 A 0 A_ZoomFactor(1.0)
+			TNT1 A 0 A_Takeinventory("ADSmode",1)
+			TNT1 A 0 A_SetCrosshair(0)
+			Goto ReadyLoop
+
+		DryFire:
+			TNT1 A 0 A_PlaySound("weapons/empty")
+			Goto ReadyLoop
+
+		Reload:
+			"####" "#" 0 A_ZoomFactor(1.0)
+			"####" "#" 0 A_TakeInventory("Zoomed", 1)
+			"####" "#" 0 A_TakeInventory("ADSmode", 1)
+			"####" "#" 0 A_TakeInventory("Reloading", 1)
+			"####" "#" 0 A_JumpIfInventory("Schism_BoltRifleMag", 11, "ReadyLoop")
+			"####" "#" 0 A_JumpIfInventory("Clip3", 1, 1)
+			Goto ReadyLoop
+			"####" "#" 0 A_GiveInventory("Reloading2", 1)
+			"####" "#" 0 A_GunFlash("FlashReload")
+			ReloadLoop:
+			"TNT1" "A" 1 A_JumpIfInventory("Kicking", 1, "DoKick")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		FlashReload:
+			BRR1 ABCDEFG 1
+			TNT1 A 0 A_PlaySound("Reload")
+			TNT1 A 0 A_JumpIfInventory("Schism_BoltRifleMag", 1, 2)
+			TNT1 A 0 A_FireCustomMissile("EmptyClipSpawn", -5, 0, 8, -4)
+			TNT1 A 0
+			BRR2 ABCDEFGHIJKLMNOPRST 2
+			TNT1 A 0 A_JumpIfInventory("Schism_BoltRifleMag", 1, "SkipBoltingOnReload")
+			BLRR DEF 1
+			TNT1 A 0 A_PlaySound("M40Rifle/Bolt1", CHAN_5)
+			BLRR GHI 2
+			TNT1 A 0 A_FireCustomMissile("HeavyRifleCaseSpawn", 5, 0, 6, -10)
+			TNT1 A 0 A_PlaySound("M40Rifle/Bolt2", CHAN_5)
+			BLRR JKLMNO 2
+			SkipBoltingOnReload:
+			TNT1 A 0 A_JumpIfInventory("Schism_BoltRifleMag", 1, "RefillTo11")
+			Goto RefillTo10
+
+		RefillTo10:
+			TNT1 A 0 A_GiveInventory("Schism_BoltRifleMag", 1)
+			TNT1 A 0 A_TakeInventory("Clip3", 1, TIF_NOTAKEINFINITE)
+			TNT1 A 0 A_JumpIfInventory("Schism_BoltRifleMag", 10, "FinishReload")
+			TNT1 A 0 A_JumpIfInventory("Clip3", 1, "RefillTo10")
+			Goto FinishReload
+
+		RefillTo11:
+			TNT1 A 0 A_GiveInventory("Schism_BoltRifleMag", 1)
+			TNT1 A 0 A_TakeInventory("Clip3", 1, TIF_NOTAKEINFINITE)
+			TNT1 A 0 A_JumpIfInventory("Schism_BoltRifleMag", 11, "FinishReload")
+			TNT1 A 0 A_JumpIfInventory("Clip3", 1, "RefillTo11")
+			Goto ReloadLoop11
+
+		FinishReload:
+			"####" "#" 0 A_TakeInventory("Reloading2", 1)
+			"####" "#" 0 A_ReFire
+			"####" "#" 0 A_JumpIfInventory("Kicking", 1, "KickFlash")
+			"BLRF" "A" 2100
+			Goto ReadyLoop
+
+		Steady:
+			TNT1 A 1
+			Goto ReadyLoop
+
+		DoKick: //14 tic
+			TNT1 A 0
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("KickFlash")
+			TNT1 A 0 A_TakeInventory("Kicking", 1)
+			TNT1 A 0 A_TakeInventory("Zoomed", 1)
+			TNT1 A 0 A_ZoomFactor(1.0)
+			TNT1 A 0 A_TakeInventory("ADSmode", 1)
+			TNT1 A 0 A_JumpIf (momZ > 0, "KickInAir")
+			TNT1 A 0 A_JumpIf (momZ < 0, "KickInAir")
+			TNT1 A 0 A_JumpIf((Abs(VelY) < 1) && (Abs(VelX) < 1), 2)
+			TNT1 A 0 A_JumpIfInventory("IsCrouching", 1, "SlideAttack")
+			TNT1 A 0 A_PlaySound("KICK")
+			TNT1 A 0 SetPlayerProperty(0, 1, 0)
+			K1CK A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2CK A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KICK A 0
+			"####" BCD 1
+			"####" A 0 A_GiveInventory("Schism_Kick", 1)
+			"####" H 3
+			"####" IGF 1
+			"####" "#" 0 SetPlayerProperty(0, 0, 0)
+			"####" EDCBA 1 A_JumpIfInventory("Kicking", 1, "KickRight")
+			TNT1 A 0 A_JumpIfInventory("Kicking", 1, "KickRight")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		KickRight: // 15 tic
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("RightKickFlash")
+			K1K2 A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2K2 A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KIK2 A 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" ABC 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0
+			"####" A 0 A_SetPitch(pitch-9)
+			"####" A 0 A_SetAngle(angle+9)
+			"####" A 0 A_GiveInventory("Schism_Kick", 1)
+			"####" D 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle-2)
+			"####" D 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle-2)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" C 1 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" B 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle-1)
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 1 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		KickInAir: // 18 tics
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("KickInAirFlash")
+			TNT1 A 0 A_TakeInventory("Kicking", 1)
+			K1CK J 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2CK J 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KICK J 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0 A_Recoil(-15)
+			"####" JKLMN 1
+			"####" A 0 A_GiveInventory("Schism_AirKick", 1)
+			"####" O 3
+			"####" PQ 2
+			"####" RS 1
+			"####" T 1 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 1 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		LeftFinishingKick: // 11 tics
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("LeftKickFlash")
+			K1K3 A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2K3 A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KIK3 A 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" A 0 A_Recoil(-10)
+			"####" ABC 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0 A_SetPitch(pitch-9)
+			"####" A 0 A_SetAngle(angle-9)
+			"####" D 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" E 1
+			"####" A 0 A_SetPitch(pitch+2)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" F 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+3)
+			"####" G 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+2)
+			"####" H 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+2)
+			"####" I 1
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+1)
+			"####" J 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(pitch+1)
+			"####" A 0 A_SetAngle(angle+1)
+			"####" K 1
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		SlideAttack:
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("SlideKickFlashStart")
+			TNT1 A 0 SetPlayerProperty(0, 1, 0)
+			KICK A 0 A_TakeInventory("Kicking", 1)
+			TNT1 A 0 A_PlaySound("KICK")
+			TNT1 A 0 A_Recoil(-16)
+			TNT1 A 0 A_PlaySound("SlideKickStart", CHAN_5)
+			S1DK A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			S2DK A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SLDK A 1
+			"####" ABC 1
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_GiveInventory("Schism_SlideKick", 1)
+			"####" E 1
+			"####" A 0 A_Recoil(-14)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-12)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-8)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-6)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-4)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-4)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-3)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-3)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-3)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-2)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-1)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-1)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-2)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			"####" A 0 A_TakeInventory("KickHasHit", 1)
+			Goto FinishSlide
+
+		FinishSlide:  //10 tic
+			TNT1 A 0 A_TakeInventory("Kicking",1)
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("SlideKickFlashEnd")
+			TNT1 A 0 A_PlaySound("SlideKickStop", CHAN_5)
+			S1DK H 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			S2DK H 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SLDK H 0
+			"####" A 0 SetPlayerProperty(0, 0, 0)
+			"####" A 0 A_JumpIfInventory("IsPaladin", 1, 2)
+			"####" A 0 A_Jump(256,5)
+			"####" A 0 A_JumpIfInventory("FiredSecondary", 1, 2)
+			"####" A 0 A_Jump(256,3)
+			"####" A 0 A_GiveInventory("DoUppercutNow", 1)
+			"####" A 0 A_SelectWeapon("Berserker_Melee_Attacks")
+			"####" HD 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 0 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" CBA 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 0 A_Takeinventory("Kicking", 1)
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		FinishSlideHitwall:
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("SlideKickFlashEnd")
+			S1DK H 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			S2DK H 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SLDK H 0
+			"####" A 0 A_Stop
+			"####" HDCBA 2
+			"####" A 0 A_TAkeInventory("KickHasHit", 1)
+			"####" A 0 A_Takeinventory("Kicking", 1)
+			"####" A 0 SetPlayerProperty(0, 0, 0)
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		GrenadeFlash:
+			BLRS DCBA 1
+			Stop
+
+		KickFlash: //14
+			BLRS DCBAAAAAAAABCD 1
+			Stop
+
+		KickInAirFlash: //19
+			BLRS DCBAAAAAAAAAAAAAABCD 1
+			Stop
+
+		RightKickFlash: //15
+			BLRS AAAAAAAAAAAABCD 1
+			Stop
+
+		LeftKickFlash: // 11 tics
+			BLRS AAAAAAAABCD 1
+			Stop
+
+		SlideKickFlashStart: //27
+			BLRS DCB 1
+			"####" "A" 24
+			Stop
+
+		SlideKickFlashEnd: //10 tic
+			BLRS AAAAAAABCD 1
+			Stop
+
+	}
+}
+
+Actor SniperAttackState : TokenBase10 {}
+Actor SniperZoomFactor : TokenBase 2 {}
+Actor WeapSpecial : TokenBase {}
+
+Actor Schism_BoltRifleMag : Ammo {
+	+INVENTORY.IGNORESKILL
+	Inventory.Amount 0
+	Inventory.MaxAmount 11
+	Ammo.BackpackAmount 0
+	Ammo.BackpackMaxAmount 11
+   	Inventory.Icon "SILVA0"
+}

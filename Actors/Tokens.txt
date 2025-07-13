@@ -1,0 +1,384 @@
+Actor TokenBase : Inventory{Inventory.MaxAmount 1}
+Actor TokenBase2 : Inventory{Inventory.MaxAmount 2}
+Actor TokenBase5 : Inventory{Inventory.MaxAmount 5}
+Actor TokenBase6 : Inventory{Inventory.MaxAmount 6}
+Actor TokenBase8 : Inventory{Inventory.MaxAmount 8}
+Actor TokenBase10 : Inventory {Inventory.MaxAmount 10}
+Actor TokenBase20 : Inventory {Inventory.MaxAmount 20}
+Actor TokenBase30 : Inventory {Inventory.MaxAmount 30}
+Actor TokenBase40 : Inventory {Inventory.MaxAmount 40}
+Actor TokenBase50 : Inventory {Inventory.MaxAmount 50}
+Actor TokenBase60 : Inventory {Inventory.MaxAmount 60}
+Actor TokenBase100 : Inventory {Inventory.MaxAmount 100}
+Actor TokenBase500 : Inventory {Inventory.MaxAmount 500}
+Actor TokenBase950 : Inventory {Inventory.MaxAmount 950}
+
+ACTOR TemporaryTokenBase : Powerup {powerup.duration 1}
+ACTOR TemporaryTokenBase2 : TemporaryTokenBase {powerup.duration 2}
+ACTOR TemporaryTokenBase5 : TemporaryTokenBase {powerup.duration 5}
+ACTOR TemporaryTokenBase10 : TemporaryTokenBase {powerup.duration 10}
+
+Actor UndroppableTokenBase : TokenBase {+INVENTORY.UNDROPPABLE}
+Actor ScreenFX : TokenBase {}
+Actor HasFreezerWeapon : TokenBase {}
+Actor IsSlowed : TokenBase {}
+Actor StartEquipmentIsGiven : TokenBase {}
+Actor Quickspell : TokenBase {Inventory.ForbiddenTo Schism_Ranger, Schism_Warrior}
+Actor DaggerSelected : TokenBase {}
+Actor FistsSelected : TokenBase {}
+Actor IsPlayer : UndroppableTokenBase {}
+Actor IsSorcerer : TokenBase {}
+Actor IsPaladin : TokenBase {}
+Actor IsHeretic : TokenBase {}
+Actor JustStartedGame : TokenBase {}
+Actor RevolverChangeAmmo : TokenBase {}
+Actor AxeHit : TokenBase {}
+Actor NoAutoreload : TokenBase {}
+Actor DMgame : UndroppableTokenBase {}
+Actor IsOver100Health : TokenBase {}
+Actor IsOver100Armor : TokenBase {}
+Actor No_Overlay : TokenBase {}
+Actor No_Pulse : TokenBase {}
+Actor Has_Armor : TokenBase {}
+Actor Has_GreenArmor : TokenBase {}
+Actor Has_BlueArmor : TokenBase {}
+Actor Has_ArmorBonus : TokenBase {}
+Actor Has_RedArmor : TokenBase {}
+Actor IsInATank : TokenBase {}
+Actor IsPickable : TokenBase {}
+Actor Crashed : TokenBase {}
+Actor Accident : TokenBase {}
+Actor FootStepDisabled : TokenBase {}
+Actor BDWeaponACtion : TokenBase {}
+Actor NoDualWield : TokenBase {}
+Actor StartDualWield : TokenBase {}
+Actor MoveBack : TokenBase {}
+Actor EnemyIsArchvile : TokenBase {}
+Actor IsARevenant : TokenBase {}
+Actor IsStandingStill : TokenBase {}
+Actor FootPrintAlternate: TokenBase {}
+Actor BarrelExpMeasure : TokenBase950 {}
+Actor BarrelExpMeas2 : TokenBase950 {}
+Actor TurboReload : TokenBase {}
+Actor STGrenadeTimer : TokenBase20 {}
+Actor Zoomed : TokenBase {}
+Actor ZoomHold : TokenBase {}
+Actor BotAgression : TokenBase10 {}
+Actor BootsSmearedWithRedBlood : TokenBase20 {}
+Actor BootsSmearedWithBlueBlood : TokenBase20 {}
+Actor BootsSmearedWithGreenBlood : TokenBase20 {}
+Actor GoFatality : TokenBase {}
+Actor GoSpecial : TokenBase {}
+Actor GotMeatShield : TokenBase {}
+Actor Salute1 : TokenBase {}
+Actor Salute2 : TokenBase {}
+Actor PVPFatality : TokenBase {}
+Actor MastermindFatality : TokenBase {}
+Actor CyberdemonFatality : TokenBase {}
+Actor ZombieManFatality : TokenBase {}
+Actor ZombieManFatality3 : TokenBase {}
+Actor ZombieManFatality4 : TokenBase {}
+Actor ZombieManFatality5 : TokenBase {}
+Actor SKZombieman : TokenBase {}
+Actor SKShotgunguy : TokenBase {}
+Actor SKChaingunguy: TokenBase {}
+Actor SKImp : TokenBase {}
+Actor SKUbersoldat : TokenBase {}
+Actor SelectionHack : TokenBase {}
+Actor NoPenetration : TokenBase {}
+Actor HasImpShield : TokenBase {}
+Actor HasZManShield : TokenBase {}
+Actor HasSGuyShield : TokenBase {}
+Actor HasNaziShield : TokenBase {}
+Actor HasZombieCivilianShield : TokenBase {}
+Actor HasEvilMarineShield : TokenBase {}
+Actor HasCGuyShield : TokenBase {}
+Actor SKNazi : TokenBase {}
+Actor ZombieManFatality2 : TokenBase {}
+Actor ImpFatality : TokenBase {}
+Actor ImpFatality2 : TokenBase {}
+Actor ImpFatality3 : TokenBase {}
+Actor ImpFatality4 : TokenBase {}
+Actor SergeantFatality : TokenBase {}
+Actor SergeantFatality2 : TokenBase {}
+Actor SergeantFatality3 : TokenBase {}
+Actor SergeantFatality4 : TokenBase {}
+Actor SergeantFatality5 : TokenBase {}
+Actor SerpentFatality : TokenBase {}
+Actor SerpentFatality2 : TokenBase {}
+Actor SerpentFatality3 : TokenBase {}
+Actor ComandoFatality : TokenBase {}
+Actor ComandoFatality2 : TokenBase {}
+Actor LostSoulFatality : TokenBase {}
+Actor DemonFatality : TokenBase {}
+Actor DemonFatality2 : TokenBase {}
+Actor DemonFatality3 : TokenBase {}
+Actor FireDemonFatality : TokenBase {}
+Actor FireDemonFatality2 : TokenBase {}
+Actor FireDemonFatality3 : TokenBase {}
+Actor EttinFatality : TokenBase {}
+Actor EttinFatality2 : TokenBase {}
+Actor EttinFatality3 : TokenBase {}
+Actor CacoDemonFatality : TokenBase {}
+Actor CacoDemonFatality2 : TokenBase {}
+Actor RevenantFatality : TokenBase {}
+Actor RevenantFatality2 : TokenBase {}
+Actor PEFatality : TokenBase {}
+Actor FatsoFatality : TokenBase {}
+Actor Arachnotron2FatalityA : TokenBase {}
+Actor Arachnotron2FatalityB : TokenBase {}
+Actor SKLabguy : TokenBase {}
+Actor LabGuyToken1 : TokenBase {}
+Actor LabGuyToken2 : TokenBase {}
+Actor LabGuyToken3 : TokenBase {}
+Actor ArachnotronXFatality : TokenBase {}
+Actor ArachnotronXFatality2 : TokenBase {}
+Actor VolcabusFatality : TokenBase {}
+Actor VolcabusFatality2 : TokenBase {}
+Actor BaronFatality : TokenBase {}
+Actor CyberBaronFatality1 : TokenBase {}
+Actor CyberBaronFatality2 : TokenBase {}
+Actor AfritFatality3 : TokenBase {}
+Actor BelphegorFatality : TokenBase {}
+Actor ArchVileFatality : TokenBase {}
+Actor ArchVileFatality2 : TokenBase {}
+Actor HKFatality : TokenBase {}
+Actor HKFatality2 : TokenBase {}
+Actor HKFatality3 : TokenBase {}
+Actor ArachnotronFatality : TokenBase {}
+Actor ArachnotronFatality2 : TokenBase {}
+Actor AracnorbFatality : TokenBase {}
+Actor Taunting : TokenBase {}
+Actor Enraged : TokenBase {}
+Actor Curbstomp_Marine : TokenBase {}
+Actor Fatality_Marine : TokenBase {}
+Actor SSGAlt : TokenBase {}
+Actor QSG42 : TokenBase {}
+//Movement Key Interception ACS tokens
+Actor IsJumping : TokenBase {}
+Actor IsCrouching : TokenBase {}
+Actor IsMovingLeft : TokenBase {}
+Actor IsMovingRight : TokenBase {}
+Actor IsMovingForwards : TokenBase {}
+Actor IsMovingBackwards : TokenBase {}
+Actor IsRunning : TokenBase {}
+
+//Mouse Look Interception ACS tokens
+Actor IsTurningRight : TemporaryTokenBase5 {}
+Actor IsTurningLeft : TemporaryTokenBase5 {}
+Actor IsLookingUp : TemporaryTokenBase5 {}
+Actor IsLookingDown : TemporaryTokenBase5 {}
+
+Actor AngleToken : TokenBase {Inventory.maxamount 360}
+Actor AngleSpeedToken : TokenBase950 {}
+Actor PitchToken : TokenBase {Inventory.maxamount 90}
+Actor PitchSpeedToken : TokenBase950 {}
+
+Actor DotX : TokenBase950 {Inventory.maxamount 900000}
+Actor DotY : TokenBase950 {Inventory.maxamount 900000}
+
+//
+Actor IsDown : TokenBase {}
+Actor HasBarrel : TokenBase {}
+Actor RollLeft : TokenBase {}
+Actor RollRight : TokenBase {}
+Actor IsCurbstompingZombieman : TokenBase {}
+Actor IsCurbstompingSergeant : TokenBase {}
+Actor PlayerIsDead : TokenBase {}
+Actor NeverSelectedShotgun : TokenBase {}
+Actor AutoShotUnloaded : TokenBase {}
+Actor EnemyMemory : TokenBase60 {}
+Actor CantFire : TokenBase {}
+Actor LookingForPlayer : TokenBase30 {}
+Actor BrutalCounter : TokenBase500 {}
+Actor BrutalCounter2 : TokenBase500 {}
+Actor oneliner: TokenBase {}
+Actor advtaunting: TokenBase {}
+Actor FireHold : TokenBase40 {}
+Actor IsChainsawingEnemyPlayer: TokenBase {}
+Actor SwitchToFist : TokenBase {}
+Actor DamagePoint1 : TokenBase100 {}
+Actor DamagePoint2 : TokenBase100 {}
+Actor FallingHeight : TokenBase100 {}
+Actor DeathTimer1 : TokenBase100 {}
+Actor Timer555 : TokenBase500 {Inventory.MaxAmount 555}
+Actor TargetIsACyberdemon : TokenBase {}
+Actor TargetIsAMastermind : TokenBase {}
+Actor TargetIsABaronOfHell : TokenBase {}
+Actor TargetIsAMancubus : TokenBase {}
+Actor TargetIsAnExplosiveBarrel : TokenBase {}
+Actor TargetIsAMarine : TokenBase {}
+Actor NoFatality : TokenBase {}
+Actor KickHasHit : TokenBase {}
+Actor ShotgunguyHead: TokenBase {}
+Actor HasCacoEye: TokenBase {}
+Actor HasImpFatality: TokenBase {}
+Actor HasHearthFatality: TokenBase {}
+Actor HeavyStrikeRight : TokenBase {}
+Actor HeavyStrikeLeft : TokenBase {}
+Actor HeavyStrikeUpWard : TokenBase {}
+Actor PSeq1 : TokenBase2 {}
+Actor PSeq2 : TokenBase {}
+Actor PSeq3 : TokenBase {}
+Actor Kicking : TokenBase {}
+Actor FlashKick : TokenBase {}
+Actor Punching : TokenBase {}
+Actor Berserker : TokenBase {}
+Actor Reloading : TokenBase {}
+Actor Reloading2 : TokenBase {}
+Actor Unloading : TokenBase {}
+Actor HasUnloaded : TokenBase {}
+Actor HasUnloadedRL : TokenBase {}
+Actor HasUnloadedRG : TokenBase {}
+Actor ArachnotronChasisHits : TokenBase10 {}
+Actor ArachnotronChasisLastHit : TokenBase10 {}
+Actor HasUnloadedPG : TokenBase {}
+Actor IsInvisible : TokenBase {}
+Actor CeaseMorph : TokenBase {}
+Actor IsFiring : TokenBase {}
+Actor IsFiringAltFireOnFullAuto : TokenBase {}
+Actor ADSMode : TokenBase {}
+Actor TurningLeft123 : TokenBase {}
+Actor HeliIsLeft : TokenBase {}
+Actor HeliIsRight : TokenBase {}
+Actor RifleSpread : TokenBase6 {}
+Actor FiredSecondary : TokenBase {}
+Actor FiredPrimary : TokenBase {}
+Actor StopDualWield : TokenBase {}
+Actor IsFiringSecondary : TokenBase {}
+Actor Pumping : TokenBase {}
+Actor ImpactMovesSling : TokenBase {}
+Actor UseShotgunStrap : TokenBase {}
+Actor ShotgunWasEmpty : TokenBase {}
+Actor HasPlasmaWeapon: TokenBase {}
+Actor Spin : TokenBase {}
+Actor RandomHeadExploder : TokenBase {}
+Actor HasCutingWeapon : TokenBase {}
+Actor HasClassicSaw : TokenBase {}
+Actor SawFireSeq1 : TokenBase {}
+Actor SawFireSeq2 : TokenBase {}
+Actor RevenantRocketFire1823 : TokenBase {}
+Actor IsFiringThisShitOut : TokenBase {}
+Actor HasInfrared : TokenBase {}
+Actor GrenadeTime : TokenBase6 {}
+Actor TossGrenade : TokenBase {}
+Actor FiredGrenade : TokenBase {}
+Actor FiredMGGrenade : TokenBase {}
+Actor ZombiemanAmmo : TokenBase20 {}
+Actor TypeZombieman : TokenBase {}
+Actor EverSeenThePlayer : TokenBase {}
+Actor IsCrawling : TokenBase {}
+Actor SergeantAmmo : TokenBase6 {}
+Actor TypeSergeant : TokenBase {}
+Actor EatMe : TokenBase {}
+Actor DemonBleedingOut : TokenBase50 {}
+Actor StopKickingMyBallsMotherFucker : TokenBase {}
+Actor MaxLostSoulRange : TokenBase30 {}
+Actor BotIsChasingYou : TokenBase {}
+Actor CheckMarines : TokenBase {}
+Actor JuggernautMachinegunAmmo : TokenBase30 {}
+Actor JuggernautRocketAmmo : TokenBase6 {}
+Actor RealismMode : TokenBase {}
+Actor CanGrab : TokenBase {}
+Actor GrabbedAZombieman : TokenBase {}
+Actor GrabbedAShotgunguy : TokenBase {}
+Actor GrabbedAImp : TokenBase {}
+Actor GrabbedAChaingunguy : TokenBase {}
+Actor GrabbedAZombieCivilian : TokenBase {}
+Actor GrabbedAEvilMarine: TokenBase {}
+Actor GrabbedANazi : TokenBase {}
+Actor BloodSplasherz : TokenBase {}
+Actor AnimuGore : TokenBase {}
+Actor PoorGuyBurningLife :  TokenBase20 {}
+Actor lowgraphicsmode : TokenBase {}
+Actor Timer : TokenBase2 {Inventory.MaxAmount 4}
+Actor IsOverLava : TokenBase {}
+Actor IsOverWater : TokenBase {}
+Actor IsOverSlime : TokenBase {}
+Actor IsOverFlesh : TokenBase {}
+Actor IsOverSludge : TokenBase {}
+Actor IsOverBlood : TokenBase {}
+Actor IsOverSand : TokenBase {}
+Actor IsOverNukage : TokenBase {}
+Actor IsOverGrass : TokenBase {}
+Actor IsOverBottomless : TokenBase {}
+Actor IsOverDirt : TokenBase {}
+Actor IsOverGravel : TokenBase {}
+Actor IsOverMetal : TokenBase {}
+Actor IsOverMetal2 : TokenBase {}
+Actor IsOverRock : TokenBase {}
+Actor IsOverSnow : TokenBase {}
+Actor IsOverWood : TokenBase {}
+Actor IsOverTile : TokenBase {}
+Actor IsOverTile2 : TokenBase {}
+Actor IsOverSlimy : TokenBase {}
+Actor DecorationDisabled : TokenBase {}
+Actor HasExplosiveBarrel : TokenBase {}
+Actor ComingTOGetTheBarrel : TokenBase {}
+Actor GotBloody : TokenBase {}
+Actor NumberOfAllies : TokenBase8 {}
+Actor NumberOfAlliesMinigun : TokenBase8 {}
+Actor NumberOfAlliesShotgun : TokenBase8 {}
+Actor NumberOfAlliesPlasmaGun : TokenBase8 {}
+Actor NumberOfAlliesRocket : TokenBase8 {}
+Actor IsAnEvilMarine : TokenBase5 {}
+Actor NaziVerificate1 : TokenBase {}
+Actor NaziVerificate2 : TokenBase {}
+Actor TVRRainVerification : TokenBase30 {}
+Actor Epic2AlienVerification : TokenBase {}
+Actor AltEasyMarineVerification : TokenBase {}
+Actor NumberOfAlliesBFG : TokenBase5 {}
+Actor MarinesBFGDispenser : TokenBase5 {}
+Actor HeavyAutomaticWeapon : TokenBase {}
+Actor ExecuteDownedEnemy : TokenBase {}
+Actor ExecuteDownedImp : TokenBase {}
+Actor ExecuteDownedZombieman : TokenBase {}
+Actor ExecuteDownedShotgunguy : TokenBase {}
+Actor ExecuteStompWall : TokenBase {}
+Actor ExecuteBashWall : TokenBase {}
+Actor IsFloating : TokenBase {}
+Actor IsExecutingOnAir : TokenBase {}
+Actor ChainsawHitRed : TokenBase {}
+Actor ChainsawHitBlue : TokenBase {}
+Actor ChainsawHitGreen : TokenBase {}
+Actor IsOnCeiling : TokenBase {}
+Actor FlashlightAction: TokenBase {}
+Actor SwitchFlashlight : TokenBase {}
+Actor FlashlightOn : TokenBase {}
+Actor BDECLightCheckerRed : TokenBase {}
+Actor BDECLightCheckerOrange : TokenBase {}
+Actor BDECLightCheckerBlue : TokenBase {}
+Actor BDECLightCheckerGreen : TokenBase {}
+Actor BDECLightCheckerWhite : TokenBase {}
+Actor BDECNukageChecker : TokenBase {}
+Actor evmarinenoway : TokenBase {}
+Actor evmarinecanjump : TokenBase {}
+Actor haszombiemanchunk : TokenBase {}
+Actor hassergeantchunk : TokenBase {}
+Actor MarkForDeletion : TokenBase {}
+Actor PlayerCountDifficulty : Inventory {Inventory.maxamount 32}
+Actor Token1 : TokenBase {}
+Actor Token2 : TokenBase {}
+Actor Token3 : TokenBase {}
+Actor Token4 : TokenBase {}
+Actor PitchFrontToken : TokenBase20 {}
+Actor PitchBackToken : TokenBase20 {}
+Actor PitchFrontToken2 : TokenBase20 {}
+Actor PitchBackToken2 : TokenBase20 {}
+Actor FireCounter : Inventory {Inventory.MaxAmount 4}
+Actor IceCounter : Inventory {Inventory.MaxAmount 4}
+Actor ElecCounter : Inventory {Inventory.MaxAmount 4}
+Actor AllCounter : Inventory {Inventory.MaxAmount 7}
+Actor Schism_NecroLitLimit : TokenBase {}
+Actor Schism_TargetLimit : TokenBase {}
+Actor Schism_SidheAmmoGiverLimit : TokenBase {}
+Actor Schism_CrossbowBolts : TokenBase5 {}
+Actor Schism_CrossbowTimer : Inventory {Inventory.MaxAmount 15}
+Actor Schism_GeomancyStyle : TokenBase5 {}
+Actor Schism_GeomancyCastLvl : TokenBase6 {}
+Actor Schism_GeomancyQuickSpell : TokenBase {}
+Actor Schism_GeomancyGoldToken : TokenBase {}
+Actor Schism_GeomancyTurnIntoGoldToken : TokenBase {}
+Actor Schism_GeomancyThrowBoulders : TokenBase {}
+Actor Schism_SandWarperLimit : TokenBase {}
+Actor Schism_SidheOneGiver : Tokenbase {}

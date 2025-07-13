@@ -1,0 +1,647 @@
+Actor Schism_RavenDecoration
+{
+	Game Raven
+	
+	+SOLID
+	+NOTARGET
+	+NOBLOCKMAP
+	+NOTAUTOAIMED
+}
+
+Actor Schism_RavenBarrel
+{
+	Game Raven
+	//Gore DamageFactors 
+	DamageFactor "Blood", 0.0
+	DamageFactor "BlueBlood", 0.0
+	DamageFactor "GreenBlood", 0.0
+	DamageFactor "GibRemoving", 0.0
+	//System Dmg factors
+	DamageFactor "KillMe", 0.0
+	DamageFactor "KillMeBot", 0.0
+	DamageFactor "Avoid", 0.0
+	DamageFactor "TeleportRemover", 0.0
+	//Player caused dmg factors
+	DamageFactor "Use", 0.0
+	DamageFactor "Taunt", 0.0
+	DamageFactor "Trample", 0.0
+	DamageFactor "Stealth", 0.0
+	DamageFactor "Headkick", 0.0
+	DamageFactor "Kick", 0.1
+	DamageFactor "LowKick", 0.1
+	DamageFactor "Fatality", 10.0
+	DamageFactor "SuperPunch", 10.0
+	DamageFactor "ExtremePunches", 0.1
+	DamageFactor "Fire", 10.0
+	
+	DamageFactor "Slide", 0.0
+	//Player caused painchances
+	PainChance "Kick", 255
+	PainChance 255
+	Radius 12
+	Height 32
+	Health 50
+	Mass 200
+	+NOBLOOD
+	+SOLID
+	+SHOOTABLE
+	+PUSHABLE
+	+WINDTHRUST
+	+SLIDESONWALLS
+	+NOICEDEATH
+	+NOBLOCKMONST
+	+NOTARGET
+	+NOTAUTOAIMED
+}
+
+Actor Schism_HereticSerpentTorch : SerpentTorch Replaces SerpentTorch {
+	Game Raven
+	Radius 12
+	Height 54
+	+SOLID
+	States {
+		Spawn:
+			SRTC A 2
+			"####" "#" 1 A_CheckSight("NoSpecialFX")
+			TNT1 A 0 A_Playsound("HETorch", 1, 1, 1)
+			TNT1 A 0 A_SPawnItem("SerpentTorch_Flames")
+			TNT1 A 0 A_SpawnItem("SerpentTorch_Flare",0,52)
+			Stay:
+			SRTC AA 14 A_CustomMissile ("TorchBall", 59, 0, random (0, 140), 2, random (0, 160))
+			SRTC A 0 A_CustomMissile ("RealisticFireSparks", 59, 0, random (0, 140), 2, random (0, 160))
+			Loop
+			
+		NoSpecialFX:
+			SRTC ABC 3 Bright
+			Goto Spawn
+	}
+}
+
+Actor SerpentTorch_Flames : Schism_HereticSerpentTorch
+{
+	XScale 0.9
+	YScale 1.2
+	Renderstyle Add
+	Alpha 0.9
+	+CLIENTSIDEONLY
+	+NONETID
+	+THRUACTORS
+	states
+	{
+	Spawn:
+		TRKR ABCDEFGHIJKL 1 BRIGHT
+		Loop
+	}
+}
+
+Actor SerpentTorch_Flare : SerpentTorch_Flames
+{
+	XScale 0.7
+	YScale 0.5
+	+NOGRAVITY
+	states
+	{
+	Spawn:
+		TRKR OP 2 BRIGHT
+		Loop
+	}
+}
+
+
+ACTOR RealisticFireSparks
+{
+	Speed 0
+	-FORCEXYBILLBOARD
+	+NOINTERACTION
+	+NOCLIP
+	Alpha 1.0
+	Renderstyle Add
+    YScale 1.0
+	XScale -1.0
+	States
+	{
+    Spawn:
+        SPFN ABCDEFGHIJKLMNOPQRSTUVWXYZ 1 BRIGHT
+		SPFM ABCDEFG 1 BRIGHT
+        Stop
+	}
+}
+
+Actor BrazierFire : SerpentTorch_Flames
+{
+XScale 1.0
+YScale 0.6
+Alpha 0.7
+Radius 0
+Height 0
++NOGRAVITY
+states
+	{
+	Spawn:
+		NF4R ABCDEFGHIJKLMNOPQ 1 BRIGHT
+		Stop
+	}
+}
+
+/*
+ACTOR HEFireBrazier : FireBrazier Replaces FireBrazier
+{
+	Game Heretic
+	Radius 16
+	Height 44
+	+SOLID
+	States
+	{
+	Spawn:
+		KFR1 N 2 BRIGHT
+		TNT1 A 0 A_Playsound("HETorch", 1, 1, 1)
+		Goto Stay
+	Stay:
+		KFR1 NA 16 BRIGHT A_CustomMissile ("BrazierFire", 46, 0, random (40, 180), 2, random (50, 130))
+		KFR1 N 0 A_CustomMissile ("RealisticFireSparks", 46, 0, random (0, 140), 2, random (0, 160))
+		Loop
+	}
+}*/
+
+ACTOR Schism_HereticFireBrazier : Schism_RavenDecoration Replaces FireBrazier
+{
+	Radius 11
+	Height 37
+	States
+	{
+		Spawn:
+			KFR1 N 0 NODELAY A_CheckSight("NoSpecialFX")
+			TNT1 A 0 A_SpawnItem("RedFlare", 0, 41)
+			TNT1 A 0 A_Jump(200,2)
+			KFR1 N 0 A_CustomMissile ("RealisticFireSparks", 46, 0, random (0, 140), 2, random (0, 160))
+			KFR1 N 0 A_CustomMissile ("BrazierFire", 41, 0, random (40, 180), 2, random (50, 130))
+
+			KFR1 N 2 BRIGHT A_CustomMissile ("RealFlameTrails", 41, 0, random (0, 360), 2, random (70, 110))
+			KFR1 N 2 BRIGHT A_SpawnItem("RedFlare", 0, 41)
+			TNT1 A 0 A_Jump(200,2)
+			KFR1 N 0 A_CustomMissile ("RealisticFireSparks", 46, 0, random (0, 140), 2, random (0, 160))
+			
+			KFR1 N 2 BRIGHT A_CustomMissile ("RealFlameTrails", 41, 0, random (0, 360), 2, random (70, 110))
+			KFR1 N 2 BRIGHT A_SpawnItem("RedFlare", 0, 41)
+			TNT1 A 0 A_Jump(220,2)
+			KFR1 N 0 A_CustomMissile ("RealisticFireSparks", 46, 0, random (0, 140), 2, random (0, 160))
+			
+			KFR1 N 2 BRIGHT A_CustomMissile ("RealFlameTrails", 41, 0, random (0, 360), 2, random (70, 110))
+			KFR1 N 2 BRIGHT A_SpawnItem("RedFlare", 0, 41)
+			TNT1 A 0 A_Jump(200,2)
+			KFR1 N 0 A_CustomMissile ("RealisticFireSparks", 46, 0, random (0, 140), 2, random (0, 160))
+			
+			KFR1 N 2 BRIGHT A_CustomMissile ("RealFlameTrails", 41, 0, random (0, 360), 2, random (70, 110))
+			KFR1 N 2 BRIGHT A_SpawnItem("RedFlare", 0, 41)
+			Loop
+		NoSpecialFX:
+			KFR1 ABCDEFGH 3 Bright
+			Goto Spawn
+	}
+}
+
+ACTOR RealFlameTrails
+{
+	Radius 1
+	Height 1
+	Speed 4
+    +NOBLOCKMAP
+    +NOTELEPORT
+    +DONTSPLASH
+	+MISSILE
+	+FORCEYBILLBOARD
+    +CLIENTSIDEONLY
+    +NOINTERACTION
+	+NOCLIP
+	+DONTBLAST
+	RenderStyle Add
+    YScale 0.8
+	Alpha 1.0
+	Gravity 0
+	States
+	{
+    Spawn:
+	    TNT1 A 0
+        FIR1 AABBCCDEFGHII 1 BRIGHT
+	        //   FIR1 ABC 2 BRIGHT
+       // FIR2 ABCDEF 2 BRIGHT
+        Stop
+	}
+}
+
+ACTOR Schism_HereticWallTorch : WallTorch Replaces WallTorch {
+	Game Raven
+	Radius 6
+	Height 16
+	+NOGRAVITY
+	+FIXMAPTHINGPOS
+	+RANDOMIZE
+	States {
+		Spawn:
+			"WTRH" "A" 0
+			"####" "#" 1 A_CheckSight("NoSpecialFX")
+			"####" "#" 1
+			"####" "#" 0 A_Playsound("HETorch", 1, 1, 1)
+			"####" "#" 0 A_SPawnItem("WallTorch_Flames", 0, 73)
+			"####" "#" 0 A_SpawnItem("WallTorch_Flare", 0, 73)
+			Stay:
+			"WTRH" "AA" 16 BRIGHT A_CustomMissile("RealisticFireSparks", 73, 0, random (0, 140), 2, random (0, 160)) 
+			Loop
+		NoSpecialFX:
+			"WTRH" "ABC" 4 Bright
+			Goto Spawn
+	}
+}
+
+Actor WallTorch_Flames : Schism_HereticWallTorch {
+	XScale 1
+	YScale 1
+	Renderstyle Add
+	Alpha 0.9
+	+CLIENTSIDEONLY
+	+NONETID
+	+THRUACTORS
+	States {
+	Spawn:
+		CFCF ABCDEFGHIJKLMN 1 BRIGHT
+		Loop
+	}
+}
+
+Actor WallTorch_Flare : WallTorch_Flames {
+	XScale 0.6
+	YScale 0.4
+	States {
+	Spawn:
+		TRKR OP 2 BRIGHT
+		Loop
+	}
+}
+
+ACTOR HEKeyGizmoFloatBlue : KeyGizmoFloatBlue Replaces KeyGizmoFloatBlue
+{
+	Radius 16
+	Height 16
+	+SOLID
+	//+NOGRAVITY
+	//+FLOATBOB
+	States
+	{
+	Spawn:
+		KGZB A 5 //Bright
+		loop
+	}
+}
+
+ACTOR HEKeyGizmoFloatGreen : KeyGizmoFloatGreen Replaces KeyGizmoFloatGreen
+{
+	Radius 16
+	Height 16
+	+SOLID
+	//+NOGRAVITY
+	//+FLOATBOB
+	States
+	{
+	Spawn:
+		KGZG A 5 //Bright
+		loop
+	}
+}
+
+Actor Schism_YellowKeyGizmo : Schism_RavenDecoration Replaces KeyGizmoFloatYellow {
+	Radius 16
+	Height 16
+	Monster
+	Gravity 0.1
+	-SHOOTABLE
+	-COUNTKILL
+	+SOLID
+	+LOOKALLAROUND
+	+AMBUSH
+	+QUICKTORETALIATE
+	-NOGRAVITY
+	-FLOATBOB
+	States {
+		Spawn:
+			TNT1 A 0 A_JumpIfCloser(380,"Fly")
+			TNT1 A 0 A_JumpIfCloser(512,"Fall")
+			TNT1 A 0 A_JumpIfInTargetInventory("KeyYellow",1,3)
+			KGZY A 5 A_LookEx
+			TNT1 A 0 A_Jump(256,3)
+			TNT1 A 0 A_SpawnItem("YellowFlare", 0, 0)	
+			KGZY A 5 BRIGHT A_LookEx
+			TNT1 A 0
+		See:
+			TNT1 A 0 A_JumpIfCloser(380,"Fly")
+			TNT1 A 0 A_JumpIfInTargetInventory("KeyYellow",1,3)
+			KGZY A 5 
+			TNT1 A 0 A_Jump(256,2)
+			KGZY A 2 BRIGHT A_SpawnItem("YellowFlare", 0, 0)	
+			TNT1 A 0 
+			goto Spawn
+		Fly:
+			TNT1 A 0 A_ChangeFlag("NOGRAVITY",1)
+			TNT1 A 0 A_ChangeFlag("FLOATBOB",1)
+			TNT1 A 0 A_JumpIfInTargetInventory("KeyYellow",1,3)
+			KGZY A 2 
+			TNT1 A 0 A_Jump(256,2)
+			KGZY B 2 BRIGHT A_SpawnItem("YellowFlare", 0, 0)
+			TNT1 A 0 
+			goto Spawn
+		Fall:
+			TNT1 A 0 A_ChangeFlag("NOGRAVITY",0)
+			TNT1 A 0 A_ChangeFlag("FLOATBOB",0)
+			TNT1 A 0 A_JumpIfInTargetInventory("KeyYellow",1,3)
+			KGZY A 2 
+			TNT1 A 0 A_Jump(256,2)
+			KGZY A 2 BRIGHT A_SpawnItem("YellowFlare", 0, 0) 
+			TNT1 A 0 
+			goto Spawn
+	}
+}
+
+ACTOR ZCorpseSleepingX : ZCorpseSleeping replaces ZCorpseSleeping
+{
+	Radius 20
+	Height 16
+	Scale 1.0
+	Health 100
+	Mass 5000
+	-SOLID
+	+SHOOTABLE
+	GibHealth 10
+	damagefactor "Blood", 0.0    damagefactor "GreenBlood", 0.0    damagefactor "BlueBlood", 0.0    damagefactor "Taunt", 0.0    damagefactor "KillMe", 0.0  damagefactor "Avoid", 0.0  damagefactor "Taunt", 0.0
+	bloodtype "DeadBlood"
+	
+	States
+	{
+		Spawn:
+		CP52 A 1
+		Goto Stand
+		
+		Stand:
+		CP52 A 2
+		loop
+		
+		Death:
+        TNT1 A 0
+		TNT1 A 0 A_Jump(128, "Death.Torso", "Death.Legs")
+		XDeath:
+		Death.ExplosiveImpact:
+        TNT1 A 0 A_Scream
+		TNT1 AA 0 A_CustomMissile ("XDeath2", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAA 0 A_CustomMissile ("XDeath4", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeath3", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AA 0 A_CustomMissile ("XDeath1", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("PZombieHead", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZArm1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZArm1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZombieLeg1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZombieLeg1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAA 0 A_SpawnItem ("Blood")
+		Stop
+		
+		Death.Torso:
+        TNT1 A 0
+        TNT1 A 0 A_Scream
+		TNT1 A 0 A_CustomMissile ("XDeath2", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAA 0 A_CustomMissile ("XDeath4", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeath3", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeath1", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("PZombieHead", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZArm1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZArm1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAA 0 A_SpawnItem ("Blood")
+		TNT1 A 0 A_SpawnItem ("ZCorpseLegsOnly")
+		Stop
+		
+		Death.Legs:
+        TNT1 A 0
+        TNT1 A 0 A_Scream
+		TNT1 A 0 A_CustomMissile ("XDeath2", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAA 0 A_CustomMissile ("XDeath4", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeath3", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeath1", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZombieLeg1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZombieLeg1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAA 0 A_SpawnItem ("Blood")
+		TNT1 A 0 A_SpawnItem ("ZCorpseTorsoOnly")
+		Stop
+	}
+}
+
+ACTOR ZCorpseTorsoOnly : ZCorpseSleepingX
+{
+	Health 70
+	
+	States
+	{
+	Spawn:
+		CP52 B 1
+		Goto Stand
+		
+		Stand:
+		CP52 B 2
+		loop
+		
+		Death:
+		XDeath:
+		Death.ExplosiveImpact:
+        TNT1 A 0
+        TNT1 A 0 A_Scream
+		TNT1 A 0 A_CustomMissile ("XDeath2", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AA 0 A_CustomMissile ("XDeath4", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeath3", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeath1", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("PZombieHead", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZArm1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZArm1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAA 0 A_SpawnItem ("Blood")
+		Stop
+	}
+}
+
+ACTOR ZCorpseLegsOnly : ZCorpseSleepingX
+{
+	Health 70
+	
+	States
+	{
+	Spawn:
+		CP52 C 1
+		Goto Stand
+		
+		Stand:
+		CP52 C 2
+		loop
+		
+		Death:
+		XDeath:
+		Death.ExplosiveImpact:
+        TNT1 A 0
+        TNT1 A 0 A_Scream
+		TNT1 A 0 A_CustomMissile ("XDeath2", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 AA 0 A_CustomMissile ("XDeath4", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeath3", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeath1", 5, 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZombieLeg1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 A 0 A_CustomMissile ("XDeathPZombieLeg1", random(2, 6), 0, random (0, 360), 2, random (0, 160))
+		TNT1 AAAA 0 A_SpawnItem ("Blood")
+		Stop
+	}
+}
+
+Actor Schism_HereticBarrelSpawner Replaces Barrel
+{
+	+NoInterAction
+	+NoBlockMap
+	+NOTARGET
+	+THRUACTORS
+	States
+	{
+		Spawn:
+			TNT1 A 0 NODELAY A_Jump(56, "Spawn2")
+			TNT1 A 0 A_Jump(10, "Spawn3")
+			Spawn1:
+			TNT1 A 0 A_SpawnItemEx("Schism_HereticEmptyBarrel")
+			Stop
+			
+		Spawn2:
+			TNT1 A 0 A_SpawnItemEx("Schism_HereticFoodBarrel")
+			Stop
+			
+		Spawn3:
+			TNT1 A 0 A_SpawnItemEx("Schism_HereticPowderKeg")
+			Stop
+	}
+}
+
+Actor Schism_BrokenWoodenBarrelParticals
+{
+	States
+	{
+		Spawn:
+			TNT1 AAA 0 A_CustomMissile ("BrownCloudSmall", 35, 0, random (0, 360), 2, random (0, 360))
+			TNT1 AAAAAAA 0 A_CustomMissile ("WoodParticle", 35, 0, random (0, 360), 2, random (0, 160))
+			TNT1 AAAAAAA 0 A_CustomMissile ("WoodParticleSmall", 45, 0, random (0, 360), 2, random (0, 160))
+			TNT1 AAAAAAAAA 0 A_CustomMissile ("WoodParticleTiny", 65, 0, random (0, 360), 2, random (0, 160))
+			TNT1 AAAAAAAAAAAAA 0 A_CustomMissile ("WoodParticleBig", 85, 0, random (0, 360), 2, random (0, 160))
+			Stop
+	}
+}
+
+Actor Schism_HereticEmptyBarrel : Schism_RavenBarrel
+{
+	States
+	{
+		Spawn:
+			BARL A 1 A_FaceTarget
+			Loop
+			
+		Pain.Kick:
+		Pain.LowKick:
+		Pain.ExtremePunches:
+		Pain.Melee:
+			TNT1 A 0 A_FaceTarget
+			TNT1 A 0 ThrustThing(angle*256/360+128, 10, 0, 0)
+			TNT1 A 0 ThrustThingZ(0,10,0,1)
+			BARL A 1
+			Goto Spawn
+			
+		Death:
+			TNT1 A 0 A_SpawnItemEx("Schism_BrokenWoodenBarrelParticals", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			TNT1 A 1 A_NoBlocking
+			Stop
+	}
+}
+
+Actor Schism_HereticPowderKeg : Schism_HereticEmptyBarrel
+{	
+	PainChance "Kick", 255
+	PainChance "LowKick", 255
+	PainChance "ExtremePunches", 255
+	PainChance "Melee", 255
+	States
+	{	
+		Spawn:
+			BARL A -1
+			Stop
+			
+		Pain.Kick:
+		Pain.LowKick:
+		Pain.ExtremePunches:
+		Pain.Melee:
+			TNT1 A 0 A_FaceTarget
+			TNT1 A 0 ThrustThing(angle*256/360+128, 10, 0, 0)
+			TNT1 A 0 ThrustThingZ(0,10,0,1)
+			TNT1 A 0 HealThing(100)
+			BARL A 1
+			Goto Spawn
+			
+		Death.Melee:
+			TNT1 A 0 A_SpawnItemEx("Schism_HereticPowderKeg", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION)
+			Stop
+			
+		Death:
+			TNT1 A 0 A_SpawnItemEx("Schism_BrokenWoodenBarrelParticals", 0, 0, 0, 0, 0, 0, 0, SXF_NOCHECKPOSITION, 0)
+			TNT1 A 0 A_SpawnItemEx("BarrelExplosionDamage",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_SpawnItemEx("BarrelKaboom",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION,0)
+			TNT1 A 0 A_CustomMissile("HighExplosiveFlamesBig", random (30, 50), 0, random (0, 360), 2, random (10, 90))
+			EXPL A 0 A_CustomMissile("BigBlackSmokeLarger", 20, 0, random (0, 360), 2, random (10, 90))
+			TNT1 A 0 A_CustomMissile("BDExplosionparticles3", 124, 0, random (0, 360), 2, random (40, 90))
+			TNT1 A 0 A_CustomMissile("BDExplosionparticles4", 124, 0, random (0, 360), 2, random (40, 90))
+			TNT1 A 0 A_CustomMissile("ExplosionFlames", 0, 0, random (0, 360), 2, random (0, 360))
+			EXPL A 0 Radius_Quake (2, 24, 0, 15, 0)
+			TNT1 A 1 A_NoBlocking
+			Stop
+
+	}
+}
+
+Actor Schism_HereticFoodBarrel : Schism_RavenBarrel
+{
+	Radius 16
+	Height 30
+	Health 20
+	Mass 180
+	States
+	{
+		Spawn:
+			FOBR A -1
+			Stop
+			
+		Pain.Kick:
+		Pain.LowKick:
+		Pain.ExtremePunches:
+		Pain.Melee:
+			TNT1 A 0 A_FaceTarget
+			TNT1 A 0 ThrustThing(angle*256/360+128, 10, 0, 0)
+			TNT1 A 0 ThrustThingZ(0,10,0,1)
+			FOBR A 1
+			Goto Spawn
+			
+		Death:
+			TNT1 A 0 A_SpawnItemEx("Schism_BrokenWoodenBarrelParticals")
+			TNT1 A 0 A_Jump(56, "AppleSet", "MeatSet", "CheeseSet")
+			FishSet:
+			TNT1 AAAA 0 A_SpawnItemEx("Schism_FoodFish", 0, 0, 1, 1, 0, 0, Random(-179, 179))
+			Goto DeathAnimation
+			
+			AppleSet:
+			TNT1 AAAA 0 A_SpawnItemEx("Schism_FoodApple", 0, 0, 1, 1, 0, 0, Random(-179, 179))
+			Goto DeathAnimation
+			
+			MeatSet:
+			TNT1 AAA 0 A_SpawnItemEx("Schism_FoodSteak", 0, 0, 1, 1, 0, 0, Random(-179, 179))
+			Goto DeathAnimation
+			
+			CheeseSet:
+			TNT1 AAAAA 0 A_SpawnItemEx("Schism_FoodCheese", 0, 0, 1, 1, 0, 0, Random(-179, 179))
+			Goto DeathAnimation
+			
+			DeathAnimation:
+			FOBR BCDEFG 5
+			FOBR H -1 A_NoBlocking
+			Stop
+	}
+}

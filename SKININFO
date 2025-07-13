@@ -1,0 +1,142 @@
+//Ranger Skins
+
+{
+Name = "Fist Marine"
+Class = "UAC Marine Test"
+Sprite = PLA1
+CrouchSprite = PL1C
+Hidden = True
+}
+
+{
+Name = "Chainsaw Marine"
+Class = "UAC Marine Test"
+Sprite = MAR1
+Hidden = True
+}
+
+{
+Name = "Pistol Marine"
+Class = "UAC Marine Test"
+Sprite = PLA2
+CrouchSprite = PL2C
+Hidden = True
+}
+
+{
+Name = "Dual Pistol Marine"
+Class = "UAC Marine Test"
+Sprite = PL22
+CrouchSprite = P22C
+Hidden = True
+}
+
+{
+Name = "Smg Marine"
+Class = "UAC Marine Test"
+Sprite = MRMP
+Hidden = True
+}
+
+{
+Name = "Shotgun Marine"
+Class = "UAC Marine Test"
+Sprite = MAR3
+CrouchSprite = MR3C
+Hidden = True
+}
+
+{
+Name = "SSg Marine"
+Class = "UAC Marine Test Test"
+Sprite = MSSG
+CrouchSprite = MSGC
+Hidden = True
+}
+
+{
+Name = "QQS Marine"
+Class = "UAC Marine Test Test"
+Sprite = PQST
+CrouchSprite = PQSC
+Hidden = True
+}
+
+{
+Name = "Rifle Marine"
+Class = "UAC Marine Test"
+Sprite = MARN
+CrouchSprite = MARC
+Hidden = True
+}
+
+{
+Name = "Minigun Marine"
+Class = "UAC Marine Test"
+Sprite = MAR4
+CrouchSprite = MR4C
+Hidden = True
+}
+
+{
+Name = "RL Marine"
+Class = "UAC Marine Test"
+Sprite = MAR5
+Hidden = True
+}
+
+{
+Name = "GL Marine"
+Class = "UAC Marine Test"
+Sprite = MRGL
+CrouchSprite = MGLC
+Hidden = True
+}
+
+{
+Name = "PG Marine"
+Class = "UAC Marine Test"
+Sprite = MAR6
+CrouchSprite = MR6C
+Hidden = True
+}
+
+{
+Name = "Rail-Gun Marine"
+Class = "UAC Marine Test"
+Sprite = MRRG
+CrouchSprite = MRGC
+Hidden = True
+}
+
+{
+Name = "BFG Marine"
+Class = "UAC Marine Test"
+Sprite = MAR7
+CrouchSprite = MR7C
+Hidden = True
+}
+
+{
+Name = "BFG-10k Marine"
+Class = "UAC Marine Test"
+Sprite = M10K
+CrouchSprite = M10C
+Hidden = True
+}
+
+{
+Name = "Flamethrower Marine"
+Class = "UAC Marine Test"
+Sprite = MMFC
+Hidden = True
+}
+
+{
+Name = "Rev.-Launchers Marine"
+Class = "UAC Marine Test"
+Sprite = MHML
+Hidden = True
+}
+
+//Paladin Skins

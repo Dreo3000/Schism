@@ -1,0 +1,10 @@
+Actor Schism_ShootableActor {
+	
+	
+}
+
+Actor Schism_Monster : Schism_ShootableActor {
+	Monster
+	
+	var int user_stealthkill;
+}

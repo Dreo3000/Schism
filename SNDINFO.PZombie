@@ -1,0 +1,12 @@
+// possessed from OSJC (this code modified by LordADHD)
+Zomb/Active			foddact
+
+$random Zomb/Sight { FODDERSEE1 FODDERSEE2 }
+FODDERSEE1	FODDSEE1
+FODDERSEE2	FODDSEE2
+
+Zomb/Pain	FODDPAIN
+
+$random Zomb/Death { FODDERDIE1 FODDERDIE2 }
+FODDERDIE1	FODDDIE1
+FODDERDIE2	FODDDIE2

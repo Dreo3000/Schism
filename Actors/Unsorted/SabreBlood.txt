@@ -1,0 +1,51 @@
+//-------------------//
+//----Sabre Blood----//
+//-------------------//
+
+actor Sabre_Blood : Brutal_Blood
+{
+ states
+ {
+  Spawn:
+        TNT1 A 0
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Splash")
+		TNT1 A 0 A_CustomMissile ("Blood", 7, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_Jump(128, 2)
+		TNT1 A 0 A_CustomMissile ("FlyingTinyBurningPiece2", 7, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_Jump(128, 2)
+		TNT1 A 0 A_CustomMissile ("FlyingTinyBurningPiece3", 7, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_Jump(128, 2)
+		TNT1 A 0 A_CustomMissile ("FlyingTinyBurningPiece3", 7, 0, random (0, 360), 2, random (0, 360))
+		//TNT1 A 0 A_SpawnItem ("BloodHit")
+        BLOD BCD 0
+        stop
+ }
+}
+
+
+
+actor Sabre_SawBlood : Brutal_Blood
+{
+ states
+ {
+  Spawn:
+        TNT1 A 0
+	    TNT1 A 0 A_JumpIf(waterlevel > 1, "Splash")
+		TNT1 A 0
+		TNT1 A 0 A_RadiusGive("ChainsawHitRed", 200, RGF_PLAYERS | RGF_MONSTERS , 1)
+		TNT1 A 0 A_RadiusGive("PowerBloodOnVisor", 200, RGF_PLAYERS | RGF_MONSTERS , 1)
+		TNT1 A 0 A_CustomMissile ("BloodmistChainsaw", -10, 0, random (0, 360), 2, random (60, 90))
+		TNT1 A 0 A_CustomMissile ("ChainsawWallRedBlood", 0, 0, random (0, 360), 2, random (-10, 80))
+		TNT1 A 0 A_PlaySound("CSAWFLESH")
+		TNT1 A 0 Radius_Quake (2, 2, 0, 2, 0)
+		TNT1 A 0 A_Jump(128, 2)
+		TNT1 A 0 A_CustomMissile ("FlyingTinyBurningPiece2", 7, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_Jump(128, 2)
+		TNT1 A 0 A_CustomMissile ("FlyingTinyBurningPiece3", 7, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0 A_Jump(128, 2)
+		TNT1 A 0 A_CustomMissile ("FlyingTinyBurningPiece3", 7, 0, random (0, 360), 2, random (0, 360))
+		TNT1 A 0
+		Stop
+		}
+}
+

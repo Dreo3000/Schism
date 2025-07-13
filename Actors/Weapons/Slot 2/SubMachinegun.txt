@@ -1,0 +1,815 @@
+Actor Schism_SMGGiver : Schism_BaseWeaponGiver {
+	Scale 1.0
+	Inventory.PickupSound "SMGDRAW"
+	Inventory.PickupMessage "You got the Sub-machinegun! (Slot 2)"
+	Inventory.ForbiddenTo Schism_Corvus, BaronPlayer, RevenantPlayer
+    States {
+		Spawn:
+			SMGZ A -1
+			Stop
+
+		Pickup:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIfInventory("Schism_SMG", 1, 2)
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CounInvG", 2) == 3, "DontGive")
+// 			TNT1 A 0 A_GiveInventory("Clip1", 20)
+			TNT1 A 0 A_GiveInventory("Schism_SMG", 1)
+// 			TNT1 A 0 A_JumpIfInventory("IsPaladin", 1, "Paladin")
+			Stop
+
+// 			Paladin:
+// 			TNT1 A 0 A_JumpIfInventory("Shield_SMG", 1, "DontGive")
+// 			TNT1 A 0 A_GiveInventory("Shield_SMG")
+// 			Stop
+
+		DontGive:
+			TNT1 A 0
+			Fail
+    }
+}
+
+Actor Schism_SMGEmptyGiver : Schism_BaseWeaponGiver {
+	Scale 1.0
+	Inventory.PickupSound "SMGDRAW"
+	Inventory.PickupMessage "You got the Sub-machinegun! (Slot 2)"
+	Inventory.ForbiddenTo Schism_Corvus, BaronPlayer, RevenantPlayer
+    States {
+		Spawn:
+			SMGZ A -1
+			Stop
+
+		Pickup:
+			TNT1 A 0
+			TNT1 A 0 A_JumpIfInventory("Schism_SMG", 1, 2)
+			TNT1 A 0 A_JumpIf(ACS_NamedExecuteWithResult("Schism_CounInvG", 2) == 3, "DontGive")
+			TNT1 A 0 A_GiveInventory("Schism_SMG", 1)
+// 			TNT1 A 0 A_JumpIfInventory("IsPaladin", 1, "Paladin")
+			Stop
+
+// 		Paladin:
+// 			TNT1 A 0 A_JumpIfInventory("Shield_SMG", 1, "DontGive")
+// 			TNT1 A 0 A_GiveInventory("Shield_SMG")
+// 			Stop
+
+		DontGive:
+			TNT1 A 0
+			Fail
+    }
+}
+
+Actor Schism_SMG : Schism_Weapon {
+	Weapon.AmmoType1 "Schism_SmgMag"
+	Weapon.AmmoGive1 0
+	Weapon.AmmoUse1 1
+	Weapon.AmmoType2 "Clip1"
+	Weapon.AmmoGive2 40
+	Weapon.AmmoUse2 0
+	Obituary "%o was shot down by %k's SMG."
+	Inventory.MaxAmount 2
+	Inventory.ForbiddenTo Schism_Corvus
+	Inventory.PickupSound "SMGDRAW"
+	Inventory.Pickupmessage "You got the SMG! (Slot 2)"
+	+WEAPON.NOALERT
+    +WEAPON.NOAUTOAIM
+    +WEAPON.NOAUTOFIRE
+	+WEAPON.AMMO_OPTIONAL
+// 	+THRUGHOST
+	Tag "Sub-MachineGun"
+	AttackSound "None"
+	Scale 0.9
+	States {
+		Spawn:
+			TNT1 A 2
+			TNT1 A 1 A_SpawnItem("Schism_SMGEmptyGiver", 50)
+			Stop
+
+		Select:
+			SMGG A 0 A_Raise
+			Wait
+
+		Deselect:
+			TNT1 A 0 A_GunFlash("LightDone", GFF_NOEXTCHANGE)
+			PSSL A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			MSMS A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGS A 0
+			"####" "#" 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" "#" 0 A_JumpIfInventory("Zoomed", 1, "Deselect2")
+			"####" FEDCBA 1
+			DeselectLoop:
+			TNT1 A 0 A_Lower
+			Wait
+
+		Deselect2:
+			SMGG A 0 A_TakeInventory("Zoomed", 1)
+			SMGG A 0 A_TakeInventory("ADSMode", 1)
+			Deselect2Loop:
+			TNT1 A 0 A_ZoomFactor(1.0)
+			TNT1 A 0 A_Lower
+			Loop
+
+		Ready:
+			TNT1 A 0 A_PlaySound("CLIPIN")
+			PSSL A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			MSMS A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGS A 0
+			"####" ABCDEF 1
+			ReadyLoop:
+			TNT1 A 0 A_GunFlash("LightDone", GFF_NOEXTCHANGE)
+			PSMG A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			MSMG A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGG A 0
+			"####" A 0
+			"####" A 0 A_JumpIfInventory("Zoomed", 1, "ReadyInZoom")
+			"####" A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			"####" A 0 A_JumpIfInventory("Kicking", 1, "DoKick")
+			"####" A 0 A_JumpIfInventory("Reloading", 1, "Reload")
+			"####" A 0 A_JumpIfInventory("Reloading", 1, "Reload")
+			//"####" A 0 A_JumpIfInventory("StartDualWield", 1,"DualWield")
+			"####" F 0 A_JumpIfInventory("Quickspell", 1, "Quickspell")
+			TNT1 A 0 A_SetCrosshair(13)
+			Loop
+
+		ReadyInZoom:
+			SMPS A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			SMMS A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGA A 0
+			"####" A 0 A_JumpIfInventory("Kicking", 1, "ExitFromZoom")
+			"####" A 0 A_JumpIfInventory("Reloading", 1, "ExitFromZoom")
+			"####" A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			"####" A 0 A_JumpIfInventory("Reloading", 1, "ExitFromZoom")
+			//"####" A 0 A_JumpIfInventory("StartDualWield", 1, "ExitFromZoom")
+			Loop
+
+		/*Ammo
+		Gunflash
+		FrostEnchantment/AlertMonsters
+		Take Ammo
+		Sounds
+		Zoomed
+		*/
+
+		Fire:
+			TNT1 A 0 A_JumpIfNoAmmo("NoAmmo")
+			PSF1 F 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			MSMF A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGF A 0
+
+			"####" "#" 0 A_GunFlash("Flash")
+			"####" "#" 0 A_JumpIfInventory("FrostEnchantedSMG", 1, 2)
+			"####" "#" 0 A_AlertMonsters
+			"####" "#" 0 A_TakeInventory("Schism_SMGMag", 1)
+			"####" "#" 0 A_PlaySound("FARSHT", CHAN_6)
+			"####" "#" 0 A_PlaySound("SMGFIRE", CHAN_WEAPON)
+			"####" "#" 0 A_JumpIfInventory("Zoomed", 1, "FireInZoom")
+
+			"####" "#" 0 A_SpawnItemEx("PlayerMuzzle1", 30, 5, 30)
+			"####" "#" 0 A_ZoomFactor(0.99)
+			"####" A 1 ACS_NamedExecuteWithResult("Schism_FireBullets", 18, 18, 1, 17)
+			"####" "#" 0 A_ZoomFactor(1.0)
+			"####" "#" 0 A_FireCustomMissile("DecorativeTracer", random(-1, 1), 0, 0, 0)
+			"####" B 1
+			"####" "#" 0 A_FireCustomMissile("PistolCaseSpawn", 5, 0, 0, -9)
+			"####" C 1
+			"####" "#" 0 A_SetPitch(Pitch - 1.0)
+			"####" "#" 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			"####" "#" 0 A_SetPitch(Pitch + 1.0)
+
+			PSMG A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			MSMG A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGG A 0
+			"####" "#" 0 A_ReFire
+			"####" A 7 A_WeaponReady(1)
+			Goto ReadyLoop
+
+		Flash:
+			TNT1 A 1 A_Light2
+			TNT1 A 1 A_Light1
+			Goto LightDone
+
+		FireInZoom:
+			SMPS A 0 A_JumpIfInventory("Schism_SmgMag", 1, 1)
+			Goto NoAmmoInZoom
+			SMPS A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			SMMS A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGA A 0
+			"####" "#" 0 A_ZoomFactor(1.33)
+			"####" B 1 ACS_NamedExecuteWithResult("Schism_FireBullets", 18, 18, 1, 17)
+			"####" "#" 0 A_ZoomFactor(1.3)
+			"####" "#" 0 A_FireCustomMissile("DecorativeTracer", random(-1, 1), 0, 0, 0)
+			"####" C 1
+			"####" "#" 0 A_FireCustomMissile("PistolCaseSpawn", 5, 0, 0, -9)
+			"####" D 1
+			"####" "#" 0 A_SetPitch(Pitch - 0.5)
+			"####" "#" 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			"####" "#" 0 A_SetPitch(Pitch + 0.5)
+			"####" "#" 0 A_JumpIfInventory("FiredSecondary", 1, "ADSMode")
+			"####" "#" 0 A_ReFire("Fire")
+			"####" A 1 A_WeaponReady(1)
+			"####" A 7 A_WeaponReady(1)
+			Goto ReadyLoop
+
+		AltFire:
+		Zoom:
+			SMGG A 0
+			TNT1 A 0 A_SetCrosshair(41)
+			SMGG A 0 A_Giveinventory("GoSpecial", 1)
+			SMGG A 0 A_JumpIfInventory("Zoomed", 1, "ExitFromZoom")
+			SMGG A 0 A_Giveinventory("Zoomed", 1)
+			SMGG A 0 A_ZoomFactor(1.3)
+			SMGG A 0 A_Giveinventory("ADSmode", 1)
+			SMPS A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			SMMS A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGA A 0
+			"####" EA 3
+			SMPS A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			SMMS A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGA A 0
+			"####" "#" 0 A_JumpIfInventory("FiredPrimary", 1, "Fire")
+			"####" "#" 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			"####" "#" 0 A_JumpIfInventory("FiredPrimary", 1, "Fire")
+			"####" "#" 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			"####" "#" 0 A_JumpIfInventory("FiredPrimary", 1, "Fire")
+			"####" "#" 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			"####" "#" 0 A_JumpIfInventory("FiredPrimary", 1, "Fire")
+			"####" "#" 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			"####" "#" 0 A_JumpIfInventory("FiredPrimary", 1, "Fire")
+			"####" "#" 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			"####" "#" 0 A_JumpIfInventory("FiredPrimary", 1, "Fire")
+			"####" "#" 2 A_WeaponReady(WRF_ALLOWRELOAD)
+			"####" "#" 0 A_JumpIfInventory("FiredPrimary", 1, "Fire")
+			"####" "#" 0 A_JumpIfInventory("FiredSecondary", 1, "ADSMode")
+			Goto ReadyInZoom
+
+		ADSMode:
+			SMPS A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			SMMS A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGA A 0
+			"####" A 0 A_JumpIfInventory("FiredPrimary", 1, "Fire")
+			"####" A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			"####" A 0 A_JumpIfInventory("FiredPrimary", 1, "Fire")
+			"####" A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			"####" A 0 A_JumpIfInventory("FiredPrimary", 1, "Fire")
+			"####" A 1 A_WeaponReady(WRF_ALLOWRELOAD)
+			"####" A 0 A_JumpIfInventory("FiredSecondary", 1, "ADSMode")
+			Goto ExitFromZoom
+
+		ExitFromZoom:
+			SMGG A 0 A_TakeInventory("Zoomed", 1)
+			SMGG A 0 A_ZoomFactor(1.0)
+			SMGG A 0 A_TakeInventory("ADSmode", 1)
+			SMGG A 0 A_GiveInventory("GoSpecial", 1)
+			SMPS A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			SMMS A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGA A 0
+			"####" AE 3
+			Goto ReadyLoop
+
+
+
+		Reload:
+			"####" "#" 0 A_ZoomFactor(1.0)
+			"####" "#" 0 A_TakeInventory("Zoomed", 1)
+			"####" "#" 0 A_TakeInventory("ADSmode", 1)
+			"####" "#" 0 A_TakeInventory("Reloading", 1)
+			"####" A 0 A_JumpIfInventory("Schism_SmgMag", 41, "ReadyLoop")
+			"####" A 0 A_JumpIfInventory("Clip1", 1, 1)
+			Goto ReadyLoop
+			"####" "#" 0 A_SetCrosshair(41)
+			"####" "#" 0 A_GiveInventory("Reloading2", 1)
+			"####" "#" 0 A_GunFlash("DetectReloadFlash")
+			ReloadLoop:
+			"TNT1" "A" 1 A_JumpIfInventory("Kicking", 1, "DoKick")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+
+		DetectReloadFlash:
+			PSMG A 0 A_JumpIfInventory("IsPaladin", 1, "PallyReloadAnim")
+			MSMG A 0 A_JumpIfInventory("IsSorcerer", 1, "SorcyReloadAnim")
+			Goto MarineReloadAnim
+
+		MarineReloadAnim:
+			"####" "#" 0 A_FireCustomMissile("EmptyClipSpawn", -5, 0, 8, -4)
+			"####" "#" 0 A_PlaySound("SMGMOUT")
+			SMGR ABCCDDEEFFGH 1
+			SMGG A 0 A_PlaySound("SMGMAGIN")
+			SMGR IIIIJKLMNOPQRST 1
+			"####" "#" 0 A_JumpIfInventory("Schism_SmgMag", 1, "RefillTo41")
+			Goto RefillTo40
+
+		PallyReloadAnim:
+			"####" "#" 0 A_FireCustomMissile("EmptyClipSpawn", -5, 0, 8, -4)
+			"####" "#" 0 A_PlaySound("SMGMOUT")
+			PSRR ABCDEFGHIJKLMNOPQRSTUVWXYZ 1
+			SMGG A 0 A_PlaySound("SMGMAGIN")
+			PSRL ABCDEFGHIJKLMNOPQRST 1
+			"####" "#" 0 A_JumpIfInventory("Schism_SmgMag", 1, "RefillTo41")
+			Goto RefillTo40
+
+		SorcyReloadAnim:
+			"####" "#" 0 A_FireCustomMissile("EmptyClipSpawn", -5, 0, 8, -4)
+			"####" "#" 0 A_PlaySound("SMGMOUT")
+			MSMR BBCCDDEEFFGH 1
+			SMGG A 0 A_PlaySound("SMGMAGIN")
+			MSMR IIIIJKLMNOPQRS 1
+			"####" "#" 0 A_JumpIfInventory("Schism_SmgMag", 1, "RefillTo41")
+			Goto RefillTo40
+
+		RefillTo40:
+			"####" "#" 0 A_TakeInventory("Clip1", 1)
+			"####" "#" 0 A_GiveInventory("Schism_SmgMag", 1)
+			"####" "#" 0 A_JumpIfInventory("Schism_SmgMag", 40, "FinishReload")
+			"####" "#" 0 A_JumpIfInventory("Clip1", 1, "RefillTo40")
+			Goto FinishReload
+
+		RefillTo41:
+			"####" "#" 0 A_TakeInventory("Clip1", 1)
+			"####" "#" 0 A_GiveInventory("Schism_SmgMag", 1)
+			"####" "#" 0 A_JumpIfInventory("Schism_SmgMag", 41, "FinishReload")
+			"####" "#" 0 A_JumpIfInventory("Clip1", 1, "RefillTo41")
+			Goto FinishReload
+
+		FinishReload:
+			"####" "#" 0 A_TakeInventory("Reloading2", 1)
+			PSMG A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			MSMG A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGG A 0
+			"####" "#" 0 A_ReFire
+			"####" "#" 0 A_JumpIfInventory("Kicking", 1, "KickFlash")
+			"####" "#" 2100
+			Stop
+
+		NoAmmo:
+			PSMG A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			MSMG A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGG A 0
+			"####" "#" 0 A_JumpIfInventory("Zoomed", 1, "NoAmmoInZoom")
+			"####" "#" 0 A_JumpIfInventory("noautoreload", 1, 2)
+			Goto Reload
+			"####" "#" 0 A_JumpIfInventory("TurboReload", 1, "RefillTo40")
+			"####" "#" 0 A_PlaySound("weapons/empty", 4)
+			"####" A 5 A_WeaponReady(WRF_ALLOWRELOAD | WRF_NOPRIMARY)
+			Goto ReadyLoop
+
+		NoAmmoInZoom:
+			RIFG A 0 A_JumpIfInventory("Kicking", 1, "ExitFromZoom")
+			SMPS A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			SMMS A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGA A 0
+			"####" A 5 A_WeaponReady(WRF_ALLOWRELOAD | WRF_NOPRIMARY)
+			RIFG A 0 A_JumpIfInventory("Reloading", 1, "Reload")
+			RIFG A 0 A_JumpIfInventory("TurboReload", 1, "RefillTo40")
+			TNT1 A 0 A_JumpIfInventory("NoAutoReload", 1, "NoAmmoInZoom")
+			RIFG A 0 A_JumpIfInventory("Clip1", 1, "Reload")
+			RIFG A 0 A_JumpIfInventory("FiredPrimary", 1, "NoAmmoInZoom")
+			Goto ReadyLoop
+
+		Steady:
+			TNT1 A 1
+			Goto ReadyLoop
+
+		Enchanting:
+			TNT1 A 0 A_JumpIfInventory("QuickFireSpellSelected", 1, "FireEnchant")
+			TNT1 A 0 A_JumpIfInventory("QuickLightningSpellSelected", 1, "LightningEnchant")
+			TNT1 A 0 A_JumpIfInventory("QuickFrostSpellSelected", 1, "FrostEnchant")
+			FireEnchant:
+			"####" F 0 A_Print("Now your SMG is spreading fire")
+			TNT1 A 0 A_GiveInventory("FireEnchantedSMG", 1)
+			TNT1 A 0 A_TakeInventory("FrostEnchantedSMG", 1)
+			TNT1 A 0 A_TakeInventory("LightningEnchantedSMG", 1)
+			Goto ReadyLoop
+
+		LightningEnchant:
+			"####" F 0 A_Print("Now your SMG is zapping")
+			TNT1 A 0 A_GiveInventory("LightningEnchantedSMG", 1)
+			TNT1 A 0 A_TakeInventory("FrostEnchantedSMG", 1)
+			TNT1 A 0 A_TakeInventory("FireEnchantedSMG", 1)
+			Goto ReadyLoop
+
+		FrostEnchant:
+			"####" F 0 A_Print("Now your SMG is ice-cool")
+			TNT1 A 0 A_GiveInventory("FrostEnchantedSMG", 1)
+			TNT1 A 0 A_TakeInventory("LightningEnchantedSMG", 1)
+			TNT1 A 0 A_TakeInventory("FireEnchantedSMG", 1)
+			Goto ReadyLoop
+
+		CheckTypeWall:
+			TNT1 A 0 A_JumpIfInventory("QuickFireSpellSelected", 1, "InitializeFirewall")
+			TNT1 A 0 A_JumpIfInventory("QuickFrostSpellSelected", 1, "InitializeIcewall")
+			TNT1 A 0 A_JumpIfInventory("QuickLightningSpellSelected", 1, "InitializeStunwall")
+			InitializeFirewall:
+			TNT1 A 0 A_GunFlash("GrenadeFlash")
+			TNT1 A 10
+			CONG EFGHI 2 BRIGHT A_FireCustomMissile("LostSoulOnHandFireSpawner",random (-40,40),0,0,3)
+			TNT1 A 0 A_PlaySound("Sorcerer/SpellCastLarge", CHAN_VOICE)
+			TNT1 A 0 A_FireCustomMissile ("FirewallXS", 0, 1, 0, 0)
+			TNT1 A 0 A_SetPitch(-4.0 + pitch)
+			TNT1 A 0 A_TakeInventory("BrutalBlueMana", 200)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			CONE BA 3 A_SetPitch(+2.0 + pitch)
+			CONE AAAAA 3 A_FireCustomMissile("LostSoulOnHandFireSpawner",random (-40,40),0,0,3)
+			TNT1 A 0 A_TakeInventory("TossGrenade", 1)
+			Goto Ready
+
+		InitializeIcewall:
+			TNT1 A 0 A_GunFlash("GrenadeFlash")
+			TNT1 A 10
+			TNT1 A 0 A_PlaySound("Cryomancy/Draw",6)
+			TNT1 A 0 A_PlaySound("ICEBRK1")
+			F5CH S 2 BRIGHT A_gunflash("FlashWarp")
+			F9CH KJ 2 BRIGHT A_TakeInventory("BrutalGreenMana",10)
+			F9CH IH 2 BRIGHT A_TakeInventory("BrutalGreenMana",10)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			TNT1 A 0 A_PlaySound("Sorcerer/SpellCast", CHAN_VOICE)
+			TNT1 A 0 A_PlaySound("Cryomancy/IceballCast", 1)
+			F9CH G 2 BRIGHT A_FireCustomMissile("IceWallXS", random(-2,2), 0, -1, 0, 0, random(-2,2))
+			F9CH D 1 BRIGHT A_Recoil(15)
+			TNT1 A 0 A_SetPitch(-7.0 + pitch)
+			QKFR GHIIJJ 2 A_SetPitch(+1.0 + pitch)
+			CONE BAA 2
+			TNT1 A 0 A_TakeInventory("TossGrenade", 1)
+			Goto Ready
+
+		InitializeStunwall:
+			TNT1 A 0 A_GunFlash("GrenadeFlash")
+			TNT1 A 10
+			SCLA EFGHI 2 BRIGHT
+			TNT1 A 0 A_PlaySound("TPortalAppear")
+			TNT1 A 0 A_FireCustomMissile ("StunwallProjXS", 0, 1, 0, 0)
+			TNT1 A 0 A_SetPitch(-4.0 + pitch)
+			TNT1 A 0 A_TakeInventory("BrutalGreenMana", 200)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			SCLA BA 3 A_SetPitch(+2.0 + pitch)
+			SCLA AAAAA 3
+			TNT1 A 0 A_TakeInventory("TossGrenade", 1)
+			Goto Ready
+
+
+		DoKick: //14 tic
+			TNT1 A 0
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("KickFlash")
+			TNT1 A 0 A_TakeInventory("Kicking", 1)
+			TNT1 A 0 A_TakeInventory("Zoomed", 1)
+			TNT1 A 0 A_ZoomFactor(1.0)
+			TNT1 A 0 A_TakeInventory("ADSmode", 1)
+			TNT1 A 0 A_JumpIf (momZ > 0, "KickInAir")
+			TNT1 A 0 A_JumpIf (momZ < 0, "KickInAir")
+			TNT1 A 0 A_JumpIf((Abs(VelY) < 1) && (Abs(VelX) < 1), 2)
+			TNT1 A 0 A_JumpIfInventory("IsCrouching", 1, "SlideAttack")
+			TNT1 A 0 A_PlaySound("KICK")
+			TNT1 A 0 SetPlayerProperty(0, 1, 0)
+			K1CK A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2CK A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KICK A 0
+			"####" BCD 1
+			"####" A 0 A_GiveInventory("Schism_Kick", 1)
+			"####" H 3
+			"####" IGF 1
+			"####" "#" 0 SetPlayerProperty(0, 0, 0)
+			"####" EDCBA 1 A_JumpIfInventory("Kicking", 1, "KickRight")
+			TNT1 A 0 A_JumpIfInventory("Kicking", 1, "KickRight")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		KickRight: // 15 tic
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("RightKickFlash")
+			K1K2 A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2K2 A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KIK2 A 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" ABC 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0
+			"####" A 0 A_SetPitch(Pitch-9)
+			"####" A 0 A_SetAngle(Angle+9)
+			"####" A 0 A_GiveInventory("Schism_Kick", 1)
+			"####" D 1
+			"####" A 0 A_SetPitch(Pitch+2)
+			"####" A 0 A_SetAngle(Angle-2)
+			"####" D 1
+			"####" A 0 A_SetPitch(Pitch+2)
+			"####" A 0 A_SetAngle(Angle-2)
+			"####" E 1
+			"####" A 0 A_SetPitch(Pitch+1)
+			"####" A 0 A_SetAngle(Angle-1)
+			"####" E 1
+			"####" A 0 A_SetPitch(Pitch+1)
+			"####" A 0 A_SetAngle(Angle-1)
+			"####" C 1 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(Pitch+1)
+			"####" A 0 A_SetAngle(Angle-1)
+			"####" B 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(Pitch+1)
+			"####" A 0 A_SetAngle(Angle-1)
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 0 A_SetPitch(Pitch+1)
+			"####" A 0 A_SetAngle(Angle-1)
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" A 1 A_JumpIfInventory("Kicking", 1, "KickInAir")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		KickInAir: // 18 tics
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("KickInAirFlash")
+			TNT1 A 0 A_TakeInventory("Kicking", 1)
+			K1CK J 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2CK J 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KICK J 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0 A_Recoil(-15)
+			"####" JKLMN 1
+			"####" A 0 A_GiveInventory("Schism_AirKick", 1)
+			"####" O 3
+			"####" PQ 2
+			"####" RS 1
+			"####" T 1 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 1 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		LeftFinishingKick: // 11 tics
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("LeftKickFlash")
+			K1K3 A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			K2K3 A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			KIK3 A 0
+			"####" "#" 0 A_TakeInventory("Kicking", 1)
+			"####" A 0 A_Recoil(-10)
+			"####" ABC 1
+			"####" A 0 A_PlaySound("KICK")
+			"####" A 0 A_SetPitch(Pitch-9)
+			"####" A 0 A_SetAngle(Angle-9)
+			"####" D 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(Pitch+2)
+			"####" A 0 A_SetAngle(Angle+3)
+			"####" E 1
+			"####" A 0 A_SetPitch(Pitch+2)
+			"####" A 0 A_SetAngle(Angle+3)
+			"####" F 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(Pitch+1)
+			"####" A 0 A_SetAngle(Angle+3)
+			"####" G 1
+			"####" A 0 A_SetPitch(Pitch+1)
+			"####" A 0 A_SetAngle(Angle+2)
+			"####" H 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(Pitch+1)
+			"####" A 0 A_SetAngle(Angle+2)
+			"####" I 1
+			"####" A 0 A_SetPitch(Pitch+1)
+			"####" A 0 A_SetAngle(Angle+1)
+			"####" J 1 A_GiveInventory("Schism_Kick", 1)
+			"####" A 0 A_SetPitch(Pitch+1)
+			"####" A 0 A_SetAngle(Angle+1)
+			"####" K 1
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		SlideAttack:
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("SlideKickFlashStart")
+			TNT1 A 0 SetPlayerProperty(0, 1, 0)
+			KICK A 0 A_TakeInventory("Kicking", 1)
+			TNT1 A 0 A_PlaySound("KICK")
+			TNT1 A 0 A_Recoil(-16)
+			TNT1 A 0 A_PlaySound("SlideKickStart", CHAN_5)
+			S1DK A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			S2DK A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SLDK A 1
+			"####" ABC 1
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_GiveInventory("Schism_SlideKick", 1)
+			"####" E 1
+			"####" A 0 A_Recoil(-14)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-12)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-8)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-6)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-4)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-4)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-3)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-3)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-3)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-2)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-1)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" F 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-1)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			Goto FinishSlide
+
+			"####" G 1 A_GiveInventory("Schism_SlideKick", 1)
+			"####" A 0 A_Recoil(-2)
+			"####" A 0 A_SetPitch(10)
+			"####" A 0 A_JumpIfInventory("KickHasHit", 1, "FinishSlideHitWall")
+			"####" A 0 A_JumpIfInventory("IsCrouching", 1, 1)
+			"####" A 0 A_TakeInventory("KickHasHit", 1)
+			Goto FinishSlide
+
+		FinishSlide:  //10 tic
+			TNT1 A 0 A_TakeInventory("Kicking",1)
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("SlideKickFlashEnd")
+			TNT1 A 0 A_PlaySound("SlideKickStop", CHAN_5)
+			S1DK H 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			S2DK H 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SLDK H 0
+			"####" A 0 SetPlayerProperty(0, 0, 0)
+			"####" A 0 A_JumpIfInventory("IsPaladin", 1, 2)
+			"####" A 0 A_Jump(256,5)
+			"####" A 0 A_JumpIfInventory("FiredSecondary", 1, 2)
+			"####" A 0 A_Jump(256,3)
+			"####" A 0 A_GiveInventory("DoUppercutNow", 1)
+			"####" A 0 A_SelectWeapon("Berserker_Melee_Attacks")
+			"####" HD 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 0 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" CBA 2 A_JumpIfInventory("Kicking", 1, "LeftFinishingKick")
+			"####" A 0 A_Takeinventory("Kicking", 1)
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+		FinishSlideHitwall:
+			TNT1 A 0 A_JumpIfInventory("Reloading2", 1, 2)
+			TNT1 A 0 A_GunFlash("SlideKickFlashEnd")
+			S1DK H 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			S2DK H 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SLDK H 0
+			"####" A 0 A_Stop
+			"####" HDCBA 2
+			"####" A 0 A_TAkeInventory("KickHasHit", 1)
+			"####" A 0 A_Takeinventory("Kicking", 1)
+			"####" A 0 SetPlayerProperty(0, 0, 0)
+			"####" "#" 0 A_JumpIfInventory("Reloading2", 1, "ReloadLoop")
+			Goto ReadyLoop
+
+
+		Quickspell:
+			TNT1 A 0 A_TakeInventory("Quickspell", 1)
+			TNT1 A 0 A_JumpIfInventory("IsSorcerer", 1, 3)
+			TNT1 A 0 A_Print("You are not a mage !")
+			TNT1 A 0 A_Jump(256, "ReadyLoop")
+			TNT1 A 0 A_Takeinventory("Zoomed",1)
+			TNT1 A 0 A_Takeinventory("PowerLightAmp",1)
+			TNT1 A 0 A_Takeinventory("ADSmode",1)
+			TNT1 A 0 A_JumpIfInventory("QuickFireSpellSelected",1,"QuickFireSpell")
+			TNT1 A 0 A_JumpIfInventory("QuickLightningSpellSelected",1,"QuickLightningSpell")
+			TNT1 A 0 A_JumpIfInventory("QuickFrostSpellSelected",1,"QuickFrostSpell")
+			Goto QuickFireSpell
+
+		QuickFireSpell:
+			TNT1 A 0 A_GunFlash("SpellFlash")
+			TNT1 A 2
+			FOSP AB 1
+			TNT1 A 0 A_AlertMonsters
+			TNT1 A 0 A_PlaySound("IGNITE")
+			FOSP CCDD 1
+			FOSP EEFFGG 1 BRIGHT
+			FOSP GGHH 1 BRIGHT
+			TNT1 A 0 A_FireCustomMissile("MageFireBall", 0, 0, 0, -10)
+			TNT1 A 0 A_SetPitch(-6.0 + pitch)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			FOSP IJ 1 BRIGHT A_SetPitch(+2 + pitch)
+			FOSP KCBBAA 1 A_SetPitch(+0.5 + pitch)
+			Goto ReadyLoop
+
+		QuickLightningSpell:
+			TNT1 A 0 A_GunFlash("SpellFlash")
+			LGQS AB 1
+			TNT1 A 0 A_AlertMonsters
+			TNT1 A 0 A_PlaySound("TPortalZap", CHAN_WEAPON, 2)
+			LGQS CCDD 1
+			LGQS EFGHIJ 1 BRIGHT
+			LGQS KL 1 BRIGHT A_FireCustomMissile("ShakeYourAssQuad", 0, 0, 0, 0)
+			TNT1 A 0 A_RailAttack(90, 10, 0, none, "9F 9F FF", RGF_SILENT | RGF_FULLBRIGHT, 25, "LightningPuff", 0, 0, 600, 5,0.001,5.0,"StormTrailParticle",-15)
+			TNT1 A 0 A_SetPitch(-6.0 + pitch)
+			TNT1 A 0 A_FireCustomMissile("LightningMissile3", 0, 0, 0,-10)
+			TNT1 A 0 A_FireCustomMissile("ShakeYourAssDouble", 0, 0, 0, 0)
+			LGQS MNO 1 BRIGHT A_SetPitch(+2 + pitch)
+			LGQS PQR 1 BRIGHT A_SetPitch(+0.5 + pitch)
+			LGQS FEDCBA 1
+			Goto ReadyLoop
+
+		QuickFrostSpell:
+			TNT1 A 0 A_GunFlash("SpellFlash")
+			TNT1 A 2
+			TNT1 A 0 A_Giveinventory("HasFreezerWeapon",1)
+			IS1F AABB 1
+			IS1F CCDD 1
+			IS1F KLF 1
+			IS1F MNO 1 BRIGHT
+			IS1F A 0 A_Giveinventory("HasFreezerWeapon",1)
+			IS1F G 1 BRIGHT A_FireCustomMissile ("BlueFlareSpawn",0,0,0,0)
+			IS1F A 0 A_PlaySound("ICESHA", 1)
+			IS1F H 1 BRIGHT
+			TNT1 A 0 A_FireCustomMissile("BlueFlareSpawn",0,0,0,0)
+			IS1F I 1 BRIGHT A_FireCustomMissile ("FrostShard",random(-5,5),0,0,random(-12,12))
+			TNT1 A 0 A_FireCustomMissile("BlueFlareSpawn",0,0,0,0)
+			IS1F J 1 BRIGHT A_FireCustomMissile ("FrostShard",random(-5,5),0,0,random(-12,12))
+			TNT1 A 0 A_Recoil(3)
+			TNT1 A 0 A_FireCustomMissile("BlueFlareSpawn",0,0,0,0)
+			IS1F K 1 BRIGHT A_FireCustomMissile ("FrostShard",random(-5,5),0,0,random(-12,12))
+			TNT1 A 0 A_Takeinventory("HasFreezerWeapon",1)
+			IS1F DCBAA 1
+			Goto ReadyLoop
+
+		SpellFlash:
+			MSSF AAABBBCCCCCCCCCCCCCCCBBBAAAA 1
+			Stop
+
+		KickFlash: // 15 tics
+			PSSL A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			MSMS A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGS A 0
+			"####" FEDCBAAAABCDEF 1
+			Stop
+
+		LeftKickFlash:
+		RightKickFlash:
+		SlideKickFlashStart:
+		SlideKickFlashEnd:
+		KickInAirFlash:
+			TNT1 A 1 //Bruh
+			Stop
+
+		GrenadeFlash: // 14 tic
+			PSSL A 0 A_JumpIfInventory("IsPaladin", 1, 3)
+			MSMS A 0 A_JumpIfInventory("IsSorcerer", 1, 2)
+			SMGS A 0
+			"####" FEDCBA 1
+			TNT1 A 2
+			Stop
+
+	}
+}
+
+Actor FireEnchantedSMG : TokenBase {}
+Actor LightningEnchantedSMG : TokenBase {}
+Actor FrostEnchantedSMG : TokenBase {}

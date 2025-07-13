@@ -1,0 +1,178 @@
+
+/// +++++++++++++++++////
+/// Mud Blood
+/// +++++++++++++++++////
+
+decal MudBloodSplat01
+{
+pic BSPLNEW
+x-scale 0.355
+y-scale 0.355
+randomflipx
+randomflipy
+//shade "65 00 00"
+shade "99 50 00"
+//translucent 0.9
+}
+
+decal MudBloodSplat02
+{
+pic BSPLNEW2
+x-scale 0.355
+y-scale 0.355
+randomflipx
+randomflipy
+//shade "65 00 00"
+shade "99 50 00"
+//translucent 0.9
+}
+
+
+
+decalgroup MudBloodSplat
+{
+MudBloodSplat01 6
+MudBloodSplat02 6
+}
+
+/*
+decalgroup MudBlood
+{
+MudBloodSplat01 6
+MudBloodSplat02 6
+}
+*/
+
+
+
+decal MudBloodSuper01
+{
+pic BSPLBIG1
+x-scale 0.45
+y-scale 0.45
+randomflipx
+randomflipy
+shade "99 50 00"
+//translucent 0.9
+lowerdecal MudBloodSmear
+}
+
+decal MudBloodSuper02
+{
+pic BSPLBIG2
+x-scale 0.45
+y-scale 0.45
+randomflipx
+shade "99 50 00"
+//translucent 0.9
+lowerdecal MudBloodSmear
+}
+
+decalgroup MudBloodSuper
+{
+MudBloodSuper01 6
+MudBloodSuper02 6
+}
+
+
+
+decal MudBloodGiant01
+{
+pic BSPLBIG1
+x-scale 1.0
+y-scale 1.0
+randomflipx
+randomflipy
+shade "99 50 00"
+//translucent 0.9
+lowerdecal MudBloodSmear
+}
+
+decal MudBloodGiant02
+{
+pic BSPLBIG2
+x-scale 1.0
+y-scale 1.0
+randomflipx
+shade "99 50 00"
+//translucent 0.9
+lowerdecal MudBloodSmear
+}
+
+decalgroup MudBloodGiant
+{
+MudBloodGiant01 6
+MudBloodGiant02 6
+}
+
+stretcher MudBloodSmearer
+{
+   GoalX 0.4
+   GoalY 2.0
+   StretchStart 1
+   StretchTime 6
+}
+
+stretcher MudBloodSmearerSmall
+{
+   GoalX 0.4
+   GoalY 2.0
+   StretchStart 1
+   StretchTime 6
+}
+
+decal MudBloodSmearSmall1
+{
+	pic BSPLNEW8
+	x-scale 0.355
+	y-scale 0.355
+	randomflipx
+	//translucent 0.9
+	shade "99 50 00"
+	animator MudBloodSmearerSmall
+}
+
+decal MudBloodSmearSmall2
+{
+	pic BSPLNEW7
+	x-scale 0.35
+	y-scale 0.35
+	randomflipx
+	//translucent 0.9
+	shade "99 50 00"
+	animator MudBloodSmearerSmall
+}
+
+decalgroup MudBloodSmearSmall
+{
+	MudBloodSmearSmall1	1
+	MudBloodSmearSmall2	1
+}
+
+decal MudBloodSmear1
+{
+	pic BSPLNEW4
+	x-scale 0.4
+	y-scale 0.4
+	//translucent 0.9
+	shade "99 50 00"
+	randomflipx
+	animator MudBloodSmearer
+}
+
+decal MudBloodSmear2
+{
+	pic BSPLNEW5
+	x-scale 0.4
+	y-scale 0.4
+	randomflipx
+	//translucent 0.9
+	shade "99 50 00"
+	animator MudBloodSmearer
+}
+
+decalgroup MudBloodSmear
+{
+	MudBloodSmear1	1
+	MudBloodSmear2	1
+}
