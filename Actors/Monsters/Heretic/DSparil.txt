@@ -334,17 +334,17 @@ ACTOR SerpHorn1: XDeath1
     States
     {
     Spawn:
-        SRCG ABCD 2
+        SMCG ABCD 2
         Loop
     Death:
 		TNT1 A 0
 		TNT1 A 0 A_QueueCorpse
 	    TNT1 A 0 A_CheckFloor("SpawnFloor")
-        SRCG A 9009
+        SMCG A 9009
 		TNT1 A 2
         Stop
 	SpawnFloor:
-	    SRCG A 9009
+	    SMCG A 9009
 		TNT1 A 2
 		Stop
     }
