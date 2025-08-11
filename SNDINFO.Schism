@@ -1,0 +1,17 @@
+//Monsters
+//Magic
+archer/sight					archidle
+archer/draw						archdraw
+archer/attack					archsht1
+$random archer/attackboss		{ archer/attack1 archer/attack2 }
+archer/attack1					archsht2
+archer/attack2					archsht3
+$random archer/pain				{ archer/pain1 archer/pain2 }
+archer/pain1					archpain
+archer/pain2					archpai2
+$random archer/death			{ archer/death1 archer/death2 }
+archer/death1					archdeth
+archer/death2					archdth2
+archer/gib						SLOPPY2
+archer/growl					archidle
+archer/hit						arr2flsh

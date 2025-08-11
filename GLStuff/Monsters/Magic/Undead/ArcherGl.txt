@@ -1,0 +1,77 @@
+Pointlight KnightGreen0
+{
+Color 0.0 0.8 0.0
+Size 40
+}
+
+Pointlight KnightGreen1
+{
+Color 0.0 0.8 0.0
+Size 56
+}
+
+Pointlight KnightGreen2
+{
+Color 0.0 1.0 0.0
+Size 64
+}
+
+Pointlight KnightGreen3
+{
+Color 0.0 0.6 0.0
+Size 40
+}
+
+Pointlight KnightGreen4
+{
+Color 0.0 0.3 0.0
+Size 32
+}
+
+Pointlight KnightRed0
+{
+Color 0.8 0.0 0.0
+Size 40
+}
+
+Pointlight KnightRed1
+{
+Color 0.8 0.0 0.0
+Size 56
+}
+
+Pointlight KnightRed2
+{
+Color 1.0 0.0 0.0
+Size 64
+}
+
+Pointlight KnightRed3
+{
+Color 0.6 0.0 0.0
+Size 40
+}
+
+Pointlight KnightRed4
+{
+Color 0.3 0.0 0.0
+Size 32
+}
+
+Object ArcherArrow
+{
+Frame VEKFA { Light KnightGreen0 }
+Frame VEKFF { Light KnightGreen1 }
+Frame VEKFG { Light KnightGreen2 }
+Frame VEKFH { Light KnightGreen3 }
+Frame VEKFI { Light KnightGreen4 }
+}
+
+Object ArcherArrow2
+{
+Frame VEKGA { Light KnightRed0 }
+Frame VEKGF { Light KnightRed1 }
+Frame VEKGG { Light KnightRed2 }
+Frame VEKGH { Light KnightRed3 }
+Frame VEKGI { Light KnightRed4 }
+}
