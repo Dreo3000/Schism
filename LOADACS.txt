@@ -1,19 +1,2 @@
-COMMANDS
-CHASECAM
-BLOODSPLASH
-greenbloodsplash
-bluebloodsplash
-PAINEFFECT
-REALISM
-CVARS
-BOSSHEALTH
-SSPLASH
-DYNAMICLEV
-VEHICLECONTROL
-SCOUTER
-SlowingFreeze
-BLINK2_LITE
-ScalyScum	// You know you love us. -Dino
-LFSHITEM //shield sphere artifact acs
-TELEPORT
 Schism_Scripts
+KEY_INTERCEPTION

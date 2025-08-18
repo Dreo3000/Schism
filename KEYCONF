@@ -1,0 +1,103 @@
+clearplayerclasses
+addplayerclass Schism_Ranger
+addplayerclass Schism_Paladin
+addplayerclass Sorcerer
+addplayerclass Schism_Corvus
+addplayerclass Schism_Rogue
+
+weaponsection "Schism"
+
+setslot 1 Schism_NecroGauntlets DSweap BrutalAxe Chain_Saw Melee_Attacks Berserker_Melee_Attacks AssassinClaws Assassin_ShadowDisciplines MageDagger MageMeleeStaff  //Schism_WS1S
+setslot 2 Schism_AssassinTraps Schism_GoldenWand Schism_Deagle Schism_Pistol Schism_SMG ShieldRifle Shield_SMG BattleAxe DualBattleAxe Piromancy
+setslot 3 Schism_AssaultShotgun Schism_Shotgun Schism_CryoShotgun Schism_SSg Schism_QuadShotgun Stormcast Schism_Geomancy Schism_Crossbow Schism_Sickle
+setslot 4 Schism_Rifle Schism_HeavyRifle Schism_Minigun Schism_ElectroRifle Schism_Machinegun Frostmancy BrutalDragonClaw TheQuietus
+setslot 5 Schism_GrenadeLauncher Schism_AdvancedMissileLauncher Schism_RocketLauncher DV_Crossbow Runecraft BrutalPhoenixRod Schism_SniperRifle Schism_BoltRifle Arrancadora
+setslot 6 Schism_RailGun Schism_PlasmaRifle Schism_Freezethrower BrutalHellstaff VorpalBlade
+setslot 7 Schism_BFG10k Schism_BFG9k Schism_Tesla BrutalFireMace //ArcOfDeath_Fake
+setslot 8 Schism_Unmaker Flamethrower2
+setslot 9 Schism_MP40 HitlersBuzzsaw FlameCannon HellishMissileLauncher
+setslot 0 Schism_HandGrenades Schism_HandFreezebot Schism_Freezenades //AmmoDroper
+
+addkeysection "Schism - Advanced Actions" SchismActions
+
+addmenukey "Kick" kickem
+alias kickem "puke 301"
+defaultbind Q kickem
+
+addmenukey "[Mage] Quick Spell Cast" quickspell
+alias quickspell "pukename Quickspell"
+
+addmenukey "Toss Grenade / Magic Wall" grenadetoss
+alias grenadetoss "puke 315"
+defaultbind G grenadetoss
+
+addmenukey "Reload / Stance / Mana Recharge" reload
+alias reload "puke 303"
+defaultbind R reload
+
+addmenukey "Select Spell Type" unreloader
+alias unreloader "puke 363"
+
+addmenukey "Quick Pull Pistol" quickpistol
+alias quickpistol "puke 310"
+
+addkeysection "Schism - Class specific actions" SchismInteractions
+
+addmenukey "Offend / Telekinesis / Blink" brutaltaunt
+alias brutaltaunt "puke 302"
+defaultbind H brutaltaunt
+
+addmenukey "Battlecry / Bracers Protection" wave1
+alias wave1 "puke 431"
+defaultbind V wave1
+
+addmenukey "Wave(2)" wave2
+alias wave2 "puke 432"
+defaultbind N wave2
+
+addmenukey "Advanced Taunt" advtaunt
+alias advtaunt "puke 304"
+defaultbind J advtaunt
+
+addmenukey "One-Liners" oneliner
+alias oneliner "puke 305"
+defaultbind K oneliner
+
+addmenukey "Dual Wield / Weapon Special Action" dual
+alias dual "pukename Schism_WeaponSpecialBind"
+defaultbind X dual
+
+addmenukey "Select Ammo Drop" selectammodrop
+alias selectammodrop "puke 309"
+defaultbind I selectammodrop
+
+addkeysection "Brutal Doom - Advanced Moves" SchismAdvMoves              // here too
+
+addmenukey "Roll Left" roleft
+alias roleft "puke 306"
+defaultbind Z roleft
+
+addmenukey "Roll Right" roright
+alias roright "puke 307"
+defaultbind C roright
+
+addkeysection "Schism - Quick Ready Weapons or Spells" SchismQuickReadyWeapons
+
+addmenukey "Quick Ready Pistol / Frostmancy" quickpistol
+alias quickpistol "puke 310"
+
+addmenukey "Quick Ready Fists / Piromancy" quickfists
+alias quickfists "puke 311"
+
+addmenukey "Quick Ready Assault Rifle / Stormcast" quickarifle
+alias quickarifle "puke 314"
+
+alias disablereloading "bd_disablereloading 1; give turboreload"
+alias enablereloading "bd_disablereloading 0; take turboreload"
+
+alias disableautoreload "bd_disableautoreload 1; give noautoreload"
+alias enableautoreload "bd_disableautoreload 0; take noautoreload"
+
+alias schism_rangerbindsetup "bind q kickem; bind r reload; bind f dual"
+alias schism_paladinbindsetup "bind q kickem; bind f brutaltaunt; bind r dual"
+alias schism_sorcererbindsetup "bind q quickspell; bind r unreloader; bind f dual"
