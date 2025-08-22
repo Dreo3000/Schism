@@ -1,11 +1,9 @@
 // Health bonus -------------------------------------------------------------
 
-ACTOR HealthPlus : Health Replaces HealthBonus
-{
+Actor HealthPlus : Health Replaces HealthBonus {
 	Game Doom
 	SpawnID 152
 	Scale 0.25
-	Radius 4
 	+COUNTITEM
 	+INVENTORY.ALWAYSPICKUP
 	+INVENTORY.NEVERRESPAWN
@@ -13,25 +11,24 @@ ACTOR HealthPlus : Health Replaces HealthBonus
 	Inventory.MaxAmount 300
 	Tag "Health Bonus"
 	Inventory.PickupMessage "$GOTHTHBONUS"
-	States
-	{
-	Spawn:
-		BON1 A 0
-		BON1 A 0 ACS_NamedExecuteAlways("BDCheckDecorations", 0, 0, 0, 0)//Check if advanced decorations are disabled.
-	Spawn2:	
-        TNT1 A 0 A_CheckSight ("Spawn3")
-		TNT1 A 0 A_Jump(128,5)
-		TNT1 A 0 A_Jump(128,5)
-		TNT1 A 0 A_Jump(128,5)
-		TNT1 A 0 A_Jump(128,5)
-		HSPH ABCDEFGH 2 BRIGHT A_SpawnItem("BlueFlareSmallItem",0,7)
-		Loop
-	Spawn3:
-		HSPH A 9 BRIGHT
-		Goto Spawn2
-	Vanilla:
-		HSPH ABCDEFGH 2 BRIGHT
-		Loop
+	States {
+		Spawn:
+			BON1 A 0
+			BON1 A 0 ACS_NamedExecuteAlways("BDCheckDecorations", 0, 0, 0, 0)//Check if advanced decorations are disabled.
+		Spawn2:	
+			TNT1 A 0 A_CheckSight ("Spawn3")
+			TNT1 A 0 A_Jump(128,5)
+			TNT1 A 0 A_Jump(128,5)
+			TNT1 A 0 A_Jump(128,5)
+			TNT1 A 0 A_Jump(128,5)
+			HSPH ABCDEFGH 2 BRIGHT A_SpawnItem("BlueFlareSmallItem",0,7)
+			Loop
+		Spawn3:
+			HSPH A 9 BRIGHT
+			Goto Spawn2
+		Vanilla:
+			HSPH ABCDEFGH 2 BRIGHT
+			Loop
 	}
 }
 
