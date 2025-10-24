@@ -135,12 +135,14 @@ OB_DUKEHIT = "%o was crushed by hand of the Duke of Hell!";
 
 SM_PYROMANCY = "Pyromancy";
 
-
+SW_AXE = "Fire Axe";
+SW_CHAINSAW = "Chainsaw";
 SW_PISTOL = "Pistol";
 SW_RIFLE = "Assault Rifle";
 SW_MINIGUN = "Minigun";
 SW_RAILGUN = "Railgun";
 SW_GRENADE = "Hand Grenades";
+SGOT_AXE = "You got the Axe! (Slot 1)";
 SGOT_PISTOL = "You got the pistol! (Slot 2)";
 SGOT_PYROMANCY = "You got the Arcane Power of Firecasting! (Slot 2)";
 SGOT_MINIGUN = "You got the Minigun! (Slot 4)";
@@ -148,6 +150,7 @@ SGOT_RAILGUN = "You got the Railgun! (Slot 6)";
 SGOT_GRENADE = "You got a Frag Grenade! (Slot 9)";
 SGOT_HGAMMO = "Picked up a Grenade.";
 SGOT_RUBYAMULET = "Picked up a Ruby Amulet.";
+OB_AXE = "%o was choped down by %k's axe.";
 OB_PISTOL = "%o was shot down by %k's pistol.";
 OB_RIFLE = "%o was shot down by %k's assault rifle.";
 OB_RAILGUN = "";

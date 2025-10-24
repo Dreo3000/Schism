@@ -465,12 +465,11 @@ Actor Schism_BFG10k : Schism_Weapon {
 }
 
 
-ACTOR BFG10K_Ball: FastProjectile
-{
+ACTOR BFG10K_Ball: FastProjectile {
 	Radius 10
 	Height 2
 	Speed 200
-	Damage (random(300, 300))
+	Damage (300)
     DamageType Extreme
 	Decal "SmallerScorch"
 	Projectile
@@ -495,19 +494,18 @@ ACTOR BFG10K_Ball: FastProjectile
 	DeathSound "weapons/plasmax"
     SeeSound "None"
 	Obituary "$OB_MPPLASMARIFLE"
-	States
-	{
+	States {
 
 	Spawn:
         BFS1 AB 1 BRIGHT A_CustomMissile ("BFGDeathParticleFast", 0, 0, random (0, 360), 2, random (0, 360))
 		Loop
 
 	Death:
-		BFE1 A 0 Bright
+		BFE1 A 0
 		BFE1 A 3 Bright
 		BG2G A 0 A_SpawnItem("RocketExplosion")
 		BG2G A 0 Radius_Quake(3, 2, 0, 12, 0)
-		BG2G A 0 Bright A_SpawnItem("GreenShockWave",0,0,0)
+		BG2G A 0 A_SpawnItem("GreenShockWave",0,0,0)
 		EXPL AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("BFGDeathParticleSuperFast", 0, 0, random (0, 360), 2, random (0, 360))
 		EXPL AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA 0 A_CustomMissile ("BFGDeathParticleFast", 0, 0, random (0, 360), 2, random (0, 360))
 		EXPL AAAA 0 A_CustomMissile ("BFGBIGFOG", 0, 0, random (0, 360), 2, random (0, 360))
